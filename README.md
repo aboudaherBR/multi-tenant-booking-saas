@@ -94,22 +94,13 @@ simples, claro e alinhado ao problema proposto.
 - Node.js
 - Express
 
-Escolhidos pela simplicidade, ampla adoção no mercado e facilidade de manutenção,
-permitindo a criação de uma API clara e objetiva.
-
 ### Banco de Dados
 - SQLite
-
-Utilizado por se tratar de um projeto com baixo volume de dados, permitindo persistência
-em arquivo único, sem necessidade de infraestrutura adicional.
 
 ### Frontend
 - HTML
 - CSS
 - JavaScript puro
-
-A interface foi desenvolvida com foco em uso mobile, clareza e facilidade de manutenção,
-evitando frameworks desnecessários para o escopo do projeto.
 
 ---
 
@@ -118,12 +109,132 @@ evitando frameworks desnecessários para o escopo do projeto.
 O projeto segue uma arquitetura simples, com separação clara de responsabilidades:
 
 - `src/` contém todo o backend
-  - rotas, controllers, services, middlewares e acesso a dados
 - `public/` contém o frontend estático
 - separação entre configuração da aplicação (`app.js`) e inicialização do servidor (`server.js`)
 
-Essa organização facilita leitura, manutenção e evolução futura do sistema sem
-refatorações complexas.
+---
+
+## Domínio de Agendamentos
+
+### Entidade: Agendamento
+
+Um **agendamento** representa a reserva de um intervalo de tempo específico
+na agenda de um profissional, para atendimento de um cliente em determinada data e horário.
+
+Todo agendamento possui:
+- data
+- horário inicial
+- duração definida (30, 45 ou 60 minutos)
+- profissional associado
+
+Um agendamento ocupa um intervalo contínuo de tempo e **não pode se sobrepor**
+a outro agendamento do mesmo profissional.
+
+---
+
+### Regras de Conflito de Horário
+
+Para que um agendamento seja considerado válido, o intervalo de tempo ocupado
+não pode entrar em conflito com nenhum outro agendamento existente
+do mesmo profissional na mesma data.
+
+O sistema deve impedir a criação ou edição de um agendamento sempre que ocorrer
+qualquer uma das situações abaixo:
+
+- o horário inicial do novo agendamento estiver dentro do intervalo de outro agendamento existente
+- o horário final do novo agendamento ultrapassar o início de outro agendamento existente
+- o intervalo do novo agendamento envolver completamente um agendamento já existente
+
+A verificação de conflitos é sempre realizada considerando obrigatoriamente:
+- data
+- horário inicial
+- duração
+- profissional
+
+---
+
+### Papéis e Responsabilidades
+
+O sistema trabalha com dois papéis internos distintos, cada um com responsabilidades
+bem definidas sobre a gestão da agenda.
+
+#### Administrador / Recepção
+
+Responsável pela organização e controle da agenda do negócio. Possui as seguintes permissões:
+
+- visualizar a agenda completa de todos os profissionais
+- criar, editar e cancelar agendamentos
+- gerenciar conflitos de horário
+- atuar como ponto central de organização da agenda
+
+#### Profissional
+
+Responsável apenas pelo acompanhamento de sua própria agenda. Possui as seguintes permissões:
+
+- visualizar exclusivamente seus próprios agendamentos
+- acompanhar horários, datas e compromissos já definidos
+
+O profissional não possui permissão para criar, editar ou cancelar agendamentos,
+garantindo controle centralizado da agenda e reduzindo riscos operacionais.
+
+---
+
+### Organização das Regras de Negócio
+
+As regras de negócio relacionadas a agendamentos são centralizadas em um único
+service de aplicação, responsável por garantir que o fluxo de criação de um
+agendamento seja sempre validado de forma consistente.
+
+O service expõe apenas uma função pública responsável pela criação do agendamento,
+enquanto as regras internas (validação de conflitos, cálculo de horário final e
+verificações de consistência) são implementadas como funções auxiliares internas.
+
+Essa abordagem reduz o risco de uso incorreto das regras de negócio, mantém o
+fluxo controlado e facilita a evolução futura do sistema sem acoplamento excessivo.
+
+---
+
+### Service de Agendamentos — Contrato da Função Pública
+
+O service de agendamentos expõe **uma única função pública**, responsável por garantir
+a criação de agendamentos válidos de acordo com as regras do domínio.
+
+#### Função Pública: `createAppointment`
+
+**Responsabilidade**  
+Criar um agendamento válido, garantindo que todas as regras de negócio relacionadas
+a datas, horários, duração e conflitos sejam respeitadas.
+
+**Entrada (dados necessários)**  
+A função recebe as informações mínimas que definem um agendamento:
+
+- data do agendamento
+- horário inicial
+- duração (30, 45 ou 60 minutos)
+- profissional associado
+- lista de agendamentos existentes do profissional na mesma data
+
+**Processamento Interno**  
+Durante a execução, a função:
+
+- valida a duração informada
+- calcula automaticamente o horário final do agendamento
+- verifica conflitos de horário com agendamentos existentes
+- garante que o novo agendamento não viole regras do domínio
+
+Essas validações são realizadas por funções auxiliares internas (helpers),
+não expostas externamente.
+
+**Saída (resultado)**  
+- Em caso de sucesso, a função retorna um agendamento válido, contendo
+  todos os dados consistentes, incluindo o horário final calculado.
+- Em caso de violação de regra de negócio, a função lança uma exceção de domínio,
+  interrompendo o fluxo e impedindo a criação do agendamento.
+
+**Tratamento de Erros**  
+Exceções lançadas por esta função representam **exclusivamente violações explícitas
+do domínio**, como conflitos de horário ou dados inválidos.  
+Exceções não são utilizadas para controle de fluxo nem para erros técnicos.
 
 ---
 
