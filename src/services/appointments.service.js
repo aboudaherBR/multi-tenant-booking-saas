@@ -20,6 +20,8 @@
  */
 function createAppointment(data, existingAppointments) {
   const { date, startTime, duration, professionalId } = data;
+  validateInput({ date, startTime, duration, professionalId });
+
 
   validateDuration(duration);
 
@@ -85,6 +87,33 @@ function validateTimeConflict(startTime, endTime, existingAppointments) {
     }
   }
 }
+
+function validateInput({ date, startTime, duration, professionalId }) {
+  if (!date || !startTime || duration === undefined || !professionalId) {
+    throw new Error('Todos os campos são obrigatórios.');
+  }
+
+  const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+  if (!dateRegex.test(date)) {
+    throw new Error('Formato de data inválido. Use YYYY-MM-DD.');
+  }
+
+  const timeRegex = /^\d{2}:\d{2}$/;
+  if (!timeRegex.test(startTime)) {
+    throw new Error('Formato de horário inválido. Use HH:mm.');
+  }
+
+  const [hours, minutes] = startTime.split(':').map(Number);
+
+  if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
+    throw new Error('Horário inválido.');
+  }
+
+  if (typeof duration !== 'number') {
+    throw new Error('Duração deve ser numérica.');
+  }
+}
+
 
 
 
