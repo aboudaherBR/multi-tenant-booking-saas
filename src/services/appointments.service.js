@@ -7,6 +7,8 @@
  * e validações de consistência) são implementadas como helpers internos
  * para evitar uso incorreto do domínio fora do contexto apropriado.
  *
+ * 
+
  * @param {Object} data 
  * @param {string} data.date
  * @param {string} data.startTime 
@@ -18,6 +20,17 @@
  *
  * @throws {Error} 
  */
+
+
+const MINIMUM_HOURS_BEFORE_CHANGE = 4;
+const {
+  getAppointmentById,
+  deleteAppointmentById,
+  getAppointmentsByProfessionalAndDate,
+  updateAppointmentById
+} = require('../database/appointments.repository');
+
+
 function createAppointment(data, existingAppointments) {
   const { date, startTime, duration, professionalId } = data;
   validateInput({ date, startTime, duration, professionalId });
@@ -83,8 +96,10 @@ function validateTimeConflict(startTime, endTime, existingAppointments) {
     const hasConflict = !(newEnd <= existingStart || newStart >= existingEnd);
 
     if (hasConflict) {
-      throw new Error('Conflito de horário com outro agendamento existente.');
-    }
+    const error = new Error('Conflito de horário com outro agendamento existente.');
+    error.status = 400;
+    throw error;
+}
   }
 }
 
@@ -114,9 +129,96 @@ function validateInput({ date, startTime, duration, professionalId }) {
   }
 }
 
+function enforceTimeWindow(date, startTime) {
+  const appointmentDateTime = new Date(`${date}T${startTime}:00`);
+  const now = new Date();
+
+  const diffInMs = appointmentDateTime - now;
+  const diffInHours = diffInMs / (1000 * 60 * 60);
+
+
+  if (diffInHours < MINIMUM_HOURS_BEFORE_CHANGE) {
+    const error = new Error(
+      'Alterações só podem ser realizadas com no mínimo 4 horas de antecedência.'
+    );
+    error.status = 403;
+    throw error;
+  }
+}
+
+async function deleteAppointment(id) {
+  const appointment = await getAppointmentById(id);
+
+  if (!appointment) {
+    const error = new Error('Agendamento não encontrado.');
+    error.status = 404;
+    throw error;
+  }
+
+  enforceTimeWindow(appointment.date, appointment.startTime);
+
+
+
+
+  await deleteAppointmentById(id);
+}
+
+async function updateAppointment(id, data) {
+  const appointment = await getAppointmentById(id);
+
+  if (!appointment) {
+    const error = new Error('Agendamento não encontrado.');
+    error.status = 404;
+    throw error;
+  }
+
+  enforceTimeWindow(appointment.date, appointment.startTime);
+
+  const { date, startTime, duration, professionalId } = data;
+
+  validateInput({ date, startTime, duration, professionalId });
+
+  validateDuration(duration);
+
+  const endTime = calculateEndTime(startTime, duration);
+
+  const existingAppointments = await getAppointmentsByProfessionalAndDate(
+  professionalId,
+  date,
+  id
+  );
+
+  validateTimeConflict(startTime, endTime, existingAppointments);
+
+    await updateAppointmentById(id, {
+    date,
+    startTime,
+    endTime,
+    duration,
+    professionalId
+  });
+
+  return {
+    id,
+    date,
+    startTime,
+    endTime,
+    duration,
+    professionalId
+  };
+
+
+
+}
+
+
+
+
 
 
 
 module.exports = {
-  createAppointment
+  createAppointment,
+  deleteAppointment,
+  updateAppointment
 };

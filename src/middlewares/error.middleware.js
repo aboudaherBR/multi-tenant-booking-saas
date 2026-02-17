@@ -1,6 +1,7 @@
 function errorMiddleware(err, req, res, next) {
-  // Erros de domínio (regras de negócio violadas)
-  return res.status(400).json({
+  const status = err.status || 500;
+
+  return res.status(status).json({
     error: err.message
   });
 }

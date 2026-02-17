@@ -1,8 +1,11 @@
-const { createAppointment } = require('../services/appointments.service');
+const {
+  createAppointment,
+  deleteAppointment,
+  updateAppointment
+} = require('../services/appointments.service');
 const {
   getAppointmentsByProfessionalAndDate,
-  saveAppointment,
-  deleteAppointmentById
+  saveAppointment
 } = require('../database/appointments.repository');
 
 
@@ -51,15 +54,21 @@ async function remove(req, res, next) {
   try {
     const { id } = req.params;
 
-    const changes = await deleteAppointmentById(id);
-
-    if (changes === 0) {
-      return res.status(404).json({
-        error: 'Agendamento não encontrado.'
-      });
-    }
+    await deleteAppointment(id);
 
     return res.status(204).send();
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function update(req, res, next) {
+  try {
+    const { id } = req.params;
+
+    const updatedAppointment = await updateAppointment(id, req.body);
+
+    return res.status(200).json(updatedAppointment);
   } catch (error) {
     next(error);
   }
@@ -68,8 +77,11 @@ async function remove(req, res, next) {
 
 
 
+
+
 module.exports = {
   create,
   list,
-  remove
+  remove,
+  update
 };
