@@ -1,240 +1,277 @@
 # Sistema de Agendamentos Web para Pequenos Negócios
 
-Aplicação web full-stack, mobile-first, desenvolvida para organizar agendamentos
-em pequenos negócios locais, com foco em simplicidade, clareza operacional e baixo
-custo de manutenção.
+Aplicação backend desenvolvida para organizar agendamentos
+em pequenos negócios locais, com foco em simplicidade,
+clareza operacional e decisões técnicas proporcionais ao contexto.
 
-O projeto foi pensado para resolver um problema real de negócios, sem overengineering,
-utilizando uma arquitetura enxuta e decisões técnicas conscientes.
+O projeto foi pensado para resolver um problema real de negócio,
+sem overengineering, utilizando uma arquitetura enxuta e
+regras de domínio explícitas.
 
 ---
 
 ## Contexto e Problema de Negócio
 
-Pequenos negócios locais costumam controlar seus agendamentos por meio de papel,
-planilhas simples ou mensagens via WhatsApp. Esse modelo informal frequentemente
-gera conflitos de horário, retrabalho, erros de comunicação e dependência excessiva
-de uma única pessoa para gerenciar a agenda.
+Pequenos negócios locais frequentemente controlam seus agendamentos
+por meio de papel, planilhas simples ou mensagens via WhatsApp.
 
-Além disso, a falta de uma visão clara da agenda da semana dificulta o planejamento
-operacional, aumenta o estresse da equipe e impacta negativamente a experiência
-do cliente final.
+Esse modelo informal costuma gerar:
+
+- conflitos de horário
+- retrabalho
+- erros humanos
+- dependência excessiva de uma única pessoa
+- falta de previsibilidade operacional
+
+O sistema proposto resolve especificamente o problema
+de organização de horários e bloqueio automático de conflitos.
 
 ---
 
 ## Objetivo do Sistema
 
-O objetivo deste sistema é fornecer uma forma simples e centralizada de organizar
-agendamentos, reduzindo conflitos de horário e o tempo gasto com controles manuais.
+Fornecer uma API REST simples e confiável para:
 
-A proposta não é substituir sistemas complexos de gestão, mas atender de forma
-eficiente às necessidades básicas de pequenos negócios, priorizando facilidade
-de uso, clareza e manutenção simples.
+- criar agendamentos
+- listar agendamentos por profissional e data
+- editar agendamentos
+- remover agendamentos
+- impedir conflitos de horário
+- aplicar regras reais de negócio (janela mínima de antecedência)
+
+O foco é clareza, previsibilidade e manutenção simples.
 
 ---
 
 ## Princípios de Projeto
 
-Este projeto foi desenvolvido seguindo alguns princípios claros:
+O projeto foi desenvolvido seguindo princípios técnicos claros:
 
 - simplicidade como requisito técnico
-- escopo bem definido e controlado
-- foco em resolver o problema real do negócio
-- baixo custo de manutenção
-- facilidade de entendimento e evolução
+- separação clara de responsabilidades
+- regras de domínio centralizadas
+- decisões proporcionais ao escopo
+- ausência de abstrações desnecessárias
+- ausência de frameworks ou ORMs complexos
 
-As decisões técnicas refletem cenários reais de pequenos negócios, onde soluções
-excessivamente complexas tendem a gerar mais custo operacional do que benefício.
-
----
-
-## Público-Alvo
-
-Pequenos negócios locais que trabalham com atendimentos agendados, como:
-
-- clínicas
-- estúdios de estética
-- academias de pequeno porte
-- oficinas
-- escolas de bairro
-
-Normalmente são equipes pequenas, com baixo volume de dados e pouca tolerância a
-sistemas complexos ou difíceis de operar.
+A complexidade foi adicionada apenas quando justificável
+por regra de negócio real.
 
 ---
 
-## Escopo Funcional
-
-### Funcionalidades do Sistema
-
-- autenticação simples para usuários internos
-- visualização da agenda semanal
-- criação, edição e cancelamento de agendamentos
-- bloqueio automático de conflitos de horário
-- diferenciação de acesso entre administrador e profissional
-- link público simples para agendamento por clientes, sem necessidade de cadastro
-
-### Fora do Escopo (intencionalmente)
-
-- controle financeiro
-- relatórios gerenciais
-- pagamentos
-- notificações automáticas
-- integrações externas
-- autenticação ou cadastro de clientes
-
-Esses itens foram deliberadamente excluídos do escopo atual para manter o sistema
-simples, claro e alinhado ao problema proposto.
-
----
-
-## Stack Tecnológica e Justificativas
+## Stack Tecnológica
 
 ### Backend
 - Node.js
 - Express
 
 ### Banco de Dados
-- SQLite
+- SQLite (arquivo local)
 
-### Frontend
-- HTML
-- CSS
-- JavaScript puro
+### Justificativas
 
----
+**SQLite**
+- baixo volume de dados esperado
+- zero configuração externa
+- ideal para pequenos negócios
+- persistência simples e suficiente
 
-## Arquitetura e Organização
-
-O projeto segue uma arquitetura simples, com separação clara de responsabilidades:
-
-- `src/` contém todo o backend
-- `public/` contém o frontend estático
-- separação entre configuração da aplicação (`app.js`) e inicialização do servidor (`server.js`)
+**Sem ORM**
+- controle explícito sobre queries
+- menor complexidade
+- projeto didático e transparente
 
 ---
 
-## Domínio de Agendamentos
+## Arquitetura do Backend
 
-### Entidade: Agendamento
+O backend segue uma separação clara de responsabilidades:
 
-Um **agendamento** representa a reserva de um intervalo de tempo específico
-na agenda de um profissional, para atendimento de um cliente em determinada data e horário.
+- routes → define endpoints HTTP
+- controllers → traduz HTTP para o domínio
+- services → contém regras de negócio
+- repository → acesso ao banco de dados
+- database → conexão SQLite e inicialização
+- middlewares → tratamento centralizado de erros
 
-Todo agendamento possui:
-- data
-- horário inicial
-- duração definida (30, 45 ou 60 minutos)
-- profissional associado
+O service não conhece Express.
+O repository não conhece regras de negócio.
+O controller não contém validação de domínio.
 
-Um agendamento ocupa um intervalo contínuo de tempo e **não pode se sobrepor**
-a outro agendamento do mesmo profissional.
+Essa separação reduz acoplamento e facilita manutenção.
 
 ---
 
-### Regras de Conflito de Horário
+## Estrutura de Pastas
 
-Para que um agendamento seja considerado válido, o intervalo de tempo ocupado
-não pode entrar em conflito com nenhum outro agendamento existente
-do mesmo profissional na mesma data.
+```
+src/
+  app.js
+  server.js
+  routes/
+    appointments.routes.js
+  controllers/
+    appointments.controller.js
+  services/
+    appointments.service.js
+  database/
+    db.js
+    appointments.repository.js
+  middlewares/
+    error.middleware.js
+```
 
-O sistema deve impedir a criação ou edição de um agendamento sempre que ocorrer
-qualquer uma das situações abaixo:
+---
 
-- o horário inicial do novo agendamento estiver dentro do intervalo de outro agendamento existente
-- o horário final do novo agendamento ultrapassar o início de outro agendamento existente
-- o intervalo do novo agendamento envolver completamente um agendamento já existente
+## Entidade de Domínio: Appointment
 
-A verificação de conflitos é sempre realizada considerando obrigatoriamente:
-- data
-- horário inicial
+Um agendamento representa:
+
+- date (YYYY-MM-DD)
+- startTime (HH:mm)
+- duration (30, 45 ou 60 minutos)
+- professionalId
+
+O horário final é calculado automaticamente
+com base no horário inicial e duração.
+
+---
+
+## Regras de Negócio Implementadas
+
+### 1) Conflito de Horário
+
+Um agendamento não pode se sobrepor
+a outro agendamento do mesmo profissional
+na mesma data.
+
+Regra formal aplicada:
+
+```
+!(newEnd <= existingStart || newStart >= existingEnd)
+```
+
+Essa validação é aplicada:
+
+- na criação (POST)
+- na edição (PUT), ignorando o próprio id
+
+---
+
+### 2) Janela Mínima de Antecedência (4 Horas)
+
+Alterações e exclusões só são permitidas
+com no mínimo 4 horas de antecedência
+em relação ao horário do agendamento.
+
+Essa regra:
+
+- é aplicada no service
+- não pode ser burlada pelo cliente
+- retorna status 403 (Forbidden)
+
+---
+
+### 3) Validações Aplicadas
+
+- campos obrigatórios
+- formato de data (YYYY-MM-DD)
+- formato de horário (HH:mm)
+- validação básica de faixa de horário (00–23 / 00–59)
+- duração permitida: 30, 45 ou 60
+- conflito de horário
+- existência do agendamento para PUT e DELETE
+
+---
+
+## Endpoints REST
+
+### POST /appointments
+
+Cria um agendamento.
+
+Valida:
+- formato
 - duração
-- profissional
+- conflito
+
+Retornos:
+- 201 → criado com sucesso
+- 400 → erro de validação ou conflito
 
 ---
 
-### Papéis e Responsabilidades
+### GET /appointments?professionalId=&date=
 
-O sistema trabalha com dois papéis internos distintos, cada um com responsabilidades
-bem definidas sobre a gestão da agenda.
+Lista agendamentos por profissional e data.
 
-#### Administrador / Recepção
-
-Responsável pela organização e controle da agenda do negócio. Possui as seguintes permissões:
-
-- visualizar a agenda completa de todos os profissionais
-- criar, editar e cancelar agendamentos
-- gerenciar conflitos de horário
-- atuar como ponto central de organização da agenda
-
-#### Profissional
-
-Responsável apenas pelo acompanhamento de sua própria agenda. Possui as seguintes permissões:
-
-- visualizar exclusivamente seus próprios agendamentos
-- acompanhar horários, datas e compromissos já definidos
-
-O profissional não possui permissão para criar, editar ou cancelar agendamentos,
-garantindo controle centralizado da agenda e reduzindo riscos operacionais.
+Retornos:
+- 200 → lista (pode ser vazia)
+- 400 → parâmetros obrigatórios ausentes
 
 ---
 
-### Organização das Regras de Negócio
+### PUT /appointments/:id
 
-As regras de negócio relacionadas a agendamentos são centralizadas em um único
-service de aplicação, responsável por garantir que o fluxo de criação de um
-agendamento seja sempre validado de forma consistente.
+Atualiza completamente um agendamento.
 
-O service expõe apenas uma função pública responsável pela criação do agendamento,
-enquanto as regras internas (validação de conflitos, cálculo de horário final e
-verificações de consistência) são implementadas como funções auxiliares internas.
+Regras:
+- 404 → não encontrado
+- 403 → dentro da janela mínima de 4 horas
+- 400 → dados inválidos ou conflito
+- recalcula automaticamente endTime
+- ignora o próprio id na verificação de conflito
 
-Essa abordagem reduz o risco de uso incorreto das regras de negócio, mantém o
-fluxo controlado e facilita a evolução futura do sistema sem acoplamento excessivo.
+Retorno:
+- 200 → objeto atualizado
 
 ---
 
-### Service de Agendamentos — Contrato da Função Pública
+### DELETE /appointments/:id
 
-O service de agendamentos expõe **uma única função pública**, responsável por garantir
-a criação de agendamentos válidos de acordo com as regras do domínio.
+Remove permanentemente um agendamento.
 
-#### Função Pública: `createAppointment`
+Regras:
+- 404 → não encontrado
+- 403 → dentro da janela mínima de 4 horas
 
-**Responsabilidade**  
-Criar um agendamento válido, garantindo que todas as regras de negócio relacionadas
-a datas, horários, duração e conflitos sejam respeitadas.
+Retorno:
+- 204 → removido com sucesso
 
-**Entrada (dados necessários)**  
-A função recebe as informações mínimas que definem um agendamento:
+---
 
-- data do agendamento
-- horário inicial
-- duração (30, 45 ou 60 minutos)
-- profissional associado
-- lista de agendamentos existentes do profissional na mesma data
+## Decisões Técnicas Conscientes
 
-**Processamento Interno**  
-Durante a execução, a função:
+- DELETE físico (sem soft delete)
+  - sistema simples
+  - sem exigência de auditoria
+  - sem compliance regulatório
 
-- valida a duração informada
-- calcula automaticamente o horário final do agendamento
-- verifica conflitos de horário com agendamentos existentes
-- garante que o novo agendamento não viole regras do domínio
+- Sem validação de calendário real (ex: 2024-99-99)
+  - projeto didático
+  - front-end controlado
+  - evitar complexidade desnecessária
 
-Essas validações são realizadas por funções auxiliares internas (helpers),
-não expostas externamente.
+- Sem autenticação (escopo atual)
+  - foco exclusivo em regras de agendamento
 
-**Saída (resultado)**  
-- Em caso de sucesso, a função retorna um agendamento válido, contendo
-  todos os dados consistentes, incluindo o horário final calculado.
-- Em caso de violação de regra de negócio, a função lança uma exceção de domínio,
-  interrompendo o fluxo e impedindo a criação do agendamento.
+- Sem ORM
+  - clareza didática
+  - controle explícito de persistência
 
-**Tratamento de Erros**  
-Exceções lançadas por esta função representam **exclusivamente violações explícitas
-do domínio**, como conflitos de horário ou dados inválidos.  
-Exceções não são utilizadas para controle de fluxo nem para erros técnicos.
+---
+
+## Tratamento de Erros
+
+Erros de domínio retornam status apropriados:
+
+- 400 → erro de validação ou conflito
+- 403 → violação de regra de antecedência
+- 404 → recurso não encontrado
+- 500 → erro inesperado
+
+Middleware centralizado é responsável por mapear
+error.status para resposta HTTP.
 
 ---
 
@@ -243,8 +280,128 @@ Exceções não são utilizadas para controle de fluxo nem para erros técnicos.
 ### Pré-requisitos
 - Node.js instalado
 
-### Passos para execução
+### Instalação
 
 ```bash
 npm install
+```
+
+### Execução
+
+```bash
 node src/server.js
+```
+
+Servidor será iniciado na porta 3000.
+
+---
+
+## Possíveis Evoluções Futuras
+
+- autenticação e autorização
+- controle de múltiplos negócios
+- índices no banco para maior volume
+- paginação
+- testes automatizados
+- refatoração leve aplicando princípios SOLID
+- dockerização
+
+---
+
+## Objetivo Técnico do Projeto
+
+Este projeto foi desenvolvido com foco em:
+
+- clareza arquitetural
+- separação de responsabilidades
+- implementação real de regras de negócio
+- decisões proporcionais ao contexto
+- código defensável em entrevista técnica
+
+Ele demonstra como aplicar arquitetura limpa
+de forma simples e prática, sem exageros.
+
+---
+
+## Como Executar o Projeto
+
+### 1) Pré-requisitos
+
+- Node.js instalado (versão 18+ recomendada)
+
+Verifique se está instalado:
+
+```bash
+node -v
+```
+
+---
+
+### 2) Instalar Dependências
+
+Na raiz do projeto (onde está o package.json), execute:
+
+```bash
+npm install
+```
+
+---
+
+### 3) Iniciar o Servidor
+
+```bash
+node src/server.js
+```
+
+Se tudo estiver correto, o terminal exibirá:
+
+```
+Servidor rodando na porta 3000
+```
+
+---
+
+### 4) Testar a API
+
+O servidor roda em:
+
+```
+http://localhost:3000
+```
+
+Você pode testar usando:
+
+- Thunder Client
+- Postman
+- Insomnia
+- curl
+
+---
+
+### Exemplo de Criação de Agendamento
+
+POST
+
+```
+http://localhost:3000/appointments
+```
+
+Body:
+
+```json
+{
+  "date": "2026-03-20",
+  "startTime": "18:00",
+  "duration": 60,
+  "professionalId": "prof-1"
+}
+```
+
+---
+
+## Observações Importantes
+
+- O banco de dados é um arquivo SQLite (`database.sqlite`)
+- Ele é criado automaticamente na primeira execução
+- Não é necessário configurar banco externo
+- Não há autenticação nesta versão do projeto
