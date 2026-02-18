@@ -1,31 +1,29 @@
-const sqlite3 = require('sqlite3');
-const { open } = require('sqlite');
-const path = require('path');
+const { Pool } = require('pg');
 
-let dbInstance = null;
+let pool;
 
 async function connect() {
-  if (dbInstance) {
-    return dbInstance;
+  if (pool) {
+    return pool;
   }
 
-  dbInstance = await open({
-    filename: path.join(__dirname, 'database.sqlite'),
-    driver: sqlite3.Database
+  pool = new Pool({
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
   });
 
-  await dbInstance.exec(`
-    CREATE TABLE IF NOT EXISTS appointments (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      date TEXT NOT NULL,
-      startTime TEXT NOT NULL,
-      endTime TEXT NOT NULL,
-      duration INTEGER NOT NULL,
-      professionalId TEXT NOT NULL
-    );
-  `);
+  try {
+    await pool.query('SELECT 1');
+    console.log('Conectado ao PostgreSQL');
+  } catch (error) {
+    console.error('Erro ao conectar no PostgreSQL:', error);
+    process.exit(1);
+  }
 
-  return dbInstance;
+  return pool;
 }
 
 module.exports = {
