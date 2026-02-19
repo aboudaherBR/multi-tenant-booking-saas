@@ -3,6 +3,9 @@ const { generateBaseSlots, filterSlotsByServiceDuration } = require('../utils/sl
 const { findBusinessHoursByCompanyAndWeekday } = require('../database/companyBusinessHours.repository');
 const { findCompanyById } = require('../database/companies.repository');
 const { findAppointmentsByProfessionalAndDate } = require('../database/appointments.repository');
+const { findScheduleBlocksByProfessionalAndDate } =
+  require('../database/scheduleBlocks.repository');
+
 
 function timeToMinutes(time) {
   const [h, m] = time.split(':').map(Number);
@@ -30,15 +33,19 @@ async function getAvailableSlots({
   const weekday = getWeekdayFromDate(date);
 
   // 2️⃣ Buscar horário da empresa no dia
-  const businessHours =
-    await findBusinessHoursByCompanyAndWeekday({
-      companyId,
-      weekday
-    });
+ // 2️⃣ Buscar horário da empresa no dia
+const businessHours =
+  await findBusinessHoursByCompanyAndWeekday({
+    companyId,
+    weekday
+  });
 
-  if (!businessHours) {
-    return [];
-  }
+console.log("Business hours recebidos do banco:", businessHours);
+
+if (!businessHours) {
+  return [];
+}
+
 
   // 3️⃣ Buscar config da empresa
   const company = await findCompanyById(companyId);
@@ -47,6 +54,9 @@ async function getAvailableSlots({
 
   const slotInterval = company.slot_interval_minutes;
   const bufferMinutes = company.appointment_buffer_minutes;
+  const lunchStart = company.lunch_start_time;
+  const lunchEnd = company.lunch_end_time;
+
 
   // 4️⃣ Gerar slots base
   const baseSlots = generateBaseSlots({
@@ -70,33 +80,79 @@ async function getAvailableSlots({
       date
     });
 
+  const scheduleBlocks =
+    await findScheduleBlocksByProfessionalAndDate({
+      companyId,
+      professionalId,
+      date
+  });
+
+
   // 7️⃣ Aplicar conflito + buffer
-  const availableSlots = validDurationSlots.filter(slot => {
+ // 7️⃣ Aplicar conflito + buffer + bloqueios
+const availableSlots = validDurationSlots.filter(slot => {
 
-    const slotStart = timeToMinutes(slot);
-    const slotEnd = slotStart + serviceDurationMinutes;
+  const slotStart = timeToMinutes(slot);
+  const slotEnd = slotStart + serviceDurationMinutes;
 
-    for (const appt of appointments) {
+  // 🔵 Conflito com appointments
+  for (const appt of appointments) {
 
-      const apptStart = timeToMinutes(appt.start_time);
-      const apptEnd =
-        timeToMinutes(appt.end_time) + bufferMinutes;
+    const apptStart = timeToMinutes(appt.start_time);
+    const apptEnd =
+      timeToMinutes(appt.end_time) + bufferMinutes;
 
-      const conflict =
-        slotStart < apptEnd &&
-        slotEnd > apptStart;
+    const conflict =
+      slotStart < apptEnd &&
+      slotEnd > apptStart;
 
-      if (conflict) {
-        return false;
-      }
+    if (conflict) {
+      return false;
+    }
+  }
+
+  // 🔴 Conflito com bloqueios
+  for (const block of scheduleBlocks) {
+
+    if (!block.start_time || !block.end_time) {
+      continue;
     }
 
-    return true;
-  });
+    const blockStart = timeToMinutes(block.start_time);
+    const blockEnd = timeToMinutes(block.end_time);
+
+    const conflictWithBlock =
+      slotStart < blockEnd &&
+      slotEnd > blockStart;
+
+    if (conflictWithBlock) {
+      return false;
+    }
+  }
+// 🟡 Conflito com almoço
+if (lunchStart && lunchEnd) {
+
+  const lunchStartMinutes = timeToMinutes(lunchStart);
+  const lunchEndMinutes = timeToMinutes(lunchEnd);
+
+  const conflictWithLunch =
+    slotStart < lunchEndMinutes &&
+    slotEnd > lunchStartMinutes;
+
+  if (conflictWithLunch) {
+    return false;
+  }
+}
+
+  return true;
+});
+
+
+
  const today = new Date().toISOString().split('T')[0];
  console.log('Data testada:', new Date().toISOString().split('T')[0]);
  console.log('Data solicitada:', date);
-    console.log('Hoje (Node):', today);
+ console.log('Hoje (Node):', today);
 
 
 

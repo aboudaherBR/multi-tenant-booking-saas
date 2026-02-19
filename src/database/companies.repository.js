@@ -20,7 +20,14 @@ async function findCompanyById(companyId) {
 
   const result = await pool.query(
     `
-      SELECT id, status, appointment_buffer_minutes, subscription_ends_at, slot_interval_minutes
+      SELECT 
+        id, 
+        status, 
+        appointment_buffer_minutes, 
+        subscription_ends_at, 
+        slot_interval_minutes,
+        lunch_start_time,
+        lunch_end_time
       FROM companies
       WHERE id = $1
     `,
@@ -30,7 +37,23 @@ async function findCompanyById(companyId) {
   return result.rows[0];
 }
 
+async function updateCompanyLunch(companyId, lunchStart, lunchEnd) {
+  const pool = await connect();
+
+  await pool.query(
+    `
+      UPDATE companies
+      SET lunch_start_time = $2,
+          lunch_end_time   = $3
+      WHERE id = $1
+    `,
+    [companyId, lunchStart, lunchEnd]
+  );
+}
+
+
 module.exports = {
   createCompany,
-  findCompanyById
+  findCompanyById,
+  updateCompanyLunch
 };

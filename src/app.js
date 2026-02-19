@@ -1,5 +1,6 @@
 const express = require('express');
 const session = require('express-session');
+
 const app = express();
 
 app.use(
@@ -21,15 +22,23 @@ app.use(express.json());
 const authRoutes = require('./routes/auth.routes');
 app.use(authRoutes);
 
-
-app.get('/', (req, res) => {
-  res.send('API online');
-});
+const availabilityRoutes = require('./routes/availability.routes');
+app.use(availabilityRoutes);
 
 const appointmentsRoutes = require('./routes/appointments.routes');
 app.use(appointmentsRoutes);
 
-const errorMiddleware = require('./middlewares/error.middleware');
-app.use(errorMiddleware);
+const companyRoutes = require('./routes/company.routes');
+app.use(companyRoutes);
+
+const scheduleBlocksRoutes = require('./routes/scheduleBlocks.routes');
+app.use(scheduleBlocksRoutes);
+
+
+
+
+app.get('/', (req, res) => {
+  res.send('API online');
+});
 
 module.exports = app;
