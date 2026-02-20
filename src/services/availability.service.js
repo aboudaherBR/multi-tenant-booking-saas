@@ -87,6 +87,15 @@ if (!businessHours) {
       date
   });
 
+  // 🔴 Se existir bloqueio de dia inteiro, não há slots disponíveis
+    const hasFullDayBlock = scheduleBlocks.some(
+      block => !block.start_time && !block.end_time
+    );
+
+    if (hasFullDayBlock) {
+      return [];
+    }
+
 
   // 7️⃣ Aplicar conflito + buffer
  // 7️⃣ Aplicar conflito + buffer + bloqueios

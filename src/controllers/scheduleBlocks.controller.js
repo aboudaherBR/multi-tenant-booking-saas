@@ -7,6 +7,7 @@ const {
 } = require('../database/scheduleBlocks.repository');
 
 const { findProfessionalById } = require('../database/professionals.repository');
+const { findAppointmentsInRange } = require('../database/appointments.repository');
 
 function isValidTimeFormat(time) {
   return /^([01]\d|2[0-3]):([0-5]\d)$/.test(time);
@@ -84,14 +85,14 @@ async function create(req, res, next) {
       }
     }
 
-    // 🔴 VALIDAÇÃO DE CONFLITO
+    // 🔴 Validar conflito com outros blocos
     const hasConflict = await hasScheduleBlockConflict({
       companyId: req.user.companyId,
       professionalId: professionalId || null,
       startDate,
       endDate,
-      startTime,
-      endTime
+      startTime: startTime || null,
+      endTime: endTime || null
     });
 
     if (hasConflict) {
@@ -100,6 +101,17 @@ async function create(req, res, next) {
       });
     }
 
+    // 🔵 Verificar appointments existentes no período
+    const existingAppointments = await findAppointmentsInRange({
+      companyId: req.user.companyId,
+      professionalId: professionalId || null,
+      startDate,
+      endDate,
+      startTime: startTime || null,
+      endTime: endTime || null
+    });
+
+    // 🔵 Criar bloqueio mesmo que existam appointments
     await createScheduleBlock({
       companyId: req.user.companyId,
       professionalId: professionalId || null,
@@ -109,6 +121,14 @@ async function create(req, res, next) {
       endTime: endTime || null,
       reason: reason || null
     });
+
+    if (existingAppointments.length > 0) {
+      return res.status(201).json({
+        message: 'Schedule block created successfully',
+        warning: `${existingAppointments.length} appointments exist during this block`,
+        appointments: existingAppointments
+      });
+    }
 
     return res.status(201).json({
       message: 'Schedule block created successfully'
@@ -242,8 +262,8 @@ async function update(req, res, next) {
       professionalId: professionalId || null,
       startDate,
       endDate,
-      startTime,
-      endTime,
+      startTime: startTime || null,
+      endTime: endTime || null,
       ignoreBlockId: id
     });
 

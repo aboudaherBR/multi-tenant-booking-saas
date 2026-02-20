@@ -125,11 +125,57 @@ async function findAppointmentsByProfessionalAndDate({
   return result.rows;
 }
 
+async function findAppointmentsInRange({
+  companyId,
+  professionalId,
+  startDate,
+  endDate,
+  startTime,
+  endTime
+}) {
+  const pool = await connect();
+
+  const result = await pool.query(
+    `
+      SELECT id,
+             professional_id,
+             client_name,
+             date,
+             start_time,
+             end_time
+      FROM appointments
+      WHERE company_id = $1
+      AND ($2::uuid IS NULL OR professional_id = $2)
+      AND date BETWEEN $3 AND $4
+      AND (
+        $5::time IS NULL
+        OR $6::time IS NULL
+        OR (
+          $5::time < end_time
+          AND $6::time > start_time
+        )
+      )
+      ORDER BY date, start_time
+    `,
+    [
+      companyId,
+      professionalId,
+      startDate,
+      endDate,
+      startTime,
+      endTime
+    ]
+  );
+
+  return result.rows;
+}
+
 
 
 
 module.exports = {
   createAppointment,
   findConflicts,
-  findAppointmentsByProfessionalAndDate
+  findAppointmentsByProfessionalAndDate,
+  findAppointmentsInRange
 };

@@ -161,13 +161,17 @@ async function hasScheduleBlockConflict({
       SELECT id
       FROM schedule_blocks
       WHERE company_id = $1
-      AND ($2 BETWEEN start_date AND end_date
-           OR $3 BETWEEN start_date AND end_date)
+      AND start_date <= $3
+      AND end_date >= $2
       AND (
         professional_id IS NULL
         OR professional_id = $4
       )
-      AND ($5 < end_time AND $6 > start_time)
+      AND (
+        start_time IS NULL
+        OR end_time IS NULL
+        OR ($5 < end_time AND $6 > start_time)
+      )
       AND ($7::uuid IS NULL OR id <> $7)
       LIMIT 1
     `,

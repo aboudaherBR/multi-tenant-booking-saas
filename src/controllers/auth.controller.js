@@ -1,4 +1,5 @@
 const { authenticate } = require('../services/auth.service');
+const { findProfessionalByUserId } = require('../database/professionals.repository');
 
 async function login(req, res, next) {
   try {
@@ -9,12 +10,15 @@ async function login(req, res, next) {
     }
 
     const user = await authenticate(username, password);
+    const professional = user.company_id
+  ? await findProfessionalByUserId(user.company_id, user.id)
+  : null;
 
     req.session.user = {
       userId: user.id,
       companyId: user.company_id,
       isCompanyAdmin: user.is_company_admin,
-      isProfessional: user.is_professional,
+      isProfessional: Boolean(professional),
       isSuperAdmin: user.company_id === null
     };
 
