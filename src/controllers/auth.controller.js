@@ -3,6 +3,8 @@ const { findProfessionalByUserId } = require('../database/professionals.reposito
 
 async function login(req, res, next) {
   try {
+    console.log('BODY RECEIVED:', req.body);
+
     const { username, password } = req.body;
 
     if (!username || !password) {

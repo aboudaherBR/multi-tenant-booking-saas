@@ -1,25 +1,21 @@
-const { connect } = require('./db');
+const pool = require('./db');
 
-async function findServiceById({
-  companyId,
-  professionalId,
-  serviceId
-}) {
-  const pool = await connect();
-
+async function findServiceById({ companyId, serviceId }) {
   const result = await pool.query(
     `
-      SELECT id, name, duration_minutes, price
+      SELECT id,
+             name,
+             price,
+             duration_minutes
       FROM services
       WHERE company_id = $1
-        AND professional_id = $2
-        AND id = $3
-        AND is_active = true
+      AND id = $2
+      AND is_active = true
     `,
-    [companyId, professionalId, serviceId]
+    [companyId, serviceId]
   );
 
-  return result.rows[0];
+  return result.rows[0] || null;
 }
 
 module.exports = {

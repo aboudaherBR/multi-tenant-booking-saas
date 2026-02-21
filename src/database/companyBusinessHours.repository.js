@@ -1,8 +1,6 @@
-const { connect } = require('./db');
+const pool = require('./db');
 
 async function findBusinessHoursByCompanyAndWeekday({ companyId, weekday }) {
-  const pool = await connect();
-
   const result = await pool.query(
     `
       SELECT id, start_time, end_time

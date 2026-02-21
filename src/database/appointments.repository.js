@@ -1,4 +1,4 @@
-const { connect } = require('./db');
+const pool = require('./db');
 
 async function createAppointment({
   companyId,
@@ -12,8 +12,6 @@ async function createAppointment({
   servicePriceSnapshot,
   serviceDurationSnapshot
 }) {
-  const pool = await connect();
-
   const result = await pool.query(
     `
       INSERT INTO appointments (
@@ -68,17 +66,6 @@ async function findConflicts({
   endTime,
   bufferMinutes
 }) {
-  const pool = await connect();
-
-  console.log('findConflicts params:', {
-    companyId,
-    professionalId,
-    date,
-    startTime,
-    endTime,
-    bufferMinutes
-  });
-
   const result = await pool.query(
     `
       SELECT id, start_time, end_time
@@ -99,8 +86,6 @@ async function findConflicts({
     ]
   );
 
-
-
   return result.rows;
 }
 
@@ -109,8 +94,6 @@ async function findAppointmentsByProfessionalAndDate({
   professionalId,
   date
 }) {
-  const pool = await connect();
-
   const result = await pool.query(
     `
       SELECT id, start_time, end_time
@@ -133,8 +116,6 @@ async function findAppointmentsInRange({
   startTime,
   endTime
 }) {
-  const pool = await connect();
-
   const result = await pool.query(
     `
       SELECT id,
@@ -169,9 +150,6 @@ async function findAppointmentsInRange({
 
   return result.rows;
 }
-
-
-
 
 module.exports = {
   createAppointment,

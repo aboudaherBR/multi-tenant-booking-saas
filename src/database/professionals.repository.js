@@ -1,8 +1,6 @@
-const { connect } = require('./db');
+const pool = require('./db');
 
 async function findProfessionalById(companyId, professionalId) {
-  const pool = await connect();
-
   const result = await pool.query(
     `
       SELECT id
@@ -18,8 +16,6 @@ async function findProfessionalById(companyId, professionalId) {
 }
 
 async function findProfessionalByUserId(companyId, userId) {
-  const pool = await connect();
-
   const result = await pool.query(
     `
       SELECT id
@@ -36,5 +32,5 @@ async function findProfessionalByUserId(companyId, userId) {
 
 module.exports = {
   findProfessionalById,
-  findProfessionalByUserId  
+  findProfessionalByUserId
 };

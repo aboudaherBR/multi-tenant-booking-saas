@@ -1,6 +1,7 @@
 const { createAppointment, findConflicts } = require('../database/appointments.repository');
 const { findServiceById } = require('../database/services.repository');
 const { findCompanyById } = require('../database/companies.repository');
+const { findScheduleBlocksByProfessionalAndDate } = require('../database/scheduleBlocks.repository');
 
 function addMinutesToTime(time, minutesToAdd) {
   const [hours, minutes] = time.split(':').map(Number);
@@ -27,13 +28,12 @@ async function create(req, res, next) {
     // 1️⃣ Buscar serviço
     const service = await findServiceById({
       companyId,
-      professionalId,
       serviceId
     });
 
     if (!service) {
       return res.status(404).json({
-        message: 'Serviço não encontrado para este profissional'
+        message: 'Serviço não encontrado'
       });
     }
 
@@ -51,9 +51,7 @@ async function create(req, res, next) {
 
     const bufferMinutes = company.appointment_buffer_minutes;
 
-
-
-    // 4️⃣ Verificar conflitos
+    // 4️⃣ Verificar conflitos com appointments
     const conflicts = await findConflicts({
       companyId,
       professionalId,
@@ -67,6 +65,29 @@ async function create(req, res, next) {
       return res.status(409).json({
         message: 'Horário em conflito com outro agendamento'
       });
+    }
+
+    // 4.1️⃣ Verificar conflito com schedule blocks
+    const blocks = await findScheduleBlocksByProfessionalAndDate({
+      companyId,
+      professionalId,
+      date
+    });
+
+    for (const block of blocks) {
+      // Bloqueio global (dia inteiro)
+      if (!block.start_time || !block.end_time) {
+        return res.status(409).json({
+          message: 'Horário em conflito com outro agendamento'
+        });
+      }
+
+      // Bloqueio parcial
+      if (startTime < block.end_time && endTime > block.start_time) {
+        return res.status(409).json({
+          message: 'Horário em conflito com outro agendamento'
+        });
+      }
     }
 
     // 5️⃣ Criar appointment

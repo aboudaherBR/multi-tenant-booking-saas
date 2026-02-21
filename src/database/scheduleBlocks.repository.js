@@ -1,12 +1,10 @@
-const { connect } = require('./db');
+const pool = require('./db');
 
 async function findScheduleBlocksByProfessionalAndDate({
   companyId,
   professionalId,
   date
 }) {
-  const pool = await connect();
-
   const result = await pool.query(
     `
       SELECT id, start_time, end_time
@@ -24,10 +22,6 @@ async function findScheduleBlocksByProfessionalAndDate({
   return result.rows;
 }
 
-
-
-
-
 async function createScheduleBlock({
   companyId,
   professionalId,
@@ -37,8 +31,6 @@ async function createScheduleBlock({
   endTime,
   reason
 }) {
-  const pool = await connect();
-
   await pool.query(
     `
       INSERT INTO schedule_blocks (
@@ -65,8 +57,6 @@ async function createScheduleBlock({
 }
 
 async function findScheduleBlocksByCompany(companyId) {
-  const pool = await connect();
-
   const result = await pool.query(
     `
       SELECT 
@@ -89,8 +79,6 @@ async function findScheduleBlocksByCompany(companyId) {
 }
 
 async function deleteScheduleBlock(companyId, blockId) {
-  const pool = await connect();
-
   const result = await pool.query(
     `
       DELETE FROM schedule_blocks
@@ -114,8 +102,6 @@ async function updateScheduleBlock({
   endTime,
   reason
 }) {
-  const pool = await connect();
-
   const result = await pool.query(
     `
       UPDATE schedule_blocks
@@ -144,7 +130,6 @@ async function updateScheduleBlock({
   return result.rows[0] || null;
 }
 
-
 async function hasScheduleBlockConflict({
   companyId,
   professionalId,
@@ -154,8 +139,6 @@ async function hasScheduleBlockConflict({
   endTime,
   ignoreBlockId = null
 }) {
-  const pool = await connect();
-
   const result = await pool.query(
     `
       SELECT id
@@ -188,10 +171,6 @@ async function hasScheduleBlockConflict({
 
   return result.rows.length > 0;
 }
-
-
-
-
 
 module.exports = {
   findScheduleBlocksByProfessionalAndDate,

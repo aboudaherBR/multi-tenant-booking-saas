@@ -1,8 +1,6 @@
-const { connect } = require('./db');
+const pool = require('./db');
 
 async function createCompany(name) {
-  const pool = await connect();
-
   const result = await pool.query(
     `
       INSERT INTO companies (name)
@@ -16,8 +14,6 @@ async function createCompany(name) {
 }
 
 async function findCompanyById(companyId) {
-  const pool = await connect();
-
   const result = await pool.query(
     `
       SELECT 
@@ -38,8 +34,6 @@ async function findCompanyById(companyId) {
 }
 
 async function updateCompanyLunch(companyId, lunchStart, lunchEnd) {
-  const pool = await connect();
-
   await pool.query(
     `
       UPDATE companies
@@ -50,7 +44,6 @@ async function updateCompanyLunch(companyId, lunchStart, lunchEnd) {
     [companyId, lunchStart, lunchEnd]
   );
 }
-
 
 module.exports = {
   createCompany,
