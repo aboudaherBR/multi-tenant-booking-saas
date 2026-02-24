@@ -1,8 +1,16 @@
 const express = require('express');
 const session = require('express-session');
+const cors = require('cors');
 
 const app = express();
 
+// 1️⃣ CORS primeiro
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true
+}));
+
+// 2️⃣ Session depois
 app.use(
   session({
     name: 'saas_session',
@@ -17,10 +25,14 @@ app.use(
   })
 );
 
+// 3️⃣ JSON parser
 app.use(express.json());
 
 const authRoutes = require('./routes/auth.routes');
 app.use(authRoutes);
+
+const sessionRoutes = require('./routes/session.routes');
+app.use(sessionRoutes);
 
 const availabilityRoutes = require('./routes/availability.routes');
 app.use(availabilityRoutes);
@@ -33,12 +45,5 @@ app.use(companyRoutes);
 
 const scheduleBlocksRoutes = require('./routes/scheduleBlocks.routes');
 app.use(scheduleBlocksRoutes);
-
-
-
-
-app.get('/', (req, res) => {
-  res.send('API online');
-});
 
 module.exports = app;
