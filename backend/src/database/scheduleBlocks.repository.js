@@ -151,9 +151,11 @@ async function hasScheduleBlockConflict({
         OR professional_id = $4
       )
       AND (
-        start_time IS NULL
-        OR end_time IS NULL
-        OR ($5 < end_time AND $6 > start_time)
+        ($5::time IS NULL OR $6::time IS NULL)
+        OR
+        (start_time IS NULL OR end_time IS NULL)
+        OR
+        (start_time < $6::time AND end_time > $5::time)
       )
       AND ($7::uuid IS NULL OR id <> $7)
       LIMIT 1

@@ -2,6 +2,12 @@ const { createAppointment, findConflicts } = require('../database/appointments.r
 const { findServiceById } = require('../database/services.repository');
 const { findCompanyById } = require('../database/companies.repository');
 const { findScheduleBlocksByProfessionalAndDate } = require('../database/scheduleBlocks.repository');
+const { normalizeBrazilianPhone } = require('../utils/phone.utils');
+const {
+  findClientByPhone,
+  createClient,
+  updateClientName
+} = require('../database/clients.repository');
 
 function addMinutesToTime(time, minutesToAdd) {
   const [hours, minutes] = time.split(':').map(Number);
@@ -15,17 +21,70 @@ function addMinutesToTime(time, minutesToAdd) {
 
 async function create(req, res, next) {
   try {
-    const { professionalId, serviceId, clientName, date, startTime } = req.body;
+    const {
+      professionalId,
+      serviceId,
+      clientName,
+      clientPhone,
+      date,
+      startTime
+    } = req.body;
 
-    if (!professionalId || !serviceId || !clientName || !date || !startTime) {
+    if (
+      !professionalId ||
+      !serviceId ||
+      !clientName ||
+      !clientPhone ||
+      !date ||
+      !startTime
+    ) {
       return res.status(400).json({
-        message: 'professionalId, serviceId, clientName, date e startTime são obrigatórios'
+        message:
+          'professionalId, serviceId, clientName, clientPhone, date e startTime são obrigatórios'
       });
     }
 
     const companyId = req.user.companyId;
 
-    // 1️⃣ Buscar serviço
+    // 🔹 1️⃣ Normalizar telefone
+    let normalizedPhone;
+
+    try {
+      normalizedPhone = normalizeBrazilianPhone(clientPhone);
+    } catch (err) {
+      return res.status(400).json({
+        message: 'Telefone inválido'
+      });
+    }
+
+    // 🔹 2️⃣ Buscar cliente por telefone
+    let client = await findClientByPhone({
+      companyId,
+      phone: normalizedPhone
+    });
+
+    if (!client) {
+      // 🔹 3️⃣ Criar cliente se não existir
+      client = await createClient({
+        companyId,
+        name: clientName.trim(),
+        phone: normalizedPhone
+      });
+    } else {
+      // 🔹 4️⃣ Atualizar nome se diferente
+      const normalizedExistingName = client.name.trim().toLowerCase();
+      const normalizedNewName = clientName.trim().toLowerCase();
+
+      if (normalizedExistingName !== normalizedNewName) {
+       client = await updateClientName({
+        clientId: client.id,
+        companyId,
+        name: clientName.trim()
+      });
+      }
+    }
+
+    // 🔹 5️⃣ Buscar serviço
     const service = await findServiceById({
       companyId,
       serviceId
@@ -37,10 +96,13 @@ async function create(req, res, next) {
       });
     }
 
-    // 2️⃣ Calcular endTime
-    const endTime = addMinutesToTime(startTime, service.duration_minutes);
+    // 🔹 6️⃣ Calcular endTime
+    const endTime = addMinutesToTime(
+      startTime,
+      service.duration_minutes
+    );
 
-    // 3️⃣ Buscar empresa (pegar buffer)
+    // 🔹 7️⃣ Buscar empresa (buffer)
     const company = await findCompanyById(companyId);
 
     if (!company) {
@@ -51,7 +113,7 @@ async function create(req, res, next) {
 
     const bufferMinutes = company.appointment_buffer_minutes;
 
-    // 4️⃣ Verificar conflitos com appointments
+    // 🔹 8️⃣ Verificar conflitos com appointments
     const conflicts = await findConflicts({
       companyId,
       professionalId,
@@ -67,45 +129,49 @@ async function create(req, res, next) {
       });
     }
 
-    // 4.1️⃣ Verificar conflito com schedule blocks
-    const blocks = await findScheduleBlocksByProfessionalAndDate({
-      companyId,
-      professionalId,
-      date
-    });
+    // 🔹 9️⃣ Verificar conflito com schedule blocks
+    const blocks =
+      await findScheduleBlocksByProfessionalAndDate({
+        companyId,
+        professionalId,
+        date
+      });
 
     for (const block of blocks) {
-      // Bloqueio global (dia inteiro)
       if (!block.start_time || !block.end_time) {
         return res.status(409).json({
-          message: 'Horário em conflito com outro agendamento'
+          message:
+            'Horário em conflito com outro agendamento'
         });
       }
 
-      // Bloqueio parcial
-      if (startTime < block.end_time && endTime > block.start_time) {
+      if (
+        startTime < block.end_time &&
+        endTime > block.start_time
+      ) {
         return res.status(409).json({
-          message: 'Horário em conflito com outro agendamento'
+          message:
+            'Horário em conflito com outro agendamento'
         });
       }
     }
 
-    // 5️⃣ Criar appointment
+    // 🔹 🔟 Criar appointment com clientId
     const appointment = await createAppointment({
       companyId,
       professionalId,
       serviceId,
-      clientName,
+      clientId: client.id,
       date,
       startTime,
       endTime,
       serviceNameSnapshot: service.name,
       servicePriceSnapshot: service.price,
-      serviceDurationSnapshot: service.duration_minutes
+      serviceDurationSnapshot:
+        service.duration_minutes
     });
 
     return res.status(201).json(appointment);
-
   } catch (error) {
     next(error);
   }

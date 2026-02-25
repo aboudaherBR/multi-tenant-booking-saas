@@ -4,7 +4,7 @@ async function createAppointment({
   companyId,
   professionalId,
   serviceId,
-  clientName,
+  clientId,
   date,
   startTime,
   endTime,
@@ -18,7 +18,7 @@ async function createAppointment({
         company_id,
         professional_id,
         service_id,
-        client_name,
+        client_id,
         date,
         start_time,
         end_time,
@@ -32,7 +32,7 @@ async function createAppointment({
         company_id,
         professional_id,
         service_id,
-        client_name,
+        client_id,
         date,
         start_time,
         end_time,
@@ -45,7 +45,7 @@ async function createAppointment({
       companyId,
       professionalId,
       serviceId,
-      clientName,
+      clientId,
       date,
       startTime,
       endTime,
@@ -99,8 +99,8 @@ async function findAppointmentsByProfessionalAndDate({
       SELECT id, start_time, end_time
       FROM appointments
       WHERE company_id = $1
-      AND professional_id = $2
-      AND date = $3
+        AND professional_id = $2
+        AND date = $3
     `,
     [companyId, professionalId, date]
   );
@@ -116,35 +116,44 @@ async function findAppointmentsInRange({
   startTime,
   endTime
 }) {
+  const safeStartTime = startTime || null;
+  const safeEndTime = endTime || null;
+
   const result = await pool.query(
     `
-      SELECT id,
-             professional_id,
-             client_name,
-             date,
-             start_time,
-             end_time
-      FROM appointments
-      WHERE company_id = $1
-      AND ($2::uuid IS NULL OR professional_id = $2)
-      AND date BETWEEN $3 AND $4
+      SELECT
+        a.id,
+        a.professional_id,
+        a.client_id,
+        c.name AS client_name,
+        a.date,
+        a.start_time,
+        a.end_time,
+        a.service_name_snapshot,
+        a.service_price_snapshot
+      FROM appointments a
+      JOIN clients c
+        ON c.id = a.client_id
+        AND c.company_id = a.company_id
+      WHERE a.company_id = $1
+      AND ($2::uuid IS NULL OR a.professional_id = $2)
+      AND a.date BETWEEN $3 AND $4
       AND (
         $5::time IS NULL
-        OR $6::time IS NULL
         OR (
-          $5::time < end_time
-          AND $6::time > start_time
+          a.start_time < $6::time
+          AND a.end_time > $5::time
         )
       )
-      ORDER BY date, start_time
+      ORDER BY a.date, a.start_time
     `,
     [
       companyId,
       professionalId,
       startDate,
       endDate,
-      startTime,
-      endTime
+      safeStartTime,
+      safeEndTime
     ]
   );
 

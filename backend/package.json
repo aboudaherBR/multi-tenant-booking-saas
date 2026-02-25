@@ -7,7 +7,7 @@
   "author": "",
   "license": "ISC",
   "scripts": {
-    "test": "jest --detectOpenHandles --forceExit"
+    "test": "set NODE_ENV=test && jest --detectOpenHandles --forceExit"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
@@ -20,5 +20,8 @@
     "dotenv": "^17.3.1",
     "jest": "^30.2.0",
     "supertest": "^7.2.2"
+  },
+  "jest": {
+    "setupFilesAfterEnv": ["<rootDir>/jest.setup.js"]
   }
 }

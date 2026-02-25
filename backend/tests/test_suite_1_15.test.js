@@ -4,9 +4,10 @@ const app = require('../src/app');
 describe('Suite completa 1 a 15 - Autenticada', () => {
   const agent = request.agent(app);
 
-  const professionalId = 'd8f05011-3de6-4630-826f-51a322fd3c5c';
-  const serviceId = '4d40248f-87a5-453f-8bd9-460580a3bda0';
-  const companyId = '672d35c1-a21f-4a15-899e-06d771328e0a';
+  // 🔒 IDs vindos do seed TEST
+  const companyId = '11111111-1111-1111-1111-111111111111';
+  const professionalId = '33333333-3333-3333-3333-333333333333';
+  const serviceId = '44444444-4444-4444-4444-444444444444';
 
   // 🔐 LOGIN
   beforeAll(async () => {
@@ -40,6 +41,7 @@ describe('Suite completa 1 a 15 - Autenticada', () => {
       professionalId,
       serviceId,
       clientName: 'Cliente Teste',
+      clientPhone: '85999999999',
       date: '2026-04-09',
       startTime: '11:00'
     });
@@ -54,7 +56,6 @@ describe('Suite completa 1 a 15 - Autenticada', () => {
   test('3️⃣ Criar bloqueio parcial', async () => {
     const res = await agent.post('/schedule-blocks').send({
       professionalId,
-      companyId,
       startTime: '13:00',
       endTime: '14:00',
       startDate: '2026-04-09',
@@ -86,6 +87,7 @@ describe('Suite completa 1 a 15 - Autenticada', () => {
       professionalId,
       serviceId,
       clientName: 'Cliente Conflito',
+      clientPhone: '85888888888',
       date: '2026-04-09',
       startTime: '11:00'
     });
@@ -95,12 +97,11 @@ describe('Suite completa 1 a 15 - Autenticada', () => {
   });
 
   // -----------------------------
-  // 6️⃣ Bloqueio global
+  // 6️⃣ Bloqueio global remove todos slots
   // -----------------------------
   test('6️⃣ Bloqueio global remove todos slots', async () => {
     await agent.post('/schedule-blocks').send({
       professionalId: null,
-      companyId,
       startTime: null,
       endTime: null,
       startDate: '2026-04-13',
@@ -121,7 +122,6 @@ describe('Suite completa 1 a 15 - Autenticada', () => {
   test('7️⃣ Bloqueio múltiplos dias', async () => {
     await agent.post('/schedule-blocks').send({
       professionalId,
-      companyId,
       startTime: '10:00',
       endTime: '11:00',
       startDate: '2026-04-15',
