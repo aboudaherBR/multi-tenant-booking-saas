@@ -46,4 +46,7 @@ app.use(companyRoutes);
 const scheduleBlocksRoutes = require('./routes/scheduleBlocks.routes');
 app.use(scheduleBlocksRoutes);
 
+const clientsRoutes = require('./routes/clients.routes');
+app.use(clientsRoutes);
+
 module.exports = app;
