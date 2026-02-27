@@ -49,4 +49,10 @@ app.use(scheduleBlocksRoutes);
 const clientsRoutes = require('./routes/clients.routes');
 app.use(clientsRoutes);
 
+const professionalServicesRoutes = require('./routes/professionalServices.routes');
+app.use(professionalServicesRoutes);
+
+const publicRoutes = require('./routes/public.routes');
+app.use(publicRoutes);
+
 module.exports = app;

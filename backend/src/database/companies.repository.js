@@ -45,8 +45,27 @@ async function updateCompanyLunch(companyId, lunchStart, lunchEnd) {
   );
 }
 
+async function findCompanyBySlug(slug) {
+  const result = await pool.query(
+    `
+      SELECT id,
+             name,
+             slug,
+             status,
+             slot_interval_minutes
+      FROM companies
+      WHERE slug = $1
+      LIMIT 1
+    `,
+    [slug]
+  );
+
+  return result.rows[0] || null;
+}
+
 module.exports = {
   createCompany,
   findCompanyById,
-  updateCompanyLunch
+  updateCompanyLunch,
+  findCompanyBySlug
 };

@@ -1,5 +1,5 @@
 const { createAppointment, findConflicts } = require('../database/appointments.repository');
-const { findServiceById } = require('../database/services.repository');
+const { findServiceForProfessional } = require('../database/services.repository');
 const { findCompanyById } = require('../database/companies.repository');
 const { findScheduleBlocksByProfessionalAndDate } = require('../database/scheduleBlocks.repository');
 const { normalizeBrazilianPhone } = require('../utils/phone.utils');
@@ -57,52 +57,51 @@ async function create(req, res, next) {
       });
     }
 
-    // 🔹 2️⃣ Buscar cliente por telefone
+    // 🔹 2️⃣ Buscar ou criar cliente
     let client = await findClientByPhone({
       companyId,
       phone: normalizedPhone
     });
 
     if (!client) {
-      // 🔹 3️⃣ Criar cliente se não existir
       client = await createClient({
         companyId,
         name: clientName.trim(),
         phone: normalizedPhone
       });
     } else {
-      // 🔹 4️⃣ Atualizar nome se diferente
       const normalizedExistingName = client.name.trim().toLowerCase();
       const normalizedNewName = clientName.trim().toLowerCase();
 
       if (normalizedExistingName !== normalizedNewName) {
-       client = await updateClientName({
-        clientId: client.id,
-        companyId,
-        name: clientName.trim()
-      });
+        client = await updateClientName({
+          clientId: client.id,
+          companyId,
+          name: clientName.trim()
+        });
       }
     }
 
-    // 🔹 5️⃣ Buscar serviço
-    const service = await findServiceById({
+    // 🔹 3️⃣ Buscar serviço já validado para o profissional
+    const service = await findServiceForProfessional({
       companyId,
+      professionalId,
       serviceId
     });
 
     if (!service) {
       return res.status(404).json({
-        message: 'Serviço não encontrado'
+        message: 'Serviço não encontrado para este profissional'
       });
     }
 
-    // 🔹 6️⃣ Calcular endTime
+    // 🔹 4️⃣ Calcular endTime
     const endTime = addMinutesToTime(
       startTime,
       service.duration_minutes
     );
 
-    // 🔹 7️⃣ Buscar empresa (buffer)
+    // 🔹 5️⃣ Buscar empresa (buffer)
     const company = await findCompanyById(companyId);
 
     if (!company) {
@@ -113,7 +112,7 @@ async function create(req, res, next) {
 
     const bufferMinutes = company.appointment_buffer_minutes;
 
-    // 🔹 8️⃣ Verificar conflitos com appointments
+    // 🔹 6️⃣ Verificar conflitos com appointments
     const conflicts = await findConflicts({
       companyId,
       professionalId,
@@ -129,7 +128,7 @@ async function create(req, res, next) {
       });
     }
 
-    // 🔹 9️⃣ Verificar conflito com schedule blocks
+    // 🔹 7️⃣ Verificar conflito com schedule blocks
     const blocks =
       await findScheduleBlocksByProfessionalAndDate({
         companyId,
@@ -140,8 +139,7 @@ async function create(req, res, next) {
     for (const block of blocks) {
       if (!block.start_time || !block.end_time) {
         return res.status(409).json({
-          message:
-            'Horário em conflito com outro agendamento'
+          message: 'Horário em conflito com outro agendamento'
         });
       }
 
@@ -150,13 +148,12 @@ async function create(req, res, next) {
         endTime > block.start_time
       ) {
         return res.status(409).json({
-          message:
-            'Horário em conflito com outro agendamento'
+          message: 'Horário em conflito com outro agendamento'
         });
       }
     }
 
-    // 🔹 🔟 Criar appointment com clientId
+    // 🔹 8️⃣ Criar appointment com snapshot correto
     const appointment = await createAppointment({
       companyId,
       professionalId,
@@ -166,12 +163,12 @@ async function create(req, res, next) {
       startTime,
       endTime,
       serviceNameSnapshot: service.name,
-      servicePriceSnapshot: service.price,
-      serviceDurationSnapshot:
-        service.duration_minutes
+      servicePriceSnapshot: service.final_price,
+      serviceDurationSnapshot: service.duration_minutes
     });
 
     return res.status(201).json(appointment);
+
   } catch (error) {
     next(error);
   }

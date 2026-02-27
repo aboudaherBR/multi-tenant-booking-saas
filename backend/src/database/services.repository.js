@@ -5,12 +5,12 @@ async function findServiceById({ companyId, serviceId }) {
     `
       SELECT id,
              name,
-             price,
+             base_price,
              duration_minutes
       FROM services
       WHERE company_id = $1
-      AND id = $2
-      AND is_active = true
+        AND id = $2
+        AND is_active = true
     `,
     [companyId, serviceId]
   );
@@ -18,6 +18,130 @@ async function findServiceById({ companyId, serviceId }) {
   return result.rows[0] || null;
 }
 
+async function findServiceForProfessional({
+  companyId,
+  professionalId,
+  serviceId
+}) {
+  const result = await pool.query(
+    `
+      SELECT
+        s.id,
+        s.name,
+        s.duration_minutes,
+        COALESCE(ps.custom_price, s.base_price) AS final_price
+      FROM professional_services ps
+      JOIN services s
+        ON s.id = ps.service_id
+       AND s.company_id = ps.company_id
+      WHERE ps.company_id = $1
+        AND ps.professional_id = $2
+        AND ps.service_id = $3
+        AND s.is_active = true
+      LIMIT 1
+    `,
+    [companyId, professionalId, serviceId]
+  );
+
+  return result.rows[0] || null;
+}
+
+async function listServicesForProfessional({
+  companyId,
+  professionalId
+}) {
+  const result = await pool.query(
+    `
+      SELECT
+        s.id,
+        s.name,
+        s.duration_minutes,
+        COALESCE(ps.custom_price, s.base_price) AS final_price
+      FROM professional_services ps
+      JOIN services s
+        ON s.id = ps.service_id
+       AND s.company_id = ps.company_id
+      WHERE ps.company_id = $1
+        AND ps.professional_id = $2
+        AND s.is_active = true
+      ORDER BY s.name ASC
+    `,
+    [companyId, professionalId]
+  );
+
+  return result.rows;
+}
+
+/**
+ * 🔓 Método público (usa professionalSlug e retorna service.slug)
+ * Não expõe IDs internos.
+ */
+async function findActiveServicesPublicByProfessionalSlug({
+  companyId,
+  professionalSlug
+}) {
+  const result = await pool.query(
+    `
+      SELECT
+        s.slug,
+        s.name,
+        s.duration_minutes,
+        COALESCE(ps.custom_price, s.base_price) AS final_price
+      FROM professionals p
+      JOIN professional_services ps
+        ON ps.professional_id = p.id
+       AND ps.company_id = p.company_id
+      JOIN services s
+        ON s.id = ps.service_id
+       AND s.company_id = p.company_id
+      WHERE
+        p.company_id = $1
+        AND p.slug = $2
+        AND p.is_active = true
+        AND s.is_active = true
+      ORDER BY s.name ASC
+    `,
+    [companyId, professionalSlug]
+  );
+
+  return result.rows;
+}
+
+async function findServiceForProfessionalBySlugs({
+  companyId,
+  professionalSlug,
+  serviceSlug
+}) {
+  const result = await pool.query(
+    `
+      SELECT
+        p.id AS professional_id,
+        s.duration_minutes
+      FROM professionals p
+      JOIN professional_services ps
+        ON ps.professional_id = p.id
+       AND ps.company_id = p.company_id
+      JOIN services s
+        ON s.id = ps.service_id
+       AND s.company_id = p.company_id
+      WHERE
+        p.company_id = $1
+        AND p.slug = $2
+        AND p.is_active = true
+        AND s.slug = $3
+        AND s.is_active = true
+      LIMIT 1
+    `,
+    [companyId, professionalSlug, serviceSlug]
+  );
+
+  return result.rows[0] || null;
+}
+
 module.exports = {
-  findServiceById
+  findServiceById,
+  findServiceForProfessional,
+  listServicesForProfessional,
+  findActiveServicesPublicByProfessionalSlug,
+  findServiceForProfessionalBySlugs
 };

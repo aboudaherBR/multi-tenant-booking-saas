@@ -30,7 +30,38 @@ async function findProfessionalByUserId(companyId, userId) {
   return result.rows[0] || null;
 }
 
+async function findActiveProfessionalsPublicByCompanyId(companyId) {
+  const result = await pool.query(
+    `
+      SELECT DISTINCT
+        p.slug,
+        p.photo_url,
+        u.name
+      FROM professionals p
+      JOIN users u
+        ON u.id = p.user_id
+       AND u.company_id = p.company_id
+      JOIN professional_services ps
+        ON ps.professional_id = p.id
+       AND ps.company_id = p.company_id
+      JOIN services s
+        ON s.id = ps.service_id
+       AND s.company_id = p.company_id
+      WHERE
+        p.company_id = $1
+        AND p.is_active = true
+        AND u.is_active = true
+        AND s.is_active = true
+      ORDER BY u.name ASC
+    `,
+    [companyId]
+  );
+
+  return result.rows;
+}
+
 module.exports = {
   findProfessionalById,
-  findProfessionalByUserId
+  findProfessionalByUserId,
+  findActiveProfessionalsPublicByCompanyId
 };
