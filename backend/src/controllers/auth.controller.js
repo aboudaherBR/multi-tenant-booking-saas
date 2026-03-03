@@ -5,16 +5,34 @@ async function login(req, res, next) {
   try {
     console.log('BODY RECEIVED:', req.body);
 
-    const { username, password } = req.body;
+    const { slug, username, password } = req.body;
 
     if (!username || !password) {
       return res.status(400).json({ message: 'Username and password required' });
     }
 
-    const user = await authenticate(username, password);
+    let user;
+
+    if (slug) {
+      const { findCompanyBySlug } = require('../database/companies.repository');
+      const { authenticateWithCompany } = require('../services/auth.service');
+
+      const company = await findCompanyBySlug(slug);
+
+      if (!company) {
+        throw new Error('Invalid credentials');
+      }
+
+      user = await authenticateWithCompany(username, password, company.id);
+    } else {
+      // modo legado temporário
+      const { authenticate } = require('../services/auth.service');
+      user = await authenticate(username, password);
+    }
+
     const professional = user.company_id
-  ? await findProfessionalByUserId(user.company_id, user.id)
-  : null;
+      ? await findProfessionalByUserId(user.company_id, user.id)
+      : null;
 
     req.session.user = {
       userId: user.id,

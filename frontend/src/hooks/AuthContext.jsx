@@ -25,12 +25,27 @@ function AuthProvider({ children }) {
     validateSession();
   }, []);
 
-  async function login(username, password) {
-    await loginService(username, password);
-    const userData = await getCurrentUser();
-    setUser(userData);
-    setIsAuthenticated(true);
+  async function login(credentials, passwordParam) {
+  let slug;
+  let username;
+  let password;
+
+  if (typeof credentials === 'object') {
+    slug = credentials.slug;
+    username = credentials.username;
+    password = credentials.password;
+  } else {
+    // fallback legado
+    username = credentials;
+    password = passwordParam;
   }
+
+  await loginService({ slug, username, password });
+
+  const userData = await getCurrentUser();
+  setUser(userData);
+  setIsAuthenticated(true);
+}
 
   function logout() {
     setUser(null);

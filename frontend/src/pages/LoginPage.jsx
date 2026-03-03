@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams  } from 'react-router-dom';
 import { useAuth } from '../hooks/AuthContext';
 
 function LoginPage() {
@@ -8,6 +8,7 @@ function LoginPage() {
   const [error, setError] = useState('');
 
   const navigate = useNavigate();
+  const { slug } = useParams();
   const { login } = useAuth();
 
   async function handleSubmit(e) {
@@ -15,7 +16,7 @@ function LoginPage() {
     setError('');
 
     try {
-      await login(username, password);
+      await login({ slug, username, password });
       navigate('/');
     } catch (err) {
       setError(err.message);

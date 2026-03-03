@@ -10,8 +10,8 @@ function Dashboard() {
 function App() {
   return (
     <Routes>
+      <Route path="/:slug/login" element={<LoginPage />} />
       <Route path="/login" element={<LoginPage />} />
-
       <Route element={<ProtectedLayout />}>
         <Route path="/" element={<Dashboard />} />
         <Route path="/clients" element={<ClientsPage />} />
