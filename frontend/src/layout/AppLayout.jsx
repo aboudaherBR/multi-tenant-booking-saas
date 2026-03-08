@@ -1,7 +1,9 @@
 import styles from './AppLayout.module.css';
 import { Settings } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 function AppLayout({ children }) {
+  const navigate = useNavigate();
   return (
     <div className={styles.appContainer}>
       <header className={styles.header}>
@@ -17,7 +19,12 @@ function AppLayout({ children }) {
 
       <nav className={styles.bottomNav}>
         <button className={styles.navButton}>Hoje</button>
-        <button className={styles.navButton}>Agendar</button>
+       <button
+          className={styles.navButton}
+          onClick={() => navigate('/schedule')}
+        >
+          Agendar
+       </button>
         <button className={styles.navButton}>Clientes</button>
       </nav>
     </div>
