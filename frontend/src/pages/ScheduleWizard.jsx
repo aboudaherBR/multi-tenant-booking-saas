@@ -1,8 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import apiClient from '../api/apiClient';
+
 
 function ScheduleWizard() {
     const [step, setStep] = useState('professional');
+    const [professionals, setProfessionals] = useState([]);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
 
     const [appointment, setAppointment] = useState({
@@ -11,6 +14,26 @@ function ScheduleWizard() {
         time: null,
         client: null
     });
+
+    const [services, setServices] = useState([]);
+
+    const [slots, setSlots] = useState([]);
+
+    const [selectedDate, setSelectedDate] = useState('');
+
+    useEffect(() => {
+        async function fetchProfessionals() {
+            try {
+                const data = await apiClient('/professionals');
+                setProfessionals(data);
+            } catch (error) {
+                console.error('Erro ao buscar profissionais', error);
+            }
+        }
+
+        fetchProfessionals();
+    }, []);
+
 
     const navigate = useNavigate();
 
@@ -47,14 +70,32 @@ function ScheduleWizard() {
                 <div>
                     <h3>Escolher profissional</h3>
 
-                    <button
-                        onClick={() => {
-                            setAppointment({ ...appointment, professional: 'Maria' });
-                            setStep('service');
-                        }}
-                    >
-                        Maria
-                    </button>
+
+                    {professionals.map((professional) => (
+                        <button
+                            key={professional.id}
+                            onClick={async () => {
+                                try {
+                                    const data = await apiClient(`/professionals/${professional.id}/services`);
+
+                                    setServices(data.services);;
+
+                                    setAppointment({
+                                        ...appointment,
+                                        professional: professional
+                                    });
+
+                                    setStep('service');
+
+                                } catch (error) {
+                                    console.error('Erro ao buscar serviços', error);
+                                }
+                            }}
+                        >
+                            {professional.name}
+                        </button>
+                    ))}
+
                 </div>
             )}
 
@@ -66,14 +107,22 @@ function ScheduleWizard() {
 
                     <h3>Escolher serviço</h3>
 
-                    <button
-                        onClick={() => {
-                            setAppointment({ ...appointment, service: 'Corte' });
-                            setStep('time');
-                        }}
-                    >
-                        Corte
-                    </button>
+
+                    {services.map((service) => (
+                        <button
+                            key={service.id}
+                            onClick={() => {
+                                setAppointment({
+                                    ...appointment,
+                                    service: service
+                                });
+
+                                setStep('time');
+                            }}
+                        >
+                            {service.name}
+                        </button>
+                    ))}
                 </div>
             )}
 
@@ -85,14 +134,46 @@ function ScheduleWizard() {
 
                     <h3>Escolher horário</h3>
 
-                    <button
-                        onClick={() => {
-                            setAppointment({ ...appointment, time: '10:00' });
-                            setStep('client');
+                    <input
+                        type="date"
+                        min={new Date().toISOString().split('T')[0]}
+                        value={selectedDate}
+                        onChange={async (e) => {
+                            const date = e.target.value;
+                            setSelectedDate(date);
+
+                            try {
+                                const response = await apiClient(
+                                    `/availability?professionalId=${appointment.professional.id}&serviceId=${appointment.service.id}&date=${date}`
+                                );
+
+                                setSlots(response.slots);
+
+                            } catch (error) {
+                                console.error('Erro ao buscar horários', error);
+                            }
                         }}
-                    >
-                        10:00
-                    </button>
+                    />
+
+                    {slots.length === 0 ? (
+                        <p>Nenhum horário disponível.</p>
+                    ) : (
+                        slots.map((slot) => (
+                            <button
+                                key={slot}
+                                onClick={() => {
+                                    setAppointment({
+                                        ...appointment,
+                                        time: slot
+                                    });
+
+                                    setStep('client');
+                                }}
+                            >
+                                {slot}
+                            </button>
+                        ))
+                    )}
                 </div>
             )}
 
@@ -140,8 +221,8 @@ function ScheduleWizard() {
                     >
                         <h3>Confirmar agendamento</h3>
 
-                        <p>Profissional: {appointment.professional}</p>
-                        <p>Serviço: {appointment.service}</p>
+                        <p>Profissional: {appointment.professional?.name}</p>
+                        <p>Serviço: {appointment.service?.name}</p>
                         <p>Horário: {appointment.time}</p>
                         <p>Cliente: {appointment.client}</p>
 

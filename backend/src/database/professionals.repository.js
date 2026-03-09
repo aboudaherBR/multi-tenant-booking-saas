@@ -60,8 +60,31 @@ async function findActiveProfessionalsPublicByCompanyId(companyId) {
   return result.rows;
 }
 
+async function findActiveProfessionalsByCompanyId(companyId) {
+  const result = await pool.query(
+    `
+      SELECT
+        p.id,
+        u.name
+      FROM professionals p
+      JOIN users u
+        ON u.id = p.user_id
+       AND u.company_id = p.company_id
+      WHERE
+        p.company_id = $1
+        AND p.is_active = true
+        AND u.is_active = true
+      ORDER BY u.name ASC
+    `,
+    [companyId]
+  );
+
+  return result.rows;
+}
+
 module.exports = {
   findProfessionalById,
   findProfessionalByUserId,
-  findActiveProfessionalsPublicByCompanyId
+  findActiveProfessionalsPublicByCompanyId,
+  findActiveProfessionalsByCompanyId
 };

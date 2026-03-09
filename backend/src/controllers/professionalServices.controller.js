@@ -3,6 +3,8 @@ const { isValidUUID } = require('../utils/uuid.utils');
 
 async function list(req, res, next) {
   try {
+
+    console.log('PARAMS:', req.params);
     const { id: professionalId } = req.params;
     const companyId = req.user.companyId;
 

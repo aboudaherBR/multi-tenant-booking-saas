@@ -101,7 +101,7 @@ async function getPublicAvailability(req, res, next) {
       });
     }
 
-    // ✅ Validação de formato de data
+    // validação formato data
     const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
     if (!dateRegex.test(date)) {
       return res.status(400).json({
@@ -109,11 +109,26 @@ async function getPublicAvailability(req, res, next) {
       });
     }
 
-    // ✅ Validação de data real (ex: 2026-99-99)
     const parsedDate = new Date(date + 'T00:00:00');
+
     if (isNaN(parsedDate.getTime())) {
       return res.status(400).json({
         message: 'Data inválida.'
+      });
+    }
+
+    // 🔒 BLOQUEAR DATAS PASSADAS
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (parsedDate < today) {
+      return res.status(200).json({
+        companySlug,
+        professionalSlug,
+        serviceSlug,
+        date,
+        totalSlots: 0,
+        slots: []
       });
     }
 
@@ -163,7 +178,6 @@ async function getPublicAvailability(req, res, next) {
       };
     });
 
-    // ✅ Ordenação defensiva
     slots.sort((a, b) => a.startTime.localeCompare(b.startTime));
 
     return res.status(200).json({

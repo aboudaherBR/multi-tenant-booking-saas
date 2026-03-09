@@ -55,4 +55,7 @@ app.use(professionalServicesRoutes);
 const publicRoutes = require('./routes/public.routes');
 app.use(publicRoutes);
 
+const professionalsRoutes = require('./routes/professionals.routes');
+app.use(professionalsRoutes);
+
 module.exports = app;
