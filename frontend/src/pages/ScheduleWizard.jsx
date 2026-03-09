@@ -39,22 +39,35 @@ function ScheduleWizard() {
 
     const handleConfirm = async () => {
         try {
-            const response = await fetch('http://localhost:3000/appointments', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                credentials: 'include',
-                body: JSON.stringify(appointment)
-            });
 
-            const data = await response.json();
+            const payload = {
+                professionalId: appointment.professional.id,
+                serviceId: appointment.service.id,
+                clientName: appointment.client.name,
+                clientPhone: appointment.client.phone,
+                date: selectedDate,
+                startTime: appointment.time
+            };
 
-            console.log('Agendamento criado:', data);
+            const response = await apiClient(
+                '/appointments',
+                {
+                    method: 'POST',
+                    body: payload
+                }
+            );
+
+            console.log('Agendamento criado:', response);
 
             setShowConfirmModal(false);
 
-            // voltar para dashboard
+            // 🔹 atualizar slots novamente
+            const availability = await apiClient(
+                `/availability?professionalId=${appointment.professional.id}&serviceId=${appointment.service.id}&date=${selectedDate}`
+            );
+
+            setSlots(availability.slots);
+
             navigate('/');
 
         } catch (error) {
@@ -187,15 +200,21 @@ function ScheduleWizard() {
 
                     <button
                         onClick={() => {
-                            setAppointment({ ...appointment, client: 'Maria Silva' });
+                            setAppointment({
+                                ...appointment,
+                                client: {
+                                    name: "Cliente Teste",
+                                    phone: "11999999999"
+                                }
+                            });
+
                             setShowConfirmModal(true);
                         }}
                     >
-                        Maria Silva
+                        Cliente Teste
                     </button>
                 </div>
             )}
-
             {showConfirmModal && (
                 <div
                     style={{
@@ -224,7 +243,8 @@ function ScheduleWizard() {
                         <p>Profissional: {appointment.professional?.name}</p>
                         <p>Serviço: {appointment.service?.name}</p>
                         <p>Horário: {appointment.time}</p>
-                        <p>Cliente: {appointment.client}</p>
+                        <p>Cliente: {appointment.client?.name}</p>
+                        <p>Telefone: {appointment.client?.phone}</p>
 
                         <button onClick={() => setShowConfirmModal(false)}>
                             Cancelar

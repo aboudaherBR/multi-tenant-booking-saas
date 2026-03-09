@@ -58,4 +58,7 @@ app.use(publicRoutes);
 const professionalsRoutes = require('./routes/professionals.routes');
 app.use(professionalsRoutes);
 
+const dashboardRoutes = require('./routes/dashboard.routes');
+app.use(dashboardRoutes);
+
 module.exports = app;

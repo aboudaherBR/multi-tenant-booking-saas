@@ -160,9 +160,91 @@ async function findAppointmentsInRange({
   return result.rows;
 }
 
+async function findAppointmentsByDate({ companyId, date, professionalId }) {
+
+  const params = [companyId, date];
+  let professionalFilter = '';
+
+  if (professionalId) {
+    params.push(professionalId);
+    professionalFilter = 'AND a.professional_id = $3';
+  }
+
+  const result = await pool.query(
+    `
+    SELECT
+      a.id,
+      a.date,
+      a.start_time,
+      a.end_time,
+      c.name AS client_name,
+      s.name AS service_name,
+      u.name AS professional_name
+    FROM appointments a
+    JOIN clients c
+      ON c.id = a.client_id
+     AND c.company_id = a.company_id
+    JOIN services s
+      ON s.id = a.service_id
+     AND s.company_id = a.company_id
+    JOIN professionals p
+      ON p.id = a.professional_id
+     AND p.company_id = a.company_id
+    JOIN users u
+      ON u.id = p.user_id
+     AND u.company_id = p.company_id
+    WHERE
+      a.company_id = $1
+      AND a.date = $2
+      ${professionalFilter}
+    ORDER BY a.start_time ASC
+    `,
+    params
+  );
+
+  return result.rows;
+}
+
+async function getDashboardToday({ companyId, date }) {
+
+  const result = await pool.query(
+    `
+    SELECT
+      COUNT(*)::int AS total_appointments,
+      COALESCE(SUM(service_price_snapshot), 0)::numeric AS total_revenue
+    FROM appointments
+    WHERE company_id = $1
+    AND date = $2
+    `,
+    [companyId, date]
+  );
+
+  const services = await pool.query(
+    `
+    SELECT
+      service_name_snapshot AS name,
+      COUNT(*)::int AS count
+    FROM appointments
+    WHERE company_id = $1
+    AND date = $2
+    GROUP BY service_name_snapshot
+    ORDER BY count DESC
+    `,
+    [companyId, date]
+  );
+
+  return {
+    totalAppointments: result.rows[0].total_appointments,
+    totalRevenue: result.rows[0].total_revenue,
+    services: services.rows
+  };
+}
+
 module.exports = {
   createAppointment,
   findConflicts,
   findAppointmentsByProfessionalAndDate,
-  findAppointmentsInRange
+  findAppointmentsInRange,
+  findAppointmentsByDate,
+  getDashboardToday
 };

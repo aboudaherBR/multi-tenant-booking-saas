@@ -1,8 +1,14 @@
-const { createAppointment, findConflicts } = require('../database/appointments.repository');
+const {
+  createAppointment,
+  findConflicts,
+  findAppointmentsByDate
+} = require('../database/appointments.repository');
+
 const { findServiceForProfessional } = require('../database/services.repository');
 const { findCompanyById } = require('../database/companies.repository');
 const { findScheduleBlocksByProfessionalAndDate } = require('../database/scheduleBlocks.repository');
 const { normalizeBrazilianPhone } = require('../utils/phone.utils');
+
 const {
   findClientByPhone,
   createClient,
@@ -174,6 +180,33 @@ async function create(req, res, next) {
   }
 }
 
+async function list(req, res, next) {
+  try {
+    const { date, professionalId } = req.query;
+
+    if (!date) {
+      return res.status(400).json({
+        message: 'date é obrigatório'
+      });
+    }
+
+    const companyId = req.user.companyId;
+
+    const appointments =
+      await findAppointmentsByDate({
+        companyId,
+        date,
+        professionalId
+      });
+
+    return res.status(200).json(appointments);
+
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
-  create
+  create,
+  list
 };

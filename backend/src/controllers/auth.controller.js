@@ -36,6 +36,7 @@ async function login(req, res, next) {
 
     req.session.user = {
       userId: user.id,
+      name: user.name,
       companyId: user.company_id,
       isCompanyAdmin: user.is_company_admin,
       isProfessional: Boolean(professional),

@@ -8,9 +8,9 @@ function AppLayout({ children }) {
     <div className={styles.appContainer}>
       <header className={styles.header}>
         <h3 className={styles.title}>Agendô</h3>
-          <button className={styles.settingsButton}>
-            <Settings size={20} strokeWidth={2} />
-          </button>
+        <button className={styles.settingsButton}>
+          <Settings size={20} strokeWidth={2} />
+        </button>
       </header>
 
       <main className={styles.main}>
@@ -18,13 +18,18 @@ function AppLayout({ children }) {
       </main>
 
       <nav className={styles.bottomNav}>
-        <button className={styles.navButton}>Hoje</button>
-       <button
+        <button
+          className={styles.navButton}
+          onClick={() => navigate('/appointments')}
+        >
+          Ver Agendamentos
+        </button>
+        <button
           className={styles.navButton}
           onClick={() => navigate('/schedule')}
         >
           Agendar
-       </button>
+        </button>
         <button className={styles.navButton}>Clientes</button>
       </nav>
     </div>

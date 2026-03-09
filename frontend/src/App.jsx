@@ -3,10 +3,8 @@ import LoginPage from './pages/LoginPage';
 import ProtectedLayout from './layout/ProtectedLayout';
 import ClientsPage from './pages/ClientsPage';
 import ScheduleWizard from './pages/ScheduleWizard';
-
-function Dashboard() {
-  return <div>Dashboard</div>;
-}
+import Dashboard from './pages/Dashboard';
+import AppointmentsPage from './pages/AppointmentsPage';
 
 function App() {
   return (
@@ -16,6 +14,7 @@ function App() {
 
       <Route element={<ProtectedLayout />}>
         <Route path="/" element={<Dashboard />} />
+        <Route path="/appointments" element={<AppointmentsPage />} />
         <Route path="/clients" element={<ClientsPage />} />
         <Route path="/schedule" element={<ScheduleWizard />} />
       </Route>
