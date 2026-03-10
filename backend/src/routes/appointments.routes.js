@@ -16,4 +16,10 @@ router.get(
   appointmentsController.list
 );
 
+router.delete(
+  '/appointments/:id',
+  requireAuth,
+  appointmentsController.cancel
+);
+
 module.exports = router;

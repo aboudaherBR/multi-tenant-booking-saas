@@ -240,11 +240,25 @@ async function getDashboardToday({ companyId, date }) {
   };
 }
 
+async function cancelAppointment({ id, companyId }) {
+
+  await pool.query(
+    `
+    DELETE FROM appointments
+    WHERE id = $1
+      AND company_id = $2
+    `,
+    [id, companyId]
+  );
+
+}
+
 module.exports = {
   createAppointment,
   findConflicts,
   findAppointmentsByProfessionalAndDate,
   findAppointmentsInRange,
   findAppointmentsByDate,
-  getDashboardToday
+  getDashboardToday,
+  cancelAppointment
 };

@@ -5,6 +5,7 @@ import ClientsPage from './pages/ClientsPage';
 import ScheduleWizard from './pages/ScheduleWizard';
 import Dashboard from './pages/Dashboard';
 import AppointmentsPage from './pages/AppointmentsPage';
+import SettingsPage from './pages/SettingsPage';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/appointments" element={<AppointmentsPage />} />
         <Route path="/clients" element={<ClientsPage />} />
         <Route path="/schedule" element={<ScheduleWizard />} />
+        <Route path="/settings" element={<SettingsPage />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/" />} />

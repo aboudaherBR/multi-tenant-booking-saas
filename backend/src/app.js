@@ -61,4 +61,7 @@ app.use(professionalsRoutes);
 const dashboardRoutes = require('./routes/dashboard.routes');
 app.use(dashboardRoutes);
 
+const businessHoursRoutes = require('./routes/businessHours.routes');
+app.use(businessHoursRoutes);
+
 module.exports = app;

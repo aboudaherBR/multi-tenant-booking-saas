@@ -8,12 +8,15 @@ const { findServiceForProfessional } = require('../database/services.repository'
 const { findCompanyById } = require('../database/companies.repository');
 const { findScheduleBlocksByProfessionalAndDate } = require('../database/scheduleBlocks.repository');
 const { normalizeBrazilianPhone } = require('../utils/phone.utils');
+const { cancelAppointment } = require('../database/appointments.repository');
 
 const {
   findClientByPhone,
   createClient,
   updateClientName
 } = require('../database/clients.repository');
+
+
 
 function addMinutesToTime(time, minutesToAdd) {
   const [hours, minutes] = time.split(':').map(Number);
@@ -206,7 +209,29 @@ async function list(req, res, next) {
   }
 }
 
+async function cancel(req, res, next) {
+  try {
+
+    const { id } = req.params;
+    const companyId = req.user.companyId;
+
+    await cancelAppointment({
+      id,
+      companyId
+    });
+
+    return res.status(204).send();
+
+  } catch (error) {
+    next(error);
+  }
+}
+
+
+
 module.exports = {
   create,
-  list
+  list,
+  cancel,
+  cancelAppointment
 };
