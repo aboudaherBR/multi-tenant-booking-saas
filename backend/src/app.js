@@ -64,4 +64,7 @@ app.use(dashboardRoutes);
 const businessHoursRoutes = require('./routes/businessHours.routes');
 app.use(businessHoursRoutes);
 
+const servicesRoutes = require('./routes/services.routes');
+app.use(servicesRoutes);
+
 module.exports = app;
