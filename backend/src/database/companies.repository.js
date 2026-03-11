@@ -63,9 +63,29 @@ async function findCompanyBySlug(slug) {
   return result.rows[0] || null;
 }
 
+async function updateCompanyBuffer({
+  companyId,
+  appointmentBufferMinutes
+}) {
+
+  const query = `
+    UPDATE companies
+    SET appointment_buffer_minutes = $1
+    WHERE id = $2
+    RETURNING appointment_buffer_minutes
+  `;
+
+  const values = [appointmentBufferMinutes, companyId];
+
+  const { rows } = await pool.query(query, values);
+
+  return rows[0];
+}
+
 module.exports = {
   createCompany,
   findCompanyById,
   updateCompanyLunch,
-  findCompanyBySlug
+  findCompanyBySlug,
+  updateCompanyBuffer
 };

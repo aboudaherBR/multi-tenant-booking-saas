@@ -1,4 +1,4 @@
-const { updateCompanyLunch } = require('../database/companies.repository');
+const { updateCompanyLunch, updateCompanyBuffer } = require('../database/companies.repository');
 
 function isValidTimeFormat(time) {
   return /^([01]\d|2[0-3]):([0-5]\d)$/.test(time);
@@ -49,8 +49,56 @@ async function updateLunch(req, res, next) {
   }
 }
 
+async function updateBuffer(req, res, next) {
+  try {
+
+    const { appointmentBufferMinutes } = req.body;
+    const companyId = req.user.companyId;
+
+    if (appointmentBufferMinutes === undefined) {
+      return res.status(400).json({
+        message: 'appointmentBufferMinutes é obrigatório'
+      });
+    }
+
+    if (appointmentBufferMinutes < 0) {
+      return res.status(400).json({
+        message: 'Buffer não pode ser negativo'
+      });
+    }
+
+    const company = await updateCompanyBuffer({
+      companyId,
+      appointmentBufferMinutes
+    });
+
+    return res.status(200).json(company);
+
+  } catch (error) {
+    next(error);
+  }
+}
+
+const { findCompanyById } = require("../database/companies.repository");
+
+async function getSettings(req, res, next) {
+  try {
+
+    const companyId = req.user.companyId;
+
+    const company = await findCompanyById(companyId);
+
+    return res.json(company);
+
+  } catch (error) {
+    next(error);
+  }
+}
+
 
 
 module.exports = {
-  updateLunch
+  updateLunch,
+  updateBuffer,
+  getSettings
 };

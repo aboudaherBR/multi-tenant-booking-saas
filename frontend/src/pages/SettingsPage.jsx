@@ -10,6 +10,8 @@ export default function SettingsPage() {
 
     const [businessHours, setBusinessHours] = useState([]);
     const [scheduleBlocks, setScheduleBlocks] = useState([]);
+    const [bufferMinutes, setBufferMinutes] = useState(0);
+    const [slotInterval, setSlotInterval] = useState(5);
 
     const [showNewBlockForm, setShowNewBlockForm] = useState(false);
     const [selectedBlock, setSelectedBlock] = useState(null);
@@ -78,12 +80,46 @@ export default function SettingsPage() {
 
         console.log("abrindo modal");
         await loadBusinessHours();
-        console.log("business hours carregado");
+
+        const response = await fetch(
+            "http://localhost:3000/company/settings",
+            { credentials: "include" }
+        );
+
+        const data = await response.json();
+        setBufferMinutes(data.appointment_buffer_minutes || 0);
+        setSlotInterval(data.slot_interval_minutes || 5);
         setShowBusinessHoursModal(true);
-        console.log("state alterado");
+    }
+
+    function isMultipleOfInterval(time, interval) {
+
+        const [hours, minutes] = time.split(":").map(Number);
+        const totalMinutes = hours * 60 + minutes;
+        return totalMinutes % interval === 0;
     }
 
     async function saveBusinessHours() {
+
+        for (const day of businessHours) {
+
+            if (!day.is_active) continue;
+
+            const start = day.start_time.slice(0, 5);
+            const end = day.end_time.slice(0, 5);
+
+            if (
+                !isMultipleOfInterval(start, slotInterval) ||
+                !isMultipleOfInterval(end, slotInterval)
+            ) {
+                alert("Os horários precisam respeitar o intervalo da agenda.");
+                return;
+            }
+
+        }
+
+        console.log("saveBusinessHours executou");
+        console.log("buffer atual:", bufferMinutes);
 
         await fetch(
             "http://localhost:3000/business-hours",
@@ -92,6 +128,17 @@ export default function SettingsPage() {
                 credentials: "include",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ hours: businessHours })
+            }
+        );
+        await fetch(
+            "http://localhost:3000/company/buffer",
+            {
+                method: "PUT",
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    appointmentBufferMinutes: Number(bufferMinutes)
+                })
             }
         );
 
@@ -347,6 +394,24 @@ export default function SettingsPage() {
                             </div>
 
                         ))}
+
+                        <div style={{ marginTop: "15px" }}>
+
+                            <strong>Tempo entre clientes (minutos)</strong>
+
+                            <div style={{ marginTop: "5px" }}>
+
+                                <input
+                                    type="number"
+                                    min="0"
+                                    max="60"
+                                    value={bufferMinutes}
+                                    onChange={(e) => setBufferMinutes(e.target.value)}
+                                />
+
+                            </div>
+
+                        </div>
 
                         <button onClick={saveBusinessHours}>
                             Salvar

@@ -7,6 +7,7 @@ function ScheduleWizard() {
     const [step, setStep] = useState('professional');
     const [professionals, setProfessionals] = useState([]);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
+    
 
     const [appointment, setAppointment] = useState({
         professional: null,
