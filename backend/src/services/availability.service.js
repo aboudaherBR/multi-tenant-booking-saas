@@ -28,6 +28,8 @@ async function getAvailableSlots({
   date
 }) {
 
+  console.log("AVAILABILITY SERVICE EXECUTANDO");
+
   // 1️⃣ Descobrir weekday
   const weekday = getWeekdayFromDate(date);
 
@@ -126,9 +128,33 @@ async function getAvailableSlots({
       const slotMinutes = timeToMinutes(slot);
       return slotMinutes >= roundedMinutes;
     });
-  }
+  }// 9️⃣ Reduzir slots para agenda otimizada (estilo Booksy)
+  const optimizedSlots = [];
 
-  return finalSlots;
+  for (let i = 0; i < finalSlots.length; i++) {
+
+    if (i === 0) {
+      optimizedSlots.push(finalSlots[i]);
+      continue;
+    }
+
+    const previous = timeToMinutes(
+      optimizedSlots[optimizedSlots.length - 1]
+    );
+
+    const current = timeToMinutes(finalSlots[i]);
+
+    if (current - previous >= serviceDurationMinutes) {
+      optimizedSlots.push(finalSlots[i]);
+    }
+
+  }
+  console.log("serviceDurationMinutes:", serviceDurationMinutes);
+  console.log("finalSlots count:", finalSlots.length);
+  console.log("optimizedSlots count:", optimizedSlots.length);
+  return optimizedSlots;
+
+
 }
 
 module.exports = {

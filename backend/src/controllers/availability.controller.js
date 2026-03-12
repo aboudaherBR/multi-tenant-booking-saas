@@ -32,6 +32,7 @@ async function list(req, res, next) {
       serviceDurationMinutes: service.duration_minutes,
       date
     });
+    
 
     return res.status(200).json({ slots });
 

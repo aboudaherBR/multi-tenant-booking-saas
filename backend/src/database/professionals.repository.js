@@ -34,6 +34,7 @@ async function findActiveProfessionalsPublicByCompanyId(companyId) {
   const result = await pool.query(
     `
       SELECT DISTINCT
+        p.id,
         p.slug,
         p.photo_url,
         u.name

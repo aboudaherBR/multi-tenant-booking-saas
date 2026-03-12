@@ -5,7 +5,7 @@ const { requireAuth } = require('../middlewares/auth.middleware');
 const { list } = require('../controllers/professionalServices.controller');
 
 router.get(
-  '/professionals/:id/services',
+  '/admin/professionals/:id/services',
   requireAuth,
   list
 );
