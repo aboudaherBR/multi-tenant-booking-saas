@@ -67,6 +67,9 @@ app.use(businessHoursRoutes);
 const servicesRoutes = require('./routes/services.routes');
 app.use(servicesRoutes);
 
+const reportsRoutes = require('./routes/reports.routes');
+app.use(reportsRoutes);
+
 
 
 module.exports = app;

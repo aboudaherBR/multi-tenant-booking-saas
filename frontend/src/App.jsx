@@ -6,6 +6,7 @@ import ScheduleWizard from './pages/ScheduleWizard';
 import Dashboard from './pages/Dashboard';
 import AppointmentsPage from './pages/AppointmentsPage';
 import SettingsPage from './pages/SettingsPage';
+import ReportsPage from "./pages/ReportsPage";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/clients" element={<ClientsPage />} />
         <Route path="/schedule" element={<ScheduleWizard />} />
         <Route path="/settings" element={<SettingsPage />} />
+        <Route path="/reports" element={<ReportsPage />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/" />} />

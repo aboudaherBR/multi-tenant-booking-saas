@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
     const [stats, setStats] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [user, setUser] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        
+
         async function loadDashboard() {
             try {
 
@@ -60,6 +62,9 @@ export default function Dashboard() {
                     </li>
                 ))}
             </ul>
+            <button onClick={() => navigate('/reports')}>
+                Relatórios
+            </button>
         </div>
     );
 }
