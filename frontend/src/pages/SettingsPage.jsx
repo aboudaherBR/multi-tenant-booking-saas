@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import ProfessionalServicesModal from "../components/ProfessionalServicesModal";
 
 export default function SettingsPage() {
 
@@ -33,8 +34,18 @@ export default function SettingsPage() {
     ];
 
     const [showServicesModal, setShowServicesModal] = useState(false);
+    const [showProfessionalsModal, setShowProfessionalsModal] = useState(false);
     const [services, setServices] = useState([]);
+    const [professionals, setProfessionals] = useState([]);
     const [showNewServiceForm, setShowNewServiceForm] = useState(false);
+
+    const [showNewProfessionalForm, setShowNewProfessionalForm] = useState(false);
+
+    const [newProfessional, setNewProfessional] = useState({
+        name: "",
+        email: "",
+        password: ""
+    });
 
     const [newService, setNewService] = useState({
         name: "",
@@ -43,6 +54,10 @@ export default function SettingsPage() {
     });
 
     const [selectedService, setSelectedService] = useState(null);
+
+    const [selectedProfessional, setSelectedProfessional] = useState(null);
+    const [showProfessionalServicesModal, setShowProfessionalServicesModal] = useState(false);
+    const [professionalServices, setProfessionalServices] = useState([]);
 
 
 
@@ -252,6 +267,31 @@ export default function SettingsPage() {
 
     }
 
+    async function loadProfessionals() {
+
+        try {
+
+            const response = await fetch(
+                "http://localhost:3000/professionals",
+                { credentials: "include" }
+            );
+
+            const data = await response.json();
+
+            console.log("professionals retornados:", data);
+
+            setProfessionals(data);
+
+        } catch (error) {
+
+            console.error("Erro ao carregar profissionais:", error);
+
+            setProfessionals([]);
+
+        }
+
+    }
+
     async function createService() {
 
         const response = await fetch(
@@ -284,6 +324,38 @@ export default function SettingsPage() {
 
     }
 
+    async function createProfessional() {
+
+        const response = await fetch(
+            "http://localhost:3000/professionals",
+            {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    name: newProfessional.name,
+                    email: newProfessional.email,
+                    password: newProfessional.password
+                })
+            }
+        );
+
+        await response.json();
+
+        await loadProfessionals();
+
+        setShowNewProfessionalForm(false);
+
+        setNewProfessional({
+            name: "",
+            email: "",
+            password: ""
+        });
+
+    }
+
     async function deleteService(serviceId) {
 
         const confirmDelete = confirm("Excluir este serviço?");
@@ -302,6 +374,34 @@ export default function SettingsPage() {
 
         setSelectedService(null);
     }
+
+    async function openProfessionalServices(professional) {
+
+        setSelectedProfessional(professional);
+
+        try {
+
+            const response = await fetch(
+                `http://localhost:3000/admin/professionals/${professional.id}/services`,
+                { credentials: "include" }
+            );
+
+            const data = await response.json();
+
+            console.log("SERVICES:", data);
+
+            setProfessionalServices(data);
+
+        } catch (err) {
+
+            console.error("Erro ao carregar serviços do profissional", err);
+
+        }
+
+        setShowProfessionalServicesModal(true);
+
+    }
+
 
     return (
         <div>
@@ -449,6 +549,22 @@ export default function SettingsPage() {
                 }}
             >
                 Serviços
+            </button>
+
+            <button
+                onClick={async () => {
+
+                    console.log("clicou profissionais");
+
+                    await loadProfessionals();
+
+                    console.log("loadProfessionals terminou");
+
+                    setShowProfessionalsModal(true);
+
+                }}
+            >
+                Profissionais
             </button>
 
             <button onClick={() => navigate("/")}>
@@ -848,6 +964,165 @@ export default function SettingsPage() {
 
                 </div>
 
+            )}
+
+            {showProfessionalsModal && (
+
+                <div style={{
+                    position: "fixed",
+                    inset: 0,
+                    background: "rgba(0,0,0,0.4)",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center"
+                }}>
+
+                    <div style={{
+                        background: "white",
+                        padding: "20px",
+                        borderRadius: "8px",
+                        minWidth: "400px"
+                    }}>
+
+                        <h3>Profissionais</h3>
+
+                        <button
+                            style={{ marginBottom: "10px" }}
+                            onClick={() => {
+                                setShowNewProfessionalForm(true);
+                            }}
+                        >
+                            Novo profissional
+                        </button>
+                        {showNewProfessionalForm && (
+
+                            <div style={{ marginBottom: "15px" }}>
+
+                                <input
+                                    type="text"
+                                    placeholder="Nome"
+                                    autoComplete="off"
+                                    value={newProfessional.name}
+                                    onChange={(e) =>
+                                        setNewProfessional({
+                                            ...newProfessional,
+                                            name: e.target.value
+                                        })
+                                    }
+                                />
+
+                                <input
+                                    type="email"
+                                    placeholder="Email"
+                                    autoComplete="off"
+                                    value={newProfessional.email}
+                                    onChange={(e) =>
+                                        setNewProfessional({
+                                            ...newProfessional,
+                                            email: e.target.value
+                                        })
+                                    }
+                                />
+
+                                <input
+                                    type="password"
+                                    placeholder="Senha"
+                                    autoComplete="off"
+                                    value={newProfessional.password}
+                                    onChange={(e) =>
+                                        setNewProfessional({
+                                            ...newProfessional,
+                                            password: e.target.value
+                                        })
+                                    }
+                                />
+
+                                <input
+                                    type="text"
+                                    name="fake-user"
+                                    autoComplete="username"
+                                    style={{ display: "none" }}
+                                />
+
+                                <input
+                                    type="password"
+                                    name="fake-pass"
+                                    autoComplete="current-password"
+                                    style={{ display: "none" }}
+                                />
+
+                                <button onClick={createProfessional}>
+                                    Salvar
+                                </button>
+
+                                <button
+                                    onClick={() => setShowNewProfessionalForm(false)}
+                                >
+                                    Cancelar
+                                </button>
+
+                            </div>
+
+                        )}
+
+                        {professionals.length === 0 && (
+                            <p>Nenhum profissional cadastrado.</p>
+                        )}
+
+                        {professionals.length > 0 && (
+
+                            <table style={{
+                                width: "100%",
+                                borderCollapse: "collapse",
+                                marginTop: "10px"
+                            }}>
+
+                                <thead>
+                                    <tr style={{ background: "#f5f5f5" }}>
+                                        <th style={{ padding: "8px", border: "1px solid #ddd" }}>Nome</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    {professionals.map(professional => (
+                                        <tr
+                                            key={professional.id}
+                                            style={{ cursor: "pointer" }}
+                                            onClick={() => openProfessionalServices(professional)}
+                                        >
+                                            <td style={{ padding: "8px", border: "1px solid #ddd" }}>
+                                                {professional.name}
+                                            </td>
+                                        </tr>
+
+                                    ))}
+                                </tbody>
+
+                            </table>
+
+                        )}
+
+                        <button
+                            style={{ marginTop: "10px" }}
+                            onClick={() => setShowProfessionalsModal(false)}
+                        >
+                            Fechar
+                        </button>
+
+                    </div>
+
+                </div>
+
+            )}
+            {showProfessionalServicesModal && (
+                <ProfessionalServicesModal
+                    professional={selectedProfessional}
+                    services={professionalServices}
+                    onClose={() => {
+                        setShowProfessionalServicesModal(false);
+                        setShowProfessionalsModal(true);
+                    }}
+                />
             )}
 
         </div>

@@ -83,9 +83,32 @@ async function findActiveProfessionalsByCompanyId(companyId) {
   return result.rows;
 }
 
+async function createProfessional({
+  companyId,
+  userId,
+  slug
+}) {
+
+  const result = await pool.query(
+    `
+    INSERT INTO professionals (
+      company_id,
+      user_id,
+      slug
+    )
+    VALUES ($1, $2, $3)
+    RETURNING id
+    `,
+    [companyId, userId, slug]
+  );
+
+  return result.rows[0];
+}
+
 module.exports = {
   findProfessionalById,
   findProfessionalByUserId,
   findActiveProfessionalsPublicByCompanyId,
-  findActiveProfessionalsByCompanyId
+  findActiveProfessionalsByCompanyId,
+  createProfessional
 };

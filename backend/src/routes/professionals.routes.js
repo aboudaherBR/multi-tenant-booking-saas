@@ -21,4 +21,16 @@ router.get(
   professionalsController.listServicesPublic
 );
 
+router.get(
+  '/professionals',
+  requireAuth,
+  professionalsController.list
+);
+
+router.post(
+  '/professionals',
+  requireAuth,
+  professionalsController.create
+);
+
 module.exports = router;

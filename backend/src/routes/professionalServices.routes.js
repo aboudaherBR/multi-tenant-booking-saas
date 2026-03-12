@@ -1,13 +1,27 @@
-const express = require('express');
+const express = require("express");
+
 const router = express.Router();
 
-const { requireAuth } = require('../middlewares/auth.middleware');
-const { list } = require('../controllers/professionalServices.controller');
+const {
+  listServicesForProfessional,
+  addServiceToProfessional,
+  removeServiceFromProfessional
+} = require("../controllers/professionalServices.controller");
+
 
 router.get(
-  '/admin/professionals/:id/services',
-  requireAuth,
-  list
+  "/admin/professionals/:id/services",
+  listServicesForProfessional
+);
+
+router.post(
+  "/admin/professionals/:id/services",
+  addServiceToProfessional
+);
+
+router.delete(
+  "/admin/professionals/:id/services/:serviceId",
+  removeServiceFromProfessional
 );
 
 module.exports = router;
