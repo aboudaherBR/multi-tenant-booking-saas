@@ -56,7 +56,7 @@ async function listServicesForProfessional({
         s.id,
         s.name,
         s.duration_minutes,
-        COALESCE(ps.custom_price, s.base_price) AS final_price
+        COALESCE(ps.custom_price, s.base_price) AS price
       FROM professional_services ps
       JOIN services s
         ON s.id = ps.service_id
@@ -86,7 +86,7 @@ async function findActiveServicesPublicByProfessionalSlug({
         s.slug,
         s.name,
         s.duration_minutes,
-        COALESCE(ps.custom_price, s.base_price) AS final_price
+        COALESCE(ps.custom_price, s.base_price) AS price
       FROM professionals p
       JOIN professional_services ps
         ON ps.professional_id = p.id

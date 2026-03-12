@@ -7,7 +7,7 @@ function ScheduleWizard() {
     const [step, setStep] = useState('professional');
     const [professionals, setProfessionals] = useState([]);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
-    
+
 
     const [appointment, setAppointment] = useState({
         professional: null,
@@ -84,15 +84,18 @@ function ScheduleWizard() {
                 <div>
                     <h3>Escolher profissional</h3>
 
+                    <button onClick={() => navigate('/')}>
+                        ← Voltar ao início
+                    </button>
 
                     {professionals.map((professional) => (
                         <button
                             key={professional.id}
                             onClick={async () => {
                                 try {
-                                    const data = await apiClient(`/professionals/${professional.id}/services`);
+                                    const data = await apiClient(`/admin/professionals/${professional.id}/services`);
 
-                                    setServices(data.services);;
+                                    setServices(data);
 
                                     setAppointment({
                                         ...appointment,
@@ -126,6 +129,7 @@ function ScheduleWizard() {
                         <button
                             key={service.id}
                             onClick={() => {
+                                console.log("clicou serviço", service);
                                 setAppointment({
                                     ...appointment,
                                     service: service
