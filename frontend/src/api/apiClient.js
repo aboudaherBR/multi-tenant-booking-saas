@@ -1,5 +1,4 @@
-const BASE_URL =
-  import.meta.env.VITE_API_URL || "http://localhost:3000";
+const BASE_URL = "/api";
 
 async function apiClient(endpoint, options = {}) {
   const config = {

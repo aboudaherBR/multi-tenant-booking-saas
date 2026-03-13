@@ -25,12 +25,12 @@ async function login(credentials, passwordParam) {
 }
 
 export async function getCurrentUser() {
-  const response = await fetch('http://localhost:3000/auth/me', {
+  const response = await fetch('/api/auth/me', {
     credentials: 'include'
   });
 
-  if (!response.ok) {
-    throw new Error('Not authenticated');
+  if (response.status === 401) {
+    return null;
   }
 
   return response.json();
