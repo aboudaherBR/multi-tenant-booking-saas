@@ -4,29 +4,32 @@ const cors = require('cors');
 
 const app = express();
 
-// 1️⃣ CORS primeiro
+app.set('trust proxy', 1);
+
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: true,
   credentials: true
 }));
 
-// 2️⃣ Session depois
+app.use(express.json());
+
 app.use(
   session({
     name: 'saas_session',
     secret: 'sua_chave_super_secreta_temporaria',
     resave: false,
     saveUninitialized: false,
+    proxy: true,
     cookie: {
       httpOnly: true,
       secure: false,
+      sameSite: "lax",
       maxAge: 1000 * 60 * 60 * 8
     }
   })
 );
 
-// 3️⃣ JSON parser
-app.use(express.json());
+/* ROTAS */
 
 const authRoutes = require('./routes/auth.routes');
 app.use(authRoutes);
@@ -69,7 +72,5 @@ app.use(servicesRoutes);
 
 const reportsRoutes = require('./routes/reports.routes');
 app.use(reportsRoutes);
-
-
 
 module.exports = app;
