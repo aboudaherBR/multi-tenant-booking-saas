@@ -5,7 +5,9 @@ export default defineConfig({
   plugins: [react()],
   server: {
     host: true,
-    allowedHosts: "all",
+    allowedHosts: [
+      "systematic-contessa-countermandable.ngrok-free.dev"
+    ],
     proxy: {
       "/api": {
         target: "http://localhost:3000",
