@@ -12,8 +12,15 @@ function AuthProvider({ children }) {
     async function validateSession() {
       try {
         const userData = await getCurrentUser();
-        setUser(userData);
-        setIsAuthenticated(true);
+
+        if (userData) {
+          setUser(userData);
+          setIsAuthenticated(true);
+        } else {
+          setUser(null);
+          setIsAuthenticated(false);
+        }
+
       } catch (error) {
         setUser(null);
         setIsAuthenticated(false);
@@ -26,26 +33,32 @@ function AuthProvider({ children }) {
   }, []);
 
   async function login(credentials, passwordParam) {
-  let slug;
-  let username;
-  let password;
+    let slug;
+    let username;
+    let password;
 
-  if (typeof credentials === 'object') {
-    slug = credentials.slug;
-    username = credentials.username;
-    password = credentials.password;
-  } else {
-    // fallback legado
-    username = credentials;
-    password = passwordParam;
+    if (typeof credentials === 'object') {
+      slug = credentials.slug;
+      username = credentials.username;
+      password = credentials.password;
+    } else {
+      // fallback legado
+      username = credentials;
+      password = passwordParam;
+    }
+
+    await loginService({ slug, username, password });
+
+    const userData = await getCurrentUser();
+
+    if (userData) {
+      setUser(userData);
+      setIsAuthenticated(true);
+    } else {
+      setUser(null);
+      setIsAuthenticated(false);
+    }
   }
-
-  await loginService({ slug, username, password });
-
-  const userData = await getCurrentUser();
-  setUser(userData);
-  setIsAuthenticated(true);
-}
 
   function logout() {
     setUser(null);

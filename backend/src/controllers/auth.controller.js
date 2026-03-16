@@ -43,6 +43,8 @@ async function login(req, res, next) {
       isSuperAdmin: user.company_id === null
     };
 
+    console.log("SESSION AFTER LOGIN:", req.session);
+
     return res.json({ message: 'Login successful' });
 
   } catch (error) {
