@@ -366,7 +366,7 @@ Servidor rodando na porta 3000
 O servidor roda em:
 
 ```
-http://localhost:3000
+http:///api
 ```
 
 Você pode testar usando:
@@ -383,7 +383,7 @@ Você pode testar usando:
 POST
 
 ```
-http://localhost:3000/appointments
+http:///api/appointments
 ```
 
 Body:

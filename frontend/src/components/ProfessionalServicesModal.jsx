@@ -20,7 +20,7 @@ export default function ProfessionalServicesModal({
         try {
 
             const response = await fetch(
-                "http://localhost:3000/services",
+                "http:///api/services",
                 { credentials: "include" }
             );
 
@@ -51,7 +51,7 @@ export default function ProfessionalServicesModal({
         try {
 
             await fetch(
-                `http://localhost:3000/admin/professionals/${professional.id}/services`,
+                `http:///api/admin/professionals/${professional.id}/services`,
                 {
                     method: "POST",
                     credentials: "include",
@@ -86,7 +86,7 @@ export default function ProfessionalServicesModal({
         try {
 
             await fetch(
-                `http://localhost:3000/admin/professionals/${professional.id}/services/${serviceId}`,
+                `http:///api/admin/professionals/${professional.id}/services/${serviceId}`,
                 {
                     method: "DELETE",
                     credentials: "include"
@@ -108,7 +108,7 @@ export default function ProfessionalServicesModal({
         try {
 
             await fetch(
-                `http://localhost:3000/admin/professionals/${professional.id}/services`,
+                `http:///api/admin/professionals/${professional.id}/services`,
                 {
                     method: "POST",
                     credentials: "include",

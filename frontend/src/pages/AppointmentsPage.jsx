@@ -27,7 +27,7 @@ export default function AppointmentsPage() {
     }, [date, selectedProfessional]);
 
     async function loadProfessionals() {
-        const response = await fetch("http://localhost:3000/professionals", {
+        const response = await fetch("http:///api/professionals", {
             credentials: "include"
         });
 
@@ -39,7 +39,7 @@ export default function AppointmentsPage() {
 
     async function loadAppointments() {
 
-        let url = `http://localhost:3000/appointments?date=${date}`;
+        let url = `http:///api/appointments?date=${date}`;
 
         if (selectedProfessional !== "all") {
             url += `&professionalId=${selectedProfessional}`;
@@ -140,7 +140,7 @@ export default function AppointmentsPage() {
     async function handleCancel() {
 
         await fetch(
-            `http://localhost:3000/appointments/${selectedAppointment.id}`,
+            `http:///api/appointments/${selectedAppointment.id}`,
             {
                 method: "DELETE",
                 credentials: "include"

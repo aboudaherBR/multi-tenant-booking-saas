@@ -64,7 +64,7 @@ export default function SettingsPage() {
     async function loadBusinessHours() {
 
         const response = await fetch(
-            "http://localhost:3000/business-hours",
+            "http:///api/business-hours",
             { credentials: "include" }
         );
 
@@ -97,7 +97,7 @@ export default function SettingsPage() {
         await loadBusinessHours();
 
         const response = await fetch(
-            "http://localhost:3000/company/settings",
+            "http:///api/company/settings",
             { credentials: "include" }
         );
 
@@ -137,7 +137,7 @@ export default function SettingsPage() {
         console.log("buffer atual:", bufferMinutes);
 
         await fetch(
-            "http://localhost:3000/business-hours",
+            "http:///api/business-hours",
             {
                 method: "PUT",
                 credentials: "include",
@@ -146,7 +146,7 @@ export default function SettingsPage() {
             }
         );
         await fetch(
-            "http://localhost:3000/company/buffer",
+            "http:///api/company/buffer",
             {
                 method: "PUT",
                 credentials: "include",
@@ -163,7 +163,7 @@ export default function SettingsPage() {
     async function loadScheduleBlocks() {
 
         const response = await fetch(
-            "http://localhost:3000/schedule-blocks",
+            "http:///api/schedule-blocks",
             { credentials: "include" }
         );
 
@@ -178,7 +178,7 @@ export default function SettingsPage() {
     async function createScheduleBlock() {
 
         const response = await fetch(
-            "http://localhost:3000/schedule-blocks",
+            "http:///api/schedule-blocks",
             {
                 method: "POST",
                 credentials: "include",
@@ -211,7 +211,7 @@ export default function SettingsPage() {
     async function deleteScheduleBlock(id) {
 
         const response = await fetch(
-            `http://localhost:3000/schedule-blocks/${id}`,
+            `http:///api/schedule-blocks/${id}`,
             {
                 method: "DELETE",
                 credentials: "include"
@@ -251,7 +251,7 @@ export default function SettingsPage() {
         try {
 
             const response = await fetch(
-                "http://localhost:3000/services",
+                "http:///api/services",
                 { credentials: "include" }
             );
 
@@ -272,7 +272,7 @@ export default function SettingsPage() {
         try {
 
             const response = await fetch(
-                "http://localhost:3000/professionals",
+                "http:///api/professionals",
                 { credentials: "include" }
             );
 
@@ -295,7 +295,7 @@ export default function SettingsPage() {
     async function createService() {
 
         const response = await fetch(
-            "http://localhost:3000/services",
+            "http:///api/services",
             {
                 method: "POST",
                 credentials: "include",
@@ -327,7 +327,7 @@ export default function SettingsPage() {
     async function createProfessional() {
 
         const response = await fetch(
-            "http://localhost:3000/professionals",
+            "http:///api/professionals",
             {
                 method: "POST",
                 credentials: "include",
@@ -363,7 +363,7 @@ export default function SettingsPage() {
         if (!confirmDelete) return;
 
         await fetch(
-            `http://localhost:3000/services/${serviceId}`,
+            `http:///api/services/${serviceId}`,
             {
                 method: "DELETE",
                 credentials: "include"
@@ -382,7 +382,7 @@ export default function SettingsPage() {
         try {
 
             const response = await fetch(
-                `http://localhost:3000/admin/professionals/${professional.id}/services`,
+                `http:///api/admin/professionals/${professional.id}/services`,
                 { credentials: "include" }
             );
 

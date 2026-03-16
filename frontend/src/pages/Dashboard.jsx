@@ -14,7 +14,7 @@ export default function Dashboard() {
             try {
 
                 // Buscar sessão do usuário
-                const sessionResponse = await fetch("http://localhost:3000/auth/me", {
+                const sessionResponse = await fetch("http:///api/auth/me", {
                     credentials: "include",
                 });
 
@@ -22,7 +22,7 @@ export default function Dashboard() {
                 setUser(sessionData);
 
                 // Buscar dados do dashboard
-                const response = await fetch("http://localhost:3000/dashboard/today", {
+                const response = await fetch("http:///api/dashboard/today", {
                     credentials: "include",
                 });
 
