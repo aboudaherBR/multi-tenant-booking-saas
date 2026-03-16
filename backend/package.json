@@ -1,14 +1,15 @@
 {
   "name": "barberproject",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/server.js",
   "description": "",
   "keywords": [],
   "author": "",
   "license": "ISC",
   "scripts": {
-    "test": "set NODE_ENV=test && jest --detectOpenHandles --forceExit"
-  },
+  "start": "node src/server.js",
+  "test": "set NODE_ENV=test && jest --detectOpenHandles --forceExit"
+},
   "dependencies": {
     "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
@@ -27,4 +28,7 @@
       "<rootDir>/jest.setup.js"
     ]
   }
+
+  
 }
+
