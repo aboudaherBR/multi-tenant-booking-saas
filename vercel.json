@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://barbershop-api-zwxz.onrender.com/$1"
+    }
+  ]
+}
