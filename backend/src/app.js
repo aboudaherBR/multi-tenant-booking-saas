@@ -11,19 +11,22 @@ app.use(cors({
   credentials: true
 }));
 
+const isProduction = process.env.NODE_ENV === "production";
+console.log("NODE_ENV =", process.env.NODE_ENV);
+
 app.use(express.json());
 
 app.use(
   session({
     name: 'saas_session',
-    secret: 'sua_chave_super_secreta_temporaria',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     proxy: true,
     cookie: {
       httpOnly: true,
-      secure: false,
-      sameSite: "lax",
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
       maxAge: 1000 * 60 * 60 * 8
     }
   })
