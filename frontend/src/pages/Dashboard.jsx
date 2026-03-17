@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import apiClient from "../api/apiClient";
 
 export default function Dashboard() {
     const [stats, setStats] = useState(null);
@@ -9,24 +10,14 @@ export default function Dashboard() {
     const navigate = useNavigate();
 
     useEffect(() => {
-
         async function loadDashboard() {
             try {
-
                 // Buscar sessão do usuário
-                const sessionResponse = await fetch("http:///api/auth/me", {
-                    credentials: "include",
-                });
-
-                const sessionData = await sessionResponse.json();
+                const sessionData = await apiClient("/auth/me");
                 setUser(sessionData);
 
                 // Buscar dados do dashboard
-                const response = await fetch("http:///api/dashboard/today", {
-                    credentials: "include",
-                });
-
-                const data = await response.json();
+                const data = await apiClient("/dashboard/today");
                 setStats(data);
 
             } catch (err) {
@@ -38,7 +29,6 @@ export default function Dashboard() {
         }
 
         loadDashboard();
-
     }, []);
 
     if (loading) return <div>Carregando...</div>;
@@ -62,6 +52,7 @@ export default function Dashboard() {
                     </li>
                 ))}
             </ul>
+
             <button onClick={() => navigate('/reports')}>
                 Relatórios
             </button>

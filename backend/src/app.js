@@ -11,6 +11,11 @@ app.use(cors({
   credentials: true
 }));
 
+app.use((req, res, next) => {
+  res.setHeader("Cache-Control", "no-store");
+  next();
+});
+
 const isProduction = process.env.NODE_ENV === "production";
 console.log("NODE_ENV =", process.env.NODE_ENV);
 
@@ -35,46 +40,46 @@ app.use(
 /* ROTAS */
 
 const authRoutes = require('./routes/auth.routes');
-app.use(authRoutes);
+app.use('/api', authRoutes);
 
 const sessionRoutes = require('./routes/session.routes');
-app.use(sessionRoutes);
+app.use('/api', sessionRoutes);
 
 const availabilityRoutes = require('./routes/availability.routes');
-app.use(availabilityRoutes);
+app.use('/api', availabilityRoutes);
 
 const appointmentsRoutes = require('./routes/appointments.routes');
-app.use(appointmentsRoutes);
+app.use('/api', appointmentsRoutes);
 
 const companyRoutes = require('./routes/company.routes');
-app.use(companyRoutes);
+app.use('/api', companyRoutes);
 
 const scheduleBlocksRoutes = require('./routes/scheduleBlocks.routes');
-app.use(scheduleBlocksRoutes);
+app.use('/api', scheduleBlocksRoutes);
 
 const clientsRoutes = require('./routes/clients.routes');
-app.use(clientsRoutes);
+app.use('/api', clientsRoutes);
 
 const professionalServicesRoutes = require('./routes/professionalServices.routes');
-app.use(professionalServicesRoutes);
+app.use('/api', professionalServicesRoutes);
 
 const publicRoutes = require('./routes/public.routes');
-app.use(publicRoutes);
+app.use('/api', publicRoutes);
 
 const professionalsRoutes = require('./routes/professionals.routes');
-app.use(professionalsRoutes);
+app.use('/api', professionalsRoutes);
 
 const dashboardRoutes = require('./routes/dashboard.routes');
-app.use(dashboardRoutes);
+app.use('/api', dashboardRoutes);
 
 const businessHoursRoutes = require('./routes/businessHours.routes');
-app.use(businessHoursRoutes);
+app.use('/api', businessHoursRoutes);
 
 const servicesRoutes = require('./routes/services.routes');
-app.use(servicesRoutes);
+app.use('/api', servicesRoutes);
 
 const reportsRoutes = require('./routes/reports.routes');
-app.use(reportsRoutes);
+app.use('/api', reportsRoutes);
 
 
 

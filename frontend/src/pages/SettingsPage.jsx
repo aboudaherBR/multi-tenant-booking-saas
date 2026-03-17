@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import ProfessionalServicesModal from "../components/ProfessionalServicesModal";
+import apiClient from "../api/apiClient";
 
 export default function SettingsPage() {
 
@@ -63,19 +64,10 @@ export default function SettingsPage() {
 
     async function loadBusinessHours() {
 
-        const response = await fetch(
-            "http:///api/business-hours",
-            { credentials: "include" }
-        );
-
-        const data = await response.json();
-
+        const data = await apiClient("/business-hours");
         const days = [];
-
         for (let i = 0; i <= 6; i++) {
-
             const existing = data.find(d => d.weekday === i);
-
             if (existing) {
                 days.push(existing);
             } else {
@@ -97,7 +89,7 @@ export default function SettingsPage() {
         await loadBusinessHours();
 
         const response = await fetch(
-            "http:///api/company/settings",
+            "/api/company/settings",
             { credentials: "include" }
         );
 
@@ -117,9 +109,7 @@ export default function SettingsPage() {
     async function saveBusinessHours() {
 
         for (const day of businessHours) {
-
             if (!day.is_active) continue;
-
             const start = day.start_time.slice(0, 5);
             const end = day.end_time.slice(0, 5);
 
@@ -130,44 +120,34 @@ export default function SettingsPage() {
                 alert("Os horários precisam respeitar o intervalo da agenda.");
                 return;
             }
-
         }
 
         console.log("saveBusinessHours executou");
         console.log("buffer atual:", bufferMinutes);
 
-        await fetch(
-            "http:///api/business-hours",
-            {
-                method: "PUT",
-                credentials: "include",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ hours: businessHours })
+        // salvar horários
+        await apiClient("/business-hours", {
+            method: "PUT",
+            body: {
+                hours: businessHours
             }
-        );
-        await fetch(
-            "http:///api/company/buffer",
-            {
-                method: "PUT",
-                credentials: "include",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    appointmentBufferMinutes: Number(bufferMinutes)
-                })
+        });
+
+        // salvar buffer
+        await apiClient("/company/buffer", {
+            method: "PUT",
+            body: {
+                appointmentBufferMinutes: Number(bufferMinutes)
             }
-        );
+        });
 
         setShowBusinessHoursModal(false);
     }
 
+
     async function loadScheduleBlocks() {
 
-        const response = await fetch(
-            "http:///api/schedule-blocks",
-            { credentials: "include" }
-        );
-
-        const data = await response.json();
+        const data = await apiClient("/schedule-blocks");
 
         const blocks = data.blocks || [];
 
@@ -177,23 +157,16 @@ export default function SettingsPage() {
 
     async function createScheduleBlock() {
 
-        const response = await fetch(
-            "http:///api/schedule-blocks",
-            {
-                method: "POST",
-                credentials: "include",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    startDate: newBlock.startDate,
-                    endDate: newBlock.endDate,
-                    startTime: newBlock.startTime || null,
-                    endTime: newBlock.endTime || null,
-                    reason: newBlock.reason || null
-                })
+        await apiClient("/schedule-blocks", {
+            method: "POST",
+            body: {
+                startDate: newBlock.startDate,
+                endDate: newBlock.endDate,
+                startTime: newBlock.startTime || null,
+                endTime: newBlock.endTime || null,
+                reason: newBlock.reason || null
             }
-        );
-
-        await response.json();
+        });
 
         await loadScheduleBlocks();
 
@@ -208,21 +181,27 @@ export default function SettingsPage() {
         });
     }
 
+
     async function deleteScheduleBlock(id) {
 
-        const response = await fetch(
-            `http:///api/schedule-blocks/${id}`,
-            {
-                method: "DELETE",
-                credentials: "include"
-            }
-        );
-
-        await response.json();
+        await apiClient(`/schedule-blocks/${id}`, {
+            method: "DELETE"
+        });
 
         await loadScheduleBlocks();
 
         setSelectedBlock(null);
+    }
+
+    async function loadServices() {
+        try {
+            const data = await apiClient("/services");
+            console.log("services retornados:", data);
+            setServices(data.services || []);
+        } catch (error) {
+            console.error("Erro ao carregar serviços:", error);
+            setServices([]);
+        }
     }
 
     function applyFilter() {
@@ -244,27 +223,6 @@ export default function SettingsPage() {
         }
 
         setFilteredBlocks(result);
-    }
-
-    async function loadServices() {
-
-        try {
-
-            const response = await fetch(
-                "http:///api/services",
-                { credentials: "include" }
-            );
-
-            const data = await response.json();
-            console.log("services retornados:", data);
-            setServices(data.services || []);
-
-        } catch (error) {
-            console.error("Erro ao carregar serviços:", error);
-            setServices([]);
-
-        }
-
     }
 
     async function loadProfessionals() {
@@ -293,24 +251,14 @@ export default function SettingsPage() {
     }
 
     async function createService() {
-
-        const response = await fetch(
-            "http:///api/services",
-            {
-                method: "POST",
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    name: newService.name,
-                    duration_minutes: Number(newService.duration_minutes),
-                    base_price: Number(newService.base_price)
-                })
+        await apiClient("/services", {
+            method: "POST",
+            body: {
+                name: newService.name,
+                duration_minutes: Number(newService.duration_minutes),
+                base_price: Number(newService.base_price)
             }
-        );
-
-        await response.json();
+        });
 
         await loadServices();
 
@@ -321,7 +269,6 @@ export default function SettingsPage() {
             duration_minutes: "",
             base_price: ""
         });
-
     }
 
     async function createProfessional() {
