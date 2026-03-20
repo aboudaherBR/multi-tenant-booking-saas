@@ -1,6 +1,7 @@
-const BASE_URL = "/api";
+const BASE_URL = import.meta.env.VITE_API_URL || "/api";
 
 async function apiClient(endpoint, options = {}) {
+  console.log("BASE_URL:", BASE_URL);
   const config = {
     method: options.method || 'GET',
     credentials: 'include', // ESSENCIAL para cookie-based session
