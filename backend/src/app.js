@@ -1,23 +1,28 @@
 const express = require('express');
 const session = require('express-session');
 const cors = require('cors');
+
 const isProduction = process.env.NODE_ENV === "production";
 
 const app = express();
 
 app.set('trust proxy', 1);
 
-origin: isProduction
-  ? ["https://barber-shop-indol-three.vercel.app"]
-  : ["http://localhost:5173"]
+// ✅ CORS CORRETO
+app.use(cors({
+  origin: isProduction
+    ? ["https://barber-shop-indol-three.vercel.app"]
+    : ["http://localhost:5173"],
+  credentials: true
+}));
+
+// ✅ PRE-FLIGHT (CRÍTICO)
+app.options('*', cors());
 
 app.use((req, res, next) => {
   res.setHeader("Cache-Control", "no-store");
   next();
 });
-
-
-
 
 app.use(express.json());
 
@@ -80,7 +85,5 @@ app.use('/api', servicesRoutes);
 
 const reportsRoutes = require('./routes/reports.routes');
 app.use('/api', reportsRoutes);
-
-
 
 module.exports = app;
