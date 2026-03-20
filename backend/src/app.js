@@ -8,8 +8,11 @@ const app = express();
 
 app.set('trust proxy', 1);
 
+// ✅ CORS CONFIG CORRIGIDO
 app.use(cors({
   origin: function (origin, callback) {
+    console.log("🌍 Origin recebida:", origin);
+
     const allowedOrigins = [
       "https://barber-shop-indol-three.vercel.app",
       "http://localhost:5173"
@@ -18,18 +21,23 @@ app.use(cors({
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      callback(new Error("Not allowed by CORS"));
+      console.log("❌ Origin bloqueada:", origin);
+      callback(null, false); // 🔥 CORREÇÃO CRÍTICA
     }
   },
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"]
 }));
 
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Credentials", "true");
-  next();
-});
+// ✅ GARANTE RESPOSTA PARA PREFLIGHT
+app.options(/.*/, cors());
+
+// ⚠️ ESSE MIDDLEWARE ERA REDUNDANTE — REMOVIDO
+// app.use((req, res, next) => {
+//   res.header("Access-Control-Allow-Credentials", "true");
+//   next();
+// });
 
 app.use((req, res, next) => {
   res.setHeader("Cache-Control", "no-store");
