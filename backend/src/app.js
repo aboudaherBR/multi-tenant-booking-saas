@@ -16,8 +16,7 @@ app.use(cors({
   credentials: true
 }));
 
-// ✅ PRE-FLIGHT (CRÍTICO)
-app.options('*', cors());
+app.options('/api/*', cors());
 
 app.use((req, res, next) => {
   res.setHeader("Cache-Control", "no-store");
