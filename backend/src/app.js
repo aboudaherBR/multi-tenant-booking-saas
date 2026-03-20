@@ -8,15 +8,28 @@ const app = express();
 
 app.set('trust proxy', 1);
 
-// ✅ CORS CORRETO
 app.use(cors({
-  origin: isProduction
-    ? ["https://barber-shop-indol-three.vercel.app"]
-    : ["http://localhost:5173"],
-  credentials: true
+  origin: function (origin, callback) {
+    const allowedOrigins = [
+      "https://barber-shop-indol-three.vercel.app",
+      "http://localhost:5173"
+    ];
+
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
-app.options('/api/*', cors());
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Credentials", "true");
+  next();
+});
 
 app.use((req, res, next) => {
   res.setHeader("Cache-Control", "no-store");
