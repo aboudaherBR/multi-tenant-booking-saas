@@ -2,6 +2,8 @@ const express = require('express');
 const session = require('express-session');
 const cors = require('cors');
 
+console.log("🔥 VERSION CHECK - NOVO BUILD");
+
 const isProduction = process.env.NODE_ENV === "production";
 
 const app = express();
