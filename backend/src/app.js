@@ -1,13 +1,16 @@
 const express = require('express');
 const session = require('express-session');
 const cors = require('cors');
+const isProduction = process.env.NODE_ENV === "production";
 
 const app = express();
 
 app.set('trust proxy', 1);
 
 app.use(cors({
-  origin: true,
+  origin: isProduction
+    ? ["https://SEU-FRONTEND.vercel.app"]
+    : ["http://localhost:5173"],
   credentials: true
 }));
 
@@ -16,8 +19,8 @@ app.use((req, res, next) => {
   next();
 });
 
-const isProduction = process.env.NODE_ENV === "production";
-console.log("NODE_ENV =", process.env.NODE_ENV);
+
+
 
 app.use(express.json());
 
