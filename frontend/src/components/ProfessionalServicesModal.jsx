@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
+import apiClient from "../api/apiClient";
 
 export default function ProfessionalServicesModal({
     professional,
     services,
-    onClose
+    onClose,
+    onServiceAdded
 }) {
 
     if (!professional) return null;
@@ -15,26 +17,17 @@ export default function ProfessionalServicesModal({
     const [editingServiceId, setEditingServiceId] = useState(null);
     const [editingPrice, setEditingPrice] = useState("");
 
+
     async function loadAvailableServices() {
 
         try {
-
-            const response = await fetch(
-                "http:///api/services",
-                { credentials: "include" }
-            );
-
-            const data = await response.json();
-
+            const data = await apiClient("/services");
             setAvailableServices(data.services || []);
 
-        } catch (err) {
-
-            console.error("Erro ao carregar serviços", err);
+        } catch (error) {
+            console.error("Erro ao carregar serviços", error);
             setAvailableServices([]);
-
         }
-
     }
 
     useEffect(() => {
@@ -43,40 +36,26 @@ export default function ProfessionalServicesModal({
 
     async function saveProfessionalService() {
 
-        if (!selectedServiceId) {
-            alert("Selecione um serviço");
-            return;
-        }
-
         try {
 
-            await fetch(
-                `http:///api/admin/professionals/${professional.id}/services`,
+            await apiClient(
+                `/admin/professionals/${professional.id}/services`,
                 {
                     method: "POST",
-                    credentials: "include",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        serviceId: selectedServiceId,
-                        customPrice: customPrice ? Number(customPrice) : null
-                    })
+                    body: {
+                        serviceId: selectedServiceId
+                    }
                 }
             );
 
-            window.location.reload();
+            // 👇 chama função do pai
+            onServiceAdded();
 
-            alert("Serviço adicionado");
+        } catch (error) {
 
-        } catch (err) {
-
-            console.error("Erro ao adicionar serviço", err);
-
+            console.error("Erro ao adicionar serviço", error);
         }
-
     }
-
     async function removeService(serviceId) {
 
         const confirmDelete = confirm("Remover este serviço do profissional?");
@@ -85,51 +64,43 @@ export default function ProfessionalServicesModal({
 
         try {
 
-            await fetch(
-                `http:///api/admin/professionals/${professional.id}/services/${serviceId}`,
+            await apiClient(
+                `/admin/professionals/${professional.id}/services/${serviceId}`,
                 {
-                    method: "DELETE",
-                    credentials: "include"
+                    method: "DELETE"
                 }
             );
 
-            window.location.reload();
+            onServiceAdded(); // atualiza lista
 
         } catch (err) {
 
             console.error("Erro ao remover serviço", err);
-
         }
-
     }
+
 
     async function updateServicePrice(serviceId) {
 
         try {
 
-            await fetch(
-                `http:///api/admin/professionals/${professional.id}/services`,
+            await apiClient(
+                `/admin/professionals/${professional.id}/services`,
                 {
                     method: "POST",
-                    credentials: "include",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
+                    body: {
                         serviceId: serviceId,
                         customPrice: Number(editingPrice)
-                    })
+                    }
                 }
             );
 
-            window.location.reload();
+            onServiceAdded(); // atualiza lista
 
         } catch (err) {
 
             console.error("Erro ao atualizar preço", err);
-
         }
-
     }
 
     return (

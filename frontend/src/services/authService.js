@@ -25,15 +25,20 @@ async function login(credentials, passwordParam) {
 }
 
 export async function getCurrentUser() {
-  const response = await fetch('/api/auth/me', {
-    credentials: 'include'
-  });
 
-  if (response.status === 401) {
+  try {
+    const response = await fetch("/api/auth/me", {
+      credentials: "include"
+    });
+
+    if (response.status === 401) {
+      return null;
+    }
+    return await response.json();
+
+  } catch (error) {
     return null;
   }
-
-  return response.json();
 }
 
 export { login };

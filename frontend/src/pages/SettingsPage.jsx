@@ -88,12 +88,8 @@ export default function SettingsPage() {
         console.log("abrindo modal");
         await loadBusinessHours();
 
-        const response = await fetch(
-            "/api/company/settings",
-            { credentials: "include" }
-        );
+        const data = await apiClient("/company/settings");
 
-        const data = await response.json();
         setBufferMinutes(data.appointment_buffer_minutes || 0);
         setSlotInterval(data.slot_interval_minutes || 5);
         setShowBusinessHoursModal(true);
@@ -229,25 +225,14 @@ export default function SettingsPage() {
 
         try {
 
-            const response = await fetch(
-                "http:///api/professionals",
-                { credentials: "include" }
-            );
-
-            const data = await response.json();
-
+            const data = await apiClient("/professionals");
             console.log("professionals retornados:", data);
-
             setProfessionals(data);
 
         } catch (error) {
-
             console.error("Erro ao carregar profissionais:", error);
-
             setProfessionals([]);
-
         }
-
     }
 
     async function createService() {
@@ -273,23 +258,14 @@ export default function SettingsPage() {
 
     async function createProfessional() {
 
-        const response = await fetch(
-            "http:///api/professionals",
-            {
-                method: "POST",
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    name: newProfessional.name,
-                    email: newProfessional.email,
-                    password: newProfessional.password
-                })
+        await apiClient("/professionals", {
+            method: "POST",
+            body: {
+                name: newProfessional.name,
+                email: newProfessional.email,
+                password: newProfessional.password
             }
-        );
-
-        await response.json();
+        });
 
         await loadProfessionals();
 
@@ -300,25 +276,17 @@ export default function SettingsPage() {
             email: "",
             password: ""
         });
-
     }
 
     async function deleteService(serviceId) {
 
         const confirmDelete = confirm("Excluir este serviço?");
-
         if (!confirmDelete) return;
 
-        await fetch(
-            `http:///api/services/${serviceId}`,
-            {
-                method: "DELETE",
-                credentials: "include"
-            }
-        );
-
+        await apiClient(`/services/${serviceId}`, {
+            method: "DELETE"
+        });
         await loadServices();
-
         setSelectedService(null);
     }
 
@@ -327,26 +295,18 @@ export default function SettingsPage() {
         setSelectedProfessional(professional);
 
         try {
-
-            const response = await fetch(
-                `http:///api/admin/professionals/${professional.id}/services`,
-                { credentials: "include" }
+            const data = await apiClient(
+                `/admin/professionals/${professional.id}/services`
             );
 
-            const data = await response.json();
-
             console.log("SERVICES:", data);
-
             setProfessionalServices(data);
 
         } catch (err) {
-
             console.error("Erro ao carregar serviços do profissional", err);
-
         }
 
         setShowProfessionalServicesModal(true);
-
     }
 
 
@@ -1069,6 +1029,7 @@ export default function SettingsPage() {
                         setShowProfessionalServicesModal(false);
                         setShowProfessionalsModal(true);
                     }}
+                    onServiceAdded={() => openProfessionalServices(selectedProfessional)}
                 />
             )}
 

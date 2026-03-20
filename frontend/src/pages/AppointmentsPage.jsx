@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import apiClient from "../api/apiClient";
 
 export default function AppointmentsPage() {
 
@@ -23,34 +24,29 @@ export default function AppointmentsPage() {
     }, []);
 
     useEffect(() => {
-        loadAppointments();
-    }, [date, selectedProfessional]);
+        const today = new Date().toISOString().slice(0, 10);
+        loadAppointments(today);
+    }, []);
+
 
     async function loadProfessionals() {
-        const response = await fetch("http:///api/professionals", {
-            credentials: "include"
-        });
 
-        const data = await response.json();
+        const data = await apiClient("/professionals");
         setProfessionals(data);
-
-
     }
 
-    async function loadAppointments() {
+    async function loadAppointments(date) {
 
-        let url = `http:///api/appointments?date=${date}`;
+        try {
 
-        if (selectedProfessional !== "all") {
-            url += `&professionalId=${selectedProfessional}`;
+            const data = await apiClient(`/appointments?date=${date}`);
+            setAppointments(data);
+
+        } catch (error) {
+
+            console.error("Erro ao carregar agendamentos:", error);
+            setAppointments([]);
         }
-
-        const response = await fetch(url, {
-            credentials: "include"
-        });
-
-        const data = await response.json();
-        setAppointments(data);
     }
 
     return (
@@ -139,15 +135,13 @@ export default function AppointmentsPage() {
 
     async function handleCancel() {
 
-        await fetch(
-            `http:///api/appointments/${selectedAppointment.id}`,
-            {
-                method: "DELETE",
-                credentials: "include"
-            }
-        );
+        await apiClient(`/appointments/${selectedAppointment.id}`, {
+            method: "DELETE"
+        });
 
         setSelectedAppointment(null);
-        loadAppointments();
+
+        const today = new Date().toISOString().slice(0, 10);
+        loadAppointments(today);
     }
 }
