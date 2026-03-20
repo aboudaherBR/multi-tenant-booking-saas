@@ -7,12 +7,9 @@ const app = express();
 
 app.set('trust proxy', 1);
 
-app.use(cors({
-  origin: isProduction
-    ? ["https://SEU-FRONTEND.vercel.app"]
-    : ["http://localhost:5173"],
-  credentials: true
-}));
+origin: isProduction
+  ? ["https://barber-shop-indol-three.vercel.app"]
+  : ["http://localhost:5173"]
 
 app.use((req, res, next) => {
   res.setHeader("Cache-Control", "no-store");
