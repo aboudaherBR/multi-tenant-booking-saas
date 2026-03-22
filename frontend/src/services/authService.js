@@ -25,6 +25,7 @@ async function login(credentials, passwordParam) {
 }
 
 export async function getCurrentUser() {
+  console.log("SESSION:", req.session);
   try {
     const data = await apiClient('/auth/me');
     return data;
