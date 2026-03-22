@@ -55,6 +55,7 @@ function AuthProvider({ children }) {
     if (userData) {
       setUser(userData);
       setIsAuthenticated(true);
+      alert("AUTH FOI SETADO COMO TRUE");
     }
 
     setLoading(false); // 🔥 libera depois
