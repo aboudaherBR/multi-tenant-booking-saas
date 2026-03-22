@@ -35,18 +35,14 @@ app.use(cors({
 // ✅ GARANTE RESPOSTA PARA PREFLIGHT
 app.options(/.*/, cors());
 
-// ⚠️ ESSE MIDDLEWARE ERA REDUNDANTE — REMOVIDO
-// app.use((req, res, next) => {
-//   res.header("Access-Control-Allow-Credentials", "true");
-//   next();
-// });
 
-app.use((req, res, next) => {
-  res.setHeader("Cache-Control", "no-store");
-  next();
-});
 
 app.use(express.json());
+
+app.use((req, _res, next) => {
+  console.log("🔥 PASSOU AQUI:", req.method, req.url);
+  next();
+});
 
 app.use(
   session({
