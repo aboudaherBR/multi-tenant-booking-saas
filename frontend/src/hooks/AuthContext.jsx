@@ -49,6 +49,9 @@ function AuthProvider({ children }) {
 
     await loginService({ slug, username, password });
     alert("PASSOU LOGIN");
+    setTimeout(() => {
+      alert("COOKIE: " + document.cookie);
+    }, 1000);
 
     setIsAuthenticated(true);
 
