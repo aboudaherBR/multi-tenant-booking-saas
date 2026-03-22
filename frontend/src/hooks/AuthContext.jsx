@@ -48,8 +48,13 @@ function AuthProvider({ children }) {
 
     await loginService({ slug, username, password });
 
-    // 🔥 ALTERAÇÃO: força autenticação imediata
-    setIsAuthenticated(true);
+    // 🔥 busca usuário depois que logou
+    const userData = await getCurrentUser();
+
+    if (userData) {
+      setUser(userData);
+      setIsAuthenticated(true);
+    }
   }
 
   function logout() {
