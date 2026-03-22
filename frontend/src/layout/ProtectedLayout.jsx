@@ -5,6 +5,8 @@ import AppLayout from './AppLayout';
 function ProtectedLayout() {
   const { isAuthenticated, loading } = useAuth();
 
+  alert(`AUTH: ${isAuthenticated} | LOADING: ${loading}`);
+
   if (loading) {
     return <div>Loading...</div>;
   }
