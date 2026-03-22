@@ -34,7 +34,22 @@ app.use(cors({
 }));
 
 // ✅ GARANTE RESPOSTA PARA PREFLIGHT
-app.options(/.*/, cors());
+app.options(/.*/, cors({
+  origin: function (origin, callback) {
+    const allowedOrigins = [
+      "https://barber-shop-indol-three.vercel.app",
+      "https://barber-shop-fxgdm3blk-aboudahers-projects.vercel.app",
+      "http://localhost:5173"
+    ];
+
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(null, false);
+    }
+  },
+  credentials: true
+}));
 
 
 
