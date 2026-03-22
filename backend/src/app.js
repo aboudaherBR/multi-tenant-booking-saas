@@ -17,6 +17,7 @@ app.use(cors({
 
     const allowedOrigins = [
       "https://barber-shop-indol-three.vercel.app",
+      "https://barber-shop-fxgdm3blk-aboudahers-projects.vercel.app", // 🔥 adiciona isso
       "http://localhost:5173"
     ];
 
