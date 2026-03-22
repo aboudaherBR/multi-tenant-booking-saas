@@ -3,7 +3,7 @@ const router = express.Router();
 
 const { login } = require('../controllers/auth.controller');
 
-router.get('/auth/me', (req, res) => {
+router.get('/me', (req, res) => {
   console.log("ME USER:", req.session.user);
   res.json(req.session.user || null);
 });
