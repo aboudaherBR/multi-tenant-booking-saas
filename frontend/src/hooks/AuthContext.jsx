@@ -50,7 +50,18 @@ function AuthProvider({ children }) {
     await loginService({ slug, username, password });
 
     setIsAuthenticated(true);
-    setUser({ username });
+
+    try {
+      const userData = await getCurrentUser();
+
+      if (userData) {
+        setUser(userData);
+      } else {
+        console.log("userData veio null");
+      }
+    } catch (e) {
+      console.log("erro ao buscar user após login", e);
+    }
 
     setLoading(false);
   }
