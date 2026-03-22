@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, useParams  } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../hooks/AuthContext';
 
 function LoginPage() {
@@ -15,10 +15,17 @@ function LoginPage() {
     e.preventDefault();
     setError('');
 
+    console.log("🔥 cliquei no login");
+
     try {
       await login({ slug, username, password });
+
+      console.log("✅ login terminou");
+
       navigate('/');
     } catch (err) {
+      console.log("❌ erro login");
+
       setError(err.message);
     }
   }
