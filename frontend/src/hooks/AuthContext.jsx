@@ -42,22 +42,14 @@ function AuthProvider({ children }) {
       username = credentials.username;
       password = credentials.password;
     } else {
-      // fallback legado
       username = credentials;
       password = passwordParam;
     }
 
     await loginService({ slug, username, password });
 
-    const userData = await getCurrentUser();
-
-    if (userData) {
-      setUser(userData);
-      setIsAuthenticated(true);
-    } else {
-      setUser(null);
-      setIsAuthenticated(false);
-    }
+    // 🔥 ALTERAÇÃO: força autenticação imediata
+    setIsAuthenticated(true);
   }
 
   function logout() {
