@@ -48,7 +48,7 @@ function AuthProvider({ children }) {
     setLoading(true);
 
     await loginService({ slug, username, password });
-    alert("OLHA ISSO " + document.cookie);
+    alert("PASSOU LOGIN");
 
     setIsAuthenticated(true);
 
