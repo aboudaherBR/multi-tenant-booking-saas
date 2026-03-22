@@ -21,7 +21,7 @@ function LoginPage() {
 
     alert("login sucesso");
 
-    navigate('/');
+    //navigate('/');
   } catch (err) {
     alert("erro no login");
   }
