@@ -18,9 +18,8 @@ async function apiClient(endpoint, options = {}) {
   const response = await fetch(`${BASE_URL}${endpoint}`, config);
 
   if (response.status === 401) {
-    // sessão inválida ou expirada
-    window.location.href = '/login';
-    return;
+    console.log("🚨 401 detectado - SEM REDIRECT");
+    return null;
   }
 
   const data = await response.json().catch(() => null);
