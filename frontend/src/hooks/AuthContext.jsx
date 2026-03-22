@@ -50,33 +50,30 @@ function AuthProvider({ children }) {
 
     await loginService({ slug, username, password });
 
-    const userData = await getCurrentUser();
+    // 🔥 NÃO chama getCurrentUser aqui
+    setIsAuthenticated(true);
 
-    if (userData) {
-      setUser(userData);
-      setIsAuthenticated(true);
-      alert("AUTH FOI SETADO COMO TRUE");
+    // opcional
+    setUser({ username });
+
+    setLoading(false);
+
+    function logout() {
+      setUser(null);
+      setIsAuthenticated(false);
     }
 
-    setLoading(false); // 🔥 libera depois
+    return (
+      <AuthContext.Provider
+        value={{ isAuthenticated, user, login, logout, loading }}
+      >
+        {children}
+      </AuthContext.Provider>
+    );
   }
 
-  function logout() {
-    setUser(null);
-    setIsAuthenticated(false);
+  function useAuth() {
+    return useContext(AuthContext);
   }
 
-  return (
-    <AuthContext.Provider
-      value={{ isAuthenticated, user, login, logout, loading }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
-}
-
-function useAuth() {
-  return useContext(AuthContext);
-}
-
-export { AuthProvider, useAuth };
+  export { AuthProvider, useAuth };
