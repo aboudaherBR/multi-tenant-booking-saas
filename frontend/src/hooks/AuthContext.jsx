@@ -47,39 +47,36 @@ function AuthProvider({ children }) {
 
     setLoading(true);
 
-    await loginService({ slug, username, password });
-    alert("PASSOU LOGIN");
-    setTimeout(() => {
-      alert("COOKIE: " + document.cookie);
-    }, 1000);
+    try {
+      const response = await loginService({ slug, username, password });
 
-    setIsAuthenticated(true);
-
-    // 🔥 RETRY CONTROLADO (ESSA É A CORREÇÃO REAL)
-    let userData = null;
-
-    for (let i = 0; i < 3; i++) {
-      try {
-        userData = await getCurrentUser();
-
-        if (userData) break;
-
-        await new Promise(res => setTimeout(res, 300));
-      } catch (e) {
-        await new Promise(res => setTimeout(res, 300));
+      // 🔥 SALVA TOKEN (ESSENCIAL)
+      if (response?.token) {
+        localStorage.setItem('token', response.token);
       }
-    }
 
-    if (userData) {
-      setUser(userData);
-    } else {
-      console.log("não conseguiu obter usuário após login");
-    }
+      setIsAuthenticated(true);
 
-    setLoading(false);
+      // mantém compatibilidade por enquanto
+      const userData = await getCurrentUser();
+
+      if (userData) {
+        setUser(userData);
+      } else {
+        console.log("não conseguiu obter usuário após login");
+      }
+
+    } catch (error) {
+      console.log("erro no login:", error);
+      setIsAuthenticated(false);
+      setUser(null);
+    } finally {
+      setLoading(false);
+    }
   }
 
   function logout() {
+    localStorage.removeItem('token');
     setUser(null);
     setIsAuthenticated(false);
   }

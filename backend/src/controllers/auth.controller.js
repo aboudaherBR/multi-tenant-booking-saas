@@ -1,5 +1,6 @@
 const { authenticate } = require('../services/auth.service');
 const { findProfessionalByUserId } = require('../database/professionals.repository');
+const jwt = require('jsonwebtoken');
 
 async function login(req, res, next) {
   try {
@@ -43,9 +44,22 @@ async function login(req, res, next) {
       isSuperAdmin: user.company_id === null
     };
 
+    const token = jwt.sign(
+      {
+        userId: user.id,
+        name: user.name,
+        companyId: user.company_id
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: '8h' }
+    );
+
     console.log("SESSION AFTER LOGIN:", req.session);
 
-    return res.json({ message: 'Login successful' });
+    return res.json({
+      message: 'Login successful',
+      token
+    });
 
   } catch (error) {
     return res.status(401).json({ message: error.message });
