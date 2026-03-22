@@ -12,20 +12,22 @@ function LoginPage() {
   const { login } = useAuth();
 
   async function handleSubmit(e) {
-  e.preventDefault();
+    e.preventDefault();
 
-  alert("clicou no login");
+    alert("clicou no login");
 
-  try {
-    await login({ slug, username, password });
+    try {
+      await login({ slug, username, password });
 
-    alert("login sucesso");
+      alert("login sucesso");
 
-    navigate('/');
-  } catch (err) {
-    alert("erro no login");
+      requestAnimationFrame(() => {
+        navigate('/');
+      });
+    } catch (err) {
+      alert("erro no login");
+    }
   }
-}
 
   return (
     <div>
