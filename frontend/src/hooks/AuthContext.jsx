@@ -48,6 +48,7 @@ function AuthProvider({ children }) {
     setLoading(true);
 
     await loginService({ slug, username, password });
+    alert(document.cookie);
 
     setIsAuthenticated(true);
 
