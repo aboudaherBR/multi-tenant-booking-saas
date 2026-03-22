@@ -3,9 +3,9 @@ const router = express.Router();
 
 const { login } = require('../controllers/auth.controller');
 
-router.post('/login', (req, res, next) => {
-  console.log("LOGIN SESSION ANTES:", req.session);
-  next();
-}, login);
+router.get('/auth/me', (req, res) => {
+  console.log("ME USER:", req.session.user);
+  res.json(req.session.user || null);
+});
 
 module.exports = router;
