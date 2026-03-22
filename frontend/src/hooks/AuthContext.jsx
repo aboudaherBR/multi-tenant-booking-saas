@@ -46,15 +46,18 @@ function AuthProvider({ children }) {
       password = passwordParam;
     }
 
+    setLoading(true); // 🔥 trava o ProtectedLayout
+
     await loginService({ slug, username, password });
 
-    // 🔥 busca usuário depois que logou
     const userData = await getCurrentUser();
 
     if (userData) {
       setUser(userData);
       setIsAuthenticated(true);
     }
+
+    setLoading(false); // 🔥 libera depois
   }
 
   function logout() {
