@@ -29,6 +29,7 @@ export async function getCurrentUser() {
     const data = await apiClient('/auth/me');
     return data;
   } catch (error) {
+    console.log("🔥 getCurrentUser erro:", error); // 👈 ADICIONA
     return null;
   }
 }
