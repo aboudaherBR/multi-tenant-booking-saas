@@ -51,16 +51,25 @@ function AuthProvider({ children }) {
 
     setIsAuthenticated(true);
 
-    try {
-      const userData = await getCurrentUser();
+    // 🔥 RETRY CONTROLADO (ESSA É A CORREÇÃO REAL)
+    let userData = null;
 
-      if (userData) {
-        setUser(userData);
-      } else {
-        console.log("userData veio null");
+    for (let i = 0; i < 3; i++) {
+      try {
+        userData = await getCurrentUser();
+
+        if (userData) break;
+
+        await new Promise(res => setTimeout(res, 300));
+      } catch (e) {
+        await new Promise(res => setTimeout(res, 300));
       }
-    } catch (e) {
-      console.log("erro ao buscar user após login", e);
+    }
+
+    if (userData) {
+      setUser(userData);
+    } else {
+      console.log("não conseguiu obter usuário após login");
     }
 
     setLoading(false);
