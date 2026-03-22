@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { login as loginService, getCurrentUser } from '../services/authService';
+import { login as loginService } from '../services/authService';
 
 const AuthContext = createContext();
 
@@ -9,26 +9,29 @@ function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function validateSession() {
-      try {
-        const userData = await getCurrentUser();
+    // 🔥 ao iniciar, tenta recuperar usuário pelo token
+    const token = localStorage.getItem('token');
 
-        if (userData) {
-          setUser(userData);
-          setIsAuthenticated(true);
-        } else {
-          setUser(null);
-          setIsAuthenticated(false);
-        }
-      } catch (error) {
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+
+        setUser({
+          name: payload.name,
+          userId: payload.userId,
+          companyId: payload.companyId
+        });
+
+        setIsAuthenticated(true);
+      } catch (e) {
+        console.log("token inválido");
+        localStorage.removeItem('token');
         setUser(null);
         setIsAuthenticated(false);
-      } finally {
-        setLoading(false);
       }
     }
 
-    validateSession();
+    setLoading(false);
   }, []);
 
   async function login(credentials, passwordParam) {
@@ -50,26 +53,28 @@ function AuthProvider({ children }) {
     try {
       const response = await loginService({ slug, username, password });
 
-      // 🔥 SALVA TOKEN (ESSENCIAL)
       if (response?.token) {
+        // 🔥 salva token
         localStorage.setItem('token', response.token);
-      }
 
-      setIsAuthenticated(true);
+        // 🔥 extrai dados do usuário direto do token
+        const payload = JSON.parse(atob(response.token.split('.')[1]));
 
-      // mantém compatibilidade por enquanto
-      const userData = await getCurrentUser();
+        setUser({
+          name: payload.name,
+          userId: payload.userId,
+          companyId: payload.companyId
+        });
 
-      if (userData) {
-        setUser(userData);
+        setIsAuthenticated(true);
       } else {
-        console.log("não conseguiu obter usuário após login");
+        throw new Error("token não veio");
       }
 
     } catch (error) {
       console.log("erro no login:", error);
-      setIsAuthenticated(false);
       setUser(null);
+      setIsAuthenticated(false);
     } finally {
       setLoading(false);
     }
