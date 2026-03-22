@@ -20,7 +20,6 @@ function AuthProvider({ children }) {
           setUser(null);
           setIsAuthenticated(false);
         }
-
       } catch (error) {
         setUser(null);
         setIsAuthenticated(false);
@@ -46,34 +45,32 @@ function AuthProvider({ children }) {
       password = passwordParam;
     }
 
-    setLoading(true); // 🔥 trava o ProtectedLayout
+    setLoading(true);
 
     await loginService({ slug, username, password });
 
-    // 🔥 NÃO chama getCurrentUser aqui
     setIsAuthenticated(true);
-
-    // opcional
     setUser({ username });
 
     setLoading(false);
-
-    function logout() {
-      setUser(null);
-      setIsAuthenticated(false);
-    }
-
-    return (
-      <AuthContext.Provider
-        value={{ isAuthenticated, user, login, logout, loading }}
-      >
-        {children}
-      </AuthContext.Provider>
-    );
   }
 
-  function useAuth() {
-    return useContext(AuthContext);
+  function logout() {
+    setUser(null);
+    setIsAuthenticated(false);
   }
 
-  export { AuthProvider, useAuth };
+  return (
+    <AuthContext.Provider
+      value={{ isAuthenticated, user, login, logout, loading }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+}
+
+function useAuth() {
+  return useContext(AuthContext);
+}
+
+export { AuthProvider, useAuth };
