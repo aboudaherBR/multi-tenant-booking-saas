@@ -7,7 +7,7 @@ const app = express();
 
 app.set('trust proxy', 1);
 
-// ✅ CORS PROFISSIONAL
+// ✅ CORS SIMPLES E FUNCIONAL
 const allowedOrigins = [
   "https://barber-shop-indol-three.vercel.app",
   "https://barber-shop-fxgdm3blk-aboudahers-projects.vercel.app",
@@ -16,23 +16,9 @@ const allowedOrigins = [
 ];
 
 app.use(cors({
-  origin: function (origin, callback) {
-    console.log("🌍 Origin recebida:", origin);
-
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      console.log("❌ Origin bloqueada:", origin);
-      callback(new Error("Not allowed by CORS")); // 🔥 melhor prática
-    }
-  },
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"]
+  origin: allowedOrigins,
+  credentials: true
 }));
-
-// ✅ PREFLIGHT
-app.options('*', cors());
 
 app.use(express.json());
 
