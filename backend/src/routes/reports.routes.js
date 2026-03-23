@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { requireAuth } = require("../middlewares/auth.middleware");
+const { getSummary } = require("../controllers/reports.controller");
 
 console.log("reports routes loaded");
 
