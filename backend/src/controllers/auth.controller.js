@@ -1,10 +1,10 @@
-const { authenticate } = require('../services/auth.service');
+const { authenticate, authenticateWithCompany } = require('../services/auth.service');
 const { findProfessionalByUserId } = require('../database/professionals.repository');
+const { findCompanyBySlug } = require('../database/companies.repository');
 const jwt = require('jsonwebtoken');
 
 async function login(req, res, next) {
   try {
-    console.log('BODY RECEIVED:', req.body);
 
     const { slug, username, password } = req.body;
 
@@ -15,9 +15,6 @@ async function login(req, res, next) {
     let user;
 
     if (slug) {
-      const { findCompanyBySlug } = require('../database/companies.repository');
-      const { authenticateWithCompany } = require('../services/auth.service');
-
       const company = await findCompanyBySlug(slug);
 
       if (!company) {
@@ -26,8 +23,6 @@ async function login(req, res, next) {
 
       user = await authenticateWithCompany(username, password, company.id);
     } else {
-      // modo legado temporário
-      const { authenticate } = require('../services/auth.service');
       user = await authenticate(username, password);
     }
 
@@ -35,7 +30,7 @@ async function login(req, res, next) {
       ? await findProfessionalByUserId(user.company_id, user.id)
       : null;
 
-    req.session.user = {
+    const payload = {
       userId: user.id,
       name: user.name,
       companyId: user.company_id,
@@ -44,17 +39,9 @@ async function login(req, res, next) {
       isSuperAdmin: user.company_id === null
     };
 
-    const token = jwt.sign(
-      {
-        userId: user.id,
-        name: user.name,
-        companyId: user.company_id
-      },
-      process.env.JWT_SECRET,
-      { expiresIn: '8h' }
-    );
-
-    console.log("SESSION AFTER LOGIN:", req.session);
+    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+      expiresIn: '8h'
+    });
 
     return res.json({
       message: 'Login successful',
@@ -62,7 +49,12 @@ async function login(req, res, next) {
     });
 
   } catch (error) {
-    return res.status(401).json({ message: error.message });
+
+
+    return res.status(401).json({
+      message: 'Invalid credentials'
+    });
+
   }
 }
 

@@ -17,13 +17,15 @@ function LoginPage() {
     alert("clicou no login");
 
     try {
-      await login({ slug, username, password });
+      const success = await login({ slug, username, password });
 
-      alert("login sucesso");
+      if (success) {
+        alert("login sucesso");
+        navigate('/'); // 🔥 ESSENCIAL
+      } else {
+        alert("falha no login");
+      }
 
-      requestAnimationFrame(() => {
-        navigate('/');
-      });
     } catch (err) {
       alert("erro no login");
     }

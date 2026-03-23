@@ -233,5 +233,5 @@ module.exports = {
   create,
   list,
   cancel,
-  cancelAppointment
+  cancel
 };

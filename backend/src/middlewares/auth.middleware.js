@@ -1,12 +1,25 @@
+const jwt = require('jsonwebtoken');
+
 function requireAuth(req, res, next) {
+  const authHeader = req.headers.authorization;
 
-
-  if (!req.session || !req.session.user) {
-    return res.status(401).json({ message: 'Unauthorized' });
+  if (!authHeader) {
+    return res.status(401).json({ message: 'Token não fornecido' });
   }
 
-  req.user = req.session.user;
-  next();
+  const token = authHeader.split(' ')[1];
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    req.user = decoded;
+
+    console.log("👤 USER JWT:", decoded); // 🔍 DEBUG
+
+    next();
+  } catch (error) {
+    return res.status(401).json({ message: 'Token inválido' });
+  }
 }
 
 module.exports = {

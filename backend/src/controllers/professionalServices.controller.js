@@ -2,10 +2,11 @@ const professionalServicesRepository = require("../database/professionalServices
 
 async function listServicesForProfessional(req, res) {
 
-  console.log("SESSION USER:", req.session.user);
+  // 🔥 CORREÇÃO (JWT)
+  console.log("USER JWT:", req.user);
 
   const professionalId = req.params.id;
-  const companyId = req.session.user.companyId;
+  const companyId = req.user.companyId;
 
   try {
 
@@ -17,6 +18,7 @@ async function listServicesForProfessional(req, res) {
     res.json(services);
 
   } catch (err) {
+    
 
     console.error("Erro ao listar serviços do profissional", err);
     res.status(500).json({ error: "Erro interno do servidor" });
@@ -29,7 +31,10 @@ async function listServicesForProfessional(req, res) {
 async function addServiceToProfessional(req, res) {
 
   const professionalId = req.params.id;
-  const companyId = req.session.user.companyId;
+
+  // 🔥 CORREÇÃO (JWT)
+  const companyId = req.user.companyId;
+
   const { serviceId, customPrice } = req.body;
 
   try {
@@ -57,7 +62,9 @@ async function removeServiceFromProfessional(req, res) {
 
   const professionalId = req.params.id;
   const serviceId = req.params.serviceId;
-  const companyId = req.session.user.companyId;
+
+  // 🔥 CORREÇÃO (JWT)
+  const companyId = req.user.companyId;
 
   try {
 

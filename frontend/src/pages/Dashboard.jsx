@@ -1,25 +1,22 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import apiClient from "../api/apiClient";
+import { useAuth } from "../hooks/AuthContext";
 
 export default function Dashboard() {
+    const { user } = useAuth();
+
     const [stats, setStats] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [user, setUser] = useState(null);
+
     const navigate = useNavigate();
 
     useEffect(() => {
         async function loadDashboard() {
             try {
-                // Buscar sessão do usuário
-                const sessionData = await apiClient("/auth/me");
-                setUser(sessionData);
-
-                // Buscar dados do dashboard
                 const data = await apiClient("/dashboard/today");
                 setStats(data);
-
             } catch (err) {
                 console.error(err);
                 setError("Erro ao carregar dashboard");

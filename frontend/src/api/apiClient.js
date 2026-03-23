@@ -1,12 +1,13 @@
 const BASE_URL = import.meta.env.VITE_API_URL || "/api";
 
 async function apiClient(endpoint, options = {}) {
-  console.log("BASE_URL:", BASE_URL);
+  const token = localStorage.getItem('token');
+
   const config = {
     method: options.method || 'GET',
-    credentials: 'include', // ESSENCIAL para cookie-based session
     headers: {
       'Content-Type': 'application/json',
+      ...(token && { Authorization: `Bearer ${token}` }),
       ...(options.headers || {})
     }
   };
@@ -18,8 +19,9 @@ async function apiClient(endpoint, options = {}) {
   const response = await fetch(`${BASE_URL}${endpoint}`, config);
 
   if (response.status === 401) {
-    console.log("🚨 401 detectado - SEM REDIRECT");
-    return null;
+    console.log("🚨 401 detectado");
+    localStorage.removeItem('token');
+    throw new Error('Unauthorized');
   }
 
   const data = await response.json().catch(() => null);
