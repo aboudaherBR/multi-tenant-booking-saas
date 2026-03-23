@@ -20,6 +20,8 @@ function AuthProvider({ children }) {
       } catch (error) {
         console.log("token inválido");
         localStorage.removeItem('token');
+        setUser(null);
+        setIsAuthenticated(false);
       }
     }
 
@@ -40,9 +42,7 @@ function AuthProvider({ children }) {
       password = passwordParam;
     }
 
-    setTimeout(() => {
-      setLoading(false);
-    }, 50);
+    setLoading(true);
 
     try {
       const response = await loginService({ slug, username, password });
@@ -54,6 +54,8 @@ function AuthProvider({ children }) {
 
         setUser(payload);
         setIsAuthenticated(true);
+
+        return true; // 🔥 importante para navegação
       } else {
         throw new Error("token não veio");
       }
@@ -62,6 +64,7 @@ function AuthProvider({ children }) {
       console.log("erro no login:", error);
       setUser(null);
       setIsAuthenticated(false);
+      return false;
     } finally {
       setLoading(false);
     }
