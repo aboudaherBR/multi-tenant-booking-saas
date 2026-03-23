@@ -1,31 +1,29 @@
 const express = require('express');
-const session = require('express-session');
 const cors = require('cors');
 
 console.log("🔥 VERSION CHECK - NOVO BUILD");
-
-const isProduction = process.env.NODE_ENV === "production";
 
 const app = express();
 
 app.set('trust proxy', 1);
 
-// ✅ CORS CONFIG CORRIGIDO
+// ✅ CORS PROFISSIONAL
+const allowedOrigins = [
+  "https://barber-shop-indol-three.vercel.app",
+  "https://barber-shop-fxgdm3blk-aboudahers-projects.vercel.app",
+  "https://barber-shop-git-jwt-migration-aboudahers-projects.vercel.app",
+  "http://localhost:5173"
+];
+
 app.use(cors({
   origin: function (origin, callback) {
     console.log("🌍 Origin recebida:", origin);
-
-    const allowedOrigins = [
-      "https://barber-shop-indol-three.vercel.app",
-      "https://barber-shop-fxgdm3blk-aboudahers-projects.vercel.app", // 🔥 adiciona isso
-      "http://localhost:5173"
-    ];
 
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
       console.log("❌ Origin bloqueada:", origin);
-      callback(null, false); // 🔥 CORREÇÃO CRÍTICA
+      callback(new Error("Not allowed by CORS")); // 🔥 melhor prática
     }
   },
   credentials: true,
@@ -33,25 +31,8 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"]
 }));
 
-// ✅ GARANTE RESPOSTA PARA PREFLIGHT
-app.options(/.*/, cors({
-  origin: function (origin, callback) {
-    const allowedOrigins = [
-      "https://barber-shop-indol-three.vercel.app",
-      "https://barber-shop-fxgdm3blk-aboudahers-projects.vercel.app",
-      "http://localhost:5173"
-    ];
-
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(null, false);
-    }
-  },
-  credentials: true
-}));
-
-
+// ✅ PREFLIGHT
+app.options('*', cors());
 
 app.use(express.json());
 
@@ -59,22 +40,6 @@ app.use((req, _res, next) => {
   console.log("🔥 PASSOU AQUI:", req.method, req.url);
   next();
 });
-
-app.use(
-  session({
-    name: 'saas_session',
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    proxy: true,
-    cookie: {
-      httpOnly: true,
-      secure: isProduction,
-      sameSite: isProduction ? "none" : "lax",
-      maxAge: 1000 * 60 * 60 * 8
-    }
-  })
-);
 
 /* ROTAS */
 
