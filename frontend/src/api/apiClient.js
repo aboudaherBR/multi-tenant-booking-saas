@@ -20,7 +20,8 @@ async function apiClient(endpoint, options = {}) {
 
   if (response.status === 401) {
     console.log("🚨 401 detectado");
-    return null;
+    localStorage.removeItem('token');
+    throw new Error('Unauthorized');
   }
 
   const data = await response.json().catch(() => null);

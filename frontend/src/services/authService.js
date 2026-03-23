@@ -24,15 +24,6 @@ async function login(credentials, passwordParam) {
   });
 }
 
-export async function getCurrentUser() {
-  
-  try {
-    const data = await apiClient('/auth/me');
-    return data;
-  } catch (error) {
-    console.log("🔥 getCurrentUser erro:", error); // 👈 ADICIONA
-    return null;
-  }
-}
+
 
 export { login };
