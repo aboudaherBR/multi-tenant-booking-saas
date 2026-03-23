@@ -26,8 +26,6 @@ async function login(req, res, next) {
 
       user = await authenticateWithCompany(username, password, company.id);
     } else {
-      // modo legado temporário
-      const { authenticate } = require('../services/auth.service');
       user = await authenticate(username, password);
     }
 
@@ -35,7 +33,8 @@ async function login(req, res, next) {
       ? await findProfessionalByUserId(user.company_id, user.id)
       : null;
 
-    req.session.user = {
+    // 🔥 CRIA PAYLOAD COMPLETO
+    const payload = {
       userId: user.id,
       name: user.name,
       companyId: user.company_id,
@@ -44,17 +43,10 @@ async function login(req, res, next) {
       isSuperAdmin: user.company_id === null
     };
 
-    const token = jwt.sign(
-      {
-        userId: user.id,
-        name: user.name,
-        companyId: user.company_id
-      },
-      process.env.JWT_SECRET,
-      { expiresIn: '8h' }
-    );
-
-    console.log("SESSION AFTER LOGIN:", req.session);
+    // 🔥 GERA TOKEN
+    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+      expiresIn: '8h'
+    });
 
     return res.json({
       message: 'Login successful',
