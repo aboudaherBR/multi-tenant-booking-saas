@@ -21,7 +21,8 @@ const { findCompanyBySlug } = require('../database/companies.repository');
 async function list(req, res, next) {
   try {
 
-    const companyId = req.session.user.companyId;
+    // 🔥 CORREÇÃO AQUI (JWT)
+    const companyId = req.user.companyId;
 
     const professionals =
       await findActiveProfessionalsByCompanyId(companyId);
@@ -38,7 +39,9 @@ async function create(req, res, next) {
   try {
 
     const { name, password } = req.body;
-    const companyId = req.session.user.companyId;
+
+    // 🔥 JÁ ESTAVA CORRETO
+    const companyId = req.user.companyId;
 
     if (!name || !password) {
       return res.status(400).json({
