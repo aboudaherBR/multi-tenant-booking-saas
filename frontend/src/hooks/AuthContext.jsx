@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { login as loginService, getCurrentUser } from '../services/authService';
+import { login as loginService } from '../services/authService';
 
 const AuthContext = createContext();
 
@@ -9,26 +9,21 @@ function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function validateSession() {
-      try {
-        const userData = await getCurrentUser();
+    const token = localStorage.getItem('token');
 
-        if (userData) {
-          setUser(userData);
-          setIsAuthenticated(true);
-        } else {
-          setUser(null);
-          setIsAuthenticated(false);
-        }
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+
+        setUser(payload);
+        setIsAuthenticated(true);
       } catch (error) {
-        setUser(null);
-        setIsAuthenticated(false);
-      } finally {
-        setLoading(false);
+        console.log("token inválido");
+        localStorage.removeItem('token');
       }
     }
 
-    validateSession();
+    setLoading(false);
   }, []);
 
   async function login(credentials, passwordParam) {
@@ -50,26 +45,21 @@ function AuthProvider({ children }) {
     try {
       const response = await loginService({ slug, username, password });
 
-      // 🔥 SALVA TOKEN (ESSENCIAL)
       if (response?.token) {
         localStorage.setItem('token', response.token);
-      }
 
-      setIsAuthenticated(true);
+        const payload = JSON.parse(atob(response.token.split('.')[1]));
 
-      // mantém compatibilidade por enquanto
-      const userData = await getCurrentUser();
-
-      if (userData) {
-        setUser(userData);
+        setUser(payload);
+        setIsAuthenticated(true);
       } else {
-        console.log("não conseguiu obter usuário após login");
+        throw new Error("token não veio");
       }
 
     } catch (error) {
       console.log("erro no login:", error);
-      setIsAuthenticated(false);
       setUser(null);
+      setIsAuthenticated(false);
     } finally {
       setLoading(false);
     }
