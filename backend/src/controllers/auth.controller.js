@@ -1,10 +1,10 @@
-const { authenticate } = require('../services/auth.service');
+const { authenticate, authenticateWithCompany } = require('../services/auth.service');
 const { findProfessionalByUserId } = require('../database/professionals.repository');
+const { findCompanyBySlug } = require('../database/companies.repository');
 const jwt = require('jsonwebtoken');
 
 async function login(req, res, next) {
   try {
-    console.log('BODY RECEIVED:', req.body);
 
     const { slug, username, password } = req.body;
 
@@ -15,9 +15,6 @@ async function login(req, res, next) {
     let user;
 
     if (slug) {
-      const { findCompanyBySlug } = require('../database/companies.repository');
-      const { authenticateWithCompany } = require('../services/auth.service');
-
       const company = await findCompanyBySlug(slug);
 
       if (!company) {
@@ -33,7 +30,6 @@ async function login(req, res, next) {
       ? await findProfessionalByUserId(user.company_id, user.id)
       : null;
 
-    // 🔥 CRIA PAYLOAD COMPLETO
     const payload = {
       userId: user.id,
       name: user.name,
@@ -43,7 +39,6 @@ async function login(req, res, next) {
       isSuperAdmin: user.company_id === null
     };
 
-    // 🔥 GERA TOKEN
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
       expiresIn: '8h'
     });
@@ -54,7 +49,12 @@ async function login(req, res, next) {
     });
 
   } catch (error) {
-    return res.status(401).json({ message: error.message });
+
+
+    return res.status(401).json({
+      message: 'Invalid credentials'
+    });
+
   }
 }
 

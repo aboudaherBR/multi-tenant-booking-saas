@@ -1,9 +1,11 @@
 function getCurrentSession(req, res) {
-  if (!req.session || !req.session.user) {
+
+  // 🔥 CORREÇÃO (JWT)
+  if (!req.user) {
     return res.status(401).json({ message: 'Unauthorized' });
   }
 
-  return res.json(req.session.user);
+  return res.json(req.user);
 }
 
 module.exports = {

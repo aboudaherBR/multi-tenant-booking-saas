@@ -4,7 +4,7 @@ import apiClient from "../api/apiClient";
 import { useAuth } from "../hooks/AuthContext";
 
 export default function Dashboard() {
-    const { user } = useAuth();req.session.user
+    const { user } = useAuth();
 
     const [stats, setStats] = useState(null);
     const [loading, setLoading] = useState(true);

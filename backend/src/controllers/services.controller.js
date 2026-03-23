@@ -10,7 +10,7 @@ async function list(req, res) {
 
     try {
 
-        const companyId = req.session.user.companyId;
+        const companyId = req.user.companyId;
 
         const result = await pool.query(
             `
@@ -52,7 +52,7 @@ async function create(req, res) {
 
     try {
 
-        const companyId = req.session.user.companyId;
+        const companyId = req.user.companyId;
 
         const {
             name,
@@ -115,7 +115,7 @@ async function update(req, res) {
 
     try {
 
-        const companyId = req.session.company_id;
+        const companyId = req.user.companyId;
         const serviceId = req.params.id;
 
         const {
@@ -170,7 +170,7 @@ async function remove(req, res) {
 
     try {
 
-        const companyId = req.session.user.companyId;
+        const companyId = req.user.companyId;
         const serviceId = req.params.id;
 
         await pool.query(

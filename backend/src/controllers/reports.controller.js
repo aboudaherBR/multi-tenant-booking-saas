@@ -4,13 +4,13 @@ async function getSummary(req, res) {
 
     try {
 
-        if (!req.session.user) {
+        if (!req.user) {
             return res.status(401).json({
                 message: "Usuário não autenticado"
             });
         }
 
-        const companyId = req.session.user.companyId;
+        const companyId = req.user.companyId;
 
         const { startDate, endDate, professionalId } = req.query;
         if (!startDate || !endDate) {
