@@ -40,7 +40,9 @@ function AuthProvider({ children }) {
       password = passwordParam;
     }
 
-    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 50);
 
     try {
       const response = await loginService({ slug, username, password });
