@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import ProfessionalsModal from "../components/ProfessionalsModal";
 import ServicesModal from "../components/ServicesModal";
 import AvailabilityModal from "../components/AvailabilityModal";
-import apiClient from "../services/apiClient";
+import apiClient from "../api/apiClient";
 
 export default function BookPublic() {
   const { slug } = useParams();
