@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import ProfessionalsModal from "../components/ProfessionalsModal";
+import ServicesModal from "../components/ServicesModal";
 import apiClient from "../api/apiClient";
 
 export default function BookPublic() {
@@ -9,8 +10,11 @@ export default function BookPublic() {
   const [phone, setPhone] = useState("");
   const [clientName, setClientName] = useState("");
 
-  const [showModal, setShowModal] = useState(false);
+  const [showProfessionalsModal, setShowProfessionalsModal] = useState(false);
+  const [showServicesModal, setShowServicesModal] = useState(false);
+
   const [professionals, setProfessionals] = useState([]);
+  const [selectedProfessional, setSelectedProfessional] = useState(null);
 
   // 🔹 buscar profissionais
   useEffect(() => {
@@ -30,31 +34,19 @@ export default function BookPublic() {
   function handleStart() {
     if (!phone) return;
 
-    console.log("Iniciar fluxo:", {
-      slug,
-      phone,
-      clientName
-    });
-
-    setShowModal(true); // 🔥 ABRE MODAL
+    setShowProfessionalsModal(true);
   }
 
   return (
     <div style={{ padding: "20px", maxWidth: "400px", margin: "0 auto" }}>
       <h2>Agende seu horário</h2>
 
-      <p>Informe seus dados para continuar</p>
-
       <input
         type="text"
         placeholder="Telefone"
         value={phone}
         onChange={(e) => setPhone(e.target.value)}
-        style={{
-          width: "100%",
-          padding: "10px",
-          marginBottom: "10px"
-        }}
+        style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
       />
 
       <input
@@ -62,31 +54,41 @@ export default function BookPublic() {
         placeholder="Nome"
         value={clientName}
         onChange={(e) => setClientName(e.target.value)}
-        style={{
-          width: "100%",
-          padding: "10px",
-          marginBottom: "20px"
-        }}
+        style={{ width: "100%", padding: "10px", marginBottom: "20px" }}
       />
 
       <button
         onClick={handleStart}
-        style={{
-          width: "100%",
-          padding: "12px",
-          cursor: "pointer"
-        }}
+        style={{ width: "100%", padding: "12px", cursor: "pointer" }}
       >
         Procurar profissional
       </button>
 
-      {/* 🔥 MODAL */}
-      {showModal && (
+      {/* 🔥 MODAL PROFISSIONAIS */}
+      {showProfessionalsModal && (
         <ProfessionalsModal
           professionals={professionals}
-          onClose={() => setShowModal(false)}
+          onClose={() => setShowProfessionalsModal(false)}
           onSelect={(professional) => {
-            console.log("Selecionado:", professional);
+            setSelectedProfessional(professional);
+            setShowProfessionalsModal(false);
+            setShowServicesModal(true);
+          }}
+        />
+      )}
+
+      {/* 🔥 MODAL SERVIÇOS */}
+      {showServicesModal && selectedProfessional && (
+        <ServicesModal
+          slug={slug}
+          professional={selectedProfessional}
+          onBack={() => {
+            setShowServicesModal(false);
+            setShowProfessionalsModal(true);
+          }}
+          onClose={() => setShowServicesModal(false)}
+          onSelect={(service) => {
+            console.log("Serviço selecionado:", service);
           }}
         />
       )}
