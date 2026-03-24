@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import apiClient from "../api/apiClient";
 
 export default function AvailabilityModal({
@@ -9,23 +9,26 @@ export default function AvailabilityModal({
   onClose,
   onSelect
 }) {
+  const [date, setDate] = useState("");
   const [slots, setSlots] = useState([]);
 
-  useEffect(() => {
-    async function fetchAvailability() {
-      try {
-        const data = await apiClient(
-          `/agendar/${slug}/profissionais/${professional.slug}/disponibilidade?serviceId=${service.id}`
-        );
+  async function fetchAvailability(selectedDate) {
+    try {
+      const data = await apiClient(
+        `/agendar/${slug}/profissionais/${professional.slug}/disponibilidade?date=${selectedDate}&serviceId=${service.id}`
+      );
 
-        setSlots(data);
-      } catch (err) {
-        console.log(err);
-      }
+      setSlots(data);
+    } catch (err) {
+      console.log(err);
     }
+  }
 
-    fetchAvailability();
-  }, [slug, professional, service]);
+  function handleDateChange(e) {
+    const selectedDate = e.target.value;
+    setDate(selectedDate);
+    fetchAvailability(selectedDate);
+  }
 
   return (
     <div style={overlayStyle}>
@@ -33,17 +36,26 @@ export default function AvailabilityModal({
         <button onClick={onBack}>← Voltar</button>
 
         <h3>
-          Horários para {service.name} com {professional.name}
+          {professional.name} - {service.name}
         </h3>
 
+        {/* 🔥 CALENDÁRIO */}
+        <input
+          type="date"
+          value={date}
+          onChange={handleDateChange}
+          style={{ marginBottom: "15px", padding: "8px" }}
+        />
+
+        {/* 🔥 HORÁRIOS */}
         {slots.length === 0 ? (
-          <p>Nenhum horário disponível</p>
+          <p>Selecione uma data para ver horários</p>
         ) : (
           <ul>
             {slots.map((slot, index) => (
               <li
                 key={index}
-                onClick={() => onSelect(slot)}
+                onClick={() => onSelect({ ...slot, date })}
                 style={{
                   cursor: "pointer",
                   marginBottom: "10px",
@@ -51,15 +63,13 @@ export default function AvailabilityModal({
                   border: "1px solid #ccc"
                 }}
               >
-                {slot.date} - {slot.time}
+                {slot.time}
               </li>
             ))}
           </ul>
         )}
 
-        <button onClick={onClose} style={{ marginTop: "10px" }}>
-          Fechar
-        </button>
+        <button onClick={onClose}>Fechar</button>
       </div>
     </div>
   );
