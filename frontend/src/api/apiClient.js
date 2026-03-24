@@ -16,7 +16,13 @@ async function apiClient(endpoint, options = {}) {
     config.body = JSON.stringify(options.body);
   }
 
-  const response = await fetch(`${BASE_URL}${endpoint}`, config);
+  let response;
+
+  try {
+    response = await fetch(`${BASE_URL}${endpoint}`, config);
+  } catch (err) {
+    throw new Error("Servidor iniciando, tente novamente em alguns segundos...");
+  }
 
   if (response.status === 401) {
     console.log("🚨 401 detectado");
