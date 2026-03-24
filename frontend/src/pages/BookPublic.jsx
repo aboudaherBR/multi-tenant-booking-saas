@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import ProfessionalsModal from "../components/ProfessionalsModal";
+import apiClient from "../api/apiClient";
 
 export default function BookPublic() {
   const { slug } = useParams();
@@ -7,6 +9,24 @@ export default function BookPublic() {
   const [phone, setPhone] = useState("");
   const [clientName, setClientName] = useState("");
 
+  const [showModal, setShowModal] = useState(false);
+  const [professionals, setProfessionals] = useState([]);
+
+  // 🔹 buscar profissionais
+  useEffect(() => {
+    async function fetchProfessionals() {
+      try {
+        const data = await apiClient(`/agendar/${slug}/profissionais`);
+        setProfessionals(data);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    fetchProfessionals();
+  }, [slug]);
+
+  // 🔹 iniciar fluxo
   function handleStart() {
     if (!phone) return;
 
@@ -16,8 +36,7 @@ export default function BookPublic() {
       clientName
     });
 
-    // 🔥 FUTURO:
-    // abrir modal de profissionais
+    setShowModal(true); // 🔥 ABRE MODAL
   }
 
   return (
@@ -60,6 +79,17 @@ export default function BookPublic() {
       >
         Procurar profissional
       </button>
+
+      {/* 🔥 MODAL */}
+      {showModal && (
+        <ProfessionalsModal
+          professionals={professionals}
+          onClose={() => setShowModal(false)}
+          onSelect={(professional) => {
+            console.log("Selecionado:", professional);
+          }}
+        />
+      )}
     </div>
   );
 }
