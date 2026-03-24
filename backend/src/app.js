@@ -12,6 +12,7 @@ const allowedOrigins = [
   "https://barber-shop-indol-three.vercel.app",
   "https://barber-shop-fxgdm3blk-aboudahers-projects.vercel.app",
   "https://barber-shop-git-jwt-migration-aboudahers-projects.vercel.app",
+  "https://barber-shop-git-public-booking-flow-aboudahers-projects.vercel.app", // 👈 ADD AQUI
   "http://localhost:5173"
 ];
 
