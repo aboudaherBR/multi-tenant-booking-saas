@@ -7,13 +7,19 @@ import Dashboard from './pages/Dashboard';
 import AppointmentsPage from './pages/AppointmentsPage';
 import SettingsPage from './pages/SettingsPage';
 import ReportsPage from "./pages/ReportsPage";
+import BookPublic from "./pages/BookPublic"; // 🔥 IMPORTAR
 
 function App() {
   return (
     <Routes>
+      {/* 🔥 ROTA PÚBLICA (TEM QUE VIR ANTES) */}
+      <Route path="/book/:slug" element={<BookPublic />} />
+
+      {/* LOGIN */}
       <Route path="/:slug/login" element={<LoginPage />} />
       <Route path="/login" element={<LoginPage />} />
 
+      {/* ROTAS PROTEGIDAS */}
       <Route element={<ProtectedLayout />}>
         <Route path="/" element={<Dashboard />} />
         <Route path="/appointments" element={<AppointmentsPage />} />
@@ -23,6 +29,7 @@ function App() {
         <Route path="/reports" element={<ReportsPage />} />
       </Route>
 
+      {/* FALLBACK */}
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );
