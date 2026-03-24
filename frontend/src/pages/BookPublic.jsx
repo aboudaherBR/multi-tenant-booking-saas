@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import ProfessionalsModal from "../components/ProfessionalsModal";
 import ServicesModal from "../components/ServicesModal";
-import apiClient from "../api/apiClient";
+import AvailabilityModal from "../components/AvailabilityModal";
+import apiClient from "../services/apiClient";
 
 export default function BookPublic() {
   const { slug } = useParams();
@@ -12,11 +13,12 @@ export default function BookPublic() {
 
   const [showProfessionalsModal, setShowProfessionalsModal] = useState(false);
   const [showServicesModal, setShowServicesModal] = useState(false);
+  const [showAvailabilityModal, setShowAvailabilityModal] = useState(false);
 
   const [professionals, setProfessionals] = useState([]);
   const [selectedProfessional, setSelectedProfessional] = useState(null);
+  const [selectedService, setSelectedService] = useState(null);
 
-  // 🔹 buscar profissionais
   useEffect(() => {
     async function fetchProfessionals() {
       try {
@@ -30,10 +32,8 @@ export default function BookPublic() {
     fetchProfessionals();
   }, [slug]);
 
-  // 🔹 iniciar fluxo
   function handleStart() {
     if (!phone) return;
-
     setShowProfessionalsModal(true);
   }
 
@@ -64,7 +64,7 @@ export default function BookPublic() {
         Procurar profissional
       </button>
 
-      {/* 🔥 MODAL PROFISSIONAIS */}
+      {/* PROFISSIONAIS */}
       {showProfessionalsModal && (
         <ProfessionalsModal
           professionals={professionals}
@@ -77,7 +77,7 @@ export default function BookPublic() {
         />
       )}
 
-      {/* 🔥 MODAL SERVIÇOS */}
+      {/* SERVIÇOS */}
       {showServicesModal && selectedProfessional && (
         <ServicesModal
           slug={slug}
@@ -88,7 +88,26 @@ export default function BookPublic() {
           }}
           onClose={() => setShowServicesModal(false)}
           onSelect={(service) => {
-            console.log("Serviço selecionado:", service);
+            setSelectedService(service);
+            setShowServicesModal(false);
+            setShowAvailabilityModal(true);
+          }}
+        />
+      )}
+
+      {/* HORÁRIOS */}
+      {showAvailabilityModal && selectedProfessional && selectedService && (
+        <AvailabilityModal
+          slug={slug}
+          professional={selectedProfessional}
+          service={selectedService}
+          onBack={() => {
+            setShowAvailabilityModal(false);
+            setShowServicesModal(true);
+          }}
+          onClose={() => setShowAvailabilityModal(false)}
+          onSelect={(slot) => {
+            console.log("Horário selecionado:", slot);
           }}
         />
       )}
