@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import apiClient from "../services/api";
+import apiClient from "../services/apiClient";
 
 export default function BookPublic() {
   const { slug } = useParams();
