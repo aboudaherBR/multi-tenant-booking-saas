@@ -9,7 +9,6 @@ function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // 🔥 ao iniciar, tenta recuperar usuário pelo token
     const token = localStorage.getItem('token');
 
     if (token) {
@@ -54,10 +53,8 @@ function AuthProvider({ children }) {
       const response = await loginService({ slug, username, password });
 
       if (response?.token) {
-        // 🔥 salva token
         localStorage.setItem('token', response.token);
 
-        // 🔥 extrai dados do usuário direto do token
         const payload = JSON.parse(atob(response.token.split('.')[1]));
 
         setUser({
@@ -67,6 +64,8 @@ function AuthProvider({ children }) {
         });
 
         setIsAuthenticated(true);
+
+        return true; // 🔥 CORREÇÃO PRINCIPAL
       } else {
         throw new Error("token não veio");
       }
@@ -75,6 +74,8 @@ function AuthProvider({ children }) {
       console.log("erro no login:", error);
       setUser(null);
       setIsAuthenticated(false);
+
+      return false; // 🔥 CORREÇÃO PRINCIPAL
     } finally {
       setLoading(false);
     }
