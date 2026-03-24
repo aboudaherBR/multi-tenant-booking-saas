@@ -9,21 +9,50 @@ export default function ServicesModal({
   onSelect
 }) {
   const [services, setServices] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchServices() {
       try {
+        setLoading(true);
+
         const data = await apiClient(
           `/agendar/${slug}/profissionais/${professional.slug}/servicos`
         );
-        setServices(data);
+
+        // 🔥 VALIDAÇÃO CRÍTICA (evita bug silencioso)
+        if (!Array.isArray(data)) {
+          console.error("Resposta inválida de serviços:", data);
+          setServices([]);
+          return;
+        }
+
+        // 🔥 GARANTE que todo serviço tem ID
+        const validServices = data.filter((s) => s && s.id);
+
+        setServices(validServices);
       } catch (err) {
-        console.log(err);
+        console.error("Erro ao buscar serviços:", err);
+        setServices([]);
+      } finally {
+        setLoading(false);
       }
     }
 
     fetchServices();
   }, [slug, professional]);
+
+  function handleSelect(service) {
+    // 🔥 DEBUG IMPORTANTE
+    console.log("Serviço selecionado:", service);
+
+    if (!service || !service.id) {
+      console.error("Serviço inválido selecionado:", service);
+      return;
+    }
+
+    onSelect(service); // ✅ PASSA OBJETO COMPLETO
+  }
 
   return (
     <div style={overlayStyle}>
@@ -32,14 +61,16 @@ export default function ServicesModal({
 
         <h3>Serviços de {professional.name}</h3>
 
-        {services.length === 0 ? (
+        {loading ? (
+          <p>Carregando...</p>
+        ) : services.length === 0 ? (
           <p>Nenhum serviço disponível</p>
         ) : (
           <ul>
             {services.map((s) => (
               <li
                 key={s.id}
-                onClick={() => onSelect(s)}
+                onClick={() => handleSelect(s)}
                 style={{
                   cursor: "pointer",
                   marginBottom: "10px",
@@ -47,7 +78,12 @@ export default function ServicesModal({
                   border: "1px solid #ccc"
                 }}
               >
-                {s.name}
+                <strong>{s.name}</strong>
+                {s.duration_minutes && (
+                  <span style={{ marginLeft: "10px", fontSize: "12px" }}>
+                    ({s.duration_minutes} min)
+                  </span>
+                )}
               </li>
             ))}
           </ul>

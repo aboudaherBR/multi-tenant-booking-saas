@@ -11,16 +11,45 @@ export default function AvailabilityModal({
 }) {
   const [date, setDate] = useState("");
   const [slots, setSlots] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   async function fetchAvailability(selectedDate) {
+    // 🔥 VALIDAÇÃO CRÍTICA
+    if (!service || !service.id) {
+      console.error("Service inválido:", service);
+      return;
+    }
+
+    if (!professional || !professional.slug) {
+      console.error("Professional inválido:", professional);
+      return;
+    }
+
+    if (!selectedDate) {
+      console.error("Data inválida");
+      return;
+    }
+
     try {
+      setLoading(true);
+
+      console.log("🔍 Request:", {
+        slug,
+        professional: professional.slug,
+        serviceId: service.id,
+        date: selectedDate
+      });
+
       const data = await apiClient(
         `/agendar/${slug}/profissionais/${professional.slug}/disponibilidade?date=${selectedDate}&serviceId=${service.id}`
       );
 
       setSlots(data);
     } catch (err) {
-      console.log(err);
+      console.error("Erro ao buscar horários:", err);
+      setSlots([]);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -36,7 +65,7 @@ export default function AvailabilityModal({
         <button onClick={onBack}>← Voltar</button>
 
         <h3>
-          {professional.name} - {service.name}
+          {professional?.name} - {service?.name}
         </h3>
 
         {/* 🔥 CALENDÁRIO */}
@@ -47,8 +76,11 @@ export default function AvailabilityModal({
           style={{ marginBottom: "15px", padding: "8px" }}
         />
 
+        {/* 🔥 LOADING */}
+        {loading && <p>Carregando horários...</p>}
+
         {/* 🔥 HORÁRIOS */}
-        {slots.length === 0 ? (
+        {!loading && slots.length === 0 ? (
           <p>Selecione uma data para ver horários</p>
         ) : (
           <ul>
