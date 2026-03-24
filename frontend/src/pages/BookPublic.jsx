@@ -1,19 +1,26 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import apiClient from "../services/api"; // ajusta se o caminho for diferente
+import apiClient from "../services/api";
 
 export default function BookPublic() {
   const { slug } = useParams();
 
   const [company, setCompany] = useState(null);
+  const [professionals, setProfessionals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    async function fetchCompany() {
+    async function fetchData() {
       try {
-        const data = await apiClient(`/agendar/${slug}`);
-        setCompany(data);
+        // 🔹 Buscar empresa
+        const companyData = await apiClient(`/agendar/${slug}`);
+        setCompany(companyData);
+
+        // 🔹 Buscar profissionais
+        const professionalsData = await apiClient(`/agendar/${slug}/profissionais`);
+        setProfessionals(professionalsData);
+
       } catch (err) {
         setError(err.message);
       } finally {
@@ -21,7 +28,7 @@ export default function BookPublic() {
       }
     }
 
-    fetchCompany();
+    fetchData();
   }, [slug]);
 
   if (loading) return <p>Carregando...</p>;
@@ -31,8 +38,22 @@ export default function BookPublic() {
   return (
     <div style={{ padding: "20px" }}>
       <h1>Agendamento</h1>
+
       <h2>{company.name}</h2>
-      <p>Slug: {company.slug}</p>
+
+      <h3>Profissionais</h3>
+
+      {professionals.length === 0 ? (
+        <p>Nenhum profissional disponível</p>
+      ) : (
+        <ul>
+          {professionals.map((p) => (
+            <li key={p.id}>
+              {p.name}
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
