@@ -12,20 +12,33 @@ export default function Dashboard() {
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        async function loadDashboard() {
-            try {
-                const data = await apiClient("/dashboard/today");
-                setStats(data);
-            } catch (err) {
-                console.error(err);
-                setError("Erro ao carregar dashboard");
-            } finally {
-                setLoading(false);
-            }
+    async function loadDashboard() {
+        try {
+            const data = await apiClient("/dashboard/today");
+            setStats(data);
+            setError(null);
+        } catch (err) {
+            console.error(err);
+            setError("Erro ao carregar dashboard");
+        } finally {
+            setLoading(false);
         }
+    }
 
+    // 🔹 carga inicial
+    useEffect(() => {
         loadDashboard();
+    }, []);
+
+    // 🔥 polling (produção real)
+    useEffect(() => {
+
+        const interval = setInterval(() => {
+            loadDashboard();
+        }, 5000);
+
+        return () => clearInterval(interval);
+
     }, []);
 
     if (loading) return <div>Carregando...</div>;

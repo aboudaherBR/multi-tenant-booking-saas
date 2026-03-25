@@ -6,19 +6,33 @@ function ClientsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    async function fetchClients() {
-      try {
-        const data = await apiClient('/clients');
-        setClients(data.clients);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
+  async function fetchClients() {
+    try {
+      const data = await apiClient('/clients');
+      setClients(data.clients || []);
+      setError(null);
+    } catch (err) {
+      console.error('Erro ao carregar clientes:', err);
+      setError('Erro ao carregar clientes');
+    } finally {
+      setLoading(false);
     }
+  }
 
+  // 🔹 carga inicial
+  useEffect(() => {
     fetchClients();
+  }, []);
+
+  // 🔥 polling leve (produção)
+  useEffect(() => {
+
+    const interval = setInterval(() => {
+      fetchClients();
+    }, 5000);
+
+    return () => clearInterval(interval);
+
   }, []);
 
   if (loading) return <div>Carregando clientes...</div>;

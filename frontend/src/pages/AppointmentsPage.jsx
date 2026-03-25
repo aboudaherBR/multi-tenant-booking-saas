@@ -17,33 +17,37 @@ export default function AppointmentsPage() {
         setDate(d.toISOString().split("T")[0]);
     }
 
-
-
+    // 🔹 carregar profissionais (1x)
     useEffect(() => {
         loadProfessionals();
     }, []);
 
+    // 🔥 carregar agendamentos sempre que data mudar
     useEffect(() => {
-        const today = new Date().toISOString().slice(0, 10);
-        loadAppointments(today);
-    }, []);
+        loadAppointments(date);
+    }, [date]);
 
+    // 🔥 polling automático (produção-ready)
+    useEffect(() => {
+
+        const interval = setInterval(() => {
+            loadAppointments(date);
+        }, 5000);
+
+        return () => clearInterval(interval);
+
+    }, [date]);
 
     async function loadProfessionals() {
-
         const data = await apiClient("/professionals");
         setProfessionals(data);
     }
 
     async function loadAppointments(date) {
-
         try {
-
             const data = await apiClient(`/appointments?date=${date}`);
             setAppointments(data);
-
         } catch (error) {
-
             console.error("Erro ao carregar agendamentos:", error);
             setAppointments([]);
         }
@@ -75,7 +79,6 @@ export default function AppointmentsPage() {
                     value={selectedProfessional}
                     onChange={(e) => setSelectedProfessional(e.target.value)}
                 >
-
                     <option value="all">Todos</option>
 
                     {professionals.map((p) => (
@@ -83,7 +86,6 @@ export default function AppointmentsPage() {
                             {p.name}
                         </option>
                     ))}
-
                 </select>
             </div>
 
@@ -94,8 +96,8 @@ export default function AppointmentsPage() {
                     <li key={a.id} onClick={() => setSelectedAppointment(a)}>
                         {a.start_time} {a.professional_name} — {a.client_name} ({a.service_name})
                     </li>
-
                 ))}
+
                 {selectedAppointment && (
                     <div style={{
                         position: "fixed",
@@ -141,7 +143,7 @@ export default function AppointmentsPage() {
 
         setSelectedAppointment(null);
 
-        const today = new Date().toISOString().slice(0, 10);
-        loadAppointments(today);
+        // 🔥 atualização imediata após ação
+        loadAppointments(date);
     }
 }

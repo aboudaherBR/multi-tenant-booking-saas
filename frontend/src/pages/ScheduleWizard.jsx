@@ -2,12 +2,10 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import apiClient from '../api/apiClient';
 
-
 function ScheduleWizard() {
     const [step, setStep] = useState('professional');
     const [professionals, setProfessionals] = useState([]);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
-
 
     const [appointment, setAppointment] = useState({
         professional: null,
@@ -17,11 +15,12 @@ function ScheduleWizard() {
     });
 
     const [services, setServices] = useState([]);
-
     const [slots, setSlots] = useState([]);
-
     const [selectedDate, setSelectedDate] = useState('');
 
+    const navigate = useNavigate();
+
+    // 🔹 carregar profissionais
     useEffect(() => {
         async function fetchProfessionals() {
             try {
@@ -35,11 +34,47 @@ function ScheduleWizard() {
         fetchProfessionals();
     }, []);
 
+    // 🔥 POLLING DE SLOTS (CRÍTICO)
+    useEffect(() => {
+        if (
+            step !== 'time' ||
+            !selectedDate ||
+            !appointment.professional ||
+            !appointment.service
+        ) return;
 
-    const navigate = useNavigate();
+        const interval = setInterval(async () => {
+            try {
+                const response = await apiClient(
+                    `/availability?professionalId=${appointment.professional.id}&serviceId=${appointment.service.id}&date=${selectedDate}`
+                );
 
+                setSlots(response.slots);
+            } catch (error) {
+                console.error('Erro ao atualizar slots', error);
+            }
+        }, 5000);
+
+        return () => clearInterval(interval);
+
+    }, [step, selectedDate, appointment.professional, appointment.service]);
+
+    // 🔥 CONFIRMAÇÃO SEGURA
     const handleConfirm = async () => {
         try {
+
+            // 🔹 revalidar disponibilidade
+            const availability = await apiClient(
+                `/availability?professionalId=${appointment.professional.id}&serviceId=${appointment.service.id}&date=${selectedDate}`
+            );
+
+            const stillAvailable = availability.slots.includes(appointment.time);
+
+            if (!stillAvailable) {
+                alert("Esse horário acabou de ser ocupado. Escolha outro.");
+                setStep('time');
+                return;
+            }
 
             const payload = {
                 professionalId: appointment.professional.id,
@@ -50,29 +85,26 @@ function ScheduleWizard() {
                 startTime: appointment.time
             };
 
-            const response = await apiClient(
-                '/appointments',
-                {
-                    method: 'POST',
-                    body: payload
-                }
-            );
+            const response = await apiClient('/appointments', {
+                method: 'POST',
+                body: payload
+            });
 
             console.log('Agendamento criado:', response);
 
             setShowConfirmModal(false);
-
-            // 🔹 atualizar slots novamente
-            const availability = await apiClient(
-                `/availability?professionalId=${appointment.professional.id}&serviceId=${appointment.service.id}&date=${selectedDate}`
-            );
-
-            setSlots(availability.slots);
-
             navigate('/');
 
         } catch (error) {
+
             console.error('Erro ao criar agendamento:', error);
+
+            if (error.message?.includes("ocupado")) {
+                alert("Esse horário acabou de ser preenchido. Escolha outro.");
+                setStep('time');
+            } else {
+                alert("Erro ao criar agendamento. Tente novamente.");
+            }
         }
     };
 
@@ -93,7 +125,9 @@ function ScheduleWizard() {
                             key={professional.id}
                             onClick={async () => {
                                 try {
-                                    const data = await apiClient(`/admin/professionals/${professional.id}/services`);
+                                    const data = await apiClient(
+                                        `/admin/professionals/${professional.id}/services`
+                                    );
 
                                     setServices(data);
 
@@ -112,7 +146,6 @@ function ScheduleWizard() {
                             {professional.name}
                         </button>
                     ))}
-
                 </div>
             )}
 
@@ -124,12 +157,10 @@ function ScheduleWizard() {
 
                     <h3>Escolher serviço</h3>
 
-
                     {services.map((service) => (
                         <button
                             key={service.id}
                             onClick={() => {
-                                console.log("clicou serviço", service);
                                 setAppointment({
                                     ...appointment,
                                     service: service
@@ -220,29 +251,26 @@ function ScheduleWizard() {
                     </button>
                 </div>
             )}
+
             {showConfirmModal && (
-                <div
-                    style={{
-                        position: 'fixed',
-                        top: 0,
-                        left: 0,
-                        width: '100%',
-                        height: '100%',
-                        backgroundColor: 'rgba(0,0,0,0.4)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                    }}
-                >
-                    <div
-                        style={{
-                            background: '#fff',
-                            padding: '20px',
-                            borderRadius: '12px',
-                            width: '90%',
-                            maxWidth: '400px'
-                        }}
-                    >
+                <div style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    backgroundColor: 'rgba(0,0,0,0.4)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}>
+                    <div style={{
+                        background: '#fff',
+                        padding: '20px',
+                        borderRadius: '12px',
+                        width: '90%',
+                        maxWidth: '400px'
+                    }}>
                         <h3>Confirmar agendamento</h3>
 
                         <p>Profissional: {appointment.professional?.name}</p>
