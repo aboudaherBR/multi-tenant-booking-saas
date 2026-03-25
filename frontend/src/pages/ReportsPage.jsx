@@ -7,6 +7,7 @@ export default function ReportsPage() {
   const navigate = useNavigate();
 
   const [summary, setSummary] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -25,6 +26,7 @@ export default function ReportsPage() {
 
   const year = today.getFullYear();
 
+  // 🔹 inicialização
   useEffect(() => {
 
     const today = new Date();
@@ -46,41 +48,49 @@ export default function ReportsPage() {
 
   }, []);
 
-  async function loadProfessionals() {
+  // 🔥 auto refresh leve (60s)
+  useEffect(() => {
 
-    try {
+    const interval = setInterval(() => {
+      if (startDate && endDate) {
+        loadSummary(startDate, endDate);
+      }
+    }, 60000);
 
-      const data = await apiClient("/professionals");
+    return () => clearInterval(interval);
 
-      setProfessionals(data);
+  }, [startDate, endDate, professionalId, serviceId]);
 
-    } catch (error) {
-
-      console.error("Erro ao carregar profissionais", error);
-
+  // 🔥 auto update ao mudar filtros
+  useEffect(() => {
+    if (startDate && endDate) {
+      loadSummary(startDate, endDate);
     }
+  }, [professionalId, serviceId]);
 
+  async function loadProfessionals() {
+    try {
+      const data = await apiClient("/professionals");
+      setProfessionals(data);
+    } catch (error) {
+      console.error("Erro ao carregar profissionais", error);
+    }
   }
 
   async function loadServices() {
-
     try {
-
       const data = await apiClient("/services");
-
       setServices(data.services || data);
-
     } catch (error) {
-
       console.error("Erro ao carregar serviços", error);
-
     }
-
   }
 
   async function loadSummary(start, end) {
 
     try {
+
+      setLoading(true);
 
       let url = `/reports/summary?startDate=${start}&endDate=${end}`;
 
@@ -100,8 +110,9 @@ export default function ReportsPage() {
 
       console.error("Erro ao carregar relatório", error);
 
+    } finally {
+      setLoading(false);
     }
-
   }
 
   return (
@@ -142,7 +153,6 @@ export default function ReportsPage() {
               {professional.name}
             </option>
           ))}
-
         </select>
 
         <label style={{ marginLeft: "10px" }}>Serviço</label>
@@ -158,19 +168,20 @@ export default function ReportsPage() {
               {service.name}
             </option>
           ))}
-
         </select>
 
         <button
           style={{ marginLeft: "10px" }}
           onClick={() => loadSummary(startDate, endDate)}
         >
-          Aplicar filtro
+          Atualizar
         </button>
 
       </div>
 
-      {summary && (
+      {loading ? (
+        <p style={{ marginTop: "20px" }}>Atualizando dados...</p>
+      ) : summary && (
         <div style={{ marginTop: "20px" }}>
 
           <h2>
