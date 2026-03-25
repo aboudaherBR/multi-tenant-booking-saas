@@ -3,8 +3,8 @@ import { useParams } from "react-router-dom";
 import ProfessionalsModal from "../components/ProfessionalsModal";
 import ServicesModal from "../components/ServicesModal";
 import AvailabilityModal from "../components/AvailabilityModal";
-import apiClient from "../api/apiClient";
 import ConfirmBookingModal from "../components/ConfirmBookingModal";
+import apiClient from "../api/apiClient";
 
 export default function BookPublic() {
     const { slug } = useParams();
@@ -42,133 +42,119 @@ export default function BookPublic() {
         setShowProfessionalsModal(true);
     }
 
-    async function handleConfirmBooking() {
-        try {
-            const payload = {
-                companySlug: slug,
-                professionalSlug: selectedProfessional.slug,
-                serviceSlug: selectedService.slug,
-                date: selectedSlot.date,
-                startTime: selectedSlot.startTime,
-                clientName,
-                phone
-            };
-
-            console.log("📦 PAYLOAD:", payload);
-
-            await apiClient("/agendar", {
-                method: "POST",
-                body: payload
-            });
-
-            // sucesso
-            setShowConfirmModal(false);
-            setBookingSuccess(true);
-
-        } catch (err) {
-            console.error("Erro ao criar agendamento:", err);
-            alert("Erro ao agendar. Tente novamente.");
-        }
-    }
-
     return (
         <div style={{ padding: "20px", maxWidth: "400px", margin: "0 auto" }}>
-            <h2>Agende seu horário</h2>
 
-            <input
-                type="text"
-                placeholder="Telefone"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
-            />
+            {/* 🔥 TELA DE SUCESSO */}
+            {bookingSuccess ? (
+                <div style={{ textAlign: "center", marginTop: "40px" }}>
+                    <h2>Agendamento confirmado!</h2>
 
-            <input
-                type="text"
-                placeholder="Nome"
-                value={clientName}
-                onChange={(e) => setClientName(e.target.value)}
-                style={{ width: "100%", padding: "10px", marginBottom: "20px" }}
-            />
+                    <p><strong>Serviço:</strong> {selectedService?.name}</p>
+                    <p><strong>Profissional:</strong> {selectedProfessional?.name}</p>
+                    <p><strong>Data:</strong> {selectedSlot?.date}</p>
+                    <p><strong>Horário:</strong> {selectedSlot?.startTime}</p>
 
-            <button
-                onClick={handleStart}
-                style={{ width: "100%", padding: "12px", cursor: "pointer" }}
-            >
-                Procurar profissional
-            </button>
+                    <p style={{ marginTop: "20px" }}>
+                        Obrigado, {clientName}!
+                    </p>
+                </div>
+            ) : (
+                <>
+                    <h2>Agende seu horário</h2>
 
-            {/* PROFISSIONAIS */}
-            {showProfessionalsModal && (
-                <ProfessionalsModal
-                    professionals={professionals}
-                    onClose={() => setShowProfessionalsModal(false)}
-                    onSelect={(professional) => {
-                        setSelectedProfessional(professional);
-                        setShowProfessionalsModal(false);
-                        setShowServicesModal(true);
-                    }}
-                />
+                    <input
+                        type="text"
+                        placeholder="Telefone"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
+                    />
+
+                    <input
+                        type="text"
+                        placeholder="Nome"
+                        value={clientName}
+                        onChange={(e) => setClientName(e.target.value)}
+                        style={{ width: "100%", padding: "10px", marginBottom: "20px" }}
+                    />
+
+                    <button
+                        onClick={handleStart}
+                        style={{ width: "100%", padding: "12px", cursor: "pointer" }}
+                    >
+                        Procurar profissional
+                    </button>
+
+                    {/* PROFISSIONAIS */}
+                    {showProfessionalsModal && (
+                        <ProfessionalsModal
+                            professionals={professionals}
+                            onClose={() => setShowProfessionalsModal(false)}
+                            onSelect={(professional) => {
+                                setSelectedProfessional(professional);
+                                setShowProfessionalsModal(false);
+                                setShowServicesModal(true);
+                            }}
+                        />
+                    )}
+
+                    {/* SERVIÇOS */}
+                    {showServicesModal && selectedProfessional && (
+                        <ServicesModal
+                            slug={slug}
+                            professional={selectedProfessional}
+                            onBack={() => {
+                                setShowServicesModal(false);
+                                setShowProfessionalsModal(true);
+                            }}
+                            onClose={() => setShowServicesModal(false)}
+                            onSelect={(service) => {
+                                setSelectedService(service);
+                                setShowServicesModal(false);
+                                setShowAvailabilityModal(true);
+                            }}
+                        />
+                    )}
+
+                    {/* HORÁRIOS */}
+                    {showAvailabilityModal && selectedProfessional && selectedService && (
+                        <AvailabilityModal
+                            slug={slug}
+                            professional={selectedProfessional}
+                            service={selectedService}
+                            onBack={() => {
+                                setShowAvailabilityModal(false);
+                                setShowServicesModal(true);
+                            }}
+                            onClose={() => setShowAvailabilityModal(false)}
+                            onSelect={(slot) => {
+                                setSelectedSlot(slot);
+                                setShowAvailabilityModal(false);
+                                setShowConfirmModal(true);
+                            }}
+                        />
+                    )}
+
+                    {/* CONFIRMAÇÃO */}
+                    {showConfirmModal && selectedSlot && (
+                        <ConfirmBookingModal
+                            professional={selectedProfessional}
+                            service={selectedService}
+                            slot={selectedSlot}
+                            onBack={() => {
+                                setShowConfirmModal(false);
+                                setShowAvailabilityModal(true);
+                            }}
+                            onClose={() => setShowConfirmModal(false)}
+                            onConfirm={() => {
+                                setShowConfirmModal(false);
+                                setBookingSuccess(true);
+                            }}
+                        />
+                    )}
+                </>
             )}
-
-            {/* SERVIÇOS */}
-            {showServicesModal && selectedProfessional && (
-                <ServicesModal
-                    slug={slug}
-                    professional={selectedProfessional}
-                    onBack={() => {
-                        setShowServicesModal(false);
-                        setShowProfessionalsModal(true);
-                    }}
-                    onClose={() => setShowServicesModal(false)}
-                    onSelect={(service) => {
-                        console.log("SERVICE SELECIONADO:", service); // 🔥
-                        setSelectedService(service);
-                        setShowServicesModal(false);
-                        setShowAvailabilityModal(true);
-                    }}
-                />
-            )}
-
-            {/* HORÁRIOS */}
-            {showAvailabilityModal && selectedProfessional && selectedService && (
-                <AvailabilityModal
-                    slug={slug}
-                    professional={selectedProfessional}
-                    service={selectedService}
-                    onBack={() => {
-                        setShowAvailabilityModal(false);
-                        setShowServicesModal(true);
-                    }}
-                    onClose={() => setShowAvailabilityModal(false)}
-                    onSelect={(slot) => {
-                        console.log("🔥 SLOT NO PAI:", slot);
-
-                        setSelectedSlot(slot);
-                        setShowAvailabilityModal(false);
-                        setShowConfirmModal(true);
-                    }}
-                />
-            )}
-
-            {showConfirmModal && selectedSlot && (
-                <ConfirmBookingModal
-                    professional={selectedProfessional}
-                    service={selectedService}
-                    slot={selectedSlot}
-                    onBack={() => {
-                        setShowConfirmModal(false);
-                        setShowAvailabilityModal(true);
-                    }}
-                    onClose={() => setShowConfirmModal(false)}
-                    onConfirm={() => {
-                        setShowConfirmModal(false);
-                        setBookingSuccess(true);
-                    }}
-                />
-            )}
-
-
         </div>
     );
 }
