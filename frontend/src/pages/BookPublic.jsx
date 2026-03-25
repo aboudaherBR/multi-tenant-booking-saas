@@ -4,6 +4,7 @@ import ProfessionalsModal from "../components/ProfessionalsModal";
 import ServicesModal from "../components/ServicesModal";
 import AvailabilityModal from "../components/AvailabilityModal";
 import apiClient from "../api/apiClient";
+import ConfirmBookingModal from "../components/ConfirmBookingModal";
 
 export default function BookPublic() {
     const { slug } = useParams();
@@ -20,6 +21,8 @@ export default function BookPublic() {
     const [selectedService, setSelectedService] = useState(null);
 
     const [selectedSlot, setSelectedSlot] = useState(null);
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
+    const [bookingSuccess, setBookingSuccess] = useState(false);
 
     useEffect(() => {
         async function fetchProfessionals() {
@@ -111,10 +114,34 @@ export default function BookPublic() {
                     onClose={() => setShowAvailabilityModal(false)}
                     onSelect={(slot) => {
                         console.log("🔥 SLOT NO PAI:", slot);
-                        alert(`Horário: ${slot.startTime}`);
+
+                        setSelectedSlot(slot);
+                        setShowAvailabilityModal(false);
+                        setShowConfirmModal(true);
                     }}
                 />
             )}
+
+            {showConfirmModal && selectedSlot && (
+                <ConfirmBookingModal
+                    professional={selectedProfessional}
+                    service={selectedService}
+                    slot={selectedSlot}
+                    onBack={() => {
+                        setShowConfirmModal(false);
+                        setShowAvailabilityModal(true);
+                    }}
+                    onClose={() => setShowConfirmModal(false)}
+                    onConfirm={() => {
+                        console.log("CONFIRMOU");
+
+                        setShowConfirmModal(false);
+                        setBookingSuccess(true);
+                    }}
+                />
+            )}
+
+
         </div>
     );
 }
