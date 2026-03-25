@@ -20,17 +20,10 @@ export default function ServicesModal({
           `/agendar/${slug}/profissionais/${professional.slug}/servicos`
         );
 
-        // 🔥 VALIDAÇÃO CRÍTICA (evita bug silencioso)
-        if (!Array.isArray(data)) {
-          console.error("Resposta inválida de serviços:", data);
-          setServices([]);
-          return;
-        }
+        console.log("SERVICES RESPONSE:", data); // 🔥 DEBUG
 
-        // 🔥 GARANTE que todo serviço tem ID
-        const validServices = data.filter((s) => s && s.id);
-
-        setServices(validServices);
+        // ✅ NÃO FILTRA MAIS (isso quebrava antes)
+        setServices(data || []);
       } catch (err) {
         console.error("Erro ao buscar serviços:", err);
         setServices([]);
@@ -43,15 +36,15 @@ export default function ServicesModal({
   }, [slug, professional]);
 
   function handleSelect(service) {
-    // 🔥 DEBUG IMPORTANTE
-    console.log("Serviço selecionado:", service);
+    console.log("SERVICE CLICK:", service); // 🔥 DEBUG
 
-    if (!service || !service.id) {
-      console.error("Serviço inválido selecionado:", service);
+    // 🔥 VALIDAÇÃO CORRETA (AGORA COM SLUG)
+    if (!service || !service.slug) {
+      console.error("Serviço inválido:", service);
       return;
     }
 
-    onSelect(service); // ✅ PASSA OBJETO COMPLETO
+    onSelect(service); // ✅ passa objeto completo
   }
 
   return (
@@ -62,14 +55,14 @@ export default function ServicesModal({
         <h3>Serviços de {professional.name}</h3>
 
         {loading ? (
-          <p>Carregando...</p>
+          <p>Carregando serviços...</p>
         ) : services.length === 0 ? (
           <p>Nenhum serviço disponível</p>
         ) : (
           <ul>
-            {services.map((s) => (
+            {services.map((s, index) => (
               <li
-                key={s.id}
+                key={s.slug || index} // ✅ usa slug
                 onClick={() => handleSelect(s)}
                 style={{
                   cursor: "pointer",
