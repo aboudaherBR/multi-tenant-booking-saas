@@ -5,7 +5,7 @@ const {
   findServiceForProfessionalBySlugs
 } = require('../database/services.repository');
 const { getAvailableSlots } = require('../services/availability.service');
-const { pool } = require('../database');
+const pool = require('../database/db');
 
 async function getPublicCompany(req, res, next) {
   try {
