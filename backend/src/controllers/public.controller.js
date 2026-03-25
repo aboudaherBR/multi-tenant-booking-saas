@@ -5,6 +5,7 @@ const {
   findServiceForProfessionalBySlugs
 } = require('../database/services.repository');
 const { getAvailableSlots } = require('../services/availability.service');
+const { pool } = require('../database');
 
 async function getPublicCompany(req, res, next) {
   try {
@@ -242,7 +243,48 @@ async function createPublicAppointment(req, res, next) {
       });
     }
 
-    // 🔥 AQUI VAI SALVAR NO BANCO (PRÓXIMO PASSO)
+    // 🔥 SALVAR NO BANCO
+
+    // função auxiliar (coloca acima da função ou no topo do arquivo se preferir)
+    function addMinutes(time, duration) {
+      const [h, m] = time.split(':').map(Number);
+      const total = h * 60 + m + duration;
+
+      const newH = Math.floor(total / 60);
+      const newM = total % 60;
+
+      return `${String(newH).padStart(2, '0')}:${String(newM).padStart(2, '0')}`;
+    }
+
+    const endTime = addMinutes(startTime, serviceData.duration_minutes);
+
+    await pool.query(
+      `
+          INSERT INTO appointments (
+            company_id,
+            professional_id,
+            service_id,
+            client_name,
+            client_phone,
+            appointment_date,
+            start_time,
+            end_time,
+            status,
+            created_at
+          )
+          VALUES ($1,$2,$3,$4,$5,$6,$7,$8,'scheduled',NOW())
+  `,
+      [
+        company.id,
+        serviceData.professional_id,
+        serviceData.service_id,
+        clientName,
+        phone,
+        date,
+        startTime,
+        endTime
+      ]
+    );
 
     return res.status(201).json({
       message: "Agendamento criado com sucesso"
