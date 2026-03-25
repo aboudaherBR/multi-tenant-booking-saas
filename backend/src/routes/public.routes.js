@@ -23,4 +23,9 @@ router.get(
   publicController.getPublicAvailability
 );
 
+router.post(
+  '/agendar',
+  publicController.createPublicAppointment
+);
+
 module.exports = router;
