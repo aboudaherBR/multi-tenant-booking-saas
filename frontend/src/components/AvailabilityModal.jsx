@@ -89,8 +89,8 @@ export default function AvailabilityModal({
                             <li
                                 key={index}
                                 onClick={() => {
-                                    console.log("🔥 CLIQUE NO SLOT:", slot);
                                     alert("clicou no horário");
+                                    console.log("🔥 SLOT:", slot);
                                 }}
                                 style={{
                                     cursor: "pointer",
