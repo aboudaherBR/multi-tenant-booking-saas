@@ -223,14 +223,15 @@ async function createPublicAppointment(req, res, next) {
       });
     }
 
+    // 🔹 COMPANY
     const company = await findCompanyBySlug(companySlug);
-
     if (!company) {
       return res.status(404).json({
         message: "Empresa não encontrada"
       });
     }
 
+    // 🔹 SERVICE
     const serviceData = await findServiceForProfessionalBySlugs({
       companyId: company.id,
       professionalSlug,
@@ -243,9 +244,34 @@ async function createPublicAppointment(req, res, next) {
       });
     }
 
-    // 🔥 SALVAR NO BANCO
+    // 🔹 CLIENT (buscar ou criar)
+    let clientResult = await pool.query(
+      `
+      SELECT id FROM clients
+      WHERE company_id = $1 AND phone = $2
+      LIMIT 1
+    `,
+      [company.id, phone]
+    );
 
-    // função auxiliar (coloca acima da função ou no topo do arquivo se preferir)
+    let clientId;
+
+    if (clientResult.rows.length > 0) {
+      clientId = clientResult.rows[0].id;
+    } else {
+      const newClient = await pool.query(
+        `
+        INSERT INTO clients (company_id, name, phone)
+        VALUES ($1, $2, $3)
+        RETURNING id
+      `,
+        [company.id, clientName, phone]
+      );
+
+      clientId = newClient.rows[0].id;
+    }
+
+    // 🔹 CALCULAR END TIME
     function addMinutes(time, duration) {
       const [h, m] = time.split(':').map(Number);
       const total = h * 60 + m + duration;
@@ -258,31 +284,34 @@ async function createPublicAppointment(req, res, next) {
 
     const endTime = addMinutes(startTime, serviceData.duration_minutes);
 
+    // 🔹 INSERT CORRETO
     await pool.query(
       `
-          INSERT INTO appointments (
-            company_id,
-            professional_id,
-            service_id,
-            client_name,
-            client_phone,
-            appointment_date,
-            start_time,
-            end_time,
-            status,
-            created_at
-          )
-          VALUES ($1,$2,$3,$4,$5,$6,$7,$8,'scheduled',NOW())
-  `,
+      INSERT INTO appointments (
+        company_id,
+        professional_id,
+        service_id,
+        client_id,
+        date,
+        start_time,
+        end_time,
+        service_name_snapshot,
+        service_price_snapshot,
+        service_duration_snapshot
+      )
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
+    `,
       [
         company.id,
         serviceData.professional_id,
         serviceData.service_id,
-        clientName,
-        phone,
+        clientId,
         date,
         startTime,
-        endTime
+        endTime,
+        serviceData.name,
+        serviceData.price,
+        serviceData.duration_minutes
       ]
     );
 
@@ -291,6 +320,20 @@ async function createPublicAppointment(req, res, next) {
     });
 
   } catch (error) {
+
+    // 🔥 TRATAMENTO PROFISSIONAL DE ERRO
+    if (error.code === '23P01') {
+      return res.status(409).json({
+        message: "Horário já ocupado"
+      });
+    }
+
+    if (error.code === '23505') {
+      return res.status(409).json({
+        message: "Conflito de agendamento"
+      });
+    }
+
     next(error);
   }
 }
