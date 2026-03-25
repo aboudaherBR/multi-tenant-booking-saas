@@ -88,7 +88,10 @@ export default function AvailabilityModal({
                         {slots.map((slot, index) => (
                             <li
                                 key={index}
-                                onClick={() => onSelect({ ...slot, date })}
+                                onClick={() => {
+                                    console.log("🔥 CLIQUE NO SLOT:", slot);
+                                    alert("clicou no horário");
+                                }}
                                 style={{
                                     cursor: "pointer",
                                     marginBottom: "10px",

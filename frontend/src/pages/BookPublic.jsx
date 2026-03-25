@@ -19,6 +19,8 @@ export default function BookPublic() {
     const [selectedProfessional, setSelectedProfessional] = useState(null);
     const [selectedService, setSelectedService] = useState(null);
 
+    const [selectedSlot, setSelectedSlot] = useState(null);
+
     useEffect(() => {
         async function fetchProfessionals() {
             try {
@@ -109,6 +111,7 @@ export default function BookPublic() {
                     onClose={() => setShowAvailabilityModal(false)}
                     onSelect={(slot) => {
                         console.log("Horário selecionado:", slot);
+                        setSelectedSlot(slot);
                     }}
                 />
             )}
