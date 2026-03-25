@@ -42,6 +42,35 @@ export default function BookPublic() {
         setShowProfessionalsModal(true);
     }
 
+    async function handleConfirmBooking() {
+        try {
+            const payload = {
+                companySlug: slug,
+                professionalSlug: selectedProfessional.slug,
+                serviceSlug: selectedService.slug,
+                date: selectedSlot.date,
+                startTime: selectedSlot.startTime,
+                clientName,
+                phone
+            };
+
+            console.log("📦 PAYLOAD:", payload);
+
+            await apiClient("/agendar", {
+                method: "POST",
+                body: payload
+            });
+
+            // sucesso
+            setShowConfirmModal(false);
+            setBookingSuccess(true);
+
+        } catch (err) {
+            console.error("Erro ao criar agendamento:", err);
+            alert("Erro ao agendar. Tente novamente.");
+        }
+    }
+
     return (
         <div style={{ padding: "20px", maxWidth: "400px", margin: "0 auto" }}>
             <h2>Agende seu horário</h2>
@@ -133,8 +162,6 @@ export default function BookPublic() {
                     }}
                     onClose={() => setShowConfirmModal(false)}
                     onConfirm={() => {
-                        console.log("CONFIRMOU");
-
                         setShowConfirmModal(false);
                         setBookingSuccess(true);
                     }}
