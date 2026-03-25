@@ -238,14 +238,24 @@ async function createPublicAppointment(req, res, next) {
       serviceSlug
     });
 
-    if (!serviceData) {
-      return res.status(404).json({
-        message: "Serviço inválido"
+    console.log("SERVICE DATA:", serviceData);
+
+    // 🔥 VALIDAÇÃO REAL (isso evita 500 silencioso)
+    if (
+      !serviceData ||
+      !serviceData.id || // 🔥 aqui está o segredo
+      !serviceData.professional_id ||
+      !serviceData.duration_minutes ||
+      !serviceData.name ||
+      serviceData.price == null
+    ) {
+      return res.status(500).json({
+        message: "Erro interno: dados do serviço incompletos"
       });
     }
 
-    // 🔹 CLIENT (buscar ou criar)
-    let clientResult = await pool.query(
+    // 🔹 CLIENT
+    const clientResult = await pool.query(
       `
       SELECT id FROM clients
       WHERE company_id = $1 AND phone = $2
@@ -284,7 +294,7 @@ async function createPublicAppointment(req, res, next) {
 
     const endTime = addMinutes(startTime, serviceData.duration_minutes);
 
-    // 🔹 INSERT CORRETO
+    // 🔥 INSERT CORRETO
     await pool.query(
       `
       INSERT INTO appointments (
@@ -304,7 +314,7 @@ async function createPublicAppointment(req, res, next) {
       [
         company.id,
         serviceData.professional_id,
-        serviceData.service_id,
+        serviceData.id, // 🔥 CORREÇÃO REAL
         clientId,
         date,
         startTime,
@@ -321,7 +331,8 @@ async function createPublicAppointment(req, res, next) {
 
   } catch (error) {
 
-    // 🔥 TRATAMENTO PROFISSIONAL DE ERRO
+    console.error("CREATE APPOINTMENT ERROR:", error);
+
     if (error.code === '23P01') {
       return res.status(409).json({
         message: "Horário já ocupado"
