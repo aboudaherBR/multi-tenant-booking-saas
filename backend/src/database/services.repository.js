@@ -73,8 +73,7 @@ async function listServicesForProfessional({
 }
 
 /**
- * 🔓 Método público (usa professionalSlug e retorna service.slug)
- * Não expõe IDs internos.
+ * 🔓 Público (lista serviços)
  */
 async function findActiveServicesPublicByProfessionalSlug({
   companyId,
@@ -107,6 +106,9 @@ async function findActiveServicesPublicByProfessionalSlug({
   return result.rows;
 }
 
+/**
+ * 🔥 CORREÇÃO CRÍTICA AQUI
+ */
 async function findServiceForProfessionalBySlugs({
   companyId,
   professionalSlug,
@@ -115,8 +117,11 @@ async function findServiceForProfessionalBySlugs({
   const result = await pool.query(
     `
       SELECT
-        p.id AS professional_id,
-        s.duration_minutes
+        s.id, -- 🔥 ESSENCIAL
+        s.name, -- 🔥 SNAPSHOT
+        COALESCE(ps.custom_price, s.base_price) AS price, -- 🔥 SNAPSHOT
+        s.duration_minutes,
+        p.id AS professional_id
       FROM professionals p
       JOIN professional_services ps
         ON ps.professional_id = p.id
