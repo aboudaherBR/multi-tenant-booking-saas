@@ -22,4 +22,9 @@ router.delete(
   appointmentsController.cancel
 );
 
+router.post(
+  '/agendar',
+  publicController.createPublicAppointment
+);
+
 module.exports = router;

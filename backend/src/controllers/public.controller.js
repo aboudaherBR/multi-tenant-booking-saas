@@ -196,9 +196,69 @@ async function getPublicAvailability(req, res, next) {
   }
 }
 
+async function createPublicAppointment(req, res, next) {
+  try {
+    const {
+      companySlug,
+      professionalSlug,
+      serviceSlug,
+      date,
+      startTime,
+      clientName,
+      phone
+    } = req.body;
+
+    if (
+      !companySlug ||
+      !professionalSlug ||
+      !serviceSlug ||
+      !date ||
+      !startTime ||
+      !clientName ||
+      !phone
+    ) {
+      return res.status(400).json({
+        message: "Dados obrigatórios não informados"
+      });
+    }
+
+    const company = await findCompanyBySlug(companySlug);
+
+    if (!company) {
+      return res.status(404).json({
+        message: "Empresa não encontrada"
+      });
+    }
+
+    const serviceData = await findServiceForProfessionalBySlugs({
+      companyId: company.id,
+      professionalSlug,
+      serviceSlug
+    });
+
+    if (!serviceData) {
+      return res.status(404).json({
+        message: "Serviço inválido"
+      });
+    }
+
+    // 🔥 AQUI VAI SALVAR NO BANCO (PRÓXIMO PASSO)
+
+    return res.status(201).json({
+      message: "Agendamento criado com sucesso"
+    });
+
+  } catch (error) {
+    next(error);
+  }
+}
+
+
+
 module.exports = {
   getPublicCompany,
   getPublicProfessionals,
   getPublicServicesByProfessional,
-  getPublicAvailability
+  getPublicAvailability,
+  createPublicAppointment
 };

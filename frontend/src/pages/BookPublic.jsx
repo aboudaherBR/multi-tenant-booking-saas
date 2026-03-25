@@ -147,10 +147,7 @@ export default function BookPublic() {
                                 setShowAvailabilityModal(true);
                             }}
                             onClose={() => setShowConfirmModal(false)}
-                            onConfirm={() => {
-                                setShowConfirmModal(false);
-                                setBookingSuccess(true);
-                            }}
+                            onConfirm={handleConfirmBooking}
                         />
                     )}
                 </>
