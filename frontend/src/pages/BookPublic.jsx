@@ -110,8 +110,8 @@ export default function BookPublic() {
                     }}
                     onClose={() => setShowAvailabilityModal(false)}
                     onSelect={(slot) => {
-                        console.log("Horário selecionado:", slot);
-                        setSelectedSlot(slot);
+                        console.log("🔥 SLOT RECEBIDO NO PAI:", slot);
+                        alert("chegou no BookPublic");
                     }}
                 />
             )}
