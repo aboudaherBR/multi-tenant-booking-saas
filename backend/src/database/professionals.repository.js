@@ -15,19 +15,18 @@ async function findProfessionalById(companyId, professionalId) {
   return result.rows[0] || null;
 }
 
-async function findProfessionalByUserId(companyId, userId) {
+async function findProfessionalByUserId({ userId, companyId }) {
   const result = await pool.query(
     `
-      SELECT id
-      FROM professionals
-      WHERE company_id = $1
-      AND user_id = $2
-      AND is_active = true
+    SELECT id
+    FROM professionals
+    WHERE user_id = $1
+      AND company_id = $2
     `,
-    [companyId, userId]
+    [userId, companyId]
   );
 
-  return result.rows[0] || null;
+  return result.rows[0];
 }
 
 async function findActiveProfessionalsPublicByCompanyId(companyId) {
