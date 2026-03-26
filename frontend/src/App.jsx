@@ -7,7 +7,8 @@ import Dashboard from './pages/Dashboard';
 import AppointmentsPage from './pages/AppointmentsPage';
 import SettingsPage from './pages/SettingsPage';
 import ReportsPage from "./pages/ReportsPage";
-import BookPublic from "./pages/BookPublic"; // 🔥 IMPORTAR
+import BookPublic from "./pages/BookPublic";
+import ProfessionalDashboard from "./pages/ProfessionalDashboard"; // 🔥 NOVO
 
 function App() {
   return (
@@ -27,6 +28,9 @@ function App() {
         <Route path="/schedule" element={<ScheduleWizard />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/reports" element={<ReportsPage />} />
+
+        {/* 🔥 NOVA ROTA DO PROFISSIONAL */}
+        <Route path="/professional" element={<ProfessionalDashboard />} />
       </Route>
 
       {/* FALLBACK */}
