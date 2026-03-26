@@ -12,7 +12,8 @@ const allowedOrigins = [
   "https://barber-shop-indol-three.vercel.app",
   "https://barber-shop-fxgdm3blk-aboudahers-projects.vercel.app",
   "https://barber-shop-git-jwt-migration-aboudahers-projects.vercel.app",
-  "https://barber-shop-git-public-booking-flow-aboudahers-projects.vercel.app", // 👈 ADD AQUI
+  "https://barber-shop-git-public-booking-flow-aboudahers-projects.vercel.app", 
+  "https://barber-shop-git-merge-public-booking-aboudahers-projects.vercel.app",
   "http://localhost:5173"
 ];
 
