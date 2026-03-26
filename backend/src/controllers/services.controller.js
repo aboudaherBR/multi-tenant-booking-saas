@@ -66,6 +66,55 @@ async function create(req, res) {
             .replace(/[\u0300-\u036f]/g, "")
             .replace(/\s+/g, "-");
 
+        // 🔥 1. VERIFICAR SE JÁ EXISTE
+        const existing = await pool.query(
+            `
+            SELECT id, is_active
+            FROM services
+            WHERE company_id = $1 AND slug = $2
+            LIMIT 1
+            `,
+            [companyId, slug]
+        );
+
+        if (existing.rows.length > 0) {
+
+            const service = existing.rows[0];
+
+            // 🔴 já existe ativo → erro
+            if (service.is_active) {
+                return res.status(409).json({
+                    message: "Já existe um serviço com esse nome"
+                });
+            }
+
+            // 🟢 existe mas está inativo → REATIVAR
+            const updated = await pool.query(
+                `
+                UPDATE services
+                SET 
+                    name = $1,
+                    duration_minutes = $2,
+                    base_price = $3,
+                    is_active = true
+                WHERE id = $4
+                RETURNING id, name, duration_minutes, base_price
+                `,
+                [
+                    name,
+                    duration_minutes,
+                    base_price,
+                    service.id
+                ]
+            );
+
+            return res.json({
+                service: updated.rows[0],
+                reactivated: true
+            });
+        }
+
+        // 🔵 NÃO EXISTE → INSERT NORMAL
         const result = await pool.query(
             `
             INSERT INTO services
@@ -88,20 +137,18 @@ async function create(req, res) {
             ]
         );
 
-        res.json({
+        return res.json({
             service: result.rows[0]
         });
 
     } catch (error) {
 
-        console.error("ERRO CREATE SERVICE:", error);
+        console.error("🔥 CREATE SERVICE ERROR:", error);
 
-        res.status(500).json({
+        return res.status(500).json({
             message: "Erro interno ao criar serviço"
         });
-
     }
-
 }
 
 
