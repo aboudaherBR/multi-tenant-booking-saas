@@ -17,17 +17,17 @@ export default function AppointmentsPage() {
         setDate(d.toISOString().split("T")[0]);
     }
 
-    // 🔹 carregar profissionais (1x)
+    // 🔹 carregar profissionais (correto)
     useEffect(() => {
         loadProfessionals();
     }, []);
 
-    // 🔥 carregar agendamentos sempre que data mudar
+    // 🔥 carregar agendamentos quando data OU profissional mudar
     useEffect(() => {
         loadAppointments(date);
-    }, [date]);
+    }, [date, selectedProfessional]);
 
-    // 🔥 polling automático (produção-ready)
+    // 🔥 polling automático
     useEffect(() => {
 
         const interval = setInterval(() => {
@@ -36,17 +36,30 @@ export default function AppointmentsPage() {
 
         return () => clearInterval(interval);
 
-    }, [date]);
+    }, [date, selectedProfessional]);
 
     async function loadProfessionals() {
-        const data = await apiClient("/professionals");
-        setProfessionals(data);
+        try {
+            const data = await apiClient("/professionals");
+            setProfessionals(data);
+        } catch (error) {
+            console.error("Erro ao carregar profissionais:", error);
+        }
     }
 
     async function loadAppointments(date) {
         try {
-            const data = await apiClient(`/appointments?date=${date}`);
+
+            let url = `/appointments?date=${date}`;
+
+            if (selectedProfessional !== "all") {
+                url += `&professionalId=${selectedProfessional}`;
+            }
+
+            const data = await apiClient(url);
+
             setAppointments(data);
+
         } catch (error) {
             console.error("Erro ao carregar agendamentos:", error);
             setAppointments([]);
@@ -143,7 +156,6 @@ export default function AppointmentsPage() {
 
         setSelectedAppointment(null);
 
-        // 🔥 atualização imediata após ação
         loadAppointments(date);
     }
 }
