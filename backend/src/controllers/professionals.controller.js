@@ -176,10 +176,61 @@ async function listServicesPublic(req, res, next) {
   }
 }
 
+async function getMyAppointments(req, res, next) {
+  try {
+    const { userId, companyId } = req.user;
+
+    // 🔹 1. Buscar professional
+    const { findProfessionalByUserId } = require('../database/professionals.repository');
+
+    const professional = await findProfessionalByUserId({
+      userId,
+      companyId
+    });
+
+    if (!professional) {
+      return res.status(403).json({
+        message: 'Usuário não é um profissional'
+      });
+    }
+
+    const professionalId = professional.id;
+
+    // 🔹 2. Data (default hoje)
+    const date =
+      req.query.date ||
+      new Date().toISOString().split('T')[0];
+
+    // 🔹 3. Buscar agendamentos
+    const { findAppointmentsByDate } = require('../database/appointments.repository');
+
+    const appointments = await findAppointmentsByDate({
+      companyId,
+      date,
+      professionalId
+    });
+
+    // 🔹 4. Total do dia
+    const total = appointments.reduce((acc, item) => {
+      return acc + (Number(item.service_price_snapshot) || 0);
+    }, 0);
+
+    return res.status(200).json({
+      date,
+      totalAmount: total,
+      appointments
+    });
+
+  } catch (error) {
+    next(error);
+  }
+}
+
 
 module.exports = {
   list,
   create,
   listPublic,
-  listServicesPublic
+  listServicesPublic,
+  getMyAppointments
 };

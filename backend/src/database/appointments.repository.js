@@ -253,6 +253,20 @@ async function cancelAppointment({ id, companyId }) {
 
 }
 
+async function findProfessionalByUserId({ userId, companyId }) {
+  const result = await pool.query(
+    `
+    SELECT id
+    FROM professionals
+    WHERE user_id = $1
+      AND company_id = $2
+    `,
+    [userId, companyId]
+  );
+
+  return result.rows[0];
+}
+
 module.exports = {
   createAppointment,
   findConflicts,
@@ -260,5 +274,6 @@ module.exports = {
   findAppointmentsInRange,
   findAppointmentsByDate,
   getDashboardToday,
-  cancelAppointment
+  cancelAppointment,
+  findProfessionalByUserId
 };
