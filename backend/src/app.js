@@ -11,6 +11,7 @@ app.set('trust proxy', 1);
 const allowedOrigins = [
   "https://barber-shop-indol-three.vercel.app",
   "https://barber-shop-git-feature-professional-84c6f1-aboudahers-projects.vercel.app"
+]; // 🔥 FALTAVA FECHAR AQUI
 
 app.use(cors({
   origin: allowedOrigins,
@@ -68,6 +69,7 @@ app.use('/api', servicesRoutes);
 const reportsRoutes = require('./routes/reports.routes');
 app.use('/api', reportsRoutes);
 
+// 🔥 NOVA ROTA (PROFISSIONAL)
 const professionalMeRoutes = require('./routes/professional.me.routes');
 app.use('/api', professionalMeRoutes);
 
