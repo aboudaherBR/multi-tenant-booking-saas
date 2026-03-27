@@ -10,7 +10,8 @@ app.set('trust proxy', 1);
 // ✅ CORS SIMPLES E FUNCIONAL
 const allowedOrigins = [
   "https://barber-shop-indol-three.vercel.app",
-  "https://barber-shop-git-feature-professional-84c6f1-aboudahers-projects.vercel.app"
+  "https://barber-shop-git-feature-professional-84c6f1-aboudahers-projects.vercel.app",
+  "https://barber-shop-git-public-booking-flow-aboudahers-projects.vercel.app"
 ]; // 🔥 FALTAVA FECHAR AQUI
 
 app.use(cors({
