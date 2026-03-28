@@ -16,10 +16,10 @@ function App() {
       {/* 🔥 ROTA PÚBLICA */}
       <Route path="/book/:slug" element={<BookPublic />} />
 
-      {/* 🔥 LOGIN (AGORA SOMENTE COM SLUG) */}
+      {/* 🔥 LOGIN (COM SLUG) */}
       <Route path="/:slug/login" element={<LoginPage />} />
 
-      {/* 🔒 ROTAS PROTEGIDAS */}
+      {/* 🔒 ROTAS ADMIN (COM LAYOUT) */}
       <Route element={<ProtectedLayout />}>
         <Route path="/" element={<Dashboard />} />
         <Route path="/appointments" element={<AppointmentsPage />} />
@@ -27,8 +27,10 @@ function App() {
         <Route path="/schedule" element={<ScheduleWizard />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/reports" element={<ReportsPage />} />
+      </Route>
 
-        {/* 🔥 PROFISSIONAL */}
+      {/* 🔥 PROFISSIONAL (SEM LAYOUT DO ADMIN) */}
+      <Route element={<ProtectedLayout />}>
         <Route path="/professional" element={<ProfessionalDashboard />} />
       </Route>
 
