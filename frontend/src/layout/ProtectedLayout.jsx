@@ -10,7 +10,7 @@ function ProtectedLayout() {
   }
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/salao-rocha/login" replace />;
   }
 
   return (
