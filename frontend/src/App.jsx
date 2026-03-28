@@ -8,19 +8,18 @@ import AppointmentsPage from './pages/AppointmentsPage';
 import SettingsPage from './pages/SettingsPage';
 import ReportsPage from "./pages/ReportsPage";
 import BookPublic from "./pages/BookPublic";
-import ProfessionalDashboard from "./pages/ProfessionalDashboard"; // 🔥 NOVO
+import ProfessionalDashboard from "./pages/ProfessionalDashboard";
 
 function App() {
   return (
     <Routes>
-      {/* 🔥 ROTA PÚBLICA (TEM QUE VIR ANTES) */}
+      {/* 🔥 ROTA PÚBLICA */}
       <Route path="/book/:slug" element={<BookPublic />} />
 
-      {/* LOGIN */}
+      {/* 🔥 LOGIN (AGORA SOMENTE COM SLUG) */}
       <Route path="/:slug/login" element={<LoginPage />} />
-      <Route path="/login" element={<LoginPage />} />
 
-      {/* ROTAS PROTEGIDAS */}
+      {/* 🔒 ROTAS PROTEGIDAS */}
       <Route element={<ProtectedLayout />}>
         <Route path="/" element={<Dashboard />} />
         <Route path="/appointments" element={<AppointmentsPage />} />
@@ -29,11 +28,11 @@ function App() {
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/reports" element={<ReportsPage />} />
 
-        {/* 🔥 NOVA ROTA DO PROFISSIONAL */}
+        {/* 🔥 PROFISSIONAL */}
         <Route path="/professional" element={<ProfessionalDashboard />} />
       </Route>
 
-      {/* FALLBACK */}
+      {/* 🔁 FALLBACK */}
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );
