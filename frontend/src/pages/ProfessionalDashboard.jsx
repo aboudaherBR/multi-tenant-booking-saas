@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import api from "../api/apiClient";
 
 export default function ProfessionalDashboard() {
+  console.log("PROFESSIONAL NOVO CARREGADO");
   const [data, setData] = useState(null);
 
   async function fetchAppointments() {
