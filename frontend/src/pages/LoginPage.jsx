@@ -17,14 +17,12 @@ function LoginPage() {
     alert("clicou no login");
 
     try {
-      const success = await login({ slug, username, password });
+      const loggedUser = await login({ slug, username, password });
 
-      if (success) {
-        alert("login sucesso");
+      if (loggedUser) {
+        console.log('USER NO LOGIN:', loggedUser);
 
-        console.log('USER NO LOGIN:', user); // 🔥 ADICIONADO
-
-        if (user?.isProfessional) {
+        if (loggedUser.isProfessional) {
           navigate('/professional');
         } else {
           navigate('/');

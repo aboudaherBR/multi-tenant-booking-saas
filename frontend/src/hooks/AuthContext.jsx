@@ -69,7 +69,7 @@ function AuthProvider({ children }) {
 
         setIsAuthenticated(true);
 
-        return true; // 🔥 CORREÇÃO PRINCIPAL
+        return payload;
       } else {
         throw new Error("token não veio");
       }
