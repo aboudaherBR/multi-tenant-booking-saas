@@ -16,6 +16,11 @@ async function login(req, res, next) {
 
     if (slug) {
       const company = await findCompanyBySlug(slug);
+      console.log({
+        slug,
+        companyId: company?.id,
+        username
+      });
 
       if (!company) {
         throw new Error('Invalid credentials');

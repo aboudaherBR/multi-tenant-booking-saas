@@ -7,7 +7,7 @@ const app = express();
 
 app.set('trust proxy', 1);
 
-// ✅ CORS SIMPLES E FUNCIONAL
+
 const allowedOrigins = [
   "https://barber-shop-indol-three.vercel.app",
   "https://barber-shop-git-feature-professional-84c6f1-aboudahers-projects.vercel.app",
