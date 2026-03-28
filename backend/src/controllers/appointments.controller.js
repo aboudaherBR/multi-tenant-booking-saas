@@ -1,14 +1,15 @@
 const {
   createAppointment,
   findConflicts,
-  findAppointmentsByDate
+  findAppointmentsByDate,
+  cancelAppointment,
+  findProfessionalByUserId
 } = require('../database/appointments.repository');
 
 const { findServiceForProfessional } = require('../database/services.repository');
 const { findCompanyById } = require('../database/companies.repository');
 const { findScheduleBlocksByProfessionalAndDate } = require('../database/scheduleBlocks.repository');
 const { normalizeBrazilianPhone } = require('../utils/phone.utils');
-const { cancelAppointment } = require('../database/appointments.repository');
 
 const {
   findClientByPhone,
