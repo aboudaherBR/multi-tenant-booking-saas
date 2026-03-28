@@ -18,7 +18,9 @@ function AuthProvider({ children }) {
         setUser({
           name: payload.name,
           userId: payload.userId,
-          companyId: payload.companyId
+          companyId: payload.companyId,
+          isCompanyAdmin: payload.isCompanyAdmin,
+          isProfessional: payload.isProfessional
         });
 
         setIsAuthenticated(true);
