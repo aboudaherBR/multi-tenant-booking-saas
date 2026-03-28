@@ -228,10 +228,7 @@ async function cancel(req, res, next) {
   }
 }
 
-const {
-  findAppointmentsByDate,
-  findProfessionalByUserId
-} = require('../database/appointments.repository');
+
 
 async function getMyAppointments(req, res, next) {
   try {
@@ -261,9 +258,7 @@ async function getMyAppointments(req, res, next) {
     });
 
     // 🔥 4. calcular total
-    const totalAmount = appointments.reduce((sum, appt) => {
-      return sum + (Number(appt.service_price_snapshot) || 0);
-    }, 0);
+    const totalAmount = 0;
 
     return res.json({
       totalAmount,
