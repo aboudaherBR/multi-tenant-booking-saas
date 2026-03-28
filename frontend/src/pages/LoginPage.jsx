@@ -9,7 +9,7 @@ function LoginPage() {
 
   const navigate = useNavigate();
   const { slug } = useParams();
-  const { login } = useAuth();
+  const { login, user } = useAuth();
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -21,9 +21,14 @@ function LoginPage() {
 
       if (success) {
         alert("login sucesso");
-        navigate('/'); // 🔥 ESSENCIAL
-      } else {
-        alert("falha no login");
+
+        console.log('USER NO LOGIN:', user); // 🔥 ADICIONADO
+
+        if (user?.isProfessional) {
+          navigate('/professional');
+        } else {
+          navigate('/');
+        }
       }
 
     } catch (err) {
