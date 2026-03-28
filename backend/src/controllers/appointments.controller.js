@@ -270,7 +270,11 @@ async function getMyAppointments(req, res, next) {
     });
 
   } catch (error) {
-    next(error);
+    console.error("🔥 ERRO REAL:", error);
+    return res.status(500).json({
+      message: error.message,
+      stack: error.stack
+    });
   }
 }
 
