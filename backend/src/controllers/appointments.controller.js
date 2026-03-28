@@ -227,11 +227,58 @@ async function cancel(req, res, next) {
   }
 }
 
+const {
+  findAppointmentsByDate,
+  findProfessionalByUserId
+} = require('../database/appointments.repository');
+
+async function getMyAppointments(req, res, next) {
+  try {
+    const companyId = req.user.companyId;
+    const userId = req.user.userId;
+
+    // 🔥 1. buscar professional vinculado ao usuário
+    const professional = await findProfessionalByUserId({
+      userId,
+      companyId
+    });
+
+    if (!professional) {
+      return res.status(404).json({
+        message: 'Profissional não encontrado'
+      });
+    }
+
+    // 🔥 2. data de hoje
+    const today = new Date().toISOString().split('T')[0];
+
+    // 🔥 3. buscar agendamentos
+    const appointments = await findAppointmentsByDate({
+      companyId,
+      date: today,
+      professionalId: professional.id
+    });
+
+    // 🔥 4. calcular total
+    const totalAmount = appointments.reduce((sum, appt) => {
+      return sum + (Number(appt.service_price_snapshot) || 0);
+    }, 0);
+
+    return res.json({
+      totalAmount,
+      appointments
+    });
+
+  } catch (error) {
+    next(error);
+  }
+}
+
 
 
 module.exports = {
   create,
   list,
   cancel,
-  cancel
+  getMyAppointments
 };

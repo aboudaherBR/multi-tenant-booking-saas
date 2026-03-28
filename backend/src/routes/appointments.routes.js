@@ -22,4 +22,10 @@ router.delete(
   appointmentsController.cancel
 );
 
+router.get(
+  '/professional/me/appointments',
+  requireAuth,
+  appointmentsController.getMyAppointments
+);
+
 module.exports = router;
