@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useAuth } from '../../hooks/AuthContext.jsx';
+import { useAuth } from '../hooks/AuthContext';
 
 function LoginPage() {
   const { login, isAuthenticated, user, loading } = useAuth();
