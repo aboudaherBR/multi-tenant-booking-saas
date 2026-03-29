@@ -13,9 +13,11 @@ function LoginPage() {
 
   // 🚀 REDIRECIONAMENTO BASEADO NO AUTH CONTEXT
   useEffect(() => {
+    console.log("USER NO EFFECT:", user);
+
     if (loading) return;
     if (!isAuthenticated) return;
-    if (!user) return;
+    if (!user || user.isProfessional === undefined) return;
 
     if (user.isProfessional) {
       navigate('/professional', { replace: true });
