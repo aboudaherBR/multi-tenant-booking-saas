@@ -1,36 +1,37 @@
-import { useState } from 'react';
+
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useAuth } from '../hooks/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 
 function LoginPage() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-
+  const { login, isAuthenticated, user, loading } = useAuth();
   const navigate = useNavigate();
   const { slug } = useParams();
-  const { login, user } = useAuth();
+
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  // 🚀 REDIRECIONAMENTO BASEADO NO AUTH CONTEXT
+  useEffect(() => {
+    if (loading) return;
+    if (!isAuthenticated) return;
+    if (!user) return;
+
+    if (user.isProfessional) {
+      navigate('/professional', { replace: true });
+    } else {
+      navigate('/', { replace: true });
+    }
+  }, [loading, isAuthenticated, user, navigate]);
 
   async function handleSubmit(e) {
     e.preventDefault();
 
-    alert("clicou no login");
-
     try {
-      const loggedUser = await login({ slug, username, password });
-
-      if (loggedUser) {
-        console.log('USER NO LOGIN:', loggedUser);
-
-        if (loggedUser.isProfessional) {
-          navigate('/professional');
-        } else {
-          navigate('/');
-        }
-      }
-
-    } catch (err) {
-      alert("erro no login");
+      await login({ slug, username, password });
+      // ❌ NÃO REDIRECIONA AQUI
+    } catch (error) {
+      console.error('Erro no login:', error);
     }
   }
 
@@ -39,26 +40,31 @@ function LoginPage() {
       <h2>Login</h2>
 
       <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
+        <div>
+          <label>Usuário</label>
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+        </div>
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        <div>
+          <label>Senha</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
 
-        <button type="submit">Login</button>
+        <button type="submit">Entrar</button>
       </form>
-
-      {error && <p style={{ color: 'red' }}>{error}</p>}
     </div>
   );
 }
 
 export default LoginPage;
+
