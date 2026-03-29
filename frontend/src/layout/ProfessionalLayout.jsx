@@ -1,6 +1,7 @@
+import { Outlet } from 'react-router-dom';
 import styles from './AppLayout.module.css';
 
-function ProfessionalLayout({ children }) {
+function ProfessionalLayout() {
   return (
     <div className={styles.appContainer}>
       <header className={styles.header}>
@@ -8,7 +9,7 @@ function ProfessionalLayout({ children }) {
       </header>
 
       <main className={styles.main}>
-        {children}
+        <Outlet />
       </main>
     </div>
   );
