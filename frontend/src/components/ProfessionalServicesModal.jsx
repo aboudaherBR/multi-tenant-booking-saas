@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import apiClient from "../api/apiClient";
 
 export default function ProfessionalServicesModal({
@@ -7,8 +7,6 @@ export default function ProfessionalServicesModal({
     onClose,
     onServiceAdded
 }) {
-
-    if (!professional) return null;
 
     const [showAddService, setShowAddService] = useState(false);
     const [selectedServiceId, setSelectedServiceId] = useState("");
@@ -30,9 +28,6 @@ export default function ProfessionalServicesModal({
         }
     }
 
-    useEffect(() => {
-        loadAvailableServices();
-    }, []);
 
     async function saveProfessionalService() {
 
@@ -103,6 +98,10 @@ export default function ProfessionalServicesModal({
         }
     }
 
+    if (!professional) {
+        return null;
+    }
+
     return (
         <div style={{
             position: "fixed",
@@ -143,7 +142,10 @@ export default function ProfessionalServicesModal({
 
                 <button
                     style={{ marginBottom: "16px" }}
-                    onClick={() => setShowAddService(true)}
+                    onClick={async () => {
+                        setShowAddService(true);
+                        await loadAvailableServices();
+                    }}
                 >
                     + Adicionar serviço
                 </button>
