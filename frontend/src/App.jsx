@@ -12,6 +12,7 @@ import SettingsPage from './pages/SettingsPage';
 import ReportsPage from "./pages/ReportsPage";
 import BookPublic from "./pages/BookPublic";
 import ProfessionalDashboard from "./pages/ProfessionalDashboard";
+import ProfessionalAppointments from "./pages/ProfessionalAppointments";
 
 function App() {
   return (
@@ -34,10 +35,9 @@ function App() {
       </Route>
 
       {/* 🔒 PROFESSIONAL */}
-      <Route element={<ProtectedLayout />}>
-        <Route element={<ProfessionalLayout />}>
-          <Route path="/professional" element={<ProfessionalDashboard />} />
-        </Route>
+      <Route element={<ProfessionalLayout />}>
+        <Route path="/professional" element={<ProfessionalDashboard />} />
+        <Route path="/professional/appointments" element={<ProfessionalAppointments />} />
       </Route>
 
       {/* FALLBACK */}
