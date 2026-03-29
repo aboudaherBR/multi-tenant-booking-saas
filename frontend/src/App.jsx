@@ -35,9 +35,11 @@ function App() {
       </Route>
 
       {/* 🔒 PROFESSIONAL */}
-      <Route element={<ProfessionalLayout />}>
-        <Route path="/professional" element={<ProfessionalDashboard />} />
-        <Route path="/professional/appointments" element={<ProfessionalAppointments />} />
+      <Route element={<ProtectedLayout />}>
+        <Route element={<ProfessionalLayout />}>
+          <Route path="/professional" element={<ProfessionalDashboard />} />
+          <Route path="/professional/appointments" element={<ProfessionalAppointments />} />
+        </Route>
       </Route>
 
       {/* FALLBACK */}
