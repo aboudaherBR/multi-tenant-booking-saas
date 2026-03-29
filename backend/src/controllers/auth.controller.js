@@ -32,7 +32,10 @@ async function login(req, res, next) {
     }
 
     const professional = user.company_id
-      ? await findProfessionalByUserId(user.company_id, user.id)
+      ? await findProfessionalByUserId({
+        userId: user.id,
+        companyId: user.company_id
+      })
       : null;
 
     // 🔥 LOG PRA DEBUG (MUITO IMPORTANTE)

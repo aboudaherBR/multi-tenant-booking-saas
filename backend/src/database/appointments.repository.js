@@ -59,22 +59,9 @@ async function createAppointment({
   return result.rows[0];
 }
 
-async function findProfessionalByUserId({ userId, companyId }) {
-  const result = await pool.query(
-    `
-    SELECT id
-    FROM professionals
-    WHERE user_id = $1
-      AND company_id = $2
-    `,
-    [userId, companyId]
-  );
 
-  return result.rows[0];
-}
 
 module.exports = {
-  createAppointment,
-  findProfessionalByUserId
+  createAppointment
 };
 
