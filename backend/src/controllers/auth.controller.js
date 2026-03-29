@@ -5,7 +5,6 @@ const jwt = require('jsonwebtoken');
 
 async function login(req, res, next) {
   try {
-
     const { slug, username, password } = req.body;
 
     if (!username || !password) {
@@ -16,6 +15,7 @@ async function login(req, res, next) {
 
     if (slug) {
       const company = await findCompanyBySlug(slug);
+
       console.log({
         slug,
         companyId: company?.id,
@@ -35,12 +35,19 @@ async function login(req, res, next) {
       ? await findProfessionalByUserId(user.company_id, user.id)
       : null;
 
+    // 🔥 LOG PRA DEBUG (MUITO IMPORTANTE)
+    console.log('USER:', user);
+    console.log('PROFESSIONAL:', professional);
+
     const payload = {
       userId: user.id,
       name: user.name,
       companyId: user.company_id,
       isCompanyAdmin: user.is_company_admin,
-      isProfessional: Boolean(professional),
+
+      // 🔥 CORREÇÃO AQUI
+      isProfessional: Boolean(professional) || user.is_professional === true,
+
       isSuperAdmin: user.company_id === null
     };
 
@@ -54,12 +61,9 @@ async function login(req, res, next) {
     });
 
   } catch (error) {
-
-
     return res.status(401).json({
       message: 'Invalid credentials'
     });
-
   }
 }
 

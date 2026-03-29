@@ -18,7 +18,12 @@ function LoginPage() {
 
     if (loading) return;
     if (!isAuthenticated) return;
-    if (!user || user.isProfessional === undefined) return;
+    if (
+      loading ||
+      !isAuthenticated ||
+      !user ||
+      typeof user.isProfessional !== 'boolean'
+    ) return;
 
     if (user.isProfessional) {
       navigate('/professional', { replace: true });
