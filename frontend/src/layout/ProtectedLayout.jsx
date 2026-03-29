@@ -2,6 +2,7 @@ import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/AuthContext';
 import AppLayout from './AppLayout';
 
+
 function ProtectedLayout() {
   const { isAuthenticated, loading, user } = useAuth();
   const location = useLocation();
