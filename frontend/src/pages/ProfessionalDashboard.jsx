@@ -37,7 +37,7 @@ export default function ProfessionalDashboard() {
 
       {/* 🔥 BOTÕES */}
       <div style={{ marginTop: 20, marginBottom: 20 }}>
-        <button onClick={() => navigate('/appointments')}>
+        <button onClick={() => navigate('/professional/appointments')}>
           Agenda
         </button>
 
