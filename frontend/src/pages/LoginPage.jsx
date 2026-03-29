@@ -13,7 +13,8 @@ function LoginPage() {
 
   // 🚀 REDIRECIONAMENTO BASEADO NO AUTH CONTEXT
   useEffect(() => {
-    console.log("USER NO EFFECT:", user);
+    console.log("USER COMPLETO:", user);
+    console.log("isProfessional:", user?.isProfessional);
 
     if (loading) return;
     if (!isAuthenticated) return;
