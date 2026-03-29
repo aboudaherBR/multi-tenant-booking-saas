@@ -1,6 +1,7 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/AuthContext';
 import AppLayout from './AppLayout';
+import ProfessionalLayout from './ProfessionalLayout';
 
 
 function ProtectedLayout() {
@@ -22,7 +23,11 @@ function ProtectedLayout() {
 
   // 🔥 PROFISSIONAL NÃO USA AppLayout
   if (location.pathname === '/professional') {
-    return <Outlet />;
+    return (
+      <ProfessionalLayout>
+        <Outlet />
+      </ProfessionalLayout>
+    );
   }
 
   // 🔥 ADMIN USA AppLayout
