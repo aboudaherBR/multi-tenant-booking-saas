@@ -1,6 +1,9 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import ProtectedLayout from './layout/ProtectedLayout';
+import AppLayout from './layout/AppLayout';
+import ProfessionalLayout from './layout/ProfessionalLayout';
+
 import ClientsPage from './pages/ClientsPage';
 import ScheduleWizard from './pages/ScheduleWizard';
 import Dashboard from './pages/Dashboard';
@@ -13,29 +16,33 @@ import ProfessionalDashboard from "./pages/ProfessionalDashboard";
 function App() {
   return (
     <Routes>
-      {/* 🔥 ROTA PÚBLICA */}
-      <Route path="/book/:slug" element={<BookPublic />} />
 
-      {/* 🔥 LOGIN (COM SLUG) */}
+      {/* PUBLIC */}
+      <Route path="/book/:slug" element={<BookPublic />} />
       <Route path="/:slug/login" element={<LoginPage />} />
 
-      {/* 🔒 ROTAS ADMIN (COM LAYOUT) */}
+      {/* 🔒 ADMIN */}
       <Route element={<ProtectedLayout />}>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/appointments" element={<AppointmentsPage />} />
-        <Route path="/clients" element={<ClientsPage />} />
-        <Route path="/schedule" element={<ScheduleWizard />} />
-        <Route path="/settings" element={<SettingsPage />} />
-        <Route path="/reports" element={<ReportsPage />} />
+        <Route element={<AppLayout />}>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/appointments" element={<AppointmentsPage />} />
+          <Route path="/clients" element={<ClientsPage />} />
+          <Route path="/schedule" element={<ScheduleWizard />} />
+          <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/reports" element={<ReportsPage />} />
+        </Route>
       </Route>
 
-      {/* 🔥 PROFISSIONAL (SEM LAYOUT DO ADMIN) */}
+      {/* 🔒 PROFESSIONAL */}
       <Route element={<ProtectedLayout />}>
-        <Route path="/professional" element={<ProfessionalDashboard />} />
+        <Route element={<ProfessionalLayout />}>
+          <Route path="/professional" element={<ProfessionalDashboard />} />
+        </Route>
       </Route>
 
-      {/* 🔁 FALLBACK */}
+      {/* FALLBACK */}
       <Route path="*" element={<Navigate to="/" />} />
+
     </Routes>
   );
 }

@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "../api/apiClient";
 import { useAuth } from "../hooks/AuthContext";
 
 export default function ProfessionalDashboard() {
-  console.log("PROFESSIONAL NOVO CARREGADO");
+  const navigate = useNavigate();
+  const { user } = useAuth();
   const [data, setData] = useState(null);
 
   async function fetchAppointments() {
@@ -25,15 +27,6 @@ export default function ProfessionalDashboard() {
 
   if (!data) return <div>Carregando...</div>;
 
-  if (data.appointments.length === 0) {
-    return (
-      <div style={{ padding: 20 }}>
-        <h1>Olá</h1>
-        <h2>Nenhum agendamento hoje</h2>
-      </div>
-    );
-  }
-
   return (
     <div style={{ padding: 20 }}>
       <h1>Olá, {user?.name}</h1>
@@ -42,13 +35,31 @@ export default function ProfessionalDashboard() {
         Agendamentos de hoje — R$ {data.totalAmount}
       </h2>
 
-      <ul>
-        {data.appointments.map((appt) => (
-          <li key={appt.id}>
-            {appt.start_time} - {appt.client_name} ({appt.service_name})
-          </li>
-        ))}
-      </ul>
+      {/* 🔥 BOTÕES */}
+      <div style={{ marginTop: 20, marginBottom: 20 }}>
+        <button onClick={() => navigate('/appointments')}>
+          Agenda
+        </button>
+
+        <button
+          style={{ marginLeft: 10 }}
+          onClick={() => navigate('/reports')}
+        >
+          Relatórios
+        </button>
+      </div>
+
+      {data.appointments.length === 0 ? (
+        <p>Nenhum agendamento hoje</p>
+      ) : (
+        <ul>
+          {data.appointments.map((appt) => (
+            <li key={appt.id}>
+              {appt.start_time} - {appt.client_name} ({appt.service_name})
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
