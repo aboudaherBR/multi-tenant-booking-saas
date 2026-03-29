@@ -36,7 +36,7 @@ function App() {
 
       {/* 🔒 PROFESSIONAL */}
       <Route element={<ProtectedLayout />}>
-        <Route element={<ProfessionalLayout />}>
+        <Route path="/professional" element={<ProfessionalLayout />}>
           <Route path="/professional" element={<ProfessionalDashboard />} />
           <Route path="/professional/appointments" element={<ProfessionalAppointments />} />
         </Route>
