@@ -1,27 +1,45 @@
 const jwt = require('jsonwebtoken');
 
-function requireAuth(req, res, next) {
-  const authHeader = req.headers.authorization;
-
-  if (!authHeader) {
-    return res.status(401).json({ message: 'Token não fornecido' });
-  }
-
-  const token = authHeader.split(' ')[1];
-
+function authMiddleware(req, res, next) {
   try {
+    const authHeader = req.headers.authorization;
+
+    // 🔴 Validação básica do header
+    if (!authHeader) {
+      return res.status(401).json({ error: 'Token não fornecido' });
+    }
+
+    const parts = authHeader.split(' ');
+
+    if (parts.length !== 2) {
+      return res.status(401).json({ error: 'Formato do token inválido' });
+    }
+
+    const [scheme, token] = parts;
+
+    if (!/^Bearer$/i.test(scheme)) {
+      return res.status(401).json({ error: 'Token mal formatado' });
+    }
+
+    // 🔴 Verifica o token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    req.user = decoded;
+    // 🔥 PADRONIZAÇÃO GLOBAL DO USER (CONTRATO ÚNICO)
+    req.user = {
+      id: decoded.userId,                // padrão principal
+      userId: decoded.userId,            // compatibilidade
+      companyId: decoded.companyId,
+      isProfessional: decoded.isProfessional,
+      isCompanyAdmin: decoded.isCompanyAdmin,
+      isSuperAdmin: decoded.isSuperAdmin
+    };
 
-    console.log("👤 USER JWT:", decoded); // 🔍 DEBUG
+    return next();
 
-    next();
   } catch (error) {
-    return res.status(401).json({ message: 'Token inválido' });
+    console.error('Auth middleware error:', error);
+    return res.status(401).json({ error: 'Token inválido' });
   }
 }
 
-module.exports = {
-  requireAuth
-};
+module.exports = authMiddleware;
