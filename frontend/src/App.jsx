@@ -12,6 +12,7 @@ import ReportsPage from "./pages/ReportsPage";
 import BookPublic from "./pages/BookPublic";
 import ProfessionalDashboard from "./pages/ProfessionalDashboard";
 import ProfessionalLayout from "./layout/ProfessionalLayout";
+import ProfessionalSchedulePage from "./pages/ProfessionalSchedulePage";
 
 function App() {
   const { isAuthenticated, user } = useAuth(); // 🔥 ADICIONADO
