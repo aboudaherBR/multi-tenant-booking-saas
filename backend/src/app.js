@@ -10,14 +10,35 @@ app.set('trust proxy', 1);
 
 const allowedOrigins = [
   "https://barber-shop-indol-three.vercel.app",
-  "https://barber-shop-git-feature-professional-84c6f1-aboudahers-projects.vercel.app",
-  "https://barber-shop-git-public-booking-flow-aboudahers-projects.vercel.app"
-]; // 🔥 FALTAVA FECHAR AQUI
+];
 
-app.use(cors({
-  origin: allowedOrigins,
-  credentials: true
-}));
+const corsOptions = {
+  origin: (origin, callback) => {
+    // permite requisições sem origin (Postman, mobile, etc)
+    if (!origin) return callback(null, true);
+
+    // permite localhost
+    if (origin.includes("localhost")) {
+      return callback(null, true);
+    }
+
+    // permite QUALQUER deploy do Vercel
+    if (origin.includes("vercel.app")) {
+      return callback(null, true);
+    }
+
+    // permite lista fixa (produção principal)
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    return callback(new Error("Not allowed by CORS"));
+  },
+};
+
+app.use(cors(corsOptions));
+
+app.options('*', cors(corsOptions));
 
 app.use(express.json());
 
