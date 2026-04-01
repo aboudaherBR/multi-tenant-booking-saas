@@ -1,3 +1,8 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import apiClient from "../api/apiClient";
+import { useAuth } from "../hooks/AuthContext";
+
 export default function Dashboard() {
     const { user } = useAuth();
 
@@ -9,10 +14,10 @@ export default function Dashboard() {
 
     async function loadDashboard() {
         try {
-            const response = await apiClient("/dashboard/today");
+            const data = await apiClient("/dashboard/today");
 
-            // 🔥 GARANTE QUE É ARRAY
-            setAppointments(Array.isArray(response) ? response : []);
+            // 🔥 garante que é array
+            setAppointments(Array.isArray(data) ? data : []);
             setError(null);
         } catch (err) {
             console.error(err);
@@ -22,10 +27,12 @@ export default function Dashboard() {
         }
     }
 
+    // 🔹 carga inicial
     useEffect(() => {
         loadDashboard();
     }, []);
 
+    // 🔥 polling
     useEffect(() => {
         const interval = setInterval(() => {
             loadDashboard();
@@ -43,13 +50,14 @@ export default function Dashboard() {
 
             <h2>Hoje</h2>
 
+            {/* 🔥 agora correto */}
             <p>Atendimentos: {appointments.length}</p>
 
             <h2>Agendamentos</h2>
+
             <ul>
                 {appointments.map((appointment) => (
                     <li key={appointment.id}>
-                        {/* 🔥 FORMATANDO DATA */}
                         {new Date(appointment.date).toLocaleDateString()} — {appointment.start_time}
                     </li>
                 ))}
