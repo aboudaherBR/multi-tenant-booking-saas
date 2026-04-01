@@ -14,22 +14,18 @@ const allowedOrigins = [
 
 const corsOptions = {
   origin: (origin, callback) => {
-    // permite requisições sem origin (Postman, mobile, etc)
     if (!origin) return callback(null, true);
 
-    // permite localhost
     if (origin.includes("localhost")) {
-      return callback(null, true);
+      return callback(null, origin);
     }
 
-    // permite QUALQUER deploy do Vercel
     if (origin.includes("vercel.app")) {
-      return callback(null, true);
+      return callback(null, origin);
     }
 
-    // permite lista fixa (produção principal)
     if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
+      return callback(null, origin);
     }
 
     return callback(new Error("Not allowed by CORS"));
