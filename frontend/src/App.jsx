@@ -10,7 +10,8 @@ import AppointmentsPage from './pages/AppointmentsPage';
 import SettingsPage from './pages/SettingsPage';
 import ReportsPage from "./pages/ReportsPage";
 import BookPublic from "./pages/BookPublic";
-import ProfessionalDashboard from "./pages/ProfessionalDashboard"; 
+import ProfessionalDashboard from "./pages/ProfessionalDashboard";
+import ProfessionalLayout from "./layout/ProfessionalLayout";
 
 function App() {
   const { isAuthenticated, user } = useAuth(); // 🔥 ADICIONADO
@@ -36,13 +37,14 @@ function App() {
 
       {/* 🔥 ROTA PROFISSIONAL PROTEGIDA */}
       <Route
-        path="/professional"
         element={
           isAuthenticated && user?.isProfessional
-            ? <ProfessionalDashboard />
+            ? <ProfessionalLayout />
             : <Navigate to="/login" />
         }
-      />
+      >
+        <Route path="/professional" element={<ProfessionalDashboard />} />
+      </Route>
 
       {/* FALLBACK */}
       <Route path="*" element={<Navigate to="/" />} />
