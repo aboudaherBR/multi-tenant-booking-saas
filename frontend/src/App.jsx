@@ -44,6 +44,7 @@ function App() {
         }
       >
         <Route path="/professional" element={<ProfessionalDashboard />} />
+        <Route path="/professional/schedule" element={<ProfessionalSchedulePage />} />
       </Route>
 
       {/* FALLBACK */}
