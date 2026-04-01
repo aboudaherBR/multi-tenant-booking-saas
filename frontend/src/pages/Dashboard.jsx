@@ -1,12 +1,7 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import apiClient from "../api/apiClient";
-import { useAuth } from "../hooks/AuthContext";
-
 export default function Dashboard() {
     const { user } = useAuth();
 
-    const [stats, setStats] = useState(null);
+    const [appointments, setAppointments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -14,8 +9,10 @@ export default function Dashboard() {
 
     async function loadDashboard() {
         try {
-            const data = await apiClient("/dashboard/today");
-            setStats(data);
+            const response = await apiClient("/dashboard/today");
+
+            // 🔥 GARANTE QUE É ARRAY
+            setAppointments(Array.isArray(response) ? response : []);
             setError(null);
         } catch (err) {
             console.error(err);
@@ -25,20 +22,16 @@ export default function Dashboard() {
         }
     }
 
-    // 🔹 carga inicial
     useEffect(() => {
         loadDashboard();
     }, []);
 
-    // 🔥 polling (produção real)
     useEffect(() => {
-
         const interval = setInterval(() => {
             loadDashboard();
         }, 5000);
 
         return () => clearInterval(interval);
-
     }, []);
 
     if (loading) return <div>Carregando...</div>;
@@ -50,15 +43,14 @@ export default function Dashboard() {
 
             <h2>Hoje</h2>
 
-            <p>Atendimentos: {stats?.totalAppointments}</p>
-            <p>Faturamento: R$ {stats?.totalRevenue}</p>
+            <p>Atendimentos: {appointments.length}</p>
 
-            <h2>Serviços</h2>
-
+            <h2>Agendamentos</h2>
             <ul>
-                {stats?.services?.map((service, index) => (
-                    <li key={index}>
-                        {service.name} — {service.count}
+                {appointments.map((appointment) => (
+                    <li key={appointment.id}>
+                        {/* 🔥 FORMATANDO DATA */}
+                        {new Date(appointment.date).toLocaleDateString()} — {appointment.start_time}
                     </li>
                 ))}
             </ul>
