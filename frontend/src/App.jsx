@@ -1,4 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { useAuth } from './hooks/AuthContext'; // 🔥 ADICIONADO
+
 import LoginPage from './pages/LoginPage';
 import ProtectedLayout from './layout/ProtectedLayout';
 import ClientsPage from './pages/ClientsPage';
@@ -8,9 +10,11 @@ import AppointmentsPage from './pages/AppointmentsPage';
 import SettingsPage from './pages/SettingsPage';
 import ReportsPage from "./pages/ReportsPage";
 import BookPublic from "./pages/BookPublic";
-import ProfessionalDashboard from "./pages/ProfessionalDashboard"; // 🔥 NOVO
+import ProfessionalDashboard from "./pages/ProfessionalDashboard"; 
 
 function App() {
+  const { isAuthenticated, user } = useAuth(); // 🔥 ADICIONADO
+
   return (
     <Routes>
       {/* 🔥 ROTA PÚBLICA (TEM QUE VIR ANTES) */}
@@ -20,7 +24,7 @@ function App() {
       <Route path="/:slug/login" element={<LoginPage />} />
       <Route path="/login" element={<LoginPage />} />
 
-      {/* ROTAS PROTEGIDAS */}
+      {/* ROTAS ADMIN */}
       <Route element={<ProtectedLayout />}>
         <Route path="/" element={<Dashboard />} />
         <Route path="/appointments" element={<AppointmentsPage />} />
@@ -28,10 +32,17 @@ function App() {
         <Route path="/schedule" element={<ScheduleWizard />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/reports" element={<ReportsPage />} />
-
-        {/* 🔥 NOVA ROTA DO PROFISSIONAL */}
-        <Route path="/professional" element={<ProfessionalDashboard />} />
       </Route>
+
+      {/* 🔥 ROTA PROFISSIONAL PROTEGIDA */}
+      <Route
+        path="/professional"
+        element={
+          isAuthenticated && user?.isProfessional
+            ? <ProfessionalDashboard />
+            : <Navigate to="/login" />
+        }
+      />
 
       {/* FALLBACK */}
       <Route path="*" element={<Navigate to="/" />} />
