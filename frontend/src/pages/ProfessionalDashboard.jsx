@@ -6,8 +6,8 @@ export default function ProfessionalDashboard() {
 
   async function fetchAppointments() {
     try {
-      const res = await api.get("/professional/me/appointments");
-      setData(res.data);
+      const data = await api("/professional/me/appointments");
+      setData(data);
     } catch (error) {
       console.error("Erro ao buscar agendamentos:", error);
     }
