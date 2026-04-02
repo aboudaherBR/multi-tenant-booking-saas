@@ -6,6 +6,18 @@ import AvailabilityModal from "../components/AvailabilityModal";
 import ConfirmBookingModal from "../components/ConfirmBookingModal";
 import apiClient from "../api/apiClient";
 
+// 🔥 FUNÇÃO UTILITÁRIA (TOPO - PADRÃO CORRETO)
+function normalizePhone(value) {
+    const numbers = value.replace(/\D/g, "");
+    const trimmed = numbers.slice(0, 11);
+
+    if (trimmed.length === 11) {
+        return `+55${trimmed}`;
+    }
+
+    return null;
+}
+
 export default function BookPublic() {
     const { slug } = useParams();
 
@@ -44,12 +56,16 @@ export default function BookPublic() {
 
     async function handleConfirmBooking() {
         try {
+            console.log("📞 PHONE ORIGINAL:", phone);
+
             const normalizedPhone = normalizePhone(phone);
+            console.log("📞 NORMALIZED:", normalizedPhone);
 
             if (!normalizedPhone) {
                 alert("Telefone inválido. Digite um número válido com DDD.");
                 return;
             }
+
             const payload = {
                 companySlug: slug,
                 professionalSlug: selectedProfessional.slug,
@@ -76,20 +92,6 @@ export default function BookPublic() {
         }
     }
 
-    function normalizePhone(value) {
-        const numbers = value.replace(/\D/g, "");
-
-        // corta no máximo 11 dígitos
-        const trimmed = numbers.slice(0, 11);
-
-        // só aceita se tiver 11 dígitos (DDD + celular)
-        if (trimmed.length === 11) {
-            return `+55${trimmed}`;
-        }
-
-        return null;
-    }
-
     return (
         <div style={{ minHeight: "100vh", background: "#f5f5f5" }}>
 
@@ -102,7 +104,6 @@ export default function BookPublic() {
                     color: "#fff"
                 }}
             >
-                {/* LOGO (placeholder por enquanto) */}
                 <div style={{ marginBottom: "10px" }}>
                     <div
                         style={{
@@ -130,7 +131,6 @@ export default function BookPublic() {
                 }}
             >
 
-                {/* 🔥 TELA DE SUCESSO */}
                 {bookingSuccess ? (
                     <div style={{ textAlign: "center" }}>
                         <h2>Agendamento confirmado!</h2>
@@ -198,7 +198,6 @@ export default function BookPublic() {
                             Continuar agendamento
                         </button>
 
-                        {/* MODAIS (inalterados) */}
                         {showProfessionalsModal && (
                             <ProfessionalsModal
                                 professionals={professionals}
