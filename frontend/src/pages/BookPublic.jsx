@@ -71,11 +71,48 @@ export default function BookPublic() {
     }
 
     return (
-        <div style={{ padding: "20px", maxWidth: "400px", margin: "0 auto" }}>
+    <div style={{ minHeight: "100vh", background: "#f5f5f5" }}>
+
+        {/* 🔵 HEADER */}
+        <div
+            style={{
+                background: "linear-gradient(135deg, #0f172a, #1e293b)",
+                padding: "30px 20px",
+                textAlign: "center",
+                color: "#fff"
+            }}
+        >
+            {/* LOGO (placeholder por enquanto) */}
+            <div style={{ marginBottom: "10px" }}>
+                <div
+                    style={{
+                        width: "60px",
+                        height: "60px",
+                        borderRadius: "50%",
+                        background: "#fff",
+                        margin: "0 auto"
+                    }}
+                />
+            </div>
+
+            <h2 style={{ margin: 0 }}>Barbearia</h2>
+        </div>
+
+        {/* ⚪ CARD */}
+        <div
+            style={{
+                maxWidth: "400px",
+                margin: "-30px auto 0 auto",
+                background: "#fff",
+                borderRadius: "12px",
+                padding: "20px",
+                boxShadow: "0 10px 25px rgba(0,0,0,0.1)"
+            }}
+        >
 
             {/* 🔥 TELA DE SUCESSO */}
             {bookingSuccess ? (
-                <div style={{ textAlign: "center", marginTop: "40px" }}>
+                <div style={{ textAlign: "center" }}>
                     <h2>Agendamento confirmado!</h2>
 
                     <p><strong>Serviço:</strong> {selectedService?.name}</p>
@@ -89,14 +126,26 @@ export default function BookPublic() {
                 </div>
             ) : (
                 <>
-                    <h2>Agende seu horário</h2>
+                    <h2 style={{ marginBottom: "5px" }}>
+                        Agende seu horário
+                    </h2>
+
+                    <p style={{ marginBottom: "20px", color: "#666" }}>
+                        Leva menos de 1 minuto
+                    </p>
 
                     <input
                         type="text"
                         placeholder="Telefone"
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
-                        style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
+                        style={{
+                            width: "100%",
+                            padding: "12px",
+                            marginBottom: "10px",
+                            borderRadius: "8px",
+                            border: "1px solid #ddd"
+                        }}
                     />
 
                     <input
@@ -104,17 +153,32 @@ export default function BookPublic() {
                         placeholder="Nome"
                         value={clientName}
                         onChange={(e) => setClientName(e.target.value)}
-                        style={{ width: "100%", padding: "10px", marginBottom: "20px" }}
+                        style={{
+                            width: "100%",
+                            padding: "12px",
+                            marginBottom: "20px",
+                            borderRadius: "8px",
+                            border: "1px solid #ddd"
+                        }}
                     />
 
                     <button
                         onClick={handleStart}
-                        style={{ width: "100%", padding: "12px", cursor: "pointer" }}
+                        style={{
+                            width: "100%",
+                            padding: "14px",
+                            borderRadius: "8px",
+                            border: "none",
+                            background: "#0f172a",
+                            color: "#fff",
+                            fontWeight: "bold",
+                            cursor: "pointer"
+                        }}
                     >
-                        Procurar profissional
+                        Continuar agendamento
                     </button>
 
-                    {/* PROFISSIONAIS */}
+                    {/* MODAIS (inalterados) */}
                     {showProfessionalsModal && (
                         <ProfessionalsModal
                             professionals={professionals}
@@ -127,7 +191,6 @@ export default function BookPublic() {
                         />
                     )}
 
-                    {/* SERVIÇOS */}
                     {showServicesModal && selectedProfessional && (
                         <ServicesModal
                             slug={slug}
@@ -145,7 +208,6 @@ export default function BookPublic() {
                         />
                     )}
 
-                    {/* HORÁRIOS */}
                     {showAvailabilityModal && selectedProfessional && selectedService && (
                         <AvailabilityModal
                             slug={slug}
@@ -164,7 +226,6 @@ export default function BookPublic() {
                         />
                     )}
 
-                    {/* CONFIRMAÇÃO */}
                     {showConfirmModal && selectedSlot && (
                         <ConfirmBookingModal
                             professional={selectedProfessional}
@@ -181,5 +242,6 @@ export default function BookPublic() {
                 </>
             )}
         </div>
-    );
+    </div>
+);
 }
