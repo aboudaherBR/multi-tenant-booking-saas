@@ -44,6 +44,12 @@ export default function BookPublic() {
 
     async function handleConfirmBooking() {
         try {
+            const normalizedPhone = normalizePhone(phone);
+
+            if (!normalizedPhone) {
+                alert("Telefone inválido. Digite um número válido com DDD.");
+                return;
+            }
             const payload = {
                 companySlug: slug,
                 professionalSlug: selectedProfessional.slug,
@@ -51,7 +57,7 @@ export default function BookPublic() {
                 date: selectedSlot.date,
                 startTime: selectedSlot.startTime,
                 clientName,
-                phone: normalizePhone(phone)
+                phone: normalizedPhone
             };
 
             console.log("📦 PAYLOAD:", payload);
@@ -73,12 +79,15 @@ export default function BookPublic() {
     function normalizePhone(value) {
         const numbers = value.replace(/\D/g, "");
 
-        // garante DDD + número
-        if (numbers.length === 11) {
-            return `+55${numbers}`;
+        // corta no máximo 11 dígitos
+        const trimmed = numbers.slice(0, 11);
+
+        // só aceita se tiver 11 dígitos (DDD + celular)
+        if (trimmed.length === 11) {
+            return `+55${trimmed}`;
         }
 
-        return numbers;
+        return null;
     }
 
     return (
