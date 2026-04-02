@@ -51,7 +51,7 @@ export default function BookPublic() {
                 date: selectedSlot.date,
                 startTime: selectedSlot.startTime,
                 clientName,
-                phone
+                phone: normalizePhone(phone)
             };
 
             console.log("📦 PAYLOAD:", payload);
@@ -70,178 +70,189 @@ export default function BookPublic() {
         }
     }
 
-    return (
-    <div style={{ minHeight: "100vh", background: "#f5f5f5" }}>
+    function normalizePhone(value) {
+        const numbers = value.replace(/\D/g, "");
 
-        {/* 🔵 HEADER */}
-        <div
-            style={{
-                background: "linear-gradient(135deg, #0f172a, #1e293b)",
-                padding: "30px 20px",
-                textAlign: "center",
-                color: "#fff"
-            }}
-        >
-            {/* LOGO (placeholder por enquanto) */}
-            <div style={{ marginBottom: "10px" }}>
-                <div
-                    style={{
-                        width: "60px",
-                        height: "60px",
-                        borderRadius: "50%",
-                        background: "#fff",
-                        margin: "0 auto"
-                    }}
-                />
+        // garante DDD + número
+        if (numbers.length === 11) {
+            return `+55${numbers}`;
+        }
+
+        return numbers;
+    }
+
+    return (
+        <div style={{ minHeight: "100vh", background: "#f5f5f5" }}>
+
+            {/* 🔵 HEADER */}
+            <div
+                style={{
+                    background: "linear-gradient(135deg, #0f172a, #1e293b)",
+                    padding: "30px 20px",
+                    textAlign: "center",
+                    color: "#fff"
+                }}
+            >
+                {/* LOGO (placeholder por enquanto) */}
+                <div style={{ marginBottom: "10px" }}>
+                    <div
+                        style={{
+                            width: "60px",
+                            height: "60px",
+                            borderRadius: "50%",
+                            background: "#fff",
+                            margin: "0 auto"
+                        }}
+                    />
+                </div>
+
+                <h2 style={{ margin: 0 }}>Barbearia</h2>
             </div>
 
-            <h2 style={{ margin: 0 }}>Barbearia</h2>
+            {/* ⚪ CARD */}
+            <div
+                style={{
+                    maxWidth: "400px",
+                    margin: "-30px auto 0 auto",
+                    background: "#fff",
+                    borderRadius: "12px",
+                    padding: "20px",
+                    boxShadow: "0 10px 25px rgba(0,0,0,0.1)"
+                }}
+            >
+
+                {/* 🔥 TELA DE SUCESSO */}
+                {bookingSuccess ? (
+                    <div style={{ textAlign: "center" }}>
+                        <h2>Agendamento confirmado!</h2>
+
+                        <p><strong>Serviço:</strong> {selectedService?.name}</p>
+                        <p><strong>Profissional:</strong> {selectedProfessional?.name}</p>
+                        <p><strong>Data:</strong> {selectedSlot?.date}</p>
+                        <p><strong>Horário:</strong> {selectedSlot?.startTime}</p>
+
+                        <p style={{ marginTop: "20px" }}>
+                            Obrigado, {clientName}!
+                        </p>
+                    </div>
+                ) : (
+                    <>
+                        <h2 style={{ marginBottom: "5px" }}>
+                            Agende seu horário
+                        </h2>
+
+                        <p style={{ marginBottom: "20px", color: "#666" }}>
+                            Leva menos de 1 minuto
+                        </p>
+
+                        <input
+                            type="text"
+                            placeholder="Telefone"
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value)}
+                            style={{
+                                width: "100%",
+                                padding: "12px",
+                                marginBottom: "10px",
+                                borderRadius: "8px",
+                                border: "1px solid #ddd"
+                            }}
+                        />
+
+                        <input
+                            type="text"
+                            placeholder="Nome"
+                            value={clientName}
+                            onChange={(e) => setClientName(e.target.value)}
+                            style={{
+                                width: "100%",
+                                padding: "12px",
+                                marginBottom: "20px",
+                                borderRadius: "8px",
+                                border: "1px solid #ddd"
+                            }}
+                        />
+
+                        <button
+                            onClick={handleStart}
+                            style={{
+                                width: "100%",
+                                padding: "14px",
+                                borderRadius: "8px",
+                                border: "none",
+                                background: "#0f172a",
+                                color: "#fff",
+                                fontWeight: "bold",
+                                cursor: "pointer"
+                            }}
+                        >
+                            Continuar agendamento
+                        </button>
+
+                        {/* MODAIS (inalterados) */}
+                        {showProfessionalsModal && (
+                            <ProfessionalsModal
+                                professionals={professionals}
+                                onClose={() => setShowProfessionalsModal(false)}
+                                onSelect={(professional) => {
+                                    setSelectedProfessional(professional);
+                                    setShowProfessionalsModal(false);
+                                    setShowServicesModal(true);
+                                }}
+                            />
+                        )}
+
+                        {showServicesModal && selectedProfessional && (
+                            <ServicesModal
+                                slug={slug}
+                                professional={selectedProfessional}
+                                onBack={() => {
+                                    setShowServicesModal(false);
+                                    setShowProfessionalsModal(true);
+                                }}
+                                onClose={() => setShowServicesModal(false)}
+                                onSelect={(service) => {
+                                    setSelectedService(service);
+                                    setShowServicesModal(false);
+                                    setShowAvailabilityModal(true);
+                                }}
+                            />
+                        )}
+
+                        {showAvailabilityModal && selectedProfessional && selectedService && (
+                            <AvailabilityModal
+                                slug={slug}
+                                professional={selectedProfessional}
+                                service={selectedService}
+                                onBack={() => {
+                                    setShowAvailabilityModal(false);
+                                    setShowServicesModal(true);
+                                }}
+                                onClose={() => setShowAvailabilityModal(false)}
+                                onSelect={(slot) => {
+                                    setSelectedSlot(slot);
+                                    setShowAvailabilityModal(false);
+                                    setShowConfirmModal(true);
+                                }}
+                            />
+                        )}
+
+                        {showConfirmModal && selectedSlot && (
+                            <ConfirmBookingModal
+                                professional={selectedProfessional}
+                                service={selectedService}
+                                slot={selectedSlot}
+                                onBack={() => {
+                                    setShowConfirmModal(false);
+                                    setShowAvailabilityModal(true);
+                                }}
+                                onClose={() => setShowConfirmModal(false)}
+                                onConfirm={handleConfirmBooking}
+                            />
+                        )}
+                    </>
+                )}
+            </div>
         </div>
-
-        {/* ⚪ CARD */}
-        <div
-            style={{
-                maxWidth: "400px",
-                margin: "-30px auto 0 auto",
-                background: "#fff",
-                borderRadius: "12px",
-                padding: "20px",
-                boxShadow: "0 10px 25px rgba(0,0,0,0.1)"
-            }}
-        >
-
-            {/* 🔥 TELA DE SUCESSO */}
-            {bookingSuccess ? (
-                <div style={{ textAlign: "center" }}>
-                    <h2>Agendamento confirmado!</h2>
-
-                    <p><strong>Serviço:</strong> {selectedService?.name}</p>
-                    <p><strong>Profissional:</strong> {selectedProfessional?.name}</p>
-                    <p><strong>Data:</strong> {selectedSlot?.date}</p>
-                    <p><strong>Horário:</strong> {selectedSlot?.startTime}</p>
-
-                    <p style={{ marginTop: "20px" }}>
-                        Obrigado, {clientName}!
-                    </p>
-                </div>
-            ) : (
-                <>
-                    <h2 style={{ marginBottom: "5px" }}>
-                        Agende seu horário
-                    </h2>
-
-                    <p style={{ marginBottom: "20px", color: "#666" }}>
-                        Leva menos de 1 minuto
-                    </p>
-
-                    <input
-                        type="text"
-                        placeholder="Telefone"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        style={{
-                            width: "100%",
-                            padding: "12px",
-                            marginBottom: "10px",
-                            borderRadius: "8px",
-                            border: "1px solid #ddd"
-                        }}
-                    />
-
-                    <input
-                        type="text"
-                        placeholder="Nome"
-                        value={clientName}
-                        onChange={(e) => setClientName(e.target.value)}
-                        style={{
-                            width: "100%",
-                            padding: "12px",
-                            marginBottom: "20px",
-                            borderRadius: "8px",
-                            border: "1px solid #ddd"
-                        }}
-                    />
-
-                    <button
-                        onClick={handleStart}
-                        style={{
-                            width: "100%",
-                            padding: "14px",
-                            borderRadius: "8px",
-                            border: "none",
-                            background: "#0f172a",
-                            color: "#fff",
-                            fontWeight: "bold",
-                            cursor: "pointer"
-                        }}
-                    >
-                        Continuar agendamento
-                    </button>
-
-                    {/* MODAIS (inalterados) */}
-                    {showProfessionalsModal && (
-                        <ProfessionalsModal
-                            professionals={professionals}
-                            onClose={() => setShowProfessionalsModal(false)}
-                            onSelect={(professional) => {
-                                setSelectedProfessional(professional);
-                                setShowProfessionalsModal(false);
-                                setShowServicesModal(true);
-                            }}
-                        />
-                    )}
-
-                    {showServicesModal && selectedProfessional && (
-                        <ServicesModal
-                            slug={slug}
-                            professional={selectedProfessional}
-                            onBack={() => {
-                                setShowServicesModal(false);
-                                setShowProfessionalsModal(true);
-                            }}
-                            onClose={() => setShowServicesModal(false)}
-                            onSelect={(service) => {
-                                setSelectedService(service);
-                                setShowServicesModal(false);
-                                setShowAvailabilityModal(true);
-                            }}
-                        />
-                    )}
-
-                    {showAvailabilityModal && selectedProfessional && selectedService && (
-                        <AvailabilityModal
-                            slug={slug}
-                            professional={selectedProfessional}
-                            service={selectedService}
-                            onBack={() => {
-                                setShowAvailabilityModal(false);
-                                setShowServicesModal(true);
-                            }}
-                            onClose={() => setShowAvailabilityModal(false)}
-                            onSelect={(slot) => {
-                                setSelectedSlot(slot);
-                                setShowAvailabilityModal(false);
-                                setShowConfirmModal(true);
-                            }}
-                        />
-                    )}
-
-                    {showConfirmModal && selectedSlot && (
-                        <ConfirmBookingModal
-                            professional={selectedProfessional}
-                            service={selectedService}
-                            slot={selectedSlot}
-                            onBack={() => {
-                                setShowConfirmModal(false);
-                                setShowAvailabilityModal(true);
-                            }}
-                            onClose={() => setShowConfirmModal(false)}
-                            onConfirm={handleConfirmBooking}
-                        />
-                    )}
-                </>
-            )}
-        </div>
-    </div>
-);
+    );
 }
