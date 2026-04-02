@@ -7,21 +7,34 @@ const app = express();
 
 app.set('trust proxy', 1);
 
-// ✅ CORS SIMPLES E FUNCIONAL
+
 const allowedOrigins = [
   "https://barber-shop-indol-three.vercel.app",
-  "https://barber-shop-fxgdm3blk-aboudahers-projects.vercel.app",
-  "https://barber-shop-git-jwt-migration-aboudahers-projects.vercel.app",
-  "https://barber-shop-git-public-booking-flow-aboudahers-projects.vercel.app", 
-  "https://barber-shop-git-merge-public-booking-aboudahers-projects.vercel.app",
-  "https://barber-shop-git-master-aboudahers-projects.vercel.app",
-  "http://localhost:5173"
 ];
 
-app.use(cors({
-  origin: allowedOrigins,
-  credentials: true
-}));
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true);
+
+    if (origin.includes("localhost")) {
+      return callback(null, origin);
+    }
+
+    if (origin.includes("vercel.app")) {
+      return callback(null, origin);
+    }
+
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, origin);
+    }
+
+    return callback(new Error("Not allowed by CORS"));
+  },
+};
+
+app.use(cors(corsOptions));
+
+
 
 app.use(express.json());
 
@@ -74,6 +87,7 @@ app.use('/api', servicesRoutes);
 const reportsRoutes = require('./routes/reports.routes');
 app.use('/api', reportsRoutes);
 
+// 🔥 NOVA ROTA (PROFISSIONAL)
 const professionalMeRoutes = require('./routes/professional.me.routes');
 app.use('/api', professionalMeRoutes);
 

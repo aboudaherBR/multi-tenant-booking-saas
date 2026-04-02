@@ -14,16 +14,24 @@ function LoginPage() {
   async function handleSubmit(e) {
     e.preventDefault();
 
-    alert("clicou no login");
+
 
     try {
       const success = await login({ slug, username, password });
 
       if (success) {
         alert("login sucesso");
-        navigate('/'); // 🔥 ESSENCIAL
-      } else {
-        alert("falha no login");
+
+        const token = localStorage.getItem('token');
+        const payload = JSON.parse(atob(token.split('.')[1]));
+
+        console.log("DEBUG LOGIN:", payload);
+
+        if (payload.isProfessional) {
+          navigate('/professional');
+        } else {
+          navigate('/');
+        }
       }
 
     } catch (err) {

@@ -1,4 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { useAuth } from './hooks/AuthContext'; // 🔥 ADICIONADO
+
 import LoginPage from './pages/LoginPage';
 import ProtectedLayout from './layout/ProtectedLayout';
 import ClientsPage from './pages/ClientsPage';
@@ -7,9 +9,14 @@ import Dashboard from './pages/Dashboard';
 import AppointmentsPage from './pages/AppointmentsPage';
 import SettingsPage from './pages/SettingsPage';
 import ReportsPage from "./pages/ReportsPage";
-import BookPublic from "./pages/BookPublic"; // 🔥 IMPORTAR
+import BookPublic from "./pages/BookPublic";
+import ProfessionalDashboard from "./pages/ProfessionalDashboard";
+import ProfessionalLayout from "./layout/ProfessionalLayout";
+import ProfessionalSchedulePage from "./pages/ProfessionalSchedulePage";
 
 function App() {
+  const { isAuthenticated, user } = useAuth(); // 🔥 ADICIONADO
+
   return (
     <Routes>
       {/* 🔥 ROTA PÚBLICA (TEM QUE VIR ANTES) */}
@@ -19,7 +26,7 @@ function App() {
       <Route path="/:slug/login" element={<LoginPage />} />
       <Route path="/login" element={<LoginPage />} />
 
-      {/* ROTAS PROTEGIDAS */}
+      {/* ROTAS ADMIN */}
       <Route element={<ProtectedLayout />}>
         <Route path="/" element={<Dashboard />} />
         <Route path="/appointments" element={<AppointmentsPage />} />
@@ -27,6 +34,18 @@ function App() {
         <Route path="/schedule" element={<ScheduleWizard />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/reports" element={<ReportsPage />} />
+      </Route>
+
+      {/* 🔥 ROTA PROFISSIONAL PROTEGIDA */}
+      <Route
+        element={
+          isAuthenticated && user?.isProfessional
+            ? <ProfessionalLayout />
+            : <Navigate to="/login" />
+        }
+      >
+        <Route path="/professional" element={<ProfessionalDashboard />} />
+        <Route path="/professional/schedule" element={<ProfessionalSchedulePage />} />
       </Route>
 
       {/* FALLBACK */}

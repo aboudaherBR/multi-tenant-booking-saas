@@ -17,6 +17,12 @@ async function login(req, res, next) {
     if (slug) {
       const company = await findCompanyBySlug(slug);
 
+      console.log('LOGIN DEBUG - COMPANY LOOKUP:', {
+        slug,
+        companyId: company?.id,
+        username
+      });
+
       if (!company) {
         throw new Error('Invalid credentials');
       }
@@ -26,9 +32,19 @@ async function login(req, res, next) {
       user = await authenticate(username, password);
     }
 
+    // 🔥 CORREÇÃO PRINCIPAL
     const professional = user.company_id
-      ? await findProfessionalByUserId(user.company_id, user.id)
+      ? await findProfessionalByUserId({
+          userId: user.id,
+          companyId: user.company_id
+        })
       : null;
+
+    console.log('LOGIN DEBUG - PROFESSIONAL LOOKUP:', {
+      userId: user.id,
+      companyId: user.company_id,
+      found: !!professional
+    });
 
     const payload = {
       userId: user.id,
@@ -50,6 +66,7 @@ async function login(req, res, next) {
 
   } catch (error) {
 
+    console.error('LOGIN ERROR:', error.message);
 
     return res.status(401).json({
       message: 'Invalid credentials'
