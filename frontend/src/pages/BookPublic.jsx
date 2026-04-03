@@ -6,6 +6,7 @@ import AvailabilityModal from "../components/AvailabilityModal";
 import ConfirmBookingModal from "../components/ConfirmBookingModal";
 import apiClient from "../api/apiClient";
 import PhoneErrorModal from "../components/PhoneErrorModal";
+import NameErrorModal from "../components/NameErrorModal";
 
 // 🔥 FUNÇÃO UTILITÁRIA (TOPO - PADRÃO CORRETO)
 function normalizePhone(value) {
@@ -40,6 +41,8 @@ export default function BookPublic() {
     const [phoneError, setPhoneError] = useState("");
     const [showPhoneErrorModal, setShowPhoneErrorModal] = useState(false);
 
+    const [showNameErrorModal, setShowNameErrorModal] = useState(false);
+
     useEffect(() => {
         async function fetchProfessionals() {
             try {
@@ -58,6 +61,11 @@ export default function BookPublic() {
 
         if (!normalized) {
             setShowPhoneErrorModal(true);
+            return;
+        }
+
+        if (!clientName.trim()) {
+            setShowNameErrorModal(true);
             return;
         }
 
@@ -289,6 +297,12 @@ export default function BookPublic() {
                         {showPhoneErrorModal && (
                             <PhoneErrorModal
                                 onClose={() => setShowPhoneErrorModal(false)}
+                            />
+                        )}
+
+                        {showNameErrorModal && (
+                            <NameErrorModal
+                                onClose={() => setShowNameErrorModal(false)}
                             />
                         )}
 
