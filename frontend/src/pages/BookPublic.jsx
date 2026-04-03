@@ -42,6 +42,8 @@ export default function BookPublic() {
     const [showPhoneErrorModal, setShowPhoneErrorModal] = useState(false);
 
     const [showNameErrorModal, setShowNameErrorModal] = useState(false);
+    const [isCheckingClient, setIsCheckingClient] = useState(false);
+    const [clientFound, setClientFound] = useState(false);
 
     useEffect(() => {
         async function fetchProfessionals() {
