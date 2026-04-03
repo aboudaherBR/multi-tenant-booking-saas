@@ -81,6 +81,9 @@ export default function BookPublic() {
 
         const normalized = normalizePhone(phone);
 
+        console.log("PHONE DIGITADO:", phone);
+        console.log("PHONE NORMALIZED:", normalized);
+
         if (!normalized || normalized.length < 13) return;
 
         const timeout = setTimeout(async () => {
@@ -88,7 +91,7 @@ export default function BookPublic() {
                 setIsCheckingClient(true);
 
                 const res = await apiClient(
-                    `/clients/by-phone/${slug}?phone=${normalized}`
+                    `/clients/by-phone/${slug}?phone=${encodeURIComponent(normalized)}`
                 );
 
                 console.log("RES COMPLETO:", res);
