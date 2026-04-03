@@ -89,11 +89,15 @@ export default function BookPublic() {
                     `/clients/by-phone/${slug}?phone=${normalized}`
                 );
 
+                
+
                 if (res) {
                     setClientName(res.name);
                     setExistingClient(true);
+                    setClientFound(true); 
                 } else {
                     setExistingClient(false);
+                    setClientFound(false); 
                 }
             } catch (err) {
                 console.error("Erro ao buscar cliente:", err);
