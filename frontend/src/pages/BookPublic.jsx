@@ -229,7 +229,9 @@ export default function BookPublic() {
                         </p>
 
                         <input
-                            type="text"
+                            type="tel"
+                            inputMode="numeric"
+                            pattern="[0-9]*"
                             placeholder="Telefone"
                             value={phone}
                             onChange={(e) => {
@@ -297,13 +299,11 @@ export default function BookPublic() {
                                 </p>
 
                                 <input
-                                    type="tel"
+                                    type="text"
                                     placeholder="Digite seu nome"
                                     value={clientName}
                                     onChange={(e) => setClientName(e.target.value)}
                                     disabled={existingClient}
-                                    inputMode="numeric"
-                                    pattern="[0-9]*"
                                     style={{
                                         width: "100%",
                                         padding: "12px",
