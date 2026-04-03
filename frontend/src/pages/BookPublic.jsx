@@ -89,15 +89,20 @@ export default function BookPublic() {
                     `/clients/by-phone/${slug}?phone=${normalized}`
                 );
 
-                
+
 
                 if (res) {
+                    console.log("ENTROU NO IF");
+                    console.log("NAME:", res.name);
                     setClientName(res.name);
                     setExistingClient(true);
-                    setClientFound(true); 
+                    setClientFound(true);
+                    setClientFound(true);
+                    console.log("SET CLIENT FOUND TRUE");
+
                 } else {
                     setExistingClient(false);
-                    setClientFound(false); 
+                    setClientFound(false);
                 }
             } catch (err) {
                 console.error("Erro ao buscar cliente:", err);
@@ -143,6 +148,8 @@ export default function BookPublic() {
             console.error("Erro ao criar agendamento:", err);
             alert("Erro ao agendar");
         }
+
+        console.log("RENDER:", { clientFound, existingClient, clientName });
     }
 
     return (
