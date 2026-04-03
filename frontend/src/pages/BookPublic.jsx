@@ -74,7 +74,7 @@ export default function BookPublic() {
             return;
         }
 
-        if (!clientFound) {
+        if (!existingClient) {
             setShowPhoneConfirmModal(true);
             return;
         }
