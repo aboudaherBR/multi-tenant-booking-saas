@@ -7,6 +7,7 @@ import ConfirmBookingModal from "../components/ConfirmBookingModal";
 import apiClient from "../api/apiClient";
 import PhoneErrorModal from "../components/PhoneErrorModal";
 import NameErrorModal from "../components/NameErrorModal";
+import { formatPhone } from "../utils/phone.utils";
 
 // 🔥 FUNÇÃO UTILITÁRIA (TOPO - PADRÃO CORRETO)
 function normalizePhone(value) {
@@ -241,12 +242,15 @@ export default function BookPublic() {
                             placeholder="Telefone"
                             value={phone}
                             onChange={(e) => {
-                                const value = e.target.value;
-                                setPhone(value);
+                                const raw = e.target.value;
 
-                                const normalized = normalizePhone(value);
+                                const formatted = formatPhone(raw);
 
-                                if (!value) {
+                                setPhone(formatted);
+
+                                const normalized = normalizePhone(formatted);
+
+                                if (!formatted) {
                                     setPhoneError("");
                                 } else if (!normalized) {
                                     setPhoneError("Digite um telefone válido com DDD");
