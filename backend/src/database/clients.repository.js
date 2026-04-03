@@ -15,7 +15,17 @@ async function findClientByPhone({ companyId, phone }) {
   return result.rows[0] || null;
 }
 
+const { normalizeBrazilianPhone } = require('../utils/phone.utils');
+
 async function createClient({ companyId, name, phone }) {
+  let normalizedPhone;
+
+  try {
+    normalizedPhone = normalizeBrazilianPhone(phone);
+  } catch (err) {
+    throw new Error('Invalid phone');
+  }
+
   const result = await pool.query(
     `
       INSERT INTO clients (
@@ -26,7 +36,7 @@ async function createClient({ companyId, name, phone }) {
       VALUES ($1, $2, $3)
       RETURNING id, company_id, name, phone, created_at, is_active
     `,
-    [companyId, name, phone]
+    [companyId, name, normalizedPhone]
   );
 
   return result.rows[0];
