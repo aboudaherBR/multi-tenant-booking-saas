@@ -297,7 +297,7 @@ export default function BookPublic() {
                                 </p>
 
                                 <input
-                                    type="text"
+                                    type="tel"
                                     placeholder="Digite seu nome"
                                     value={clientName}
                                     onChange={(e) => setClientName(e.target.value)}
