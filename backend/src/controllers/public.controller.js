@@ -6,6 +6,7 @@ const {
 } = require('../database/services.repository');
 const { getAvailableSlots } = require('../services/availability.service');
 const pool = require('../database/db');
+const { normalizeBrazilianPhone } = require('../utils/phone.utils');
 
 async function getPublicCompany(req, res, next) {
   try {
@@ -102,7 +103,6 @@ async function getPublicAvailability(req, res, next) {
       });
     }
 
-    // validação formato data
     const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
     if (!dateRegex.test(date)) {
       return res.status(400).json({
@@ -118,7 +118,6 @@ async function getPublicAvailability(req, res, next) {
       });
     }
 
-    // 🔒 BLOQUEAR DATAS PASSADAS
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
@@ -223,7 +222,15 @@ async function createPublicAppointment(req, res, next) {
       });
     }
 
-    // 🔹 COMPANY
+    // ✅ NORMALIZAÇÃO NO LUGAR CERTO
+    let normalizedPhone;
+
+    try {
+      normalizedPhone = normalizeBrazilianPhone(phone);
+    } catch (err) {
+      return res.status(400).json({ message: 'Telefone inválido' });
+    }
+
     const company = await findCompanyBySlug(companySlug);
     if (!company) {
       return res.status(404).json({
@@ -231,19 +238,15 @@ async function createPublicAppointment(req, res, next) {
       });
     }
 
-    // 🔹 SERVICE
     const serviceData = await findServiceForProfessionalBySlugs({
       companyId: company.id,
       professionalSlug,
       serviceSlug
     });
 
-    console.log("SERVICE DATA:", serviceData);
-
-    // 🔥 VALIDAÇÃO REAL (isso evita 500 silencioso)
     if (
       !serviceData ||
-      !serviceData.id || // 🔥 aqui está o segredo
+      !serviceData.id ||
       !serviceData.professional_id ||
       !serviceData.duration_minutes ||
       !serviceData.name ||
@@ -254,14 +257,13 @@ async function createPublicAppointment(req, res, next) {
       });
     }
 
-    // 🔹 CLIENT
     const clientResult = await pool.query(
       `
       SELECT id FROM clients
       WHERE company_id = $1 AND phone = $2
       LIMIT 1
     `,
-      [company.id, phone]
+      [company.id, normalizedPhone]
     );
 
     let clientId;
@@ -275,13 +277,12 @@ async function createPublicAppointment(req, res, next) {
         VALUES ($1, $2, $3)
         RETURNING id
       `,
-        [company.id, clientName, phone]
+        [company.id, clientName, normalizedPhone]
       );
 
       clientId = newClient.rows[0].id;
     }
 
-    // 🔹 CALCULAR END TIME
     function addMinutes(time, duration) {
       const [h, m] = time.split(':').map(Number);
       const total = h * 60 + m + duration;
@@ -294,7 +295,6 @@ async function createPublicAppointment(req, res, next) {
 
     const endTime = addMinutes(startTime, serviceData.duration_minutes);
 
-    // 🔥 INSERT CORRETO
     await pool.query(
       `
       INSERT INTO appointments (
@@ -314,7 +314,7 @@ async function createPublicAppointment(req, res, next) {
       [
         company.id,
         serviceData.professional_id,
-        serviceData.id, // 🔥 CORREÇÃO REAL
+        serviceData.id,
         clientId,
         date,
         startTime,
@@ -348,8 +348,6 @@ async function createPublicAppointment(req, res, next) {
     next(error);
   }
 }
-
-
 
 module.exports = {
   getPublicCompany,
