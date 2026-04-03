@@ -36,6 +36,8 @@ export default function BookPublic() {
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [bookingSuccess, setBookingSuccess] = useState(false);
 
+    const [phoneError, setPhoneError] = useState("");
+
     useEffect(() => {
         async function fetchProfessionals() {
             try {
@@ -158,7 +160,20 @@ export default function BookPublic() {
                             type="text"
                             placeholder="Telefone"
                             value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
+                            onChange={(e) => {
+                                const value = e.target.value;
+                                setPhone(value);
+
+                                const normalized = normalizePhone(value);
+
+                                if (!value) {
+                                    setPhoneError("");
+                                } else if (!normalized) {
+                                    setPhoneError("Digite um telefone válido com DDD");
+                                } else {
+                                    setPhoneError("");
+                                }
+                            }}
                             style={{
                                 width: "100%",
                                 padding: "12px",
@@ -167,6 +182,11 @@ export default function BookPublic() {
                                 border: "1px solid #ddd"
                             }}
                         />
+                        {phoneError && (
+                            <p style={{ color: "red", fontSize: "14px", marginBottom: "10px" }}>
+                                {phoneError}
+                            </p>
+                        )}
 
                         <input
                             type="text"
