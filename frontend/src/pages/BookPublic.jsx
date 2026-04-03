@@ -45,6 +45,8 @@ export default function BookPublic() {
     const [isCheckingClient, setIsCheckingClient] = useState(false);
     const [clientFound, setClientFound] = useState(false);
 
+    const [existingClient, setExistingClient] = useState(false);
+
     useEffect(() => {
         async function fetchProfessionals() {
             try {
@@ -73,6 +75,33 @@ export default function BookPublic() {
 
         setShowProfessionalsModal(true);
     }
+
+    useEffect(() => {
+        if (!phone) return;
+
+        const normalized = normalizePhone(phone);
+
+        if (!normalized || normalized.length < 13) return;
+
+        const timeout = setTimeout(async () => {
+            try {
+                const res = await apiClient(
+                    `/clients/by-phone/${slug}?phone=${normalized}`
+                );
+
+                if (res) {
+                    setClientName(res.name);
+                    setExistingClient(true);
+                } else {
+                    setExistingClient(false);
+                }
+            } catch (err) {
+                console.error("Erro ao buscar cliente:", err);
+            }
+        }, 500);
+
+        return () => clearTimeout(timeout);
+    }, [phone]);
 
     async function handleConfirmBooking() {
         try {
@@ -247,13 +276,20 @@ export default function BookPublic() {
                                     placeholder="Digite seu nome"
                                     value={clientName}
                                     onChange={(e) => setClientName(e.target.value)}
+                                    disabled={existingClient}
                                     style={{
                                         width: "100%",
                                         padding: "12px",
                                         borderRadius: "8px",
-                                        border: "1px solid #ddd"
+                                        border: "1px solid #ddd",
+                                        backgroundColor: existingClient ? "#f5f5f5" : "white"
                                     }}
                                 />
+                                {existingClient && (
+                                    <p style={{ color: "green", marginTop: "8px" }}>
+                                        Bem-vindo de volta, {clientName} 👋
+                                    </p>
+                                )}
                             </div>
                         ) : null}
 
