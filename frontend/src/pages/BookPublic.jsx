@@ -85,27 +85,38 @@ export default function BookPublic() {
 
         const timeout = setTimeout(async () => {
             try {
+                setIsCheckingClient(true);
+
                 const res = await apiClient(
                     `/clients/by-phone/${slug}?phone=${normalized}`
                 );
 
+                console.log("RES COMPLETO:", res);
 
-
-                if (res) {
-                    console.log("ENTROU NO IF");
+                // ✅ CORREÇÃO PRINCIPAL
+                if (res && res.name) {
+                    console.log("ENTROU NO IF CORRETO");
                     console.log("NAME:", res.name);
+
                     setClientName(res.name);
                     setExistingClient(true);
                     setClientFound(true);
-                    setClientFound(true);
-                    console.log("SET CLIENT FOUND TRUE");
-
                 } else {
+                    console.log("NÃO ENTROU NO IF");
+
+                    setClientName('');
                     setExistingClient(false);
                     setClientFound(false);
                 }
+
             } catch (err) {
                 console.error("Erro ao buscar cliente:", err);
+
+                setClientName('');
+                setExistingClient(false);
+                setClientFound(false);
+            } finally {
+                setIsCheckingClient(false);
             }
         }, 500);
 
