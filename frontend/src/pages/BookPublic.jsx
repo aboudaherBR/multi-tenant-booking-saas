@@ -62,8 +62,49 @@ export default function BookPublic() {
         fetchProfessionals();
     }, [slug]);
 
+    useEffect(() => {
+        if (!phone) return;
+
+        const digitsOnly = phone.replace(/\D/g, "");
+        const normalized = normalizePhone(digitsOnly);
+
+        if (!normalized || normalized.length < 13) return;
+
+        const timeout = setTimeout(async () => {
+            try {
+                setIsCheckingClient(true);
+
+                const res = await apiClient(
+                    `/clients/by-phone/${slug}?phone=${encodeURIComponent(normalized)}`
+                );
+
+                if (res && res.name) {
+                    setClientName(res.name);
+                    setExistingClient(true);
+                    setClientFound(true);
+                } else {
+                    setClientName("");
+                    setExistingClient(false);
+                    setClientFound(false);
+                }
+
+            } catch (err) {
+                console.error("Erro ao buscar cliente:", err);
+
+                setClientName("");
+                setExistingClient(false);
+                setClientFound(false);
+            } finally {
+                setIsCheckingClient(false);
+            }
+        }, 500);
+
+        return () => clearTimeout(timeout);
+    }, [phone]);
+
     function handleStart() {
-        const normalized = normalizePhone(phone);
+        const digitsOnly = phone.replace(/\D/g, "");
+        const normalized = normalizePhone(digitsOnly);
 
         if (!normalized) {
             setShowPhoneErrorModal(true);
@@ -83,61 +124,12 @@ export default function BookPublic() {
         setShowProfessionalsModal(true);
     }
 
-    useEffect(() => {
-        if (!phone) return;
-
-        const normalized = normalizePhone(phone);
-
-        console.log("PHONE DIGITADO:", phone);
-        console.log("PHONE NORMALIZED:", normalized);
-
-        if (!normalized || normalized.length < 13) return;
-
-        const timeout = setTimeout(async () => {
-            try {
-                setIsCheckingClient(true);
-
-                const res = await apiClient(
-                    `/clients/by-phone/${slug}?phone=${encodeURIComponent(normalized)}`
-                );
-
-                console.log("RES COMPLETO:", res);
-
-                // ✅ CORREÇÃO PRINCIPAL
-                if (res && res.name) {
-                    console.log("ENTROU NO IF CORRETO");
-                    console.log("NAME:", res.name);
-
-                    setClientName(res.name);
-                    setExistingClient(true);
-                    setClientFound(true);
-                } else {
-                    console.log("NÃO ENTROU NO IF");
-
-                    setClientName('');
-                    setExistingClient(false);
-                    setClientFound(false);
-                }
-
-            } catch (err) {
-                console.error("Erro ao buscar cliente:", err);
-
-                setClientName('');
-                setExistingClient(false);
-                setClientFound(false);
-            } finally {
-                setIsCheckingClient(false);
-            }
-        }, 500);
-
-        return () => clearTimeout(timeout);
-    }, [phone]);
-
     async function handleConfirmBooking() {
         try {
             console.log("📞 PHONE ORIGINAL:", phone);
 
-            const normalizedPhone = normalizePhone(phone);
+            const digitsOnly = phone.replace(/\D/g, "");
+            const normalizedPhone = normalizePhone(digitsOnly);
             console.log("📞 NORMALIZED:", normalizedPhone);
 
             if (!normalizedPhone) {
@@ -248,7 +240,8 @@ export default function BookPublic() {
 
                                 setPhone(formatted);
 
-                                const normalized = normalizePhone(formatted);
+                                const digitsOnly = formatted.replace(/\D/g, "");
+                                const normalized = normalizePhone(digitsOnly);
 
                                 if (!formatted) {
                                     setPhoneError("");
@@ -289,6 +282,7 @@ export default function BookPublic() {
                                         setPhone("");
                                         setClientName("");
                                         setClientFound(false);
+                                        setExistingClient(false);
                                     }}
                                     style={{
                                         marginTop: "5px",
