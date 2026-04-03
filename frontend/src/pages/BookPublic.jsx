@@ -302,6 +302,8 @@ export default function BookPublic() {
                                     value={clientName}
                                     onChange={(e) => setClientName(e.target.value)}
                                     disabled={existingClient}
+                                    inputMode="numeric"
+                                    pattern="[0-9]*"
                                     style={{
                                         width: "100%",
                                         padding: "12px",
