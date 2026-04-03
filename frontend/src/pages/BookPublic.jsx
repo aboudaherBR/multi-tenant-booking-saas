@@ -204,19 +204,56 @@ export default function BookPublic() {
                             </p>
                         )}
 
-                        <input
-                            type="text"
-                            placeholder="Nome"
-                            value={clientName}
-                            onChange={(e) => setClientName(e.target.value)}
-                            style={{
-                                width: "100%",
-                                padding: "12px",
-                                marginBottom: "20px",
-                                borderRadius: "8px",
-                                border: "1px solid #ddd"
-                            }}
-                        />
+                        {/* 🔥 ESTADO DINÂMICO DO CLIENTE */}
+
+                        {isCheckingClient ? (
+                            <p style={{ marginBottom: "20px", color: "#666" }}>
+                                Verificando...
+                            </p>
+                        ) : clientFound ? (
+                            <div style={{ marginBottom: "20px" }}>
+                                <p>
+                                    👋 Olá, <strong>{clientName}</strong>
+                                </p>
+
+                                <button
+                                    onClick={() => {
+                                        setPhone("");
+                                        setClientName("");
+                                        setClientFound(false);
+                                    }}
+                                    style={{
+                                        marginTop: "5px",
+                                        fontSize: "14px",
+                                        background: "none",
+                                        border: "none",
+                                        color: "#2563eb",
+                                        cursor: "pointer"
+                                    }}
+                                >
+                                    Não é você? Trocar número
+                                </button>
+                            </div>
+                        ) : phone ? (
+                            <div style={{ marginBottom: "20px" }}>
+                                <p style={{ marginBottom: "8px" }}>
+                                    Primeira vez aqui?
+                                </p>
+
+                                <input
+                                    type="text"
+                                    placeholder="Digite seu nome"
+                                    value={clientName}
+                                    onChange={(e) => setClientName(e.target.value)}
+                                    style={{
+                                        width: "100%",
+                                        padding: "12px",
+                                        borderRadius: "8px",
+                                        border: "1px solid #ddd"
+                                    }}
+                                />
+                            </div>
+                        ) : null}
 
                         <button
                             onClick={handleStart}
