@@ -5,6 +5,7 @@ import ServicesModal from "../components/ServicesModal";
 import AvailabilityModal from "../components/AvailabilityModal";
 import ConfirmBookingModal from "../components/ConfirmBookingModal";
 import apiClient from "../api/apiClient";
+import PhoneErrorModal from "../components/PhoneErrorModal";
 
 // 🔥 FUNÇÃO UTILITÁRIA (TOPO - PADRÃO CORRETO)
 function normalizePhone(value) {
@@ -37,6 +38,7 @@ export default function BookPublic() {
     const [bookingSuccess, setBookingSuccess] = useState(false);
 
     const [phoneError, setPhoneError] = useState("");
+    const [showPhoneErrorModal, setShowPhoneErrorModal] = useState(false);
 
     useEffect(() => {
         async function fetchProfessionals() {
@@ -52,7 +54,13 @@ export default function BookPublic() {
     }, [slug]);
 
     function handleStart() {
-        if (!phone) return;
+        const normalized = normalizePhone(phone);
+
+        if (!normalized) {
+            setShowPhoneErrorModal(true);
+            return;
+        }
+
         setShowProfessionalsModal(true);
     }
 
@@ -278,6 +286,12 @@ export default function BookPublic() {
                                 onConfirm={handleConfirmBooking}
                             />
                         )}
+                        {showPhoneErrorModal && (
+                            <PhoneErrorModal
+                                onClose={() => setShowPhoneErrorModal(false)}
+                            />
+                        )}
+
                     </>
                 )}
             </div>
