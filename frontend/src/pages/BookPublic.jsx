@@ -46,6 +46,7 @@ export default function BookPublic() {
     const [clientFound, setClientFound] = useState(false);
 
     const [existingClient, setExistingClient] = useState(false);
+    const [showPhoneConfirmModal, setShowPhoneConfirmModal] = useState(false);
 
     useEffect(() => {
         async function fetchProfessionals() {
@@ -70,6 +71,11 @@ export default function BookPublic() {
 
         if (!clientName.trim()) {
             setShowNameErrorModal(true);
+            return;
+        }
+
+        if (!clientFound) {
+            setShowPhoneConfirmModal(true);
             return;
         }
 
