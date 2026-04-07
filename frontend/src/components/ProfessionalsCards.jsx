@@ -12,7 +12,7 @@ export default function ProfessionalCard({ professional, onSelect }) {
       {/* FOTO */}
       <div style={avatarWrapper}>
         <img
-          src={professional.photo_url || "/avatar.png"}
+          src={professional.photo_url || "/photos/avatar.png"}
           onError={(e) => {
             e.target.onerror = null;
             e.target.src = "/avatar.png";
@@ -101,7 +101,7 @@ const subtitleStyle = {
 };
 
 const buttonStyle = {
-  background: "#22c55e",
+  background: "#f3f8f5",
   border: "none",
   padding: "10px 14px",
   borderRadius: "20px",
