@@ -1,0 +1,103 @@
+export default function ProfessionalCard({ professional, onSelect }) {
+  return (
+    <div style={cardContainer} onClick={() => onSelect(professional)}>
+      
+      {/* BACKGROUND */}
+      <div style={backgroundStyle} />
+
+      {/* FOTO */}
+      <div style={avatarWrapper}>
+        <img
+          src={
+            professional.photo_url ||
+            "https://via.placeholder.com/100"
+          }
+          alt={professional.name}
+          style={avatarStyle}
+        />
+      </div>
+
+      {/* CONTEÚDO */}
+      <div style={contentStyle}>
+        <h3 style={nameStyle}>{professional.name}</h3>
+
+        <p style={subtitleStyle}>
+          Toque para ver serviços
+        </p>
+
+        {/* BOTÃO */}
+        <button
+          style={buttonStyle}
+          onClick={(e) => {
+            e.stopPropagation();
+            onSelect(professional);
+          }}
+        >
+          Ver serviços
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/* STYLES */
+
+const cardContainer = {
+  position: "relative",
+  background: "#0f172a",
+  borderRadius: "16px",
+  padding: "20px",
+  marginBottom: "16px",
+  textAlign: "center",
+  color: "#fff",
+  cursor: "pointer",
+  overflow: "hidden"
+};
+
+const backgroundStyle = {
+  position: "absolute",
+  top: "-40px",
+  left: "-40px",
+  width: "120px",
+  height: "120px",
+  background: "#22c55e",
+  borderRadius: "50%"
+};
+
+const avatarWrapper = {
+  position: "relative",
+  marginBottom: "10px"
+};
+
+const avatarStyle = {
+  width: "90px",
+  height: "90px",
+  borderRadius: "50%",
+  objectFit: "cover",
+  border: "3px solid #fff"
+};
+
+const contentStyle = {
+  position: "relative",
+  zIndex: 1
+};
+
+const nameStyle = {
+  margin: "10px 0 5px 0"
+};
+
+const subtitleStyle = {
+  fontSize: "14px",
+  color: "#cbd5f5",
+  marginBottom: "12px"
+};
+
+const buttonStyle = {
+  background: "#22c55e",
+  border: "none",
+  padding: "10px 14px",
+  borderRadius: "20px",
+  cursor: "pointer",
+  color: "#000",
+  fontWeight: "bold"
+};

@@ -1,3 +1,5 @@
+import ProfessionalCard from "./ProfessionalCard";
+
 export default function ProfessionalsModal({
   professionals,
   onClose,
@@ -18,41 +20,13 @@ export default function ProfessionalsModal({
           <p>Nenhum profissional disponível</p>
         ) : (
           <div style={listContainerStyle}>
-            {professionals.map((p) => {
-              console.log("PROFISSIONAL:", p); // 👈 DEBUG AQUI
-
-              return (
-                <div
-                  key={p.id}
-                  onClick={() => onSelect(p)}
-                  style={cardStyle}
-                >
-                  {/* FOTO */}
-                  <div style={avatarStyle} />
-
-                  {/* CONTEÚDO */}
-                  <div style={{ flex: 1 }}>
-                    <div style={nameStyle}>{p.name}</div>
-
-                    {/* SERVIÇOS (placeholder por enquanto) */}
-                    <div style={servicesStyle}>
-                      Corte • Barba • Outros
-                    </div>
-
-                    {/* BOTÃO VISUAL */}
-                    <button
-                      style={buttonStyle}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onSelect(p);
-                      }}
-                    >
-                      Escolher serviço
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
+            {professionals.map((p) => (
+              <ProfessionalCard
+                key={p.id}
+                professional={p}
+                onSelect={onSelect}
+              />
+            ))}
           </div>
         )}
       </div>
@@ -96,44 +70,4 @@ const backButtonStyle = {
 const listContainerStyle = {
   overflowY: "auto",
   marginTop: "10px"
-};
-
-const cardStyle = {
-  cursor: "pointer",
-  marginBottom: "12px",
-  padding: "14px",
-  borderRadius: "12px",
-  border: "1px solid #e5e7eb",
-  display: "flex",
-  gap: "12px",
-  background: "#fff",
-  transition: "0.2s"
-};
-
-const avatarStyle = {
-  width: "55px",
-  height: "55px",
-  borderRadius: "50%",
-  background: "#e5e7eb"
-};
-
-const nameStyle = {
-  fontWeight: "bold",
-  marginBottom: "4px"
-};
-
-const servicesStyle = {
-  fontSize: "13px",
-  color: "#666",
-  marginBottom: "10px"
-};
-
-const buttonStyle = {
-  padding: "8px 12px",
-  borderRadius: "6px",
-  border: "none",
-  background: "#0f172a",
-  color: "#fff",
-  cursor: "pointer",
-  fontSize: "13px"
 };
