@@ -30,7 +30,9 @@ async function findProfessionalByUserId({ userId, companyId }) {
 }
 
 async function findActiveProfessionalsPublicByCompanyId(companyId) {
+  console.log("USANDO findActiveProfessionalsPublicByCompanyId");
   const result = await pool.query(
+    
     `
       SELECT DISTINCT
         p.id,
@@ -61,6 +63,7 @@ async function findActiveProfessionalsPublicByCompanyId(companyId) {
 }
 
 async function findActiveProfessionalsByCompanyId(companyId) {
+  console.log("USANDO findActiveProfessionalsByCompanyId");
   const result = await pool.query(
     `
       SELECT
