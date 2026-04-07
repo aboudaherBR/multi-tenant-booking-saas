@@ -1,105 +1,111 @@
 export default function ProfessionalCard({ professional, onSelect }) {
-    console.log("FOTO:", professional.photo_url);
-    return (
+  console.log("FOTO:", professional.photo_url);
 
-        <div style={cardContainer} onClick={() => onSelect(professional)}>
+  return (
+    <div
+      style={cardContainer}
+      onClick={() => onSelect(professional)}
+    >
+      {/* BACKGROUND */}
+      <div style={backgroundStyle} />
 
-            {/* BACKGROUND */}
-            <div style={backgroundStyle} />
+      {/* FOTO */}
+      <div style={avatarWrapper}>
+        <img
+          src={professional.photo_url || "/avatar.png"}
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = "/avatar.png";
+          }}
+          alt={professional.name}
+          style={avatarStyle}
+        />
+      </div>
 
-            {/* FOTO */}
-            <div style={avatarWrapper}>
-                <img
-                    src={
-                        professional.photo_url ||
-                        "../images/avatar.png"
-                    }
-                    alt={professional.name}
-                    style={avatarStyle}
-                />
-            </div>
+      {/* CONTEÚDO */}
+      <div style={contentStyle}>
+        <h3 style={nameStyle}>{professional.name}</h3>
 
-            {/* CONTEÚDO */}
-            <div style={contentStyle}>
-                <h3 style={nameStyle}>{professional.name}</h3>
+        <p style={subtitleStyle}>
+          Toque para ver serviços
+        </p>
 
-                <p style={subtitleStyle}>
-                    Toque para ver serviços
-                </p>
-
-                {/* BOTÃO */}
-                <button
-                    style={buttonStyle}
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        onSelect(professional);
-                    }}
-                >
-                    Ver serviços
-                </button>
-            </div>
-        </div>
-    );
+        {/* BOTÃO */}
+        <button
+          style={buttonStyle}
+          onClick={(e) => {
+            e.stopPropagation();
+            onSelect(professional);
+          }}
+        >
+          Ver serviços
+        </button>
+      </div>
+    </div>
+  );
 }
 
 /* STYLES */
 
 const cardContainer = {
-    position: "relative",
-    background: "#0f172a",
-    borderRadius: "16px",
-    padding: "20px",
-    marginBottom: "16px",
-    textAlign: "center",
-    color: "#fff",
-    cursor: "pointer",
-    overflow: "hidden"
+  position: "relative",
+  background: "#0f172a",
+  borderRadius: "16px",
+  padding: "20px",
+  marginBottom: "16px",
+  textAlign: "center",
+  color: "#fff",
+  cursor: "pointer",
+  overflow: "hidden"
 };
 
 const backgroundStyle = {
-    position: "absolute",
-    top: "-40px",
-    left: "-40px",
-    width: "120px",
-    height: "120px",
-    background: "#22c55e",
-    borderRadius: "50%"
+  position: "absolute",
+  top: "-40px",
+  left: "-40px",
+  width: "120px",
+  height: "120px",
+  background: "#22c55e",
+  borderRadius: "50%"
 };
 
 const avatarWrapper = {
-    position: "relative",
-    marginBottom: "10px"
+  position: "relative",
+  marginBottom: "10px",
+  display: "flex",
+  justifyContent: "center"
 };
 
 const avatarStyle = {
-    width: "90px",
-    height: "90px",
-    borderRadius: "50%",
-    objectFit: "cover",
-    border: "3px solid #fff"
+  width: "90px",
+  height: "90px",
+  borderRadius: "50%",
+  objectFit: "cover",
+  border: "3px solid #fff",
+  display: "block"
 };
 
 const contentStyle = {
-    position: "relative",
-    zIndex: 1
+  position: "relative",
+  zIndex: 1
 };
 
 const nameStyle = {
-    margin: "10px 0 5px 0"
+  margin: "10px 0 5px 0"
 };
 
 const subtitleStyle = {
-    fontSize: "14px",
-    color: "#cbd5f5",
-    marginBottom: "12px"
+  fontSize: "14px",
+  color: "#cbd5f5",
+  marginBottom: "12px"
 };
 
 const buttonStyle = {
-    background: "#22c55e",
-    border: "none",
-    padding: "10px 14px",
-    borderRadius: "20px",
-    cursor: "pointer",
-    color: "#000",
-    fontWeight: "bold"
+  background: "#22c55e",
+  border: "none",
+  padding: "10px 14px",
+  borderRadius: "20px",
+  cursor: "pointer",
+  color: "#000",
+  fontWeight: "bold"
 };
