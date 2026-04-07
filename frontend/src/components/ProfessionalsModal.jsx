@@ -6,11 +6,13 @@ export default function ProfessionalsModal({
   return (
     <div style={overlayStyle}>
       <div style={modalStyle}>
-        <button onClick={onClose} style={{ marginBottom: "10px" }}>
+        <button onClick={onClose} style={backButtonStyle}>
           ← Voltar
         </button>
 
-        <h3>Escolha um profissional</h3>
+        <h3 style={{ marginBottom: "15px" }}>
+          Escolha um profissional
+        </h3>
 
         {professionals.length === 0 ? (
           <p>Nenhum profissional disponível</p>
@@ -25,15 +27,25 @@ export default function ProfessionalsModal({
                 {/* FOTO */}
                 <div style={avatarStyle} />
 
-                {/* INFO */}
-                <div>
-                  <div style={nameStyle}>
-                    {p.name}
+                {/* CONTEÚDO */}
+                <div style={{ flex: 1 }}>
+                  <div style={nameStyle}>{p.name}</div>
+
+                  {/* SERVIÇOS (placeholder por enquanto) */}
+                  <div style={servicesStyle}>
+                    Corte • Barba • Outros
                   </div>
 
-                  <div style={subtitleStyle}>
-                    Ver serviços
-                  </div>
+                  {/* BOTÃO VISUAL */}
+                  <button
+                    style={buttonStyle}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onSelect(p);
+                    }}
+                  >
+                    Escolher serviço
+                  </button>
                 </div>
               </div>
             ))}
@@ -44,7 +56,8 @@ export default function ProfessionalsModal({
   );
 }
 
-/* OVERLAY */
+/* STYLES */
+
 const overlayStyle = {
   position: "fixed",
   top: 0,
@@ -58,7 +71,6 @@ const overlayStyle = {
   zIndex: 9999
 };
 
-/* MODAL */
 const modalStyle = {
   background: "#fff",
   padding: "20px",
@@ -67,35 +79,49 @@ const modalStyle = {
   maxWidth: "400px"
 };
 
-/* CARD */
+const backButtonStyle = {
+  marginBottom: "10px",
+  background: "none",
+  border: "none",
+  cursor: "pointer"
+};
+
 const cardStyle = {
   cursor: "pointer",
   marginBottom: "12px",
-  padding: "12px",
-  borderRadius: "10px",
+  padding: "14px",
+  borderRadius: "12px",
   border: "1px solid #e5e7eb",
   display: "flex",
-  alignItems: "center",
   gap: "12px",
   background: "#fff",
-  transition: "all 0.2s ease"
+  transition: "0.2s"
 };
 
-/* AVATAR */
 const avatarStyle = {
-  width: "50px",
-  height: "50px",
+  width: "55px",
+  height: "55px",
   borderRadius: "50%",
   background: "#e5e7eb"
 };
 
-/* NAME */
 const nameStyle = {
-  fontWeight: "bold"
+  fontWeight: "bold",
+  marginBottom: "4px"
 };
 
-/* SUBTITLE */
-const subtitleStyle = {
-  fontSize: "14px",
-  color: "#666"
+const servicesStyle = {
+  fontSize: "13px",
+  color: "#666",
+  marginBottom: "10px"
+};
+
+const buttonStyle = {
+  padding: "8px 12px",
+  borderRadius: "6px",
+  border: "none",
+  background: "#0f172a",
+  color: "#fff",
+  cursor: "pointer",
+  fontSize: "13px"
 };
