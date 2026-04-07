@@ -18,37 +18,41 @@ export default function ProfessionalsModal({
           <p>Nenhum profissional disponível</p>
         ) : (
           <div style={listContainerStyle}>
-            {professionals.map((p) => (
-              <div
-                key={p.id}
-                onClick={() => onSelect(p)}
-                style={cardStyle}
-              >
-                {/* FOTO */}
-                <div style={avatarStyle} />
+            {professionals.map((p) => {
+              console.log("PROFISSIONAL:", p); // 👈 DEBUG AQUI
 
-                {/* CONTEÚDO */}
-                <div style={{ flex: 1 }}>
-                  <div style={nameStyle}>{p.name}</div>
+              return (
+                <div
+                  key={p.id}
+                  onClick={() => onSelect(p)}
+                  style={cardStyle}
+                >
+                  {/* FOTO */}
+                  <div style={avatarStyle} />
 
-                  {/* SERVIÇOS (placeholder por enquanto) */}
-                  <div style={servicesStyle}>
-                    Corte • Barba • Outros
+                  {/* CONTEÚDO */}
+                  <div style={{ flex: 1 }}>
+                    <div style={nameStyle}>{p.name}</div>
+
+                    {/* SERVIÇOS (placeholder por enquanto) */}
+                    <div style={servicesStyle}>
+                      Corte • Barba • Outros
+                    </div>
+
+                    {/* BOTÃO VISUAL */}
+                    <button
+                      style={buttonStyle}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onSelect(p);
+                      }}
+                    >
+                      Escolher serviço
+                    </button>
                   </div>
-
-                  {/* BOTÃO VISUAL */}
-                  <button
-                    style={buttonStyle}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onSelect(p);
-                    }}
-                  >
-                    Escolher serviço
-                  </button>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
@@ -77,9 +81,8 @@ const modalStyle = {
   borderRadius: "12px",
   width: "90%",
   maxWidth: "400px",
-
-  maxHeight: "80vh",     // 🔥 IMPORTANTE
-  display: "flex",       // 🔥 IMPORTANTE
+  maxHeight: "80vh",
+  display: "flex",
   flexDirection: "column"
 };
 
@@ -88,6 +91,11 @@ const backButtonStyle = {
   background: "none",
   border: "none",
   cursor: "pointer"
+};
+
+const listContainerStyle = {
+  overflowY: "auto",
+  marginTop: "10px"
 };
 
 const cardStyle = {
@@ -128,9 +136,4 @@ const buttonStyle = {
   color: "#fff",
   cursor: "pointer",
   fontSize: "13px"
-};
-
-const listContainerStyle = {
-  overflowY: "auto",
-  marginTop: "10px"
 };
