@@ -55,7 +55,7 @@ async function getPublicProfessionals(req, res, next) {
     const professionals =
       await findActiveProfessionalsPublicByCompanyId(company.id);
 
-    return res.status(200).json(professionals);
+    return res.status(200).json({ teste: 'cheguei aqui' });
 
   } catch (error) {
     next(error);
