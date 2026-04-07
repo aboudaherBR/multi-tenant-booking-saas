@@ -65,6 +65,8 @@ async function findActiveProfessionalsByCompanyId(companyId) {
     `
       SELECT
         p.id,
+        p.photo_url,
+        p.slug,
         u.name
       FROM professionals p
       JOIN users u
