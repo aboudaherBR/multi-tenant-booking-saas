@@ -46,6 +46,7 @@ async function getPublicProfessionals(req, res, next) {
     }
 
     const company = await findCompanyBySlug(slug);
+    console.log("COMPANY:", company);
 
     if (!company || company.status !== 'active') {
       return res.status(404).json({ message: 'Empresa não encontrada' });
