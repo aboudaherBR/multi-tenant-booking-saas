@@ -1,4 +1,4 @@
-import ProfessionalCard from "./ProfessionalCard";
+import ProfessionalCard from "./ProfessionalCards";
 
 export default function ProfessionalsModal({
   professionals,
