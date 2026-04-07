@@ -65,7 +65,7 @@ const backgroundStyle = {
   left: "-40px",
   width: "120px",
   height: "120px",
-  background: "#22c55e",
+  background: "#f8faf8",
   borderRadius: "50%"
 };
 
