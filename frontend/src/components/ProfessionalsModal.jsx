@@ -1,4 +1,4 @@
-import ProfessionalCard from "./ProfessionalCards";
+import ProfessionalCards from "./ProfessionalCards";
 
 export default function ProfessionalsModal({
   professionals,
@@ -21,7 +21,7 @@ export default function ProfessionalsModal({
         ) : (
           <div style={listContainerStyle}>
             {professionals.map((p) => (
-              <ProfessionalCard
+              <ProfessionalCards
                 key={p.id}
                 professional={p}
                 onSelect={onSelect}
