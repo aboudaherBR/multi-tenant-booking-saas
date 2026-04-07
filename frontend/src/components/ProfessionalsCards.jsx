@@ -10,7 +10,7 @@ export default function ProfessionalCard({ professional, onSelect }) {
         <img
           src={
             professional.photo_url ||
-            "https://via.placeholder.com/100"
+            "../images/avatar.png"
           }
           alt={professional.name}
           style={avatarStyle}
