@@ -17,7 +17,7 @@ export default function ProfessionalsModal({
         {professionals.length === 0 ? (
           <p>Nenhum profissional disponível</p>
         ) : (
-          <div>
+          <div style={listContainerStyle}>
             {professionals.map((p) => (
               <div
                 key={p.id}
@@ -76,7 +76,11 @@ const modalStyle = {
   padding: "20px",
   borderRadius: "12px",
   width: "90%",
-  maxWidth: "400px"
+  maxWidth: "400px",
+
+  maxHeight: "80vh",     // 🔥 IMPORTANTE
+  display: "flex",       // 🔥 IMPORTANTE
+  flexDirection: "column"
 };
 
 const backButtonStyle = {
@@ -124,4 +128,9 @@ const buttonStyle = {
   color: "#fff",
   cursor: "pointer",
   fontSize: "13px"
+};
+
+const listContainerStyle = {
+  overflowY: "auto",
+  marginTop: "10px"
 };
