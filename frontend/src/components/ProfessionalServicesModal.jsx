@@ -43,7 +43,8 @@ export default function ProfessionalServicesModal({
                 {
                     method: "POST",
                     body: {
-                        serviceId: selectedServiceId
+                        serviceId: selectedServiceId,
+                        customPrice: customPrice ? Number(customPrice) : null
                     }
                 }
             );
