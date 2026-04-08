@@ -66,12 +66,16 @@ CREATE TABLE public.appointments (
     service_price_snapshot numeric(10,2) NOT NULL,
     service_duration_snapshot integer NOT NULL,
     created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    notified_at timestamp without time zone NULL,
     timespan tsrange GENERATED ALWAYS AS (tsrange((date + start_time), (date + end_time))) STORED,
     client_id uuid NOT NULL,
     CONSTRAINT appointments_duration_match_check CHECK ((((EXTRACT(epoch FROM (end_time - start_time)) / (60)::numeric))::integer = service_duration_snapshot)),
     CONSTRAINT appointments_service_duration_snapshot_check CHECK ((service_duration_snapshot > 0)),
     CONSTRAINT appointments_service_price_snapshot_check CHECK ((service_price_snapshot >= (0)::numeric)),
     CONSTRAINT appointments_time_order_check CHECK ((end_time > start_time))
+);
+
+ALTER TABLE public.appointments OWNER TO postgres;
 );
 
 

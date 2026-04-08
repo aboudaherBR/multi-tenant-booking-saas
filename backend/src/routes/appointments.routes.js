@@ -4,6 +4,7 @@ const router = express.Router();
 const { requireAuth } = require('../middlewares/auth.middleware');
 const appointmentsController = require('../controllers/appointments.controller');
 
+
 router.post(
   '/appointments',
   requireAuth,
@@ -21,5 +22,10 @@ router.delete(
   requireAuth,
   appointmentsController.cancel
 );
+
+router.patch(
+  '/:id/notify',
+  requireAuth,
+   appointmentsController.markAsNotified);
 
 module.exports = router;

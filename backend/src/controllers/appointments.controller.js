@@ -16,6 +16,8 @@ const {
   updateClientName
 } = require('../database/clients.repository');
 
+const appointmentsRepository = require('../database/appointments.repository');
+
 
 
 function addMinutesToTime(time, minutesToAdd) {
@@ -227,11 +229,36 @@ async function cancel(req, res, next) {
   }
 }
 
+async function markAsNotified(req, res, next) {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({
+        error: 'Appointment ID is required'
+      });
+    }
+
+    const updated = await appointmentsRepository.markAsNotified(id);
+
+    if (!updated) {
+      return res.status(404).json({
+        error: 'Appointment not found'
+      });
+    }
+
+    return res.json(updated);
+  } catch (error) {
+    next(error);
+  }
+}
+
 
 
 module.exports = {
   create,
   list,
   cancel,
-  cancel
+  cancel,
+  markAsNotified
 };
