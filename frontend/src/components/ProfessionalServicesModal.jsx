@@ -49,6 +49,9 @@ export default function ProfessionalServicesModal({
                 }
             );
 
+            setCustomPrice("");
+            setSelectedServiceId("");
+
             // 👇 chama função do pai
             onServiceAdded();
 
