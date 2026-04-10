@@ -267,6 +267,18 @@ async function findProfessionalByUserId({ userId, companyId }) {
   return result.rows[0];
 }
 
+async function markAsNotified(appointmentId) {
+  const query = `
+    UPDATE appointments
+    SET notified_at = NOW()
+    WHERE id = $1
+    RETURNING *;
+  `;
+
+  const result = await db.query(query, [appointmentId]);
+  return result.rows[0];
+}
+
 module.exports = {
   createAppointment,
   findConflicts,
@@ -275,5 +287,6 @@ module.exports = {
   findAppointmentsByDate,
   getDashboardToday,
   cancelAppointment,
-  findProfessionalByUserId
+  findProfessionalByUserId,
+  markAsNotified
 };

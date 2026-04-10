@@ -45,7 +45,7 @@ async function listServicesForProfessional(companyId, professionalId) {
 
 
 async function addServiceToProfessional(companyId, professionalId, serviceId, customPrice) {
-
+  console.log('CUSTOM PRICE RECEBIDO:', customPrice);
   const result = await pool.query(
     `
     INSERT INTO professional_services (

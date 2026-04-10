@@ -43,10 +43,14 @@ export default function ProfessionalServicesModal({
                 {
                     method: "POST",
                     body: {
-                        serviceId: selectedServiceId
+                        serviceId: selectedServiceId,
+                        customPrice: customPrice ? Number(customPrice) : null
                     }
                 }
             );
+
+            setCustomPrice("");
+            setSelectedServiceId("");
 
             // 👇 chama função do pai
             onServiceAdded();

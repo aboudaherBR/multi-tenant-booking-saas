@@ -1,3 +1,5 @@
+import ProfessionalsCards from "./ProfessionalsCards";
+
 export default function ProfessionalsModal({
   professionals,
   onClose,
@@ -6,36 +8,33 @@ export default function ProfessionalsModal({
   return (
     <div style={overlayStyle}>
       <div style={modalStyle}>
-        <button onClick={onClose} style={{ marginBottom: "10px" }}>
+        <button onClick={onClose} style={backButtonStyle}>
           ← Voltar
         </button>
 
-        <h3>Escolha um profissional</h3>
+        <h3 style={{ marginBottom: "15px" }}>
+          Escolha um profissional
+        </h3>
 
         {professionals.length === 0 ? (
           <p>Nenhum profissional disponível</p>
         ) : (
-          <ul>
+          <div style={listContainerStyle}>
             {professionals.map((p) => (
-              <li
+              <ProfessionalsCards
                 key={p.id}
-                onClick={() => onSelect(p)}
-                style={{
-                  cursor: "pointer",
-                  marginBottom: "10px",
-                  padding: "8px",
-                  border: "1px solid #ccc"
-                }}
-              >
-                {p.name}
-              </li>
+                professional={p}
+                onSelect={onSelect}
+              />
             ))}
-          </ul>
+          </div>
         )}
       </div>
     </div>
   );
 }
+
+/* STYLES */
 
 const overlayStyle = {
   position: "fixed",
@@ -46,13 +45,29 @@ const overlayStyle = {
   background: "rgba(0,0,0,0.5)",
   display: "flex",
   alignItems: "center",
-  justifyContent: "center"
+  justifyContent: "center",
+  zIndex: 9999
 };
 
 const modalStyle = {
   background: "#fff",
   padding: "20px",
-  borderRadius: "8px",
+  borderRadius: "12px",
   width: "90%",
-  maxWidth: "400px"
+  maxWidth: "400px",
+  maxHeight: "80vh",
+  display: "flex",
+  flexDirection: "column"
+};
+
+const backButtonStyle = {
+  marginBottom: "10px",
+  background: "none",
+  border: "none",
+  cursor: "pointer"
+};
+
+const listContainerStyle = {
+  overflowY: "auto",
+  marginTop: "10px"
 };
