@@ -120,6 +120,12 @@ async function getAvailableSlots({
   const today = new Date().toLocaleDateString('en-CA');
   let finalSlots = availableSlots;
 
+  console.log("DEBUG DATE CHECK", {
+    date,
+    today,
+    equal: date === today
+  });
+
 
   if (date === today) {
     const now = new Date();
