@@ -130,11 +130,12 @@ async function getAvailableSlots({
     const now = new Date();
     const currentMinutes = now.getHours() * 60 + now.getMinutes();
     const roundedMinutes = roundUpToNextInterval(currentMinutes, slotInterval);
-    
+
     finalSlots = availableSlots.filter(slot => {
       const slotMinutes = timeToMinutes(slot);
       return slotMinutes >= roundedMinutes;
     });
+  }
 
 
     // 9️⃣ Reduzir slots para agenda otimizada (estilo Booksy)
