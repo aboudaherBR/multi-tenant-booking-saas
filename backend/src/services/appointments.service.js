@@ -30,6 +30,12 @@ const {
   updateAppointmentById
 } = require('../database/appointments.repository');
 
+console.log("SERVER TIME DEBUG", {
+  serverTime: new Date().toString(),
+  iso: new Date().toISOString(),
+  timezoneOffset: new Date().getTimezoneOffset()
+});
+
 
 function createAppointment(data, existingAppointments) {
   const { date, startTime, duration, professionalId } = data;
