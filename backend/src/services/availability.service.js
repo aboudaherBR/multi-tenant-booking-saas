@@ -119,10 +119,21 @@ async function getAvailableSlots({
   // 8️⃣ Ajustar slots do dia atual
   const today = new Date().toISOString().split('T')[0];
   let finalSlots = availableSlots;
+
+
   if (date === today) {
     const now = new Date();
     const currentMinutes = now.getHours() * 60 + now.getMinutes();
     const roundedMinutes = roundUpToNextInterval(currentMinutes, slotInterval);
+
+    console.log({
+      date,
+      today,
+      now: now.toString(),
+      currentMinutes,
+      slotInterval,
+      roundedMinutes
+    });
 
     finalSlots = availableSlots.filter(slot => {
       const slotMinutes = timeToMinutes(slot);
