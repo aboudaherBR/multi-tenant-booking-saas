@@ -127,25 +127,25 @@ async function getAvailableSlots({
   });
 
 
-  if (date === today) {
-    const now = new Date();
-    const currentMinutes = now.getHours() * 60 + now.getMinutes();
-    const roundedMinutes = roundUpToNextInterval(currentMinutes, slotInterval);
+  // if (date === today) {
+  //   const now = new Date();
+  //   const currentMinutes = now.getHours() * 60 + now.getMinutes();
+  //   const roundedMinutes = roundUpToNextInterval(currentMinutes, slotInterval);
 
-    console.log({
-      date,
-      today,
-      now: now.toString(),
-      currentMinutes,
-      slotInterval,
-      roundedMinutes
-    });
+  //   console.log({
+  //     date,
+  //     today,
+  //     now: now.toString(),
+  //     currentMinutes,
+  //     slotInterval,
+  //     roundedMinutes
+  //   });
 
-    finalSlots = availableSlots.filter(slot => {
-      const slotMinutes = timeToMinutes(slot);
-      return slotMinutes >= roundedMinutes;
-    });
-  }// 9️⃣ Reduzir slots para agenda otimizada (estilo Booksy)
+  //   finalSlots = availableSlots.filter(slot => {
+  //     const slotMinutes = timeToMinutes(slot);
+  //     return slotMinutes >= roundedMinutes;
+  //   });
+  // }// 9️⃣ Reduzir slots para agenda otimizada (estilo Booksy)
   const optimizedSlots = [];
 
   for (let i = 0; i < finalSlots.length; i++) {
