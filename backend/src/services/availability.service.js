@@ -129,7 +129,11 @@ async function getAvailableSlots({
 
   if (date === today) {
     const now = getBusinessNow();
-    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+    const MINIMUM_LEAD_TIME_MINUTES = 60;
+    const currentMinutes =
+      now.getHours() * 60 +
+      now.getMinutes() +
+      MINIMUM_LEAD_TIME_MINUTES;
     const roundedMinutes = roundUpToNextInterval(currentMinutes, slotInterval);
 
     finalSlots = availableSlots.filter(slot => {
@@ -139,35 +143,35 @@ async function getAvailableSlots({
   }
 
 
-    // 9️⃣ Reduzir slots para agenda otimizada (estilo Booksy)
-    const optimizedSlots = [];
+  // 9️⃣ Reduzir slots para agenda otimizada (estilo Booksy)
+  const optimizedSlots = [];
 
-    for (let i = 0; i < finalSlots.length; i++) {
+  for (let i = 0; i < finalSlots.length; i++) {
 
-      if (i === 0) {
-        optimizedSlots.push(finalSlots[i]);
-        continue;
-      }
-
-      const previous = timeToMinutes(
-        optimizedSlots[optimizedSlots.length - 1]
-      );
-
-      const current = timeToMinutes(finalSlots[i]);
-
-      if (current - previous >= serviceDurationMinutes) {
-        optimizedSlots.push(finalSlots[i]);
-      }
-
+    if (i === 0) {
+      optimizedSlots.push(finalSlots[i]);
+      continue;
     }
-    console.log("serviceDurationMinutes:", serviceDurationMinutes);
-    console.log("finalSlots count:", finalSlots.length);
-    console.log("optimizedSlots count:", optimizedSlots.length);
-    return optimizedSlots;
 
+    const previous = timeToMinutes(
+      optimizedSlots[optimizedSlots.length - 1]
+    );
+
+    const current = timeToMinutes(finalSlots[i]);
+
+    if (current - previous >= serviceDurationMinutes) {
+      optimizedSlots.push(finalSlots[i]);
+    }
 
   }
+  console.log("serviceDurationMinutes:", serviceDurationMinutes);
+  console.log("finalSlots count:", finalSlots.length);
+  console.log("optimizedSlots count:", optimizedSlots.length);
+  return optimizedSlots;
 
-  module.exports = {
-    getAvailableSlots
-  };
+
+}
+
+module.exports = {
+  getAvailableSlots
+};
