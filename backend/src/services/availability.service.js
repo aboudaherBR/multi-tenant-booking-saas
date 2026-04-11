@@ -126,54 +126,46 @@ async function getAvailableSlots({
     equal: date === today
   });
 
+  if (date === today) {
+    const now = new Date();
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+    const roundedMinutes = roundUpToNextInterval(currentMinutes, slotInterval);
+    
+    finalSlots = availableSlots.filter(slot => {
+      const slotMinutes = timeToMinutes(slot);
+      return slotMinutes >= roundedMinutes;
+    });
 
-  // if (date === today) {
-  //   const now = new Date();
-  //   const currentMinutes = now.getHours() * 60 + now.getMinutes();
-  //   const roundedMinutes = roundUpToNextInterval(currentMinutes, slotInterval);
 
-  //   console.log({
-  //     date,
-  //     today,
-  //     now: now.toString(),
-  //     currentMinutes,
-  //     slotInterval,
-  //     roundedMinutes
-  //   });
+    // 9️⃣ Reduzir slots para agenda otimizada (estilo Booksy)
+    const optimizedSlots = [];
 
-  //   finalSlots = availableSlots.filter(slot => {
-  //     const slotMinutes = timeToMinutes(slot);
-  //     return slotMinutes >= roundedMinutes;
-  //   });
-  // }// 9️⃣ Reduzir slots para agenda otimizada (estilo Booksy)
-  const optimizedSlots = [];
+    for (let i = 0; i < finalSlots.length; i++) {
 
-  for (let i = 0; i < finalSlots.length; i++) {
+      if (i === 0) {
+        optimizedSlots.push(finalSlots[i]);
+        continue;
+      }
 
-    if (i === 0) {
-      optimizedSlots.push(finalSlots[i]);
-      continue;
+      const previous = timeToMinutes(
+        optimizedSlots[optimizedSlots.length - 1]
+      );
+
+      const current = timeToMinutes(finalSlots[i]);
+
+      if (current - previous >= serviceDurationMinutes) {
+        optimizedSlots.push(finalSlots[i]);
+      }
+
     }
+    console.log("serviceDurationMinutes:", serviceDurationMinutes);
+    console.log("finalSlots count:", finalSlots.length);
+    console.log("optimizedSlots count:", optimizedSlots.length);
+    return optimizedSlots;
 
-    const previous = timeToMinutes(
-      optimizedSlots[optimizedSlots.length - 1]
-    );
-
-    const current = timeToMinutes(finalSlots[i]);
-
-    if (current - previous >= serviceDurationMinutes) {
-      optimizedSlots.push(finalSlots[i]);
-    }
 
   }
-  console.log("serviceDurationMinutes:", serviceDurationMinutes);
-  console.log("finalSlots count:", finalSlots.length);
-  console.log("optimizedSlots count:", optimizedSlots.length);
-  return optimizedSlots;
 
-
-}
-
-module.exports = {
-  getAvailableSlots
-};
+  module.exports = {
+    getAvailableSlots
+  };
