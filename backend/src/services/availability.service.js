@@ -5,6 +5,7 @@ const { findCompanyById } = require('../database/companies.repository');
 const { findAppointmentsByProfessionalAndDate } = require('../database/appointments.repository');
 const { findScheduleBlocksByProfessionalAndDate } =
   require('../database/scheduleBlocks.repository');
+const { getBusinessNow, getBusinessToday } = require('../utils/time.utils');
 
 function timeToMinutes(time) {
   const [h, m] = time.split(':').map(Number);
@@ -117,7 +118,7 @@ async function getAvailableSlots({
   });
 
   // 8️⃣ Ajustar slots do dia atual
-  const today = new Date().toLocaleDateString('en-CA');
+  const today = getBusinessToday();
   let finalSlots = availableSlots;
 
   console.log("DEBUG DATE CHECK", {
@@ -127,7 +128,7 @@ async function getAvailableSlots({
   });
 
   if (date === today) {
-    const now = new Date();
+    const now = getBusinessNow();
     const currentMinutes = now.getHours() * 60 + now.getMinutes();
     const roundedMinutes = roundUpToNextInterval(currentMinutes, slotInterval);
 
