@@ -5,6 +5,7 @@ const { findCompanyById } = require('../database/companies.repository');
 const { findAppointmentsByProfessionalAndDate } = require('../database/appointments.repository');
 const { findScheduleBlocksByProfessionalAndDate } =
   require('../database/scheduleBlocks.repository');
+const { getBusinessNow, getBusinessToday } = require('../utils/time.utils');
 
 function timeToMinutes(time) {
   const [h, m] = time.split(':').map(Number);
@@ -117,18 +118,32 @@ async function getAvailableSlots({
   });
 
   // 8️⃣ Ajustar slots do dia atual
-  const today = new Date().toISOString().split('T')[0];
+  const today = getBusinessToday();
   let finalSlots = availableSlots;
+
+  console.log("DEBUG DATE CHECK", {
+    date,
+    today,
+    equal: date === today
+  });
+
   if (date === today) {
-    const now = new Date();
-    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+    const now = getBusinessNow();
+    const MINIMUM_LEAD_TIME_MINUTES = 60;
+    const currentMinutes =
+      now.getHours() * 60 +
+      now.getMinutes() +
+      MINIMUM_LEAD_TIME_MINUTES;
     const roundedMinutes = roundUpToNextInterval(currentMinutes, slotInterval);
 
     finalSlots = availableSlots.filter(slot => {
       const slotMinutes = timeToMinutes(slot);
       return slotMinutes >= roundedMinutes;
     });
-  }// 9️⃣ Reduzir slots para agenda otimizada (estilo Booksy)
+  }
+
+
+  // 9️⃣ Reduzir slots para agenda otimizada (estilo Booksy)
   const optimizedSlots = [];
 
   for (let i = 0; i < finalSlots.length; i++) {
