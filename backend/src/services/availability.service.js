@@ -117,9 +117,7 @@ async function getAvailableSlots({
   });
 
   // 8️⃣ Ajustar slots do dia atual
-  const now = new Date(
-  new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' })
-);
+  const today = new Date().toLocaleDateString('en-CA');
   let finalSlots = availableSlots;
 
   console.log("DEBUG DATE CHECK", {
