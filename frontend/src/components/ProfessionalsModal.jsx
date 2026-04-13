@@ -3,7 +3,8 @@ import ProfessionalsCards from "./ProfessionalsCards";
 export default function ProfessionalsModal({
   professionals,
   onClose,
-  onSelect
+  onSelect,
+  onBack
 }) {
   return (
     <div style={overlayStyle}>
