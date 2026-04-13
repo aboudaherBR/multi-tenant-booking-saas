@@ -8,7 +8,18 @@ export default function ProfessionalsModal({
   return (
     <div style={overlayStyle}>
       <div style={modalStyle}>
-        <button onClick={onClose} style={backButtonStyle}>
+        <button
+          onClick={onBack}
+          style={{
+            background: "#e5e7eb",
+            border: "none",
+            padding: "6px 12px",
+            borderRadius: "999px",
+            fontSize: "13px",
+            cursor: "pointer",
+            marginBottom: "12px"
+          }}
+        >
           ← Voltar
         </button>
 
