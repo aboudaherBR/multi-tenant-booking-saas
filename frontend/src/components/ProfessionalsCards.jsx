@@ -5,13 +5,11 @@ export default function ProfessionalCard({ professional, onSelect }) {
     <div
       style={cardContainer}
       onClick={() => onSelect(professional)}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.transform = "translateY(-4px)";
-        e.currentTarget.style.boxShadow = "0 25px 50px rgba(0,0,0,0.25)";
+      onMouseDown={(e) => {
+        e.currentTarget.style.transform = "scale(0.97)";
       }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.transform = "translateY(0)";
-        e.currentTarget.style.boxShadow = "0 20px 40px rgba(0,0,0,0.15)";
+      onMouseUp={(e) => {
+        e.currentTarget.style.transform = "scale(1)";
       }}
     >
       {/* BACKGROUND */}
@@ -66,7 +64,7 @@ const cardContainer = {
   cursor: "pointer",
   overflow: "hidden",
   transition: "all 0.2s ease",
-  boxShadow: "0 20px 40px rgba(0,0,0,0.15)"
+  boxShadow: "0 20px 40px rgba(0,0,0,0.15)",
 };
 
 const backgroundStyle = {
