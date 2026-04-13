@@ -317,8 +317,8 @@ export default function BookPublic() {
                                     }}
                                 />
                                 {existingClient && (
-                                    <p style={{ color: "green", marginTop: "8px" }}>
-                                        Bem-vindo de volta, {clientName} 👋
+                                    <p style={{ color: "green", marginTop: "8px", fontSize: "16px" }}>
+                                        Bem-vindo de volta, {clientName}
                                     </p>
                                 )}
                             </div>
