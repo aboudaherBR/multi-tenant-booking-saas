@@ -11,19 +11,18 @@ export default function ProfessionalsModal({
         <button
           onClick={onClose}
           style={{
-            background: "red",
-            color: "white",
-            border: "none",
+            background: "rgba(0,0,0,0.5)",
+            color: "#fff",
+            border: "1px solid rgba(255,255,255,0.2)",
             padding: "6px 12px",
             borderRadius: "999px",
             fontSize: "13px",
             cursor: "pointer",
             marginBottom: "12px",
-            transition: "all 0.2s ease",
-            boxShadow: "0 25px 50px rgba(0,0,0,0.25)"
+            transition: "all 0.2s ease"
           }}
         >
-          Voltar ******
+          Voltar
         </button>
 
         <h3 style={{ marginBottom: "15px" }}>
