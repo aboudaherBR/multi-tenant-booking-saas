@@ -23,7 +23,7 @@ export default function ProfessionalsModal({
             boxShadow: "0 25px 50px rgba(0,0,0,0.25)"
           }}
         >
-          Voltar
+          Voltar ******
         </button>
 
         <h3 style={{ marginBottom: "15px" }}>
