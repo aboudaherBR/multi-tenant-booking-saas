@@ -3,16 +3,15 @@ import ProfessionalsCards from "./ProfessionalsCards";
 export default function ProfessionalsModal({
   professionals,
   onClose,
-  onSelect,
-  onBack
+  onSelect
 }) {
   return (
     <div style={overlayStyle}>
       <div style={modalStyle}>
         <button
-          onClick={onBack}
+          onClick={onClose}
           style={{
-            background: "#e5e7eb",
+            background: "#c9cacc",
             border: "none",
             padding: "6px 12px",
             borderRadius: "999px",
@@ -21,7 +20,7 @@ export default function ProfessionalsModal({
             marginBottom: "12px"
           }}
         >
-          ← Voltar
+          Voltar
         </button>
 
         <h3 style={{ marginBottom: "15px" }}>
