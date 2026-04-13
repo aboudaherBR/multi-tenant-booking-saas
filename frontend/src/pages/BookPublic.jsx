@@ -299,7 +299,7 @@ export default function BookPublic() {
                         ) : phone ? (
                             <div style={{ marginBottom: "20px" }}>
                                 <p style={{ marginBottom: "8px" }}>
-                                    Primeira vez aqui?
+                                    Primeira vez aqui? Digite seu nome completo para começar
                                 </p>
 
                                 <input
