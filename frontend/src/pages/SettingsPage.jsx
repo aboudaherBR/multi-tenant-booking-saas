@@ -114,6 +114,11 @@ export default function SettingsPage() {
             return;
         }
 
+        if (lunchStart && lunchEnd && lunchStart >= lunchEnd) {
+            alert("Horário de almoço inválido.");
+            return;
+        }
+
         for (const day of businessHours) {
             if (!day.is_active) continue;
             const start = day.start_time.slice(0, 5);
