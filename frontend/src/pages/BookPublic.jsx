@@ -334,7 +334,9 @@ export default function BookPublic() {
                                 background: "#0f172a",
                                 color: "#fff",
                                 fontWeight: "bold",
-                                cursor: "pointer"
+                                cursor: "pointer",
+                                marginTop: "20px",
+                                boxShadow: "0 2px 6px rgba(0,0,0,0.15)"
 
                             }}
                         >
