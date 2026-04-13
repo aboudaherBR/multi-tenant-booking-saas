@@ -62,22 +62,28 @@ export default function ServicesModal({
           <ul>
             {services.map((s, index) => (
               <li
-                key={s.slug || index} // ✅ usa slug
+                key={s.slug || index}
                 onClick={() => handleSelect(s)}
                 style={{
                   cursor: "pointer",
-                  marginBottom: "10px",
-                  padding: "8px",
-                  border: "1px solid #ccc"
+                  marginBottom: "16px",
+                  padding: "20px",
+                  borderRadius: "16px",
+                  background: "#0f172a", // azul escuro igual card
+                  color: "#fff",
+                  textAlign: "center",
+                  boxShadow: "0 8px 20px rgba(0,0,0,0.2)"
                 }}
               >
-                <strong>{s.name}</strong>
+                <strong style={{ fontSize: "18px" }}>
+                  {s.name}
+                </strong>
 
-                <div style={{ fontSize: "12px", color: "#666" }}>
+                <div style={{ marginTop: "6px", fontSize: "13px", opacity: 0.8 }}>
                   {s.duration_minutes} min
                 </div>
 
-                <div style={{ fontWeight: "bold", marginTop: "4px" }}>
+                <div style={{ marginTop: "10px", fontSize: "18px", fontWeight: "bold" }}>
                   R$ {Number(s.price).toLocaleString("pt-BR", {
                     minimumFractionDigits: 2
                   })}
