@@ -855,7 +855,9 @@ export default function SettingsPage() {
                                         >
 
                                             <td style={{ padding: "8px", border: "1px solid #ddd" }}>
-                                                <div style={{ fontWeight: "bold" }}>{service.name}</div>
+                                                <div style={{ fontWeight: "bold" }}>
+                                                    🔥 {service.name}
+                                                </div>
                                                 <div style={{ fontSize: "12px", color: "#666" }}>
                                                     {service.duration_minutes} min
                                                 </div>
