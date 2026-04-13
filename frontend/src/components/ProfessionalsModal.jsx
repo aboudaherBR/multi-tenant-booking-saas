@@ -11,7 +11,7 @@ export default function ProfessionalsModal({
         <button
           onClick={onClose}
           style={{
-            background: "rgba(0,0,0,0.5)",
+            background: "red",
             color: "white",
             border: "none",
             padding: "6px 12px",
