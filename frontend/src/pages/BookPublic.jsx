@@ -272,9 +272,9 @@ export default function BookPublic() {
                                 Verificando...
                             </p>
                         ) : clientFound ? (
-                            <div style={{ marginBottom: "20px" }}>
+                            <div style={{ marginBottom: "20px", fontSize: "18px" }}>
                                 <p>
-                                    👋 Olá, <strong>{clientName}</strong>
+                                    Olá, <strong>{clientName}</strong>
                                 </p>
 
                                 <button
