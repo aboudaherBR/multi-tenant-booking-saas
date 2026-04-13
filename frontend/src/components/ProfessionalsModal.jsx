@@ -19,7 +19,9 @@ export default function ProfessionalsModal({
             fontSize: "13px",
             cursor: "pointer",
             marginBottom: "12px",
-            transition: "all 0.2s ease"
+            transition: "all 0.2s ease",
+            boxShadow: "0 10px 18px rgba(0,0,0,0.3)",
+            transform: "translateY(0)"
           }}
         >
           Voltar
