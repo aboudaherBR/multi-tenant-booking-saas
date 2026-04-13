@@ -59,7 +59,7 @@ export default function ServicesModal({
         ) : services.length === 0 ? (
           <p>Nenhum serviço disponível</p>
         ) : (
-          <ul>
+          <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
             {services.map((s, index) => (
               <li
                 key={s.slug || index}
