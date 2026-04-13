@@ -60,6 +60,9 @@ export default function SettingsPage() {
     const [showProfessionalServicesModal, setShowProfessionalServicesModal] = useState(false);
     const [professionalServices, setProfessionalServices] = useState([]);
 
+    const [lunchStart, setLunchStart] = useState("");
+    const [lunchEnd, setLunchEnd] = useState("");
+
 
 
     async function loadBusinessHours() {
@@ -89,6 +92,8 @@ export default function SettingsPage() {
         await loadBusinessHours();
 
         const data = await apiClient("/company/settings");
+        setLunchStart(data.lunch_start_time?.slice(0, 5) || "");
+        setLunchEnd(data.lunch_end_time?.slice(0, 5) || "");
 
         setBufferMinutes(data.appointment_buffer_minutes || 0);
         setSlotInterval(data.slot_interval_minutes || 5);
@@ -401,6 +406,30 @@ export default function SettingsPage() {
                             </div>
 
                         ))}
+
+                        <div style={{ marginTop: "15px" }}>
+
+                            <strong>Horário de almoço</strong>
+
+                            <div style={{ display: "flex", gap: "8px", marginTop: "5px" }}>
+
+                                <input
+                                    type="time"
+                                    value={lunchStart}
+                                    onChange={(e) => setLunchStart(e.target.value)}
+                                />
+
+                                <span>até</span>
+
+                                <input
+                                    type="time"
+                                    value={lunchEnd}
+                                    onChange={(e) => setLunchEnd(e.target.value)}
+                                />
+
+                            </div>
+
+                        </div>
 
                         <div style={{ marginTop: "15px" }}>
 
