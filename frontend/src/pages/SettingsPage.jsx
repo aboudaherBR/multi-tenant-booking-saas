@@ -60,6 +60,9 @@ export default function SettingsPage() {
     const [showProfessionalServicesModal, setShowProfessionalServicesModal] = useState(false);
     const [professionalServices, setProfessionalServices] = useState([]);
 
+    const [lunchStart, setLunchStart] = useState("");
+    const [lunchEnd, setLunchEnd] = useState("");
+
 
 
     async function loadBusinessHours() {
@@ -89,6 +92,8 @@ export default function SettingsPage() {
         await loadBusinessHours();
 
         const data = await apiClient("/company/settings");
+        setLunchStart(data.lunch_start_time?.slice(0, 5) || "");
+        setLunchEnd(data.lunch_end_time?.slice(0, 5) || "");
 
         setBufferMinutes(data.appointment_buffer_minutes || 0);
         setSlotInterval(data.slot_interval_minutes || 5);
@@ -103,6 +108,16 @@ export default function SettingsPage() {
     }
 
     async function saveBusinessHours() {
+
+        if ((lunchStart && !lunchEnd) || (!lunchStart && lunchEnd)) {
+            alert("Preencha início e fim do horário de almoço.");
+            return;
+        }
+
+        if (lunchStart && lunchEnd && lunchStart >= lunchEnd) {
+            alert("Horário de almoço inválido.");
+            return;
+        }
 
         for (const day of businessHours) {
             if (!day.is_active) continue;
@@ -134,6 +149,14 @@ export default function SettingsPage() {
             method: "PUT",
             body: {
                 appointmentBufferMinutes: Number(bufferMinutes)
+            }
+        });
+
+        await apiClient("/company/lunch", {
+            method: "PUT",
+            body: {
+                lunchStartTime: lunchStart || null,
+                lunchEndTime: lunchEnd || null
             }
         });
 
@@ -401,6 +424,40 @@ export default function SettingsPage() {
                             </div>
 
                         ))}
+
+                        <div style={{ marginTop: "15px" }}>
+
+                            <strong>Horário de almoço</strong>
+
+                            <div style={{ display: "flex", gap: "8px", marginTop: "5px" }}>
+
+                                <input
+                                    type="time"
+                                    value={lunchStart}
+                                    onChange={(e) => setLunchStart(e.target.value)}
+                                />
+
+                                <span>até</span>
+
+                                <input
+                                    type="time"
+                                    value={lunchEnd}
+                                    onChange={(e) => setLunchEnd(e.target.value)}
+                                />
+
+                                <button
+                                    style={{ marginTop: "5px" }}
+                                    onClick={() => {
+                                        setLunchStart("");
+                                        setLunchEnd("");
+                                    }}
+                                >
+                                    Remover horário de almoço
+                                </button>
+
+                            </div>
+
+                        </div>
 
                         <div style={{ marginTop: "15px" }}>
 
