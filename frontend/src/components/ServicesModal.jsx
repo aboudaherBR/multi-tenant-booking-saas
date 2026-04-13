@@ -78,7 +78,7 @@ export default function ServicesModal({
                 </div>
 
                 <div style={{ fontWeight: "bold", marginTop: "4px" }}>
-                  R$ {s.base_price}
+                  R$ {s.price}
                 </div>
               </li>
             ))}
