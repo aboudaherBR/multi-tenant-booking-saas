@@ -334,9 +334,8 @@ export default function BookPublic() {
                                 background: "#0f172a",
                                 color: "#fff",
                                 fontWeight: "bold",
-                                cursor: "pointer",
-                                boxShadow: "0 12px 27px rgba(0,0,0,0.4)",
-                                transform: "translateY(0)"
+                                cursor: "pointer"
+
                             }}
                         >
                             Continuar agendamento

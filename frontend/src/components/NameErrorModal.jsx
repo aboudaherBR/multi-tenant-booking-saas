@@ -37,7 +37,8 @@ export default function NameErrorModal({ onClose }) {
                         border: "none",
                         background: "#0f172a",
                         color: "#fff",
-                        cursor: "pointer"
+                        cursor: "pointer",
+
                     }}
                 >
                     Ok
