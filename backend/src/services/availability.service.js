@@ -12,14 +12,13 @@ function timeToMinutes(time) {
   return h * 60 + m;
 }
 
-function minutesToTime(totalMinutes) {
-  const h = Math.floor(totalMinutes / 60);
-  const m = totalMinutes % 60;
-  return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
-}
-
 function roundUpToNextInterval(currentMinutes, interval) {
   return Math.ceil(currentMinutes / interval) * interval;
+}
+
+// 🔴 REGRA CENTRALIZADA (importante)
+function isOverlapping(startA, endA, startB, endB) {
+  return startA < endB && endA > startB;
 }
 
 async function getAvailableSlots({
@@ -31,10 +30,8 @@ async function getAvailableSlots({
 
   console.log("AVAILABILITY SERVICE EXECUTANDO");
 
-  // 1️⃣ Descobrir weekday
   const weekday = getWeekdayFromDate(date);
 
-  // 2️⃣ Buscar horário da empresa no dia
   const businessHours =
     await findBusinessHoursByCompanyAndWeekday({
       companyId,
@@ -43,28 +40,29 @@ async function getAvailableSlots({
 
   if (!businessHours) return [];
 
-  // 3️⃣ Buscar config da empresa
   const company = await findCompanyById(companyId);
   const slotInterval = company.slot_interval_minutes;
   const bufferMinutes = company.appointment_buffer_minutes;
   const lunchStart = company.lunch_start_time;
   const lunchEnd = company.lunch_end_time;
 
-  // 4️⃣ Gerar slots base
+  console.log("LUNCH CONFIG:", {
+  lunchStart,
+  lunchEnd
+});
+
   const baseSlots = generateBaseSlots({
     startTime: businessHours.start_time,
     endTime: businessHours.end_time,
     intervalMinutes: slotInterval
   });
 
-  // 5️⃣ Filtrar por duração
   const validDurationSlots = filterSlotsByServiceDuration({
     slots: baseSlots,
     serviceDurationMinutes,
     companyEndTime: businessHours.end_time
   });
 
-  // 6️⃣ Buscar appointments existentes
   const appointments =
     await findAppointmentsByProfessionalAndDate({
       companyId,
@@ -79,45 +77,47 @@ async function getAvailableSlots({
       date
     });
 
-  // 🔴 Se existir bloqueio de dia inteiro, não há slots disponíveis
   const hasFullDayBlock = scheduleBlocks.some(
     block => !block.start_time && !block.end_time
   );
   if (hasFullDayBlock) return [];
 
-  // 7️⃣ Aplicar conflito + buffer + bloqueios + almoço
+  // 🔵 FILTRO PRINCIPAL
   const availableSlots = validDurationSlots.filter(slot => {
     const slotStart = timeToMinutes(slot);
     const slotEnd = slotStart + serviceDurationMinutes;
 
-    // 🔵 Conflito com appointments
+    // appointments
     for (const appt of appointments) {
       const apptStart = timeToMinutes(appt.start_time);
       const apptEnd = timeToMinutes(appt.end_time) + bufferMinutes;
-      if (slotStart < apptEnd && slotEnd > apptStart) return false;
+
+      if (isOverlapping(slotStart, slotEnd, apptStart, apptEnd)) return false;
     }
 
-    // 🔴 Conflito com bloqueios
+    // blocks
     for (const block of scheduleBlocks) {
       if (!block.start_time || !block.end_time) continue;
+
       const blockStart = timeToMinutes(block.start_time);
       const blockEnd = timeToMinutes(block.end_time);
-      if (slotStart < blockEnd && slotEnd > blockStart) return false;
+
+      if (isOverlapping(slotStart, slotEnd, blockStart, blockEnd)) return false;
     }
 
-    // 🟡 Conflito com almoço (corrigido)
+    // almoço
     if (lunchStart && lunchEnd) {
       const lunchStartMinutes = timeToMinutes(lunchStart);
       const lunchEndMinutes = timeToMinutes(lunchEnd);
 
-      // Remover slot que inicia ou termina dentro do horário de almoço
-      if (slotStart < lunchEndMinutes && slotEnd > lunchStartMinutes) return false;
+      if (isOverlapping(slotStart, slotEnd, lunchStartMinutes, lunchEndMinutes)) {
+        return false;
+      }
     }
 
     return true;
   });
 
-  // 8️⃣ Ajustar slots do dia atual
   const today = getBusinessToday();
   let finalSlots = availableSlots;
 
@@ -130,10 +130,12 @@ async function getAvailableSlots({
   if (date === today) {
     const now = getBusinessNow();
     const MINIMUM_LEAD_TIME_MINUTES = 60;
+
     const currentMinutes =
       now.getHours() * 60 +
       now.getMinutes() +
       MINIMUM_LEAD_TIME_MINUTES;
+
     const roundedMinutes = roundUpToNextInterval(currentMinutes, slotInterval);
 
     finalSlots = availableSlots.filter(slot => {
@@ -142,14 +144,26 @@ async function getAvailableSlots({
     });
   }
 
-
-  // 9️⃣ Reduzir slots para agenda otimizada (estilo Booksy)
+  // 🔴 OTIMIZAÇÃO COM REGRA DE NEGÓCIO GARANTIDA
   const optimizedSlots = [];
 
   for (let i = 0; i < finalSlots.length; i++) {
+    const currentSlot = finalSlots[i];
+    const currentStart = timeToMinutes(currentSlot);
+    const currentEnd = currentStart + serviceDurationMinutes;
 
-    if (i === 0) {
-      optimizedSlots.push(finalSlots[i]);
+    // 🔴 GARANTE que almoço nunca passa aqui
+    if (lunchStart && lunchEnd) {
+      const lunchStartMinutes = timeToMinutes(lunchStart);
+      const lunchEndMinutes = timeToMinutes(lunchEnd);
+
+      if (isOverlapping(currentStart, currentEnd, lunchStartMinutes, lunchEndMinutes)) {
+        continue;
+      }
+    }
+
+    if (optimizedSlots.length === 0) {
+      optimizedSlots.push(currentSlot);
       continue;
     }
 
@@ -157,19 +171,16 @@ async function getAvailableSlots({
       optimizedSlots[optimizedSlots.length - 1]
     );
 
-    const current = timeToMinutes(finalSlots[i]);
-
-    if (current - previous >= serviceDurationMinutes) {
-      optimizedSlots.push(finalSlots[i]);
+    if (currentStart - previous >= serviceDurationMinutes) {
+      optimizedSlots.push(currentSlot);
     }
-
   }
+
   console.log("serviceDurationMinutes:", serviceDurationMinutes);
   console.log("finalSlots count:", finalSlots.length);
   console.log("optimizedSlots count:", optimizedSlots.length);
+
   return optimizedSlots;
-
-
 }
 
 module.exports = {

@@ -23,20 +23,24 @@ async function seedTestDatabase() {
   // 🏢 Company
   await pool.query(
     `INSERT INTO companies (
-        id,
-        name,
-        slug,
-        appointment_buffer_minutes,
-        slot_interval_minutes,
-        status
-     )
-     VALUES ($1, $2, $3, $4, $5, $6)`,
+      id,
+      name,
+      slug,
+      appointment_buffer_minutes,
+      slot_interval_minutes,
+      lunch_start_time,
+      lunch_end_time,
+      status
+   )
+   VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
     [
       companyId,
       'Company Test',
       'company-test',
       0,
       30,
+      '12:00',  // 👈 almoço início
+      '13:00',  // 👈 almoço fim
       'active'
     ]
   );
