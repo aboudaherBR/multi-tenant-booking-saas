@@ -200,7 +200,7 @@ export default function BookPublic() {
                     background: "#fff",
                     borderRadius: "12px",
                     padding: "20px",
-                    boxShadow: "0 10px 25px rgba(0,0,0,0.1)"
+                    boxShadow: "0 20px 30px rgba(0,0,0,0.3)"
                 }}
             >
 
@@ -334,10 +334,7 @@ export default function BookPublic() {
                                 background: "#0f172a",
                                 color: "#fff",
                                 fontWeight: "bold",
-                                cursor: "pointer",
-                                marginTop: "20px",
-                                boxShadow: "0 2px 6px rgba(0,0,0,0.15)"
-
+                                cursor: "pointer"
                             }}
                         >
                             Continuar agendamento
