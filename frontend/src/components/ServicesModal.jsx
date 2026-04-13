@@ -78,7 +78,9 @@ export default function ServicesModal({
                 </div>
 
                 <div style={{ fontWeight: "bold", marginTop: "4px" }}>
-                  R$ {s.price}
+                  R$ {Number(s.price).toLocaleString("pt-BR", {
+                    minimumFractionDigits: 2
+                  })}
                 </div>
               </li>
             ))}
