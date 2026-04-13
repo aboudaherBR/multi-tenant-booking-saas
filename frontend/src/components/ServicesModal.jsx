@@ -72,7 +72,8 @@ export default function ServicesModal({
                   background: "#0f172a", // azul escuro igual card
                   color: "#fff",
                   textAlign: "center",
-                  boxShadow: "0 8px 20px rgba(0,0,0,0.2)"
+                  boxShadow: "0 12px 27px rgba(0,0,0,0.4)",
+                  transform: "translateY(0)"
                 }}
               >
                 <strong style={{ fontSize: "18px" }}>
@@ -118,5 +119,7 @@ const modalStyle = {
   padding: "20px",
   borderRadius: "8px",
   width: "90%",
-  maxWidth: "400px"
+  maxWidth: "400px",
+  maxHeight: "80vh",
+  overflowY: "auto",
 };
