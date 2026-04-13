@@ -72,11 +72,14 @@ export default function ServicesModal({
                 }}
               >
                 <strong>{s.name}</strong>
-                {s.duration_minutes && (
-                  <span style={{ marginLeft: "10px", fontSize: "12px" }}>
-                    ({s.duration_minutes} min)
-                  </span>
-                )}
+
+                <div style={{ fontSize: "12px", color: "#666" }}>
+                  {s.duration_minutes} min
+                </div>
+
+                <div style={{ fontWeight: "bold", marginTop: "4px" }}>
+                  R$ {s.base_price}
+                </div>
               </li>
             ))}
           </ul>
