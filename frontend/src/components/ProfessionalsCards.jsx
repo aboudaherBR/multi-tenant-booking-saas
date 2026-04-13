@@ -64,7 +64,7 @@ const cardContainer = {
   cursor: "pointer",
   overflow: "hidden",
   transition: "all 0.2s ease",
-  boxShadow: "0 25px 50px rgba(0,0,0,0.5)"
+  boxShadow: "0 15px 20px rgba(0,0,0,0.4)"
 };
 
 const backgroundStyle = {
