@@ -109,6 +109,11 @@ export default function SettingsPage() {
 
     async function saveBusinessHours() {
 
+        if ((lunchStart && !lunchEnd) || (!lunchStart && lunchEnd)) {
+            alert("Preencha início e fim do horário de almoço.");
+            return;
+        }
+
         for (const day of businessHours) {
             if (!day.is_active) continue;
             const start = day.start_time.slice(0, 5);
