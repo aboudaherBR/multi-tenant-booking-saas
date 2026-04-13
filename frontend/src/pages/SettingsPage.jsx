@@ -142,6 +142,14 @@ export default function SettingsPage() {
             }
         });
 
+        await apiClient("/company/lunch", {
+            method: "PUT",
+            body: {
+                lunchStartTime: lunchStart || null,
+                lunchEndTime: lunchEnd || null
+            }
+        });
+
         setShowBusinessHoursModal(false);
     }
 
