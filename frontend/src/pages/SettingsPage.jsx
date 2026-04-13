@@ -445,6 +445,16 @@ export default function SettingsPage() {
                                     onChange={(e) => setLunchEnd(e.target.value)}
                                 />
 
+                                <button
+                                    style={{ marginTop: "5px" }}
+                                    onClick={() => {
+                                        setLunchStart("");
+                                        setLunchEnd("");
+                                    }}
+                                >
+                                    Remover horário de almoço
+                                </button>
+
                             </div>
 
                         </div>
