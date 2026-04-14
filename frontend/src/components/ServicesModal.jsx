@@ -50,7 +50,38 @@ export default function ServicesModal({
   return (
     <div style={overlayStyle}>
       <div style={modalStyle}>
-        <button onClick={onBack}>← Voltar</button>
+        {/* HEADER */}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "15px" }}>
+
+          <button
+            onClick={onBack}
+            style={{
+              background: "#0F172A",
+              color: "#fff",
+              border: "none",
+              padding: "6px 12px",
+              borderRadius: "999px",
+              fontSize: "13px",
+              cursor: "pointer"
+            }}
+          >
+            ← Voltar
+          </button>
+
+          <button
+            onClick={onClose}
+            style={{
+              background: "transparent",
+              border: "none",
+              fontSize: "18px",
+              cursor: "pointer",
+              color: "#666"
+            }}
+          >
+            ✕
+          </button>
+
+        </div>
 
         <h3>Serviços de {professional.name}</h3>
 
@@ -93,10 +124,6 @@ export default function ServicesModal({
             ))}
           </ul>
         )}
-
-        <button onClick={onClose} style={{ marginTop: "10px" }}>
-          Fechar
-        </button>
       </div>
     </div>
   );
@@ -116,6 +143,7 @@ const overlayStyle = {
 
 const modalStyle = {
   background: "#fff",
+  position: "relative",
   padding: "20px",
   borderRadius: "8px",
   width: "90%",
