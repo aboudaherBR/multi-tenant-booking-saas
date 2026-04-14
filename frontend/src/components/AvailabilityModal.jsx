@@ -63,6 +63,7 @@ export default function AvailabilityModal({
             setLoading(false);
         }
     }
+    const [selectedSlot, setSelectedSlot] = useState(null);
 
     function handleDateChange(e) {
         const selectedDate = e.target.value;
@@ -113,6 +114,9 @@ export default function AvailabilityModal({
                 <h3>
                     {professional?.name} - {service?.name}
                 </h3>
+                <p style={{ marginBottom: "8px", fontWeight: "bold" }}>
+                    Escolha uma data
+                </p>
 
                 <div style={{
                     display: "flex",
@@ -122,9 +126,6 @@ export default function AvailabilityModal({
                     paddingBottom: "5px",
                     scrollBehavior: "smooth"
                 }}>
-                    <p style={{ marginBottom: "8px", fontWeight: "bold" }}>
-                        Escolha uma data
-                    </p>
                     {days.map((d, index) => (
                         <div
                             key={index}
@@ -165,29 +166,48 @@ export default function AvailabilityModal({
                 {!loading && slots.length === 0 ? (
                     <p>Selecione uma data para ver horários</p>
                 ) : (
-                    <ul>
-                        {slots.map((slot, index) => (
-                            <li
-                                key={index}
-                                onClick={() => {
-                                    console.log("🔥 SLOT:", slot);
+                    <div
+                        style={{
+                            display: "grid",
+                            gridTemplateColumns: "repeat(3, 1fr)",
+                            gap: "10px"
+                        }}
+                    >
+                        {slots.map((slot, index) => {
+                            const isSelected =
+                                selectedSlot?.startTime === slot.startTime;
 
-                                    onSelect({
-                                        ...slot,
-                                        date
-                                    });
-                                }}
-                                style={{
-                                    cursor: "pointer",
-                                    marginBottom: "10px",
-                                    padding: "8px",
-                                    border: "1px solid #ccc"
-                                }}
-                            >
-                                {slot.startTime}
-                            </li>
-                        ))}
-                    </ul>
+                            return (
+                                <div
+                                    key={index}
+                                    onClick={() => {
+                                        console.log("🔥 SLOT:", slot);
+                                        setSelectedSlot(slot);
+                                        onSelect({
+                                            ...slot,
+                                            date
+                                        });
+                                    }}
+                                    style={{
+                                        padding: "12px",
+                                        borderRadius: "10px",
+                                        textAlign: "center",
+                                        cursor: "pointer",
+                                        fontWeight: "bold",
+                                        background: isSelected ? "#0F172A" : "#fff",
+                                        color: isSelected ? "#fff" : "#0F172A",
+                                        border: isSelected ? "none" : "1px solid #e5e7eb",
+                                        boxShadow: isSelected
+                                            ? "0 8px 20px rgba(0,0,0,0.25)"
+                                            : "none",
+                                        transition: "all 0.2s ease"
+                                    }}
+                                >
+                                    {slot.startTime}
+                                </div>
+                            );
+                        })}
+                    </div>
                 )}
 
 
