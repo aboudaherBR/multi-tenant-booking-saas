@@ -114,7 +114,14 @@ export default function AvailabilityModal({
                     {professional?.name} - {service?.name}
                 </h3>
 
-                <div style={{ display: "flex", gap: "8px", overflowX: "auto", marginBottom: "15px" }}>
+                <div style={{
+                    display: "flex",
+                    gap: "10px",
+                    overflowX: "auto",
+                    marginBottom: "15px",
+                    paddingBottom: "5px",
+                    scrollBehavior: "smooth"
+                }}>
                     {days.map((d, index) => (
                         <div
                             key={index}
