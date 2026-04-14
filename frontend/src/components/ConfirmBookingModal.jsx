@@ -42,6 +42,12 @@ export default function ConfirmBookingModal({
           <p><strong>{professional.name}</strong></p>
           <p>{service.name}</p>
           <p>{slot.date} às {slot.startTime}</p>
+
+          <p style={{ marginTop: "10px", fontWeight: "bold" }}>
+            R$ {Number(service.price).toLocaleString("pt-BR", {
+              minimumFractionDigits: 2
+            })}
+          </p>
         </div>
 
         {/* BOTÃO PRINCIPAL */}
