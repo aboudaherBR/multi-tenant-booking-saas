@@ -1,3 +1,14 @@
+function formatDateBR(dateString, time) {
+  const date = new Date(dateString);
+
+  const weekday = date.toLocaleDateString("pt-BR", { weekday: "long" });
+  const day = date.getDate();
+  const month = date.toLocaleDateString("pt-BR", { month: "long" });
+
+  return `${weekday}, ${day} de ${month} às ${time}`;
+}
+
+
 export default function ConfirmBookingModal({
   professional,
   service,
@@ -41,7 +52,9 @@ export default function ConfirmBookingModal({
         <div style={summaryCard}>
           <p><strong>{professional.name}</strong></p>
           <p>{service.name}</p>
-          <p>{slot.date} às {slot.startTime}</p>
+          <p>
+            {formatDateBR(slot.date, slot.startTime)}
+          </p>
 
           <p style={{ marginTop: "10px", fontWeight: "bold" }}>
             R$ {Number(service.price).toLocaleString("pt-BR", {
