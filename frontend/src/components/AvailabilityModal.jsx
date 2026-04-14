@@ -126,10 +126,19 @@ export default function AvailabilityModal({
                             style={{
                                 minWidth: "60px",
                                 padding: "10px",
-                                border: "1px solid #ccc",
-                                borderRadius: "8px",
+                                borderRadius: "10px",
                                 textAlign: "center",
-                                cursor: "pointer"
+                                cursor: "pointer",
+                                border: date === `${d.date.getFullYear()}-${String(d.date.getMonth() + 1).padStart(2, "0")}-${d.day}`
+                                    ? "none"
+                                    : "1px solid #e5e7eb",
+                                background: date === `${d.date.getFullYear()}-${String(d.date.getMonth() + 1).padStart(2, "0")}-${d.day}`
+                                    ? "#0F172A"
+                                    : "#fff",
+                                color: date === `${d.date.getFullYear()}-${String(d.date.getMonth() + 1).padStart(2, "0")}-${d.day}`
+                                    ? "#fff"
+                                    : "#0F172A",
+                                transition: "all 0.2s ease"
                             }}
                         >
                             <div style={{ fontSize: "12px" }}>{d.label}</div>
