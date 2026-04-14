@@ -855,15 +855,18 @@ export default function SettingsPage() {
                                         >
 
                                             <td style={{ padding: "8px", border: "1px solid #ddd" }}>
-                                                {service.name}
+                                                <div style={{ fontWeight: "bold" }}>
+                                                    🔥 {service.name}
+                                                </div>
+                                                <div style={{ fontSize: "12px", color: "#666" }}>
+                                                    {service.duration_minutes} min
+                                                </div>
                                             </td>
 
                                             <td style={{ padding: "8px", border: "1px solid #ddd" }}>
-                                                {service.duration_minutes} min
-                                            </td>
-
-                                            <td style={{ padding: "8px", border: "1px solid #ddd" }}>
-                                                R$ {service.base_price}
+                                                <strong style={{ fontSize: "16px" }}>
+                                                    R$ {service.base_price}
+                                                </strong>
                                             </td>
 
                                         </tr>

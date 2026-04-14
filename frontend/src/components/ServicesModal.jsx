@@ -50,7 +50,38 @@ export default function ServicesModal({
   return (
     <div style={overlayStyle}>
       <div style={modalStyle}>
-        <button onClick={onBack}>← Voltar</button>
+        {/* HEADER */}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "15px" }}>
+
+          <button
+            onClick={onBack}
+            style={{
+              background: "#0F172A",
+              color: "#fff",
+              border: "none",
+              padding: "6px 12px",
+              borderRadius: "999px",
+              fontSize: "13px",
+              cursor: "pointer"
+            }}
+          >
+            ← Voltar
+          </button>
+
+          <button
+            onClick={onClose}
+            style={{
+              background: "transparent",
+              border: "none",
+              fontSize: "18px",
+              cursor: "pointer",
+              color: "#666"
+            }}
+          >
+            ✕
+          </button>
+
+        </div>
 
         <h3>Serviços de {professional.name}</h3>
 
@@ -59,32 +90,40 @@ export default function ServicesModal({
         ) : services.length === 0 ? (
           <p>Nenhum serviço disponível</p>
         ) : (
-          <ul>
+          <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
             {services.map((s, index) => (
               <li
-                key={s.slug || index} // ✅ usa slug
+                key={s.slug || index}
                 onClick={() => handleSelect(s)}
                 style={{
                   cursor: "pointer",
-                  marginBottom: "10px",
-                  padding: "8px",
-                  border: "1px solid #ccc"
+                  marginBottom: "16px",
+                  padding: "20px",
+                  borderRadius: "16px",
+                  background: "#0f172a", // azul escuro igual card
+                  color: "#fff",
+                  textAlign: "center",
+                  boxShadow: "0 12px 27px rgba(0,0,0,0.4)",
+                  transform: "translateY(0)"
                 }}
               >
-                <strong>{s.name}</strong>
-                {s.duration_minutes && (
-                  <span style={{ marginLeft: "10px", fontSize: "12px" }}>
-                    ({s.duration_minutes} min)
-                  </span>
-                )}
+                <strong style={{ fontSize: "18px" }}>
+                  {s.name}
+                </strong>
+
+                <div style={{ marginTop: "6px", fontSize: "13px", opacity: 0.8 }}>
+                  {s.duration_minutes} min
+                </div>
+
+                <div style={{ marginTop: "10px", fontSize: "18px", fontWeight: "bold" }}>
+                  R$ {Number(s.price).toLocaleString("pt-BR", {
+                    minimumFractionDigits: 2
+                  })}
+                </div>
               </li>
             ))}
           </ul>
         )}
-
-        <button onClick={onClose} style={{ marginTop: "10px" }}>
-          Fechar
-        </button>
       </div>
     </div>
   );
@@ -104,8 +143,11 @@ const overlayStyle = {
 
 const modalStyle = {
   background: "#fff",
+  position: "relative",
   padding: "20px",
   borderRadius: "8px",
   width: "90%",
-  maxWidth: "400px"
+  maxWidth: "400px",
+  maxHeight: "80vh",
+  overflowY: "auto",
 };

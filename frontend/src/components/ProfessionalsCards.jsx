@@ -5,6 +5,12 @@ export default function ProfessionalCard({ professional, onSelect }) {
     <div
       style={cardContainer}
       onClick={() => onSelect(professional)}
+      onMouseDown={(e) => {
+        e.currentTarget.style.transform = "scale(0.97)";
+      }}
+      onMouseUp={(e) => {
+        e.currentTarget.style.transform = "scale(1)";
+      }}
     >
       {/* BACKGROUND */}
       <div style={backgroundStyle} />
@@ -56,7 +62,9 @@ const cardContainer = {
   textAlign: "center",
   color: "#fff",
   cursor: "pointer",
-  overflow: "hidden"
+  overflow: "hidden",
+  transition: "all 0.2s ease",
+  boxShadow: "0 15px 20px rgba(0,0,0,0.4)"
 };
 
 const backgroundStyle = {

@@ -8,8 +8,23 @@ export default function ProfessionalsModal({
   return (
     <div style={overlayStyle}>
       <div style={modalStyle}>
-        <button onClick={onClose} style={backButtonStyle}>
-          ← Voltar
+        <button
+          onClick={onClose}
+          style={{
+            background: "#0F172A",
+            color: "#fff",
+            border: "1px solid rgba(255,255,255,0.2)",
+            padding: "6px 12px",
+            borderRadius: "999px",
+            fontSize: "13px",
+            cursor: "pointer",
+            marginBottom: "12px",
+            transition: "all 0.2s ease",
+            boxShadow: "0 10px 18px rgba(0,0,0,0.3)",
+            transform: "translateY(0)"
+          }}
+        >
+          Voltar
         </button>
 
         <h3 style={{ marginBottom: "15px" }}>

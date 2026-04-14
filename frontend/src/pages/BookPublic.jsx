@@ -8,6 +8,7 @@ import apiClient from "../api/apiClient";
 import PhoneErrorModal from "../components/PhoneErrorModal";
 import NameErrorModal from "../components/NameErrorModal";
 import { formatPhone } from "../utils/phone.utils";
+import { formatDateBR } from "../utils/date.utils";
 
 // 🔥 FUNÇÃO UTILITÁRIA (TOPO - PADRÃO CORRETO)
 function normalizePhone(value) {
@@ -200,18 +201,26 @@ export default function BookPublic() {
                     background: "#fff",
                     borderRadius: "12px",
                     padding: "20px",
-                    boxShadow: "0 10px 25px rgba(0,0,0,0.1)"
+                    boxShadow: "0 20px 30px rgba(0,0,0,0.3)"
                 }}
             >
 
                 {bookingSuccess ? (
                     <div style={{ textAlign: "center" }}>
-                        <h2>Agendamento confirmado!</h2>
+                        <h2 style={{ color: "#16a34a" }}>
+                            ✔ Agendamento confirmado!
+                        </h2>
 
                         <p><strong>Serviço:</strong> {selectedService?.name}</p>
                         <p><strong>Profissional:</strong> {selectedProfessional?.name}</p>
-                        <p><strong>Data:</strong> {selectedSlot?.date}</p>
-                        <p><strong>Horário:</strong> {selectedSlot?.startTime}</p>
+                        <p>
+                            <strong>Data:</strong> {formatDateBR(selectedSlot?.date, selectedSlot?.startTime)}
+                        </p>
+                        <p>
+                            <strong>Valor:</strong> R$ {Number(selectedService?.price).toLocaleString("pt-BR", {
+                                minimumFractionDigits: 2
+                            })}
+                        </p>
 
                         <p style={{ marginTop: "20px" }}>
                             Obrigado, {clientName}!
@@ -256,7 +265,8 @@ export default function BookPublic() {
                                 padding: "12px",
                                 marginBottom: "10px",
                                 borderRadius: "8px",
-                                border: "1px solid #ddd"
+                                border: "1px solid #ddd",
+                                fontSize: "16px"
                             }}
                         />
                         {phoneError && (
@@ -272,9 +282,9 @@ export default function BookPublic() {
                                 Verificando...
                             </p>
                         ) : clientFound ? (
-                            <div style={{ marginBottom: "20px" }}>
+                            <div style={{ marginBottom: "20px", fontSize: "18px" }}>
                                 <p>
-                                    👋 Olá, <strong>{clientName}</strong>
+                                    Olá, <strong>{clientName}</strong>
                                 </p>
 
                                 <button
@@ -299,7 +309,7 @@ export default function BookPublic() {
                         ) : phone ? (
                             <div style={{ marginBottom: "20px" }}>
                                 <p style={{ marginBottom: "8px" }}>
-                                    Primeira vez aqui?
+                                    Primeira vez aqui? Digite seu nome completo para começar
                                 </p>
 
                                 <input
@@ -313,12 +323,13 @@ export default function BookPublic() {
                                         padding: "12px",
                                         borderRadius: "8px",
                                         border: "1px solid #ddd",
-                                        backgroundColor: existingClient ? "#f5f5f5" : "white"
+                                        backgroundColor: existingClient ? "#f5f5f5" : "white",
+                                        fontSize: "16px"
                                     }}
                                 />
                                 {existingClient && (
-                                    <p style={{ color: "green", marginTop: "8px" }}>
-                                        Bem-vindo de volta, {clientName} 👋
+                                    <p style={{ color: "green", marginTop: "8px", fontSize: "16px" }}>
+                                        Bem-vindo de volta, {clientName}
                                     </p>
                                 )}
                             </div>
