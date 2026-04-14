@@ -265,7 +265,8 @@ export default function BookPublic() {
                                 padding: "12px",
                                 marginBottom: "10px",
                                 borderRadius: "8px",
-                                border: "1px solid #ddd"
+                                border: "1px solid #ddd",
+                                fontSize: "16px"
                             }}
                         />
                         {phoneError && (
@@ -322,7 +323,8 @@ export default function BookPublic() {
                                         padding: "12px",
                                         borderRadius: "8px",
                                         border: "1px solid #ddd",
-                                        backgroundColor: existingClient ? "#f5f5f5" : "white"
+                                        backgroundColor: existingClient ? "#f5f5f5" : "white",
+                                        fontSize: "16px"
                                     }}
                                 />
                                 {existingClient && (
