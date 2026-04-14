@@ -206,12 +206,20 @@ export default function BookPublic() {
 
                 {bookingSuccess ? (
                     <div style={{ textAlign: "center" }}>
-                        <h2>Agendamento confirmado!</h2>
+                        <h2 style={{ color: "#16a34a" }}>
+                            ✔ Agendamento confirmado!
+                        </h2>
 
                         <p><strong>Serviço:</strong> {selectedService?.name}</p>
                         <p><strong>Profissional:</strong> {selectedProfessional?.name}</p>
-                        <p><strong>Data:</strong> {selectedSlot?.date}</p>
-                        <p><strong>Horário:</strong> {selectedSlot?.startTime}</p>
+                        <p>
+                            <strong>Data:</strong> {formatDateBR(selectedSlot?.date, selectedSlot?.startTime)}
+                        </p>
+                        <p>
+                            <strong>Valor:</strong> R$ {Number(selectedService?.price).toLocaleString("pt-BR", {
+                                minimumFractionDigits: 2
+                            })}
+                        </p>
 
                         <p style={{ marginTop: "20px" }}>
                             Obrigado, {clientName}!
