@@ -8,6 +8,7 @@ import apiClient from "../api/apiClient";
 import PhoneErrorModal from "../components/PhoneErrorModal";
 import NameErrorModal from "../components/NameErrorModal";
 import { formatPhone } from "../utils/phone.utils";
+import { formatDateBR } from "../utils/date.utils";
 
 // 🔥 FUNÇÃO UTILITÁRIA (TOPO - PADRÃO CORRETO)
 function normalizePhone(value) {
