@@ -122,6 +122,9 @@ export default function AvailabilityModal({
                     paddingBottom: "5px",
                     scrollBehavior: "smooth"
                 }}>
+                    <p style={{ marginBottom: "8px", fontWeight: "bold" }}>
+                        Escolha uma data
+                    </p>
                     {days.map((d, index) => (
                         <div
                             key={index}
@@ -154,26 +157,6 @@ export default function AvailabilityModal({
                     ))}
                 </div>
 
-                <p style={{ marginBottom: "8px", fontWeight: "bold" }}>
-                    Escolha uma data
-                </p>
-
-                {/* CALENDÁRIO */}
-                <input
-                    type="date"
-                    value={date}
-                    onChange={handleDateChange}
-                    style={{
-                        width: "100%",
-                        padding: "12px",
-                        borderRadius: "10px",
-                        border: "1px solid #e5e7eb",
-                        marginBottom: "15px",
-                        fontSize: "14px",
-                        color: "#0F172A",
-                        outline: "none"
-                    }}
-                />
 
                 {/* LOADING */}
                 {loading && <p>Carregando horários...</p>}
@@ -228,8 +211,10 @@ const overlayStyle = {
 const modalStyle = {
     background: "#fff",
     padding: "20px",
-    borderRadius: "8px",
+    borderRadius: "12px",
     width: "90%",
     maxWidth: "400px",
+    maxHeight: "85vh",
+    overflowY: "auto",
     position: "relative"
 };
