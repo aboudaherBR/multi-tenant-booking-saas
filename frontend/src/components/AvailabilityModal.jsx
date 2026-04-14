@@ -12,6 +12,16 @@ export default function AvailabilityModal({
     const [date, setDate] = useState("");
     const [slots, setSlots] = useState([]);
     const [loading, setLoading] = useState(false);
+    const days = Array.from({ length: 14 }, (_, i) => {
+        const d = new Date();
+        d.setDate(d.getDate() + i);
+
+        return {
+            date: d,
+            label: d.toLocaleDateString("pt-BR", { weekday: "short" }).toUpperCase(),
+            day: String(d.getDate()).padStart(2, "0")
+        };
+    });
 
     async function fetchAvailability(selectedDate) {
         // 🔥 VALIDAÇÃO CORRETA (AGORA COM SLUG)
@@ -103,6 +113,30 @@ export default function AvailabilityModal({
                 <h3>
                     {professional?.name} - {service?.name}
                 </h3>
+
+                <div style={{ display: "flex", gap: "8px", overflowX: "auto", marginBottom: "15px" }}>
+                    {days.map((d, index) => (
+                        <div
+                            key={index}
+                            onClick={() => {
+                                const formatted = `${d.date.getFullYear()}-${String(d.date.getMonth() + 1).padStart(2, "0")}-${d.day}`;
+                                setDate(formatted);
+                                fetchAvailability(formatted);
+                            }}
+                            style={{
+                                minWidth: "60px",
+                                padding: "10px",
+                                border: "1px solid #ccc",
+                                borderRadius: "8px",
+                                textAlign: "center",
+                                cursor: "pointer"
+                            }}
+                        >
+                            <div style={{ fontSize: "12px" }}>{d.label}</div>
+                            <div style={{ fontWeight: "bold" }}>{d.day}</div>
+                        </div>
+                    ))}
+                </div>
 
                 <p style={{ marginBottom: "8px", fontWeight: "bold" }}>
                     Escolha uma data
