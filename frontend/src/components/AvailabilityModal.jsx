@@ -82,7 +82,7 @@ export default function AvailabilityModal({
                             cursor: "pointer"
                         }}
                     >
-                        ← Voltar
+                        Voltar
                     </button>
 
                     <button
@@ -104,12 +104,25 @@ export default function AvailabilityModal({
                     {professional?.name} - {service?.name}
                 </h3>
 
+                <p style={{ marginBottom: "8px", fontWeight: "bold" }}>
+                    Escolha uma data
+                </p>
+
                 {/* CALENDÁRIO */}
                 <input
                     type="date"
                     value={date}
                     onChange={handleDateChange}
-                    style={{ marginBottom: "15px", padding: "8px" }}
+                    style={{
+                        width: "100%",
+                        padding: "12px",
+                        borderRadius: "10px",
+                        border: "1px solid #e5e7eb",
+                        marginBottom: "15px",
+                        fontSize: "14px",
+                        color: "#0F172A",
+                        outline: "none"
+                    }}
                 />
 
                 {/* LOADING */}
@@ -144,7 +157,7 @@ export default function AvailabilityModal({
                     </ul>
                 )}
 
-                <button onClick={onClose}>Fechar</button>
+
             </div>
         </div>
     );
