@@ -9,31 +9,55 @@ export default function ConfirmBookingModal({
   return (
     <div style={overlayStyle}>
       <div style={modalStyle}>
-        <h3>Confirmar Agendamento</h3>
 
-        <p><strong>Profissional:</strong> {professional.name}</p>
-        <p><strong>Serviço:</strong> {service.name}</p>
-        <p><strong>Data:</strong> {slot.date}</p>
-        <p><strong>Horário:</strong> {slot.startTime}</p>
-
-        <div style={{ marginTop: "20px" }}>
-          <button onClick={onBack}>← Voltar</button>
+        {/* HEADER */}
+        <div style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "15px"
+        }}>
+          <button
+            onClick={onBack}
+            style={secondaryButton}
+          >
+            ← Voltar
+          </button>
 
           <button
-            onClick={onConfirm}
-            style={{ marginLeft: "10px" }}
+            onClick={onClose}
+            style={closeButton}
           >
-            Confirmar
+            ✕
           </button>
         </div>
 
-        <button onClick={onClose} style={{ marginTop: "10px" }}>
-          Fechar
+        {/* TÍTULO */}
+        <h3 style={{ marginTop: 0 }}>
+          Confirmar agendamento
+        </h3>
+
+        {/* CARD RESUMO */}
+        <div style={summaryCard}>
+          <p><strong>{professional.name}</strong></p>
+          <p>{service.name}</p>
+          <p>{slot.date} às {slot.startTime}</p>
+        </div>
+
+        {/* BOTÃO PRINCIPAL */}
+        <button
+          onClick={onConfirm}
+          style={primaryButton}
+        >
+          Confirmar agendamento
         </button>
+
       </div>
     </div>
   );
 }
+
+/* STYLES */
 
 const overlayStyle = {
   position: "fixed",
@@ -50,7 +74,45 @@ const overlayStyle = {
 const modalStyle = {
   background: "#fff",
   padding: "20px",
-  borderRadius: "8px",
+  borderRadius: "12px",
   width: "90%",
-  maxWidth: "400px"
+  maxWidth: "400px",
+  position: "relative"
+};
+
+const summaryCard = {
+  background: "#f9fafb",
+  padding: "15px",
+  borderRadius: "10px",
+  marginBottom: "20px"
+};
+
+const primaryButton = {
+  width: "100%",
+  padding: "14px",
+  borderRadius: "10px",
+  border: "none",
+  background: "#0F172A",
+  color: "#fff",
+  fontWeight: "bold",
+  cursor: "pointer",
+  boxShadow: "0 6px 15px rgba(0,0,0,0.2)"
+};
+
+const secondaryButton = {
+  background: "transparent",
+  border: "1px solid #0F172A",
+  color: "#0F172A",
+  padding: "6px 12px",
+  borderRadius: "999px",
+  cursor: "pointer",
+  fontSize: "13px"
+};
+
+const closeButton = {
+  background: "transparent",
+  border: "none",
+  fontSize: "18px",
+  cursor: "pointer",
+  color: "#666"
 };
