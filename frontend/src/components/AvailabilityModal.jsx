@@ -63,7 +63,42 @@ export default function AvailabilityModal({
     return (
         <div style={overlayStyle}>
             <div style={modalStyle}>
-                <button onClick={onBack}>← Voltar</button>
+                <div style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    marginBottom: "15px"
+                }}>
+
+                    <button
+                        onClick={onBack}
+                        style={{
+                            background: "#0F172A",
+                            color: "#fff",
+                            border: "none",
+                            padding: "6px 12px",
+                            borderRadius: "999px",
+                            fontSize: "13px",
+                            cursor: "pointer"
+                        }}
+                    >
+                        ← Voltar
+                    </button>
+
+                    <button
+                        onClick={onClose}
+                        style={{
+                            background: "transparent",
+                            border: "none",
+                            fontSize: "18px",
+                            cursor: "pointer",
+                            color: "#666"
+                        }}
+                    >
+                        ✕
+                    </button>
+
+                </div>
 
                 <h3>
                     {professional?.name} - {service?.name}
@@ -132,5 +167,6 @@ const modalStyle = {
     padding: "20px",
     borderRadius: "8px",
     width: "90%",
-    maxWidth: "400px"
+    maxWidth: "400px",
+    position: "relative"
 };
