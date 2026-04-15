@@ -236,7 +236,7 @@ export default function BookPublic() {
                             Leva menos de 1 minuto
                         </p>
                         <input
-                            className="input-field mb-10"
+                            className={`input-field mb-10 ${phoneError ? "input-error" : ""}`}
                             type="tel"
                             inputMode="numeric"
                             pattern="[0-9]*"
@@ -262,9 +262,7 @@ export default function BookPublic() {
                             }}
                         />
                         {phoneError && (
-                            <p style={{ color: "red", fontSize: "14px", marginBottom: "10px" }}>
-                                {phoneError}
-                            </p>
+                            <p className="text-error">{phoneError}</p>
                         )}
 
                         {/* 🔥 ESTADO DINÂMICO DO CLIENTE */}
