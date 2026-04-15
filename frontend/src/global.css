@@ -78,6 +78,15 @@ input, textarea, select {
   transition: all 0.2s ease;
 }
 
+.text-center {
+  text-align: center;
+}
+
+.text-row {
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
 
 /* ========================================
    DESIGN SYSTEM - INPUT FIELDS

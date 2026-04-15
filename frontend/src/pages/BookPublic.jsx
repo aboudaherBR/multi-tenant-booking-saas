@@ -182,23 +182,26 @@ export default function BookPublic() {
             <div className="card container-main">
 
                 {bookingSuccess ? (
-                    <div style={{ textAlign: "center" }}>
-                        <h2 class="heading" style={{ color: "#16a34a" }}>
+                    <div className="text-center">
+                        <h2 className="heading text-success">
                             ✔ Agendamento confirmado!
                         </h2>
 
-                        <p><strong>Serviço:</strong> {selectedService?.name}</p>
-                        <p><strong>Profissional:</strong> {selectedProfessional?.name}</p>
-                        <p>
+                        <p className="text-row">
+                            <strong>Serviço:</strong> {selectedService?.name}
+                        </p>
+                        <p className="text-row">
+                            <strong>Profissional:</strong> {selectedProfessional?.name}</p>
+                        <p className="text-row">
                             <strong>Data:</strong> {formatDateBR(selectedSlot?.date, selectedSlot?.startTime)}
                         </p>
-                        <p>
+                        <p className="text-row">
                             <strong>Valor:</strong> R$ {Number(selectedService?.price).toLocaleString("pt-BR", {
                                 minimumFractionDigits: 2
                             })}
                         </p>
 
-                        <p style={{ marginTop: "20px" }}>
+                        <p className="mt-20">
                             Obrigado, {clientName}!
                         </p>
                     </div>
