@@ -193,13 +193,14 @@ export default function AvailabilityModal({
                                     onClick={() => {
                                         console.log("🔥 SLOT:", slot);
 
-                                        setSelectedSlot(slot);     // 👈 só o slot
-                                        setSelectedDate(date);     // 👈 data separada
+                                        setSelectedSlot(slot);
+                                        setSelectedDate(date);
 
-                                        onSelect({
-                                            ...slot,
-                                            date
-                                        });
+                                        // TEMPORARIAMENTE DESATIVA
+                                        // onSelect({
+                                        //     ...slot,
+                                        //     date
+                                        // });
                                     }}
                                 >
                                     {slot.startTime}
