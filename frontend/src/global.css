@@ -173,6 +173,16 @@ input, textarea, select {
   background: #f8fafc;
 }
 
+.button-link {
+  margin-top: 5px;
+  font-size: 14px;
+  background: none;
+  border: none;
+  color: #2563eb;
+  cursor: pointer;
+  padding: 0;
+}
+
 /* ========================================
    DESIGN SYSTEM - TEXT UTILITIES
    ======================================== */

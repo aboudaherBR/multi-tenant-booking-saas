@@ -248,7 +248,7 @@ export default function BookPublic() {
 
                         {isCheckingClient ? (
                             <p className="subtext">
-                                Verificando{" "}  
+                                Verificando{" "}
                                 <span className="loading-dots">
                                     <span></span>
                                     <span></span>
@@ -256,53 +256,39 @@ export default function BookPublic() {
                                 </span>
                             </p>
                         ) : clientFound ? (
-                            <div style={{ marginBottom: "20px", fontSize: "18px" }}>
-                                <p>
+                            <div className="mb-20">
+                                <p className="text-row">
                                     Olá, <strong>{clientName}</strong>
                                 </p>
 
                                 <button
+                                    className="button-link"
                                     onClick={() => {
                                         setPhone("");
                                         setClientName("");
                                         setClientFound(false);
                                         setExistingClient(false);
                                     }}
-                                    style={{
-                                        marginTop: "5px",
-                                        fontSize: "14px",
-                                        background: "none",
-                                        border: "none",
-                                        color: "#2563eb",
-                                        cursor: "pointer"
-                                    }}
                                 >
                                     Não é você? Trocar número
                                 </button>
                             </div>
                         ) : phone ? (
-                            <div style={{ marginBottom: "20px" }}>
-                                <p style={{ marginBottom: "8px" }}>
+                            <div className="mb-20">
+                                <p className="text-row">
                                     Primeira vez aqui? Digite seu nome completo para começar
                                 </p>
 
                                 <input
+                                    className="input-field"
                                     type="text"
                                     placeholder="Digite seu nome"
                                     value={clientName}
                                     onChange={(e) => setClientName(e.target.value)}
                                     disabled={existingClient}
-                                    style={{
-                                        width: "100%",
-                                        padding: "12px",
-                                        borderRadius: "8px",
-                                        border: "1px solid #ddd",
-                                        backgroundColor: existingClient ? "#f5f5f5" : "white",
-                                        fontSize: "16px"
-                                    }}
                                 />
                                 {existingClient && (
-                                    <p style={{ color: "green", marginTop: "8px", fontSize: "16px" }}>
+                                    <p className="text-success mt-5">
                                         Bem-vindo de volta, {clientName}
                                     </p>
                                 )}
