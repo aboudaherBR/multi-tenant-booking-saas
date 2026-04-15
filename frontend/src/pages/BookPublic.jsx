@@ -190,7 +190,7 @@ export default function BookPublic() {
                     />
                 </div>
 
-                <h2 style={{ margin: 0 }}>Barbearia</h2>
+                <h2 class="heading">Barbearia</h2>
             </div>
 
             {/* ⚪ CARD */}
@@ -207,7 +207,7 @@ export default function BookPublic() {
 
                 {bookingSuccess ? (
                     <div style={{ textAlign: "center" }}>
-                        <h2 style={{ color: "#16a34a" }}>
+                        <h2 class="heading" style={{ color: "#16a34a" }}>
                             ✔ Agendamento confirmado!
                         </h2>
 
