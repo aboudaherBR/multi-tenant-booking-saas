@@ -192,7 +192,7 @@ export default function AvailabilityModal({
                                             date
                                         });
                                     }}
-                                    className="slot slot-selected"
+                                    className={`slot ${isSelected ? "slot-selected" : ""}`}
                                 >
                                     {slot.startTime}
                                 </div>
