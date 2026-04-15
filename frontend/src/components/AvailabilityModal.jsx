@@ -175,14 +175,18 @@ export default function AvailabilityModal({
                     >
                         {slots.map((slot, index) => {
                             const isSelected =
-                                selectedSlot?.startTime === slot.startTime;
+                                selectedSlot?.startTime === slot.startTime &&
+                                selectedSlot?.date === date;
 
                             return (
                                 <div
                                     key={index}
                                     onClick={() => {
                                         console.log("🔥 SLOT:", slot);
-                                        setSelectedSlot(slot);
+                                        setSelectedSlot({
+                                            ...slot,
+                                            date
+                                        });
                                         onSelect({
                                             ...slot,
                                             date
