@@ -179,6 +179,13 @@ export default function AvailabilityModal({
                             const isSelected =
                                 selectedSlot?.startTime === slot.startTime &&
                                 selectedDate === date;
+                            console.log("DEBUG SLOT:", {
+                                slotStart: slot.startTime,
+                                selectedStart: selectedSlot?.startTime,
+                                selectedDate,
+                                currentDate: date,
+                                isSelected
+                            });
                             return (
                                 <div
                                     key={index}
