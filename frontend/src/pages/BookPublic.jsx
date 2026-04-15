@@ -247,8 +247,13 @@ export default function BookPublic() {
                         {/* 🔥 ESTADO DINÂMICO DO CLIENTE */}
 
                         {isCheckingClient ? (
-                            <p style={{ marginBottom: "20px", color: "#666" }}>
-                                Verificando...
+                            <p className="subtext">
+                                Verificando
+                                <span className="loading-dots">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </span>
                             </p>
                         ) : clientFound ? (
                             <div style={{ marginBottom: "20px", fontSize: "18px" }}>
