@@ -170,27 +170,12 @@ export default function BookPublic() {
         <div style={{ minHeight: "100vh", background: "#f5f5f5" }}>
 
             {/* 🔵 HEADER */}
-            <div
-                style={{
-                    background: "linear-gradient(135deg, #0f172a, #1e293b)",
-                    padding: "30px 20px",
-                    textAlign: "center",
-                    color: "#fff"
-                }}
-            >
-                <div style={{ marginBottom: "10px" }}>
-                    <div
-                        style={{
-                            width: "60px",
-                            height: "60px",
-                            borderRadius: "50%",
-                            background: "#fff",
-                            margin: "0 auto"
-                        }}
-                    />
+            <div className="header-gradient">
+                <div className="mb-10">
+                    <div className="avatar-placeholder" />
                 </div>
 
-                <h2 class="heading" style={{ color: "white" }}>Barbearia</h2>
+                <h2 className="heading" style={{ color: "white" }}>Barbearia</h2>
             </div>
 
             {/* ⚪ CARD */}
