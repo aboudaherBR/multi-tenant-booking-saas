@@ -190,7 +190,7 @@ export default function BookPublic() {
                     />
                 </div>
 
-                <h2 class="heading">Barbearia</h2>
+                <h2 class="heading" style={{color: "white"}}>Barbearia</h2>
             </div>
 
             {/* ⚪ CARD */}
