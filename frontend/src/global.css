@@ -63,3 +63,122 @@ input, textarea, select {
   transform: scale(0.97);
   opacity: 0.9;
 }
+
+/* ========================================
+   DESIGN SYSTEM - INPUT FIELDS
+   ======================================== */
+.input-field {
+  width: 100%;
+  padding: 12px;
+  border-radius: var(--radius);
+  border: 1px solid #e2e8f0;
+  font-size: 16px;
+  box-sizing: border-box;
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+.input-field:disabled {
+  background-color: #f8fafc;
+}
+
+/* ========================================
+   DESIGN SYSTEM - BUTTONS
+   ======================================== */
+.button-secondary {
+  margin-top: 5px;
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  border: 1px solid #e2e8f0;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.button-secondary:hover {
+  background: #f8fafc;
+}
+
+/* ========================================
+   DESIGN SYSTEM - TEXT UTILITIES
+   ======================================== */
+.text-error {
+  color: #ef4444;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.text-success {
+  color: #16a34a;
+  font-size: 16px;
+  margin-top: 8px;
+}
+
+.text-muted {
+  color: var(--color-text-secondary);
+  font-size: 14px;
+}
+
+/* ========================================
+   DESIGN SYSTEM - SPACING UTILITIES
+   ======================================== */
+.mt-5 {
+  margin-top: 5px;
+}
+
+.mb-10 {
+  margin-bottom: 10px;
+}
+
+.mb-20 {
+  margin-bottom: 20px;
+}
+
+/* ========================================
+   DESIGN SYSTEM - MODAL
+   ======================================== */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 23, 42, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.modal-content {
+  background: var(--color-surface);
+  padding: 20px;
+  border-radius: var(--radius);
+  width: 90%;
+  max-width: 350px;
+  text-align: center;
+}
+
+/* ========================================
+   DESIGN SYSTEM - HEADER
+   ======================================== */
+.header-gradient {
+  background: linear-gradient(
+    135deg,
+    var(--color-primary),
+    var(--color-primary-light)
+  );
+  padding: 30px 20px;
+  text-align: center;
+  color: var(--color-surface);
+}
+
+.avatar-placeholder {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--color-surface);
+  margin: 0 auto 10px;
+}

@@ -190,7 +190,7 @@ export default function BookPublic() {
                     />
                 </div>
 
-                <h2 class="heading" style={{color: "white"}}>Barbearia</h2>
+                <h2 class="heading" style={{ color: "white" }}>Barbearia</h2>
             </div>
 
             {/* ⚪ CARD */}
@@ -236,6 +236,7 @@ export default function BookPublic() {
                             Leva menos de 1 minuto
                         </p>
                         <input
+                            className="input-field mb-10"
                             type="tel"
                             inputMode="numeric"
                             pattern="[0-9]*"
@@ -258,14 +259,6 @@ export default function BookPublic() {
                                 } else {
                                     setPhoneError("");
                                 }
-                            }}
-                            style={{
-                                width: "100%",
-                                padding: "12px",
-                                marginBottom: "10px",
-                                borderRadius: "8px",
-                                border: "1px solid #ddd",
-                                fontSize: "16px"
                             }}
                         />
                         {phoneError && (
