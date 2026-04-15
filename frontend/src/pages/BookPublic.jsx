@@ -228,7 +228,7 @@ export default function BookPublic() {
                     </div>
                 ) : (
                     <>
-                        <h2 style={{ marginBottom: "5px" }}>
+                        <h2 className="heading">
                             Agende seu horário
                         </h2>
 
