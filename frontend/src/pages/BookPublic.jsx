@@ -179,16 +179,7 @@ export default function BookPublic() {
             </div>
 
             {/* ⚪ CARD */}
-            <div
-                style={{
-                    maxWidth: "400px",
-                    margin: "-30px auto 0 auto",
-                    background: "#fff",
-                    borderRadius: "12px",
-                    padding: "20px",
-                    boxShadow: "0 20px 30px rgba(0,0,0,0.3)"
-                }}
-            >
+            <div className="card container-main">
 
                 {bookingSuccess ? (
                     <div style={{ textAlign: "center" }}>

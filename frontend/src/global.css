@@ -65,6 +65,20 @@ input, textarea, select {
   opacity: 0.9;
 }
 
+.container-main {
+  max-width: 400px;
+  margin: -30px auto 0 auto;
+  padding: 20px;
+}
+
+.card {
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease;
+}
+
+
 /* ========================================
    DESIGN SYSTEM - INPUT FIELDS
    ======================================== */
