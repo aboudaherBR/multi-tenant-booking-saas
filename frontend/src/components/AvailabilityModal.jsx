@@ -15,7 +15,7 @@ export default function AvailabilityModal({
     const days = Array.from({ length: 14 }, (_, i) => {
         const d = new Date();
         d.setDate(d.getDate() + i);
-    
+
 
         return {
             date: d,
@@ -178,8 +178,7 @@ export default function AvailabilityModal({
                         {slots.map((slot, index) => {
                             const isSelected =
                                 selectedSlot?.startTime === slot.startTime &&
-                                selectedSlot?.date === date;
-
+                                selectedDate === date;
                             return (
                                 <div
                                     key={index}
