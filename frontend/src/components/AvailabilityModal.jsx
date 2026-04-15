@@ -181,18 +181,18 @@ export default function AvailabilityModal({
                             return (
                                 <div
                                     key={index}
+                                    className={`slot ${isSelected ? "slot-selected" : ""}`}
                                     onClick={() => {
                                         console.log("🔥 SLOT:", slot);
-                                        setSelectedSlot({
-                                            ...slot,
-                                            date
-                                        });
+
+                                        setSelectedSlot(slot);     // 👈 só o slot
+                                        setSelectedDate(date);     // 👈 data separada
+
                                         onSelect({
                                             ...slot,
                                             date
                                         });
                                     }}
-                                    className={`slot ${isSelected ? "slot-selected" : ""}`}
                                 >
                                     {slot.startTime}
                                 </div>
