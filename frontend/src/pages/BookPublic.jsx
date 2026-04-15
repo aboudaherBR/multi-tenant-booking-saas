@@ -50,6 +50,8 @@ export default function BookPublic() {
     const [existingClient, setExistingClient] = useState(false);
     const [showPhoneConfirmModal, setShowPhoneConfirmModal] = useState(false);
 
+    const isDisabled = !phone || !!phoneError;
+
     useEffect(() => {
         async function fetchProfessionals() {
             try {
@@ -296,17 +298,9 @@ export default function BookPublic() {
                         ) : null}
 
                         <button
+                            className="button-primary"
                             onClick={handleStart}
-                            style={{
-                                width: "100%",
-                                padding: "14px",
-                                borderRadius: "8px",
-                                border: "none",
-                                background: "#0f172a",
-                                color: "#fff",
-                                fontWeight: "bold",
-                                cursor: "pointer"
-                            }}
+                            disabled={isDisabled}
                         >
                             Continuar agendamento
                         </button>
