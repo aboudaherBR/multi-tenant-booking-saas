@@ -188,20 +188,7 @@ export default function AvailabilityModal({
                                             date
                                         });
                                     }}
-                                    style={{
-                                        padding: "12px",
-                                        borderRadius: "10px",
-                                        textAlign: "center",
-                                        cursor: "pointer",
-                                        fontWeight: "bold",
-                                        background: isSelected ? "#0F172A" : "#fff",
-                                        color: isSelected ? "#fff" : "#0F172A",
-                                        border: isSelected ? "none" : "1px solid #e5e7eb",
-                                        boxShadow: isSelected
-                                            ? "0 8px 20px rgba(0,0,0,0.25)"
-                                            : "none",
-                                        transition: "all 0.2s ease"
-                                    }}
+                                    className={`slot ${isSelected ? "slot-selected" : ""}`}
                                 >
                                     {slot.startTime}
                                 </div>
