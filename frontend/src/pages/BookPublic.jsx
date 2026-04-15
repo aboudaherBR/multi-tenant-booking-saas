@@ -248,7 +248,7 @@ export default function BookPublic() {
 
                         {isCheckingClient ? (
                             <p className="subtext">
-                                Verificando
+                                Verificando{" "}  
                                 <span className="loading-dots">
                                     <span></span>
                                     <span></span>
