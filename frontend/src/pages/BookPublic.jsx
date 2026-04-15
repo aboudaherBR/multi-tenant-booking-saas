@@ -232,10 +232,9 @@ export default function BookPublic() {
                             Agende seu horário
                         </h2>
 
-                        <p style={{ marginBottom: "20px", color: "#666" }}>
+                        <p className="subtext">
                             Leva menos de 1 minuto
                         </p>
-
                         <input
                             type="tel"
                             inputMode="numeric"
