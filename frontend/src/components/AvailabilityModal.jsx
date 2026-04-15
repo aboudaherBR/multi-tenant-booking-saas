@@ -15,6 +15,7 @@ export default function AvailabilityModal({
     const days = Array.from({ length: 14 }, (_, i) => {
         const d = new Date();
         d.setDate(d.getDate() + i);
+    
 
         return {
             date: d,
@@ -64,6 +65,7 @@ export default function AvailabilityModal({
         }
     }
     const [selectedSlot, setSelectedSlot] = useState(null);
+    const [selectedDate, setSelectedDate] = useState(null);
 
     function handleDateChange(e) {
         const selectedDate = e.target.value;
