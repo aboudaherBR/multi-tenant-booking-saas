@@ -89,7 +89,7 @@ input, textarea, select {
 
 
 /* ========================================
-   DESIGN SYSTEM - LOADING
+   DESIGN SYSTEM - LOADING AND ANIMATIONS
    ======================================== */
 
 .loading-dots {
@@ -124,6 +124,33 @@ input, textarea, select {
   }
 }
 
+.modal-backdrop {
+  animation: fadeIn 0.2s ease forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal-content {
+  animation: slideUp 0.25s ease forwards;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
 
 /* ========================================
    DESIGN SYSTEM - INPUT FIELDS

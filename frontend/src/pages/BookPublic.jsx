@@ -372,29 +372,11 @@ export default function BookPublic() {
                         )}
 
                         {showPhoneConfirmModal && (
-                            <div style={{
-                                position: "fixed",
-                                top: 0,
-                                left: 0,
-                                width: "100%",
-                                height: "100%",
-                                background: "rgba(0,0,0,0.5)",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                zIndex: 9999
-                            }}>
-                                <div style={{
-                                    background: "#fff",
-                                    padding: "20px",
-                                    borderRadius: "12px",
-                                    width: "90%",
-                                    maxWidth: "350px",
-                                    textAlign: "center"
-                                }}>
+                            <div className="modal-backdrop">
+                                <div className="modal-content">
                                     <h3>Confirmar telefone</h3>
 
-                                    <p style={{ margin: "15px 0" }}>
+                                    <p className="mb-20">
                                         Esse é o seu número?
                                     </p>
 
@@ -402,15 +384,9 @@ export default function BookPublic() {
 
                                     <div style={{ marginTop: "20px" }}>
                                         <button
+                                            className="button-secondary"
                                             onClick={() => {
                                                 setShowPhoneConfirmModal(false);
-                                            }}
-                                            style={{
-                                                marginRight: "10px",
-                                                padding: "10px",
-                                                borderRadius: "6px",
-                                                border: "1px solid #ddd",
-                                                background: "#fff"
                                             }}
                                         >
                                             Corrigir
