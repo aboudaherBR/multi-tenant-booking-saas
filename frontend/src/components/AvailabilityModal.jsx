@@ -188,7 +188,7 @@ export default function AvailabilityModal({
                             });
                             return (
                                 <div
-                                    key={index}
+                                    key={`${date}-${slot.startTime}`}
                                     className={`slot ${isSelected ? "slot-selected" : ""}`}
                                     onClick={() => {
                                         console.log("🔥 SLOT:", slot);
