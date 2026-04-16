@@ -132,6 +132,11 @@ function ScheduleWizard() {
 
                                     setServices(data);
 
+                                    setServicesByProfessional(prev => ({
+                                        ...prev,
+                                        [professional.id]: data
+                                    }));
+
                                     setAppointment({
                                         ...appointment,
                                         professional: professional
