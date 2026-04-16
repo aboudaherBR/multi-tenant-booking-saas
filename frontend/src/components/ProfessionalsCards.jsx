@@ -36,7 +36,7 @@ export default function ProfessionalCard({ professional, onSelect, isSelected })
         <h3 style={nameStyle}>{professional.name}</h3>
 
         <p style={subtitleStyle}>
-          Toque para ver serviços
+          {professional.services_preview || "Toque para ver serviços"}
         </p>
 
         {/* BOTÃO */}
@@ -107,8 +107,8 @@ const nameStyle = {
 };
 
 const subtitleStyle = {
-  fontSize: "14px",
-  color: "#cbd5f5",
+  fontSize: "15px",
+  color: "#64748b",
   marginBottom: "12px"
 };
 
