@@ -58,12 +58,12 @@ export default function ProfessionalCard({ professional, onSelect, isSelected })
 
 const cardContainer = {
   position: "relative",
-  background: "#0f172a",
+  background: "#f8fafc",
   borderRadius: "16px",
   padding: "20px",
   marginBottom: "16px",
   textAlign: "center",
-  color: "#fff",
+  color: "#0f172a",
   cursor: "pointer",
   overflow: "hidden",
   transition: "all 0.2s ease",
