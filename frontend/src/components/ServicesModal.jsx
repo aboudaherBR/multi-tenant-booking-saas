@@ -10,6 +10,8 @@ export default function ServicesModal({
 }) {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedServiceId, setSelectedServiceId] = useState(null);
+
 
   useEffect(() => {
     async function fetchServices() {
@@ -94,7 +96,11 @@ export default function ServicesModal({
             {services.map((s, index) => (
               <li
                 key={s.slug || index}
-                onClick={() => handleSelect(s)}
+                onClick={() => {
+                  console.log("🔥 SERVICE CLICK");
+
+                  setSelectedServiceId(s.slug);
+                }}
                 style={{
                   cursor: "pointer",
                   marginBottom: "16px",
