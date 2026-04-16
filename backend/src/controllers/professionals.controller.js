@@ -18,6 +18,10 @@ const {
 
 const { findCompanyBySlug } = require('../database/companies.repository');
 
+const {
+  findActiveProfessionalsWithPreviewByCompanyId
+} = require('../database/professionals.repository');
+
 
 async function list(req, res, next) {
   try {
@@ -146,7 +150,10 @@ async function listPublic(req, res, next) {
     const companyId = company.id;
 
     if (withPreview) {
-      // usar preview no próximo passo
+      const professionals =
+        await findActiveProfessionalsWithPreviewByCompanyId(companyId);
+
+      return res.status(200).json(professionals);
     }
 
     const professionals =
