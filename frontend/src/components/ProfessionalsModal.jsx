@@ -1,4 +1,5 @@
 import ProfessionalsCards from "./ProfessionalsCards";
+import { useState } from "react";
 
 export default function ProfessionalsModal({
   professionals,
