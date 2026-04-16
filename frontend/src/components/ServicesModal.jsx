@@ -114,8 +114,7 @@ export default function ServicesModal({
                   color: "#fff",
                   textAlign: "center",
                   boxShadow: "0 12px 27px rgba(0,0,0,0.4)",
-                  transform: "translateY(0)",
-                  border: selectedServiceId === s.slug ? "2px solid #fff" : "none"
+                  transform: "translateY(0)"                  
                 }}
               >
                 <strong style={{ fontSize: "18px" }}>
