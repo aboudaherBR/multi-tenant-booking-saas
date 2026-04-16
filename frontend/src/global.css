@@ -307,6 +307,12 @@ input, textarea, select {
   color: var(--color-surface);
 }
 
+.is-selected {
+  background: var(--color-primary);
+  color: var(--color-surface);
+  border: 2px solid #fff;
+}
+
 /* ========================================
    DESIGN SYSTEM - HEADER
    ======================================== */

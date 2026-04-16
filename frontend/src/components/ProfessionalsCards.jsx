@@ -5,8 +5,7 @@ export default function ProfessionalCard({ professional, onSelect, isSelected })
     <div
       className={`selectable ${isSelected ? "is-selected" : ""}`}
       style={{
-        ...cardContainer,
-        border: isSelected ? "2px solid #fff" : "none"
+        ...cardContainer
       }}
       onClick={() => onSelect(professional)}
       onMouseDown={(e) => {
