@@ -8,12 +8,9 @@ export default function ProfessionalCard({ professional, onSelect, isSelected })
         border: isSelected ? "2px solid #fff" : "none",
         transform: isSelected ? "scale(0.98)" : "scale(1)"
       }}
-      onSelect={(professional) => {
-        setSelectedProfessionalId(professional.id);
-
-        setTimeout(() => {
-          onSelect(professional);
-        }, 200);
+      onClick={() => onSelect(professional)}
+      onMouseDown={(e) => {
+        e.currentTarget.style.transform = "scale(0.97)";
       }}
       onMouseUp={(e) => {
         e.currentTarget.style.transform = "scale(1)";
