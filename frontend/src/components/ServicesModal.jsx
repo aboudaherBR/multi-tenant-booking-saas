@@ -88,9 +88,14 @@ export default function ServicesModal({
         <h3>Serviços de {professional.name}</h3>
 
         {loading ? (
-          <p>Carregando serviços...</p>
-        ) : services.length === 0 ? (
-          <p>Nenhum serviço disponível</p>
+          <div style={{ textAlign: "center", padding: "30px 0" }}>
+            <span style={{ marginRight: "8px" }}>Carregando{" "}</span>
+            <div className="loading-dots">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
         ) : (
           <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
             {services.map((s, index) => (
