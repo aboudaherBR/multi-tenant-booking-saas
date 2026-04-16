@@ -121,37 +121,41 @@ function ScheduleWizard() {
                         ← Voltar ao início
                     </button>
 
-                    {professionals.map((professional) => (
-                        <button
-                            key={professional.id}
-                            onClick={async () => {
-                                try {
-                                    const data = await apiClient(
-                                        `/admin/professionals/${professional.id}/services`
-                                    );
+                    {professionals.map((professional) => {
+                        const servicesPreview = servicesByProfessional[professional.id] || [];
 
-                                    setServices(data);
+                        return (
+                            <button
+                                key={professional.id}
+                                onClick={async () => {
+                                    try {
+                                        const data = await apiClient(
+                                            `/admin/professionals/${professional.id}/services`
+                                        );
 
-                                    setServicesByProfessional(prev => ({
-                                        ...prev,
-                                        [professional.id]: data
-                                    }));
+                                        setServices(data);
 
-                                    setAppointment({
-                                        ...appointment,
-                                        professional: professional
-                                    });
+                                        setServicesByProfessional(prev => ({
+                                            ...prev,
+                                            [professional.id]: data
+                                        }));
 
-                                    setStep('service');
+                                        setAppointment({
+                                            ...appointment,
+                                            professional: professional
+                                        });
 
-                                } catch (error) {
-                                    console.error('Erro ao buscar serviços', error);
-                                }
-                            }}
-                        >
-                            {professional.name}
-                        </button>
-                    ))}
+                                        setStep('service');
+
+                                    } catch (error) {
+                                        console.error('Erro ao buscar serviços', error);
+                                    }
+                                }}
+                            >
+                                {professional.name}
+                            </button>
+                        );
+                    })}
                 </div>
             )}
 
