@@ -17,6 +17,7 @@ function ScheduleWizard() {
     const [services, setServices] = useState([]);
     const [slots, setSlots] = useState([]);
     const [selectedDate, setSelectedDate] = useState('');
+    const [servicesByProfessional, setServicesByProfessional] = useState({});
 
     const navigate = useNavigate();
 
