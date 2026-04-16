@@ -18,9 +18,7 @@ const {
 
 const { findCompanyBySlug } = require('../database/companies.repository');
 
-const {
-  findActiveProfessionalsWithPreviewByCompanyId
-} = require('../database/professionals.repository');
+
 
 
 async function list(req, res, next) {
