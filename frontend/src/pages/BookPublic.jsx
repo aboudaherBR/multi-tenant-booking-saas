@@ -55,8 +55,11 @@ export default function BookPublic() {
     useEffect(() => {
         async function fetchProfessionals() {
             try {
-                const data = await apiClient(`/agendar/${slug}/profissionais`);
+                const data = await apiClient(
+                    `/public/${slug}/professionals?withPreview=true`
+                );
                 setProfessionals(data);
+                console.log("PROFISSIONAIS:", data);
             } catch (err) {
                 console.log(err);
             }
