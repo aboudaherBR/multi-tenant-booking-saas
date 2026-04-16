@@ -37,18 +37,16 @@ export default function ProfessionalsModal({
           <p>Nenhum profissional disponível</p>
         ) : (
           <div style={listContainerStyle}>
-            {professionals.map((p) => (
-              <ProfessionalsCards
-                key={p.id}
-                professional={p}
-                isSelected={selectedProfessionalId === p.id}
-                onSelect={(professional) => {
-                  console.log("🔥 CLIQUE NO MODAL");
+            onSelect={(professional) => {
+              console.log("🔥 CLIQUE NO MODAL");
 
-                  onSelect(professional);
-                }}
-              />
-            ))}
+              setSelectedProfessionalId(professional.id);
+
+              setTimeout(() => {
+                console.log("🔥 NAVEGANDO");
+                onSelect(professional);
+              }, 800);
+            }}
           </div>
         )}
       </div>
