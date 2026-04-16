@@ -33,23 +33,26 @@ export default function ProfessionalsModal({
           Escolha um profissional
         </h3>
 
-        {professionals.map((p) => (
-          <ProfessionalsCards
-            key={p.id}
-            professional={p}
-            isSelected={selectedProfessionalId === p.id}
-            onSelect={(professional) => {
-              console.log("🔥 CLIQUE NO MODAL");
+        {professionals.length === 0 ? (
+          <p>Nenhum profissional disponível</p>
+        ) : (
+          <div style={listContainerStyle}>
+            {professionals.map((p) => (
+              <ProfessionalsCards
+                key={p.id}
+                professional={p}
+                isSelected={selectedProfessionalId === p.id}
+                onSelect={(professional) => {
+                  setSelectedProfessionalId(professional.id);
 
-              setSelectedProfessionalId(professional.id);
-
-              setTimeout(() => {
-                console.log("🔥 NAVEGANDO");
-                onSelect(professional);
-              }, 800);
-            }}
-          />
-        ))}
+                  setTimeout(() => {
+                    onSelect(professional);
+                  }, 800);
+                }}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -90,5 +93,6 @@ const backButtonStyle = {
 
 const listContainerStyle = {
   overflowY: "auto",
-  marginTop: "10px"
+  marginTop: "10px",
+  flex: 1
 };
