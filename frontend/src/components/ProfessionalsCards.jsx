@@ -77,7 +77,7 @@ const backgroundStyle = {
   left: "-40px",
   width: "120px",
   height: "120px",
-  background: "#1e3a8a",// 🔥 mais sutil
+  background: "#0f172a",
   borderRadius: "50%"
 };
 
