@@ -112,10 +112,67 @@ async function createProfessional({
   return result.rows[0];
 }
 
+async function findActiveProfessionalsWithPreviewByCompanyId(companyId) {
+  const result = await pool.query(
+    `
+    SELECT 
+      p.id,
+      p.photo_url,
+      p.slug,
+      u.name,
+
+      CASE 
+        WHEN COUNT(*) > 3 THEN 
+          STRING_AGG(sub.name, ' • ' ORDER BY sub.name) 
+            FILTER (WHERE sub.rn <= 3)
+          || ' • +' || (COUNT(*) - 3)
+        ELSE 
+          STRING_AGG(sub.name, ' • ' ORDER BY sub.name)
+      END AS services_preview
+
+    FROM (
+      SELECT 
+        p.id,
+        p.company_id,
+        p.user_id,
+        s.name,
+        ROW_NUMBER() OVER (PARTITION BY p.id ORDER BY s.name) AS rn
+      FROM professionals p
+      JOIN users u
+        ON u.id = p.user_id
+       AND u.company_id = p.company_id
+      JOIN professional_services ps
+        ON ps.professional_id = p.id
+       AND ps.company_id = p.company_id
+      JOIN services s
+        ON s.id = ps.service_id
+       AND s.company_id = ps.company_id
+      WHERE
+        p.company_id = $1
+        AND p.is_active = true
+        AND u.is_active = true
+        AND s.is_active = true
+    ) sub
+
+    JOIN professionals p ON p.id = sub.id
+    JOIN users u 
+      ON u.id = p.user_id
+     AND u.company_id = p.company_id
+
+    GROUP BY p.id, p.photo_url, p.slug, u.name
+    ORDER BY u.name ASC;
+    `,
+    [companyId]
+  );
+
+  return result.rows;
+}
+
 module.exports = {
   findProfessionalById,
   findProfessionalByUserId,
   findActiveProfessionalsPublicByCompanyId,
   findActiveProfessionalsByCompanyId,
-  createProfessional
+  createProfessional,
+  findActiveProfessionalsWithPreviewByCompanyId
 };
