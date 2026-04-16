@@ -66,7 +66,7 @@ const cardContainer = {
   color: "#0f172a",
   cursor: "pointer",
   overflow: "hidden",
-  border: "1px solid rgba(15, 23, 42, 0.08)",
+  border: "2px solid rgba(15, 23, 42, 0.08)",
   transition: "all 0.2s ease",
   boxShadow: "0 15px 20px rgba(0,0,0,0.4)"
 };
