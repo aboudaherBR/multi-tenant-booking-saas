@@ -43,7 +43,9 @@ export default function ProfessionalsModal({
                 professional={p}
                 isSelected={selectedProfessionalId === p.id}
                 onSelect={(professional) => {
-                  setSelectedProfessionalId(professional.id);
+                  console.log("🔥 CLIQUE NO MODAL");
+
+                  onSelect(professional);
                 }}
               />
             ))}
