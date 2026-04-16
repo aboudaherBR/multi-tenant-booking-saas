@@ -96,9 +96,8 @@ export default function ServicesModal({
             {services.map((s, index) => (
               <li
                 key={s.slug || index}
+                className={`selectable ${selectedServiceId === s.slug ? "is-selected" : ""}`}
                 onClick={() => {
-                  console.log("🔥 SERVICE CLICK");
-
                   setSelectedServiceId(s.slug);
 
                   setTimeout(() => {
@@ -110,11 +109,8 @@ export default function ServicesModal({
                   marginBottom: "16px",
                   padding: "20px",
                   borderRadius: "16px",
-                  background: "#0f172a",
-                  color: "#fff",
                   textAlign: "center",
-                  boxShadow: "0 12px 27px rgba(0,0,0,0.4)",
-                  transform: "translateY(0)"                  
+                  boxShadow: "0 12px 27px rgba(0,0,0,0.4)"
                 }}
               >
                 <strong style={{ fontSize: "18px" }}>
