@@ -308,9 +308,9 @@ input, textarea, select {
 }
 
 .is-selected {
-  background: var(--color-primary);
-  color: var(--color-surface);
-  border: 2px solid #fff;
+  background: var(--color-primary) !important;
+  color: var(--color-surface) !important;
+  border: 2px solid #fff !important;
 }
 
 /* ========================================
