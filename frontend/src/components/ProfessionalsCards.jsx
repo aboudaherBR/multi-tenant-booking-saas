@@ -1,9 +1,13 @@
-export default function ProfessionalCard({ professional, onSelect }) {
+export default function ProfessionalCard({ professional, onSelect, isSelected }) {
   console.log("FOTO:", professional.photo_url);
 
   return (
     <div
-      style={cardContainer}
+      style={{
+        ...cardContainer,
+        border: isSelected ? "2px solid #fff" : "none",
+        transform: isSelected ? "scale(0.98)" : "scale(1)"
+      }}
       onClick={() => onSelect(professional)}
       onMouseDown={(e) => {
         e.currentTarget.style.transform = "scale(0.97)";
