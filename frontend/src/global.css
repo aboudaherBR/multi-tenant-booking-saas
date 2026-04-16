@@ -293,6 +293,20 @@ input, textarea, select {
   text-align: center;
 }
 
+
+/* ========================================
+   DESIGN SYSTEM - STATES
+   ======================================== */
+
+.selectable {
+  transition: all 0.2s ease;
+}
+
+.selectable-selected {
+  background: var(--color-primary);
+  color: var(--color-surface);
+}
+
 /* ========================================
    DESIGN SYSTEM - HEADER
    ======================================== */
@@ -344,3 +358,5 @@ input, textarea, select {
 .slot:active {
   transform: scale(0.95);
 }
+
+

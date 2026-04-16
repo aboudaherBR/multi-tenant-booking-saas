@@ -3,6 +3,7 @@ export default function ProfessionalCard({ professional, onSelect, isSelected })
 
   return (
     <div
+      className={`selectable ${isSelected ? "is-selected" : ""}`}
       style={{
         ...cardContainer,
         border: isSelected ? "2px solid #fff" : "none"
