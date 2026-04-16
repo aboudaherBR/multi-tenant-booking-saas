@@ -134,8 +134,8 @@ async function listPublic(req, res, next) {
   try {
 
     const { companySlug } = req.params;
-
     const company = await findCompanyBySlug(companySlug);
+    const withPreview = req.query.withPreview === 'true';
 
     if (!company) {
       return res.status(404).json({
@@ -144,6 +144,10 @@ async function listPublic(req, res, next) {
     }
 
     const companyId = company.id;
+
+    if (withPreview) {
+      // usar preview no próximo passo
+    }
 
     const professionals =
       await findActiveProfessionalsPublicByCompanyId(companyId);
