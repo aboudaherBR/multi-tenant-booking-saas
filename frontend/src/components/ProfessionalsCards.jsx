@@ -5,8 +5,7 @@ export default function ProfessionalCard({ professional, onSelect, isSelected })
     <div
       style={{
         ...cardContainer,
-        border: isSelected ? "2px solid #fff" : "none",
-        transform: isSelected ? "scale(0.98)" : "scale(1)"
+        border: isSelected ? "2px solid #fff" : "none"
       }}
       onClick={() => onSelect(professional)}
       onMouseDown={(e) => {

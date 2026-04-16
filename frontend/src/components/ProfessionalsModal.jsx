@@ -33,22 +33,24 @@ export default function ProfessionalsModal({
           Escolha um profissional
         </h3>
 
-        {professionals.map((p) => (
-          <ProfessionalsCards
-            key={p.id}
-            professional={p}
-            isSelected={selectedProfessionalId === p.id}
-            onSelect={(professional) => {
-              console.log("🔥 CLIQUE NO MODAL");
+        {professionals.length === 0 ? (
+          <p>Nenhum profissional disponível</p>
+        ) : (
+          <div style={listContainerStyle}>
+            {professionals.map((p) => (
+              <ProfessionalsCards
+                key={p.id}
+                professional={p}
+                isSelected={selectedProfessionalId === p.id}
+                onSelect={(professional) => {
+                  console.log("🔥 CLIQUE NO MODAL");
 
-              setSelectedProfessionalId(professional.id);
-
-              setTimeout(() => {
-                onSelect(professional);
-              }, 200);
-            }}
-          />
-        ))}
+                  onSelect(professional);
+                }}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
