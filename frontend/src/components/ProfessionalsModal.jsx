@@ -5,6 +5,7 @@ export default function ProfessionalsModal({
   onClose,
   onSelect
 }) {
+  const [selectedProfessionalId, setSelectedProfessionalId] = useState(null);
   return (
     <div style={overlayStyle}>
       <div style={modalStyle}>
@@ -39,7 +40,10 @@ export default function ProfessionalsModal({
               <ProfessionalsCards
                 key={p.id}
                 professional={p}
-                onSelect={onSelect}
+                isSelected={selectedProfessionalId === p.id}
+                onSelect={(professional) => {
+                  setSelectedProfessionalId(professional.id);
+                }}
               />
             ))}
           </div>
