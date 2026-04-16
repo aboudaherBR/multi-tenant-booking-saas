@@ -158,7 +158,7 @@ function ScheduleWizard() {
                     })}
                 </div>
             )}
-
+            {/* //------------------------------// */}
             {step === 'service' && (
                 <div>
                     <button onClick={() => setStep('professional')}>
