@@ -76,7 +76,7 @@ const backgroundStyle = {
   left: "-40px",
   width: "120px",
   height: "120px",
-  background: "#f8faf8",
+  background: "rgba(255,255,255,0.08)", // 🔥 mais sutil
   borderRadius: "50%"
 };
 
