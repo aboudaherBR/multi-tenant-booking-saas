@@ -124,8 +124,8 @@ async function findActiveProfessionalsWithPreviewByCompanyId(companyId) {
       CASE 
         WHEN COUNT(*) > 3 THEN 
           STRING_AGG(sub.name, ' • ' ORDER BY sub.name) 
-            FILTER (WHERE sub.rn <= 3)
-          || ' • +' || (COUNT(*) - 3)
+            FILTER (WHERE sub.rn <= 5)
+          || ' • +' || (COUNT(*) - 5)
         ELSE 
           STRING_AGG(sub.name, ' • ' ORDER BY sub.name)
       END AS services_preview
