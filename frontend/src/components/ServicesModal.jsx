@@ -100,6 +100,10 @@ export default function ServicesModal({
                   console.log("🔥 SERVICE CLICK");
 
                   setSelectedServiceId(s.slug);
+
+                  setTimeout(() => {
+                    handleSelect(s);
+                  }, 250);
                 }}
                 style={{
                   cursor: "pointer",
