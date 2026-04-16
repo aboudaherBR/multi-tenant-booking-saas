@@ -106,11 +106,12 @@ export default function ServicesModal({
                   marginBottom: "16px",
                   padding: "20px",
                   borderRadius: "16px",
-                  background: "#0f172a", // azul escuro igual card
+                  background: "#0f172a",
                   color: "#fff",
                   textAlign: "center",
                   boxShadow: "0 12px 27px rgba(0,0,0,0.4)",
-                  transform: "translateY(0)"
+                  transform: "translateY(0)",
+                  border: selectedServiceId === s.slug ? "2px solid #fff" : "none"
                 }}
               >
                 <strong style={{ fontSize: "18px" }}>
