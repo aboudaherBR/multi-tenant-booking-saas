@@ -32,7 +32,7 @@ async function findProfessionalByUserId({ userId, companyId }) {
 async function findActiveProfessionalsPublicByCompanyId(companyId) {
   console.log("USANDO findActiveProfessionalsPublicByCompanyId");
   const result = await pool.query(
-    
+
     `
      SELECT DISTINCT ON (p.id)
         p.id,
@@ -116,51 +116,69 @@ async function findActiveProfessionalsWithPreviewByCompanyId(companyId) {
   const result = await pool.query(
     `
     SELECT 
+  p.id,
+  p.photo_url,
+  p.slug,
+  u.name,
+
+  CASE 
+    WHEN total.total_services > 5 THEN 
+      preview.preview_names || ' • +' || (total.total_services - 5)
+    ELSE 
+      preview.preview_names
+  END AS services_preview
+
+FROM professionals p
+
+JOIN users u
+  ON u.id = p.user_id
+ AND u.company_id = p.company_id
+
+JOIN (
+  SELECT 
+    p.id,
+    COUNT(*) AS total_services
+  FROM professionals p
+  JOIN professional_services ps
+    ON ps.professional_id = p.id
+   AND ps.company_id = p.company_id
+  JOIN services s
+    ON s.id = ps.service_id
+   AND s.company_id = ps.company_id
+  WHERE 
+    p.company_id = $1
+    AND p.is_active = true
+    AND s.is_active = true
+  GROUP BY p.id
+) total ON total.id = p.id
+
+JOIN (
+  SELECT 
+    sub.id,
+    STRING_AGG(sub.name, ' • ' ORDER BY sub.name) AS preview_names
+  FROM (
+    SELECT 
       p.id,
-      p.photo_url,
-      p.slug,
-      u.name,
+      s.name,
+      ROW_NUMBER() OVER (PARTITION BY p.id ORDER BY s.name) AS rn
+    FROM professionals p
+    JOIN professional_services ps
+      ON ps.professional_id = p.id
+     AND ps.company_id = p.company_id
+    JOIN services s
+      ON s.id = ps.service_id
+     AND s.company_id = ps.company_id
+    WHERE 
+      p.company_id = $1
+      AND p.is_active = true
+      AND s.is_active = true
+  ) sub
+  WHERE sub.rn <= 5
+  GROUP BY sub.id
+) preview ON preview.id = p.id
 
-      CASE 
-        WHEN COUNT(*) > 3 THEN 
-          STRING_AGG(sub.name, ' • ' ORDER BY sub.name) 
-            FILTER (WHERE sub.rn <= 5)
-          || ' • +' || (COUNT(*) - 5)
-        ELSE 
-          STRING_AGG(sub.name, ' • ' ORDER BY sub.name)
-      END AS services_preview
-
-    FROM (
-      SELECT 
-        p.id,
-        p.company_id,
-        p.user_id,
-        s.name,
-        ROW_NUMBER() OVER (PARTITION BY p.id ORDER BY s.name) AS rn
-      FROM professionals p
-      JOIN users u
-        ON u.id = p.user_id
-       AND u.company_id = p.company_id
-      JOIN professional_services ps
-        ON ps.professional_id = p.id
-       AND ps.company_id = p.company_id
-      JOIN services s
-        ON s.id = ps.service_id
-       AND s.company_id = ps.company_id
-      WHERE
-        p.company_id = $1
-        AND p.is_active = true
-        AND u.is_active = true
-        AND s.is_active = true
-    ) sub
-
-    JOIN professionals p ON p.id = sub.id
-    JOIN users u 
-      ON u.id = p.user_id
-     AND u.company_id = p.company_id
-
-    GROUP BY p.id, p.photo_url, p.slug, u.name
-    ORDER BY u.name ASC;
+WHERE p.company_id = $1
+ORDER BY u.name;
     `,
     [companyId]
   );
