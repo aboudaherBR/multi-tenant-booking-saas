@@ -229,8 +229,8 @@ export default function BookPublic() {
                                 color: "#0f172a",
                                 transform:
                                     stage === "welcome"
-                                        ? "scale(1)"
-                                        : "scale(0.98)",
+                                        ? "scale(1.5)"
+                                        : "scale(0.7)",
                                 transition: "all 0.5s cubic-bezier(0.22, 1, 0.36, 1)"
                             }}
                         >
