@@ -241,10 +241,6 @@ export default function BookPublic() {
                 {/* CONTEÚDO PRINCIPAL */}
                 <div
                     style={{
-                        transform:
-                            stage === "content"
-                                ? "translateX(0)"
-                                : "translateX(100%)",
                         opacity: stage === "content" ? 1 : 0,
                         transition: "all 0.4s ease"
                     }}
