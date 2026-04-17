@@ -71,7 +71,7 @@ export default function BookPublic() {
     }, [slug]);
 
     useEffect(() => {
-        const t1 = setTimeout(() => setStage("transition"), 300);
+        const t1 = setTimeout(() => setStage("transition"), 600);
         const t2 = setTimeout(() => setStage("content"), 650);
 
         return () => {
@@ -229,7 +229,7 @@ export default function BookPublic() {
                                 color: "#0f172a"
                             }}
                         >
-                            Bem-vindo 👋
+                            Bem-vindo à AGENDARE
                         </h2>
                     </div>
                 )}
