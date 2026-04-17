@@ -81,7 +81,8 @@ const modalStyle = {
   maxWidth: "400px",
   maxHeight: "80vh",
   display: "flex",
-  flexDirection: "column"
+  flexDirection: "column",
+  height: "80%"
 };
 
 const backButtonStyle = {
