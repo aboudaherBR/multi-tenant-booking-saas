@@ -234,7 +234,7 @@ export default function BookPublic() {
                             }}
                         >
                             Bem-vindo à Agendare
-                            <img src="public/photos/logo.png" alt="" />
+                            <img src="/logo.png" alt="" />
                         </h2>
                     </div>
                 )}
