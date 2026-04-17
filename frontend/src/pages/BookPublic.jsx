@@ -9,6 +9,7 @@ import PhoneErrorModal from "../components/PhoneErrorModal";
 import NameErrorModal from "../components/NameErrorModal";
 import { formatPhone } from "../utils/phone.utils";
 import { formatDateBR } from "../utils/date.utils";
+import logo from "../assets/logo_png.png";
 
 // 🔥 FUNÇÃO UTILITÁRIA (TOPO - PADRÃO CORRETO)
 function normalizePhone(value) {
@@ -234,9 +235,13 @@ export default function BookPublic() {
                             }}
                         >
                             Bem-vindo à Agendare
-                            
+
                         </h2>
-                        <img src="/logo.png" alt="agendare" />
+                        <img
+                            src={logo}
+                            alt="Agendare"
+                            style={{ width: "60px", marginBottom: "12px" }}
+                        />
                     </div>
                 )}
 
