@@ -75,11 +75,11 @@ const modalStyle = {
   padding: "20px",
   borderRadius: "16px",
   width: "95%",
-  maxWidth: "420px",
-  maxHeight: "85vh", // 🔥 limite só aqui
+  maxWidth: "520px", // 🔥 aumentamos aqui
+  maxHeight: "90vh", // 🔥 mais altura
   display: "flex",
   flexDirection: "column",
-  boxShadow: "0 20px 40px rgba(0,0,0,0.2)"
+  boxShadow: "0 20px 40px rgba(0,0,0,0.25)"
 };
 
 const backButtonStyle = {
