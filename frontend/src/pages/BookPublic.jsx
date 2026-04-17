@@ -216,14 +216,23 @@ export default function BookPublic() {
                             justifyContent: "center",
                             background: "#fff",
                             zIndex: 2,
-                            // transform:
-                            //     stage === "welcome"
-                            //         ? "translateX(0) scale(1)"
-                            //         : "translateX(-100%) scale(0.95)",
-                            // opacity: stage === "welcome" ? 1 : 0,
                             transition: "all 0.5s cubic-bezier(0.22, 1, 0.36, 1)"
                         }}
                     >
+                        <img
+                            src={logo}
+                            alt="Agendare"
+                            style={{
+                                width: "60px",
+                                marginBottom: "12px",
+                                opacity: stage === "welcome" ? 1 : 0,
+                                transform: stage === "welcome" ? "translateY(0)" : "translateY(10px)",
+                                transition: stage === "welcome"
+                                    ? "all 0.6s ease"
+                                    : "all 1s ease"
+                            }}
+                        />
+
                         <h2
                             style={{
                                 fontSize: "22px",
@@ -237,13 +246,7 @@ export default function BookPublic() {
                             }}
                         >
                             Bem-vindo à Agendare
-
                         </h2>
-                        <img
-                            src={logo}
-                            alt="Agendare"
-                            style={{ width: "60px", marginBottom: "12px" }}
-                        />
                     </div>
                 )}
 
