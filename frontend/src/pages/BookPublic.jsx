@@ -236,7 +236,7 @@ export default function BookPublic() {
                             Bem-vindo à Agendare
                             
                         </h2>
-                        <img src="/logo.png" alt="" />
+                        <img src="/logo.png" alt="agendare" />
                     </div>
                 )}
 
