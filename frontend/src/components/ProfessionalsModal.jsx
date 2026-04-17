@@ -62,16 +62,12 @@ export default function ProfessionalsModal({
 
 const overlayStyle = {
   position: "fixed",
-  top: 0,
-  left: 0,
-  width: "100%",
-  height: "100%",
+  inset: 0, // 🔥 melhor que top/left/width/height
   background: "rgba(0,0,0,0.5)",
   display: "flex",
-  alignItems: "center",
   justifyContent: "center",
-  zIndex: 9999,
-  alignItems: "flex-end"
+  alignItems: "center",
+  zIndex: 9999
 };
 
 const modalStyle = {
@@ -79,8 +75,8 @@ const modalStyle = {
   padding: "20px",
   borderRadius: "16px",
   width: "95%",
-  maxWidth: "480px",
-  height: "85vh", // 🔥 controla direto aqui
+  maxWidth: "420px",
+  maxHeight: "85vh", // 🔥 limite só aqui
   display: "flex",
   flexDirection: "column",
   boxShadow: "0 20px 40px rgba(0,0,0,0.2)"
@@ -96,5 +92,5 @@ const backButtonStyle = {
 const listContainerStyle = {
   overflowY: "auto",
   marginTop: "10px",
-  flex: 1
-};
+  flex: 1,
+  minHeight: 0 
