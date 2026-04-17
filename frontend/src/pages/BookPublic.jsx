@@ -224,8 +224,8 @@ export default function BookPublic() {
                     >
                         <h2
                             style={{
-                                fontSize: "26px",
-                                fontWeight: "900",
+                                fontSize: "22px",
+                                fontWeight: "700",
                                 color: "#0f172a",
                                 transform:
                                     stage === "welcome"
