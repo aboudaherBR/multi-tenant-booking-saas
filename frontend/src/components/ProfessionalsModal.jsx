@@ -62,11 +62,12 @@ export default function ProfessionalsModal({
 
 const overlayStyle = {
   position: "fixed",
-  inset: 0, // 🔥 melhor que top/left/width/height
+  inset: 0,
   background: "rgba(0,0,0,0.5)",
   display: "flex",
   justifyContent: "center",
-  alignItems: "center",
+  alignItems: "flex-start",
+  paddingTop: "40px",
   zIndex: 9999
 };
 
@@ -93,5 +94,5 @@ const listContainerStyle = {
   overflowY: "auto",
   marginTop: "10px",
   flex: 1,
-  minHeight: 0 
+  minHeight: 0
 };
