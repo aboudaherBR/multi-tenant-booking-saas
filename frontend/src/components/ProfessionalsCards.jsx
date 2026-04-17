@@ -107,12 +107,12 @@ const nameStyle = {
 };
 
 const subtitleStyle = {
-  fontSize: "14px",
+  fontSize: "13px",
   color: "#64748b",
-  marginBottom: "12px",
-  whiteSpace: "nowrap",
-  overflow: "hidden",
-  textOverflow: "ellipsis"
+  marginTop: "6px",
+  lineHeight: "1.4",
+  whiteSpace: "normal",
+  wordBreak: "break-word"
 };
 
 const buttonStyle = {
