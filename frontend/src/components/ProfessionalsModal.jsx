@@ -70,19 +70,20 @@ const overlayStyle = {
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  zIndex: 9999
+  zIndex: 9999,
+  alignItems: "flex-end"
 };
 
 const modalStyle = {
   background: "#fff",
   padding: "20px",
-  borderRadius: "12px",
-  width: "90%",
-  maxWidth: "400px",
-  maxHeight: "80vh",
+  borderRadius: "16px",
+  width: "95%",
+  maxWidth: "480px",
+  height: "85vh", // 🔥 controla direto aqui
   display: "flex",
   flexDirection: "column",
-  height: "80%"
+  boxShadow: "0 20px 40px rgba(0,0,0,0.2)"
 };
 
 const backButtonStyle = {
@@ -95,6 +96,5 @@ const backButtonStyle = {
 const listContainerStyle = {
   overflowY: "auto",
   marginTop: "10px",
-  flex: 1,
-  height: "80%"
+  flex: 1
 };
