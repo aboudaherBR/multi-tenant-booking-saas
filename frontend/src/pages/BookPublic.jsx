@@ -224,7 +224,7 @@ export default function BookPublic() {
                             alt="Agendare"
                             style={{
                                 width: "500px",
-                                marginBottom: "12px",
+                                marginBottom: "5px",
                                 opacity: stage === "welcome" ? 1 : 0,
                                 transform: stage === "welcome" ? "translateY(0)" : "translateY(10px)",
                                 transition: stage === "welcome"
