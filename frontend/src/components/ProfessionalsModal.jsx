@@ -67,7 +67,7 @@ const overlayStyle = {
   display: "flex",
   justifyContent: "center",
   alignItems: "flex-start",
-  paddingTop: "40px",
+  paddingTop: "10x",
   zIndex: 9999
 };
 
