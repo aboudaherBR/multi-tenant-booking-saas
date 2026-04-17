@@ -228,7 +228,7 @@ export default function BookPublic() {
                                 opacity: stage === "welcome" ? 1 : 0,
                                 transform: stage === "welcome" ? "translateY(0)" : "translateY(10px)",
                                 transition: stage === "welcome"
-                                    ? "all 0.6s ease"
+                                    ? "all 0.5s ease"
                                     : "all 1s ease"
                             }}
                         />
