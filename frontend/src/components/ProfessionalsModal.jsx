@@ -94,5 +94,6 @@ const backButtonStyle = {
 const listContainerStyle = {
   overflowY: "auto",
   marginTop: "10px",
-  flex: 1
+  flex: 1,
+  height: "80%"
 };
