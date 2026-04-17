@@ -160,5 +160,5 @@ const modalStyle = {
   width: "90%",
   maxWidth: "400px",
   maxHeight: "80vh",
-  overflowY: "auto",
+  overflowY: "auto"
 };

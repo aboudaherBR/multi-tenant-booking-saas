@@ -94,3 +94,4 @@ const listContainerStyle = {
   marginTop: "10px",
   flex: 1,
   minHeight: 0 
+};
