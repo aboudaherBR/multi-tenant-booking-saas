@@ -228,7 +228,9 @@ export default function BookPublic() {
                                 color: "#0f172a",
                                 opacity: stage === "welcome" ? 1 : 0,
                                 transform: stage === "welcome" ? "translateY(0)" : "translateY(10px)",
-                                transition: "all 0.6s ease"
+                                transition: stage === "welcome"
+                                    ? "all 0.6s ease"
+                                    : "all 1s ease"
                             }}
                         >
                             Bem-vindo à Agendare
