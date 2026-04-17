@@ -216,20 +216,25 @@ export default function BookPublic() {
                             zIndex: 2,
                             transform:
                                 stage === "welcome"
-                                    ? "translateX(0)"
-                                    : "translateX(-100%)",
+                                    ? "translateX(0) scale(1)"
+                                    : "translateX(-100%) scale(0.95)",
                             opacity: stage === "welcome" ? 1 : 0,
-                            transition: "all 0.4s ease"
+                            transition: "all 0.5s cubic-bezier(0.22, 1, 0.36, 1)"
                         }}
                     >
                         <h2
                             style={{
-                                fontSize: "24px",
-                                fontWeight: "600",
-                                color: "#0f172a"
+                                fontSize: "26px",
+                                fontWeight: "900",
+                                color: "#0f172a",
+                                transform:
+                                    stage === "welcome"
+                                        ? "scale(1)"
+                                        : "scale(0.98)",
+                                transition: "all 0.5s cubic-bezier(0.22, 1, 0.36, 1)"
                             }}
                         >
-                            Bem-vindo à AGENDARE
+                            Bem-vindo à Agendare
                         </h2>
                     </div>
                 )}
