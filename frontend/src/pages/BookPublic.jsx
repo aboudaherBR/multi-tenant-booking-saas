@@ -214,11 +214,11 @@ export default function BookPublic() {
                             justifyContent: "center",
                             background: "#fff",
                             zIndex: 2,
-                            transform:
-                                stage === "welcome"
-                                    ? "translateX(0) scale(1)"
-                                    : "translateX(-100%) scale(0.95)",
-                            opacity: stage === "welcome" ? 1 : 0,
+                            // transform:
+                            //     stage === "welcome"
+                            //         ? "translateX(0) scale(1)"
+                            //         : "translateX(-100%) scale(0.95)",
+                            // opacity: stage === "welcome" ? 1 : 0,
                             transition: "all 0.5s cubic-bezier(0.22, 1, 0.36, 1)"
                         }}
                     >
@@ -227,10 +227,10 @@ export default function BookPublic() {
                                 fontSize: "22px",
                                 fontWeight: "900",
                                 color: "#0f172a",
-                                transform:
-                                    stage === "welcome"
-                                        ? "scale(1.2)"
-                                        : "scale(0.7)",
+                                // transform:
+                                //     stage === "welcome"
+                                //         ? "scale(1.2)"
+                                //         : "scale(0.7)",
                                 transition: "all 0.5s cubic-bezier(0.22, 1, 0.36, 1)"
                             }}
                         >
