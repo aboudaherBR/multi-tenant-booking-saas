@@ -10,6 +10,7 @@ import NameErrorModal from "../components/NameErrorModal";
 import { formatPhone } from "../utils/phone.utils";
 import { formatDateBR } from "../utils/date.utils";
 
+// 🔥 FUNÇÃO UTILITÁRIA (TOPO - PADRÃO CORRETO)
 function normalizePhone(value) {
     const numbers = value.replace(/\D/g, "");
     const trimmed = numbers.slice(0, 11);
@@ -51,7 +52,7 @@ export default function BookPublic() {
 
     const isDisabled = !phone || !!phoneError;
 
-    const [stage, setStage] = useState("welcome");
+    const [stage, setStage] = useState("welcome"); //Animation 
 
     useEffect(() => {
         async function fetchProfessionals() {
@@ -60,6 +61,7 @@ export default function BookPublic() {
                     `/public/${slug}/professionals?withPreview=true`
                 );
                 setProfessionals(data);
+                console.log("PROFISSIONAIS:", data);
             } catch (err) {
                 console.log(err);
             }
@@ -103,7 +105,10 @@ export default function BookPublic() {
                     setExistingClient(false);
                     setClientFound(false);
                 }
+
             } catch (err) {
+                console.error("Erro ao buscar cliente:", err);
+
                 setClientName("");
                 setExistingClient(false);
                 setClientFound(false);
@@ -139,6 +144,17 @@ export default function BookPublic() {
 
     async function handleConfirmBooking() {
         try {
+            console.log("📞 PHONE ORIGINAL:", phone);
+
+            const digitsOnly = phone.replace(/\D/g, "");
+            const normalizedPhone = normalizePhone(digitsOnly);
+            console.log("📞 NORMALIZED:", normalizedPhone);
+
+            if (!normalizedPhone) {
+                alert("Telefone inválido. Digite um número válido com DDD.");
+                return;
+            }
+
             const payload = {
                 companySlug: slug,
                 professionalSlug: selectedProfessional.slug,
@@ -146,8 +162,10 @@ export default function BookPublic() {
                 date: selectedSlot.date,
                 startTime: selectedSlot.startTime,
                 clientName,
-                phone: normalizePhone(phone.replace(/\D/g, ""))
+                phone: normalizedPhone
             };
+
+            console.log("📦 PAYLOAD:", payload);
 
             await apiClient("/agendar", {
                 method: "POST",
@@ -156,24 +174,28 @@ export default function BookPublic() {
 
             setShowConfirmModal(false);
             setBookingSuccess(true);
+
         } catch (err) {
+            console.error("Erro ao criar agendamento:", err);
             alert("Erro ao agendar");
         }
+
+        console.log("RENDER:", { clientFound, existingClient, clientName });
     }
 
     return (
         <div style={{ minHeight: "100vh", background: "#f5f5f5" }}>
-            {/* HEADER */}
+
+            {/* 🔵 HEADER */}
             <div className="header-gradient">
                 <div className="mb-10">
                     <div className="avatar-placeholder" />
                 </div>
-                <h2 className="heading" style={{ color: "white" }}>
-                    Barbearia
-                </h2>
+
+                <h2 className="heading" style={{ color: "white" }}>Barbearia</h2>
             </div>
 
-            {/* CARD */}
+            {/* ⚪ CARD */}
             <div
                 className="card container-main"
                 style={{
@@ -191,14 +213,25 @@ export default function BookPublic() {
                             alignItems: "center",
                             justifyContent: "center",
                             background: "#fff",
-                            zIndex: 2
+                            zIndex: 2,
+                            // transform:
+                            //     stage === "welcome"
+                            //         ? "translateX(0) scale(1)"
+                            //         : "translateX(-100%) scale(0.95)",
+                            // opacity: stage === "welcome" ? 1 : 0,
+                            transition: "all 0.5s cubic-bezier(0.22, 1, 0.36, 1)"
                         }}
                     >
                         <h2
                             style={{
                                 fontSize: "22px",
                                 fontWeight: "900",
-                                color: "#0f172a"
+                                color: "#0f172a",
+                                // transform:
+                                //     stage === "welcome"
+                                //         ? "scale(1.2)"
+                                //         : "scale(0.7)",
+                                transition: "all 0.5s cubic-bezier(0.22, 1, 0.36, 1)"
                             }}
                         >
                             Bem-vindo à Agendare
@@ -206,7 +239,7 @@ export default function BookPublic() {
                     </div>
                 )}
 
-                {/* CONTEÚDO */}
+                {/* CONTEÚDO PRINCIPAL */}
                 <div
                     style={{
                         transform:
@@ -217,39 +250,242 @@ export default function BookPublic() {
                         transition: "all 0.4s ease"
                     }}
                 >
-                    <h2 className="heading">Agende seu horário</h2>
+                    {bookingSuccess ? (
+                        <div className="text-center">
+                            <h2 className="heading text-success">
+                                ✔ Agendamento confirmado!
+                            </h2>
 
-                    <p className="subtext">Leva menos de 1 minuto</p>
+                            <p className="text-row">
+                                <strong>Serviço:</strong> {selectedService?.name}
+                            </p>
+                            <p className="text-row">
+                                <strong>Profissional:</strong> {selectedProfessional?.name}
+                            </p>
+                            <p className="text-row">
+                                <strong>Data:</strong>{" "}
+                                {formatDateBR(selectedSlot?.date, selectedSlot?.startTime)}
+                            </p>
+                            <p className="text-row">
+                                <strong>Valor:</strong>{" "}
+                                R${" "}
+                                {Number(selectedService?.price).toLocaleString("pt-BR", {
+                                    minimumFractionDigits: 2
+                                })}
+                            </p>
 
-                    <input
-                        className={`input-field mb-10 ${phoneError ? "input-error" : ""}`}
-                        placeholder="Telefone"
-                        value={phone}
-                        onChange={(e) => setPhone(formatPhone(e.target.value))}
-                    />
+                            <p className="mt-20">
+                                Obrigado, {clientName}!
+                            </p>
+                        </div>
+                    ) : (
+                        <>
+                            <h2 className="heading">
+                                Agende seu horário
+                            </h2>
 
-                    <button
-                        className="button-primary"
-                        onClick={handleStart}
-                        disabled={isDisabled}
-                    >
-                        Continuar agendamento
-                    </button>
+                            <p className="subtext">
+                                Leva menos de 1 minuto
+                            </p>
+
+                            <input
+                                className={`input-field mb-10 ${phoneError ? "input-error" : ""}`}
+                                type="tel"
+                                inputMode="numeric"
+                                pattern="[0-9]*"
+                                placeholder="Telefone"
+                                value={phone}
+                                onChange={(e) => {
+                                    const raw = e.target.value;
+                                    const formatted = formatPhone(raw);
+                                    setPhone(formatted);
+
+                                    const digitsOnly = formatted.replace(/\D/g, "");
+                                    const normalized = normalizePhone(digitsOnly);
+
+                                    if (!formatted) {
+                                        setPhoneError("");
+                                    } else if (!normalized) {
+                                        setPhoneError("Digite um telefone válido com DDD");
+                                    } else {
+                                        setPhoneError("");
+                                    }
+                                }}
+                            />
+
+                            {phoneError && (
+                                <p className="text-error">{phoneError}</p>
+                            )}
+
+                            {isCheckingClient ? (
+                                <p className="subtext">
+                                    Verificando{" "}
+                                    <span className="loading-dots">
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                    </span>
+                                </p>
+                            ) : clientFound ? (
+                                <div className="mb-20">
+                                    <p className="text-row">
+                                        Olá, <strong>{clientName}</strong>
+                                    </p>
+
+                                    <button
+                                        className="button-link"
+                                        onClick={() => {
+                                            setPhone("");
+                                            setClientName("");
+                                            setClientFound(false);
+                                            setExistingClient(false);
+                                        }}
+                                    >
+                                        Não é você? Trocar número
+                                    </button>
+                                </div>
+                            ) : phone ? (
+                                <div className="mb-20">
+                                    <p className="text-row">
+                                        Primeira vez aqui? Digite seu nome completo para começar
+                                    </p>
+
+                                    <input
+                                        className="input-field"
+                                        type="text"
+                                        placeholder="Digite seu nome"
+                                        value={clientName}
+                                        onChange={(e) => setClientName(e.target.value)}
+                                        disabled={existingClient}
+                                    />
+
+                                    {existingClient && (
+                                        <p className="text-success mt-5">
+                                            Bem-vindo de volta, {clientName}
+                                        </p>
+                                    )}
+                                </div>
+                            ) : null}
+
+                            <button
+                                className="button-primary"
+                                onClick={handleStart}
+                                disabled={isDisabled}
+                            >
+                                Continuar agendamento
+                            </button>
+
+                            {showProfessionalsModal && (
+                                <ProfessionalsModal
+                                    professionals={professionals}
+                                    onClose={() => setShowProfessionalsModal(false)}
+                                    onSelect={(professional) => {
+                                        setSelectedProfessional(professional);
+                                        setShowProfessionalsModal(false);
+                                        setShowServicesModal(true);
+                                    }}
+                                />
+                            )}
+
+                            {showServicesModal && selectedProfessional && (
+                                <ServicesModal
+                                    slug={slug}
+                                    professional={selectedProfessional}
+                                    onBack={() => {
+                                        setShowServicesModal(false);
+                                        setShowProfessionalsModal(true);
+                                    }}
+                                    onClose={() => setShowServicesModal(false)}
+                                    onSelect={(service) => {
+                                        setSelectedService(service);
+                                        setShowServicesModal(false);
+                                        setShowAvailabilityModal(true);
+                                    }}
+                                />
+                            )}
+
+                            {showAvailabilityModal && selectedProfessional && selectedService && (
+                                <AvailabilityModal
+                                    slug={slug}
+                                    professional={selectedProfessional}
+                                    service={selectedService}
+                                    onBack={() => {
+                                        setShowAvailabilityModal(false);
+                                        setShowServicesModal(true);
+                                    }}
+                                    onClose={() => setShowAvailabilityModal(false)}
+                                    onSelect={(slot) => {
+                                        setSelectedSlot(slot);
+                                        setShowAvailabilityModal(false);
+                                        setShowConfirmModal(true);
+                                    }}
+                                />
+                            )}
+
+                            {showConfirmModal && selectedSlot && (
+                                <ConfirmBookingModal
+                                    professional={selectedProfessional}
+                                    service={selectedService}
+                                    slot={selectedSlot}
+                                    onBack={() => {
+                                        setShowConfirmModal(false);
+                                        setShowAvailabilityModal(true);
+                                    }}
+                                    onClose={() => setShowConfirmModal(false)}
+                                    onConfirm={handleConfirmBooking}
+                                />
+                            )}
+
+                            {showPhoneErrorModal && (
+                                <PhoneErrorModal
+                                    onClose={() => setShowPhoneErrorModal(false)}
+                                />
+                            )}
+
+                            {showPhoneConfirmModal && (
+                                <div className="modal-backdrop">
+                                    <div className="modal-content">
+                                        <h3>Confirmar telefone</h3>
+
+                                        <p className="mb-20">
+                                            Esse é o seu número?
+                                        </p>
+
+                                        <strong>{phone}</strong>
+
+                                        <div style={{ marginTop: "20px" }}>
+                                            <button
+                                                className="button-secondary"
+                                                onClick={() => {
+                                                    setShowPhoneConfirmModal(false);
+                                                }}
+                                            >
+                                                Corrigir
+                                            </button>
+
+                                            <button
+                                                onClick={() => {
+                                                    setShowPhoneConfirmModal(false);
+                                                    setShowProfessionalsModal(true);
+                                                }}
+                                                style={{
+                                                    padding: "10px",
+                                                    borderRadius: "6px",
+                                                    border: "none",
+                                                    background: "#0f172a",
+                                                    color: "#fff"
+                                                }}
+                                            >
+                                                Confirmar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </>
+                    )}
                 </div>
             </div>
-
-            {/* 🔥 MODAL FORA DO CARD (CORREÇÃO PRINCIPAL) */}
-            {showProfessionalsModal && (
-                <ProfessionalsModal
-                    professionals={professionals}
-                    onClose={() => setShowProfessionalsModal(false)}
-                    onSelect={(professional) => {
-                        setSelectedProfessional(professional);
-                        setShowProfessionalsModal(false);
-                        setShowServicesModal(true);
-                    }}
-                />
-            )}
         </div>
     );
 }

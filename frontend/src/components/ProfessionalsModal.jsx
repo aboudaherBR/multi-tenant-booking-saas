@@ -66,7 +66,7 @@ const overlayStyle = {
   background: "rgba(0,0,0,0.5)",
   display: "flex",
   justifyContent: "center",
-  alignItems: "flex-start",
+  alignItems: "center",
   paddingTop: "20px",
   zIndex: 9999
 };
@@ -77,7 +77,7 @@ const modalStyle = {
   borderRadius: "16px",
   width: "95%",
   maxWidth: "520px", 
-  maxHeight: "90vh", 
+  maxHeight: "80vh",
   display: "flex",
   flexDirection: "column",
   boxShadow: "0 20px 40px rgba(0,0,0,0.25)"
