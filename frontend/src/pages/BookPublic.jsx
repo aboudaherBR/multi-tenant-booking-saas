@@ -71,8 +71,8 @@ export default function BookPublic() {
     }, [slug]);
 
     useEffect(() => {
-        const t1 = setTimeout(() => setStage("transition"), 1600);
-        const t2 = setTimeout(() => setStage("content"), 1800);
+        const t1 = setTimeout(() => setStage("transition"), 2000);
+        const t2 = setTimeout(() => setStage("content"), 2500);
 
         return () => {
             clearTimeout(t1);
