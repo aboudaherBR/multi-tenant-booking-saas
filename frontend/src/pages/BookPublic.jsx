@@ -200,7 +200,6 @@ export default function BookPublic() {
                 className="card container-main"
                 style={{
                     position: "relative",
-                    overflow: stage !== "content" ? "hidden" : "visible"
                 }}
             >
                 {/* WELCOME */}
