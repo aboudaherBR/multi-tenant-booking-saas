@@ -9,7 +9,7 @@ import PhoneErrorModal from "../components/PhoneErrorModal";
 import NameErrorModal from "../components/NameErrorModal";
 import { formatPhone } from "../utils/phone.utils";
 import { formatDateBR } from "../utils/date.utils";
-//import AppointmentsModal from "../components/AppointmentsModal";
+import AppointmentsModal from "../components/AppointmentsModal";
 import logo from "../assets/logo_png.png";
 
 
@@ -529,12 +529,12 @@ export default function BookPublic() {
                                     </div>
                                 </div>
                             )}
-                            {/* {showAppointmentsModal && (
+                            {showAppointmentsModal && (
                                 <AppointmentsModal
                                     appointments={appointments}
                                     onClose={() => setShowAppointmentsModal(false)}
                                 />
-                            )} */}
+                            )}
                         </>
                     )}
                 </div>
