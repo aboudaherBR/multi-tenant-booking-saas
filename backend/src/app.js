@@ -87,8 +87,9 @@ app.use('/api', servicesRoutes);
 const reportsRoutes = require('./routes/reports.routes');
 app.use('/api', reportsRoutes);
 
-// 🔥 NOVA ROTA (PROFISSIONAL)
 const professionalMeRoutes = require('./routes/professional.me.routes');
 app.use('/api', professionalMeRoutes);
+
+
 
 module.exports = app;

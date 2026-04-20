@@ -279,6 +279,38 @@ async function markAsNotified(appointmentId) {
   return result.rows[0];
 }
 
+async function findAppointmentsByClientId({ companyId, clientId }) {
+  const result = await pool.query(
+    `
+    SELECT
+      a.id,
+      a.date,
+      a.start_time,
+      a.end_time,
+      s.name AS service_name,
+      u.name AS professional_name
+    FROM appointments a
+    JOIN services s
+      ON s.id = a.service_id
+     AND s.company_id = a.company_id
+    JOIN professionals p
+      ON p.id = a.professional_id
+     AND p.company_id = a.company_id
+    JOIN users u
+      ON u.id = p.user_id
+     AND u.company_id = p.company_id
+    WHERE
+      a.company_id = $1
+      AND a.client_id = $2
+      AND a.date >= CURRENT_DATE
+    ORDER BY a.date, a.start_time
+    `,
+    [companyId, clientId]
+  );
+
+  return result.rows;
+}
+
 module.exports = {
   createAppointment,
   findConflicts,
@@ -288,5 +320,6 @@ module.exports = {
   getDashboardToday,
   cancelAppointment,
   findProfessionalByUserId,
-  markAsNotified
+  markAsNotified,
+  findAppointmentsByClientId
 };

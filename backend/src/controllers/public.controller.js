@@ -7,6 +7,7 @@ const {
 const { getAvailableSlots } = require('../services/availability.service');
 const pool = require('../database/db');
 const { normalizeBrazilianPhone } = require('../utils/phone.utils');
+const { findAppointmentsByClientId } = require('../database/appointments.repository');
 
 async function getPublicCompany(req, res, next) {
   try {
@@ -351,10 +352,70 @@ async function createPublicAppointment(req, res, next) {
   }
 }
 
+async function lookupPublicAppointments(req, res, next) {
+  try {
+    const { slug } = req.params;
+    const { phone } = req.body;
+
+    console.log('slug:', slug);
+
+    
+    const companySlug = slug;
+
+    if (!companySlug || !phone) {
+      return res.status(400).json({
+        message: "Dados obrigatórios não informados"
+      });
+    }
+
+    let normalizedPhone;
+
+    try {
+      normalizedPhone = normalizeBrazilianPhone(phone);
+    } catch (err) {
+      return res.status(400).json({ message: 'Telefone inválido' });
+    }
+
+    const company = await findCompanyBySlug(companySlug);
+
+    if (!company || company.status !== 'active') {
+      return res.status(404).json({
+        message: "Empresa não encontrada"
+      });
+    }
+
+    const clientResult = await pool.query(
+      `
+      SELECT id FROM clients
+      WHERE company_id = $1 AND phone = $2
+      LIMIT 1
+      `,
+      [company.id, normalizedPhone]
+    );
+
+    if (clientResult.rows.length === 0) {
+      return res.status(200).json({ appointments: [] });
+    }
+
+    const clientId = clientResult.rows[0].id;
+
+    const appointments = await findAppointmentsByClientId({
+      companyId: company.id,
+      clientId
+    });
+
+    return res.status(200).json({ appointments });
+
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   getPublicCompany,
   getPublicProfessionals,
   getPublicServicesByProfessional,
   getPublicAvailability,
-  createPublicAppointment
+  createPublicAppointment,
+  lookupPublicAppointments
 };

@@ -46,6 +46,8 @@ async function updateCompanyLunch(companyId, lunchStart, lunchEnd) {
 }
 
 async function findCompanyBySlug(slug) {
+  console.log('slug bruto:', slug);
+  console.log('slug tamanho:', slug.length);
   const result = await pool.query(
     `
       SELECT id,
