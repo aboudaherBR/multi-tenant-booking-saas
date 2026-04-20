@@ -58,3 +58,13 @@ const priceStyle = {
   fontSize: "16px",
   fontWeight: "bold"
 };
+
+const overlayStyle = {
+  position: "fixed",
+  inset: 0,
+  background: "rgba(0,0,0,0.5)",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  zIndex: 9999
+};
