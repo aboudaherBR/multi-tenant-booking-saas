@@ -374,10 +374,17 @@ export default function BookPublic() {
                                     </span>
                                 </p>
                             ) : clientFound ? (
-                                <div className="mb-20">
-                                    <p className="text-row">
+                                <div className="mb-20" style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                                    <p className="text-row" style={{ margin: 0 }}>
                                         Olá, <strong>{clientName}</strong>
                                     </p>
+
+                                    <button
+                                        className="button-link"
+                                        onClick={() => setShowAppointmentsModal(true)}
+                                    >
+                                        Ver agendamentos
+                                    </button>
 
                                     <button
                                         className="button-link"
@@ -388,7 +395,7 @@ export default function BookPublic() {
                                             setExistingClient(false);
                                         }}
                                     >
-                                        Não é você? Trocar número
+                                        Trocar número
                                     </button>
                                 </div>
                             ) : phone ? (
