@@ -396,7 +396,7 @@ export default function BookPublic() {
 
                                     {/* 🔥 botão abaixo */}
                                     <button
-                                        className="button-secondary mt-10"
+                                        className="button-soft mt-10"
                                         onClick={() => setShowAppointmentsModal(true)}
                                     >
                                         Ver meus agendamentos
