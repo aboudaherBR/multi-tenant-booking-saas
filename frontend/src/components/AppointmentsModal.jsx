@@ -53,12 +53,6 @@ export default function AppointmentsModal({ appointments, onClose }) {
     );
 }
 
-const priceStyle = {
-  marginTop: "10px",
-  fontSize: "16px",
-  fontWeight: "bold"
-};
-
 const overlayStyle = {
   position: "fixed",
   inset: 0,
@@ -79,4 +73,63 @@ const modalStyle = {
   maxHeight: "80vh",
   display: "flex",
   flexDirection: "column"
+};
+
+const headerStyle = {
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  marginBottom: "15px"
+};
+
+const backButtonStyle = {
+  background: "#0F172A",
+  color: "#fff",
+  border: "none",
+  padding: "6px 12px",
+  borderRadius: "999px",
+  fontSize: "13px",
+  cursor: "pointer"
+};
+
+const closeButtonStyle = {
+  background: "transparent",
+  border: "none",
+  fontSize: "18px",
+  cursor: "pointer",
+  color: "#666"
+};
+
+const listContainerStyle = {
+  overflowY: "auto",
+  flex: 1,
+  minHeight: 0,
+  marginTop: "10px"
+};
+
+const listStyle = {
+  listStyle: "none",
+  padding: 0,
+  margin: 0
+};
+
+const cardStyle = {
+  cursor: "pointer",
+  marginBottom: "16px",
+  padding: "20px",
+  borderRadius: "16px",
+  textAlign: "center",
+  boxShadow: "0 12px 27px rgba(0,0,0,0.4)"
+};
+
+const metaStyle = {
+  marginTop: "6px",
+  fontSize: "13px",
+  opacity: 0.8
+};
+
+const priceStyle = {
+  marginTop: "10px",
+  fontSize: "18px",
+  fontWeight: "bold"
 };
