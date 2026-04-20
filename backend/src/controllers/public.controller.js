@@ -8,6 +8,7 @@ const { getAvailableSlots } = require('../services/availability.service');
 const pool = require('../database/db');
 const { normalizeBrazilianPhone } = require('../utils/phone.utils');
 const { findAppointmentsByClientId } = require('../database/appointments.repository');
+const { findClientWithAppointments } = require('../repositories/clients.repository'); 
 
 async function getPublicCompany(req, res, next) {
   try {
@@ -411,11 +412,60 @@ async function lookupPublicAppointments(req, res, next) {
   }
 }
 
+async function lookupClientWithAppointments(req, res, next) {
+  try {
+    const { slug } = req.params;
+    const { phone } = req.query;
+
+    if (!slug || !phone) {
+      return res.status(400).json({
+        message: "Dados obrigatórios não informados"
+      });
+    }
+
+    // mesma normalização que você já usa
+    let normalizedPhone;
+    try {
+      normalizedPhone = normalizeBrazilianPhone(phone);
+    } catch (err) {
+      return res.status(400).json({ message: 'Telefone inválido' });
+    }
+
+    // resolve a empresa
+    const company = await findCompanyBySlug(slug);
+
+    if (!company || company.status !== 'active') {
+      return res.status(404).json({
+        message: "Empresa não encontrada"
+      });
+    }
+
+    // 🔥 chamada única ao repository (orquestra tudo)
+    const result = await findClientWithAppointments({
+      companyId: company.id,
+      phone: normalizedPhone
+    });
+
+    // resposta padronizada
+    return res.status(200).json({
+      client: result.client
+        ? { id: result.client.id, name: result.client.name }
+        : null,
+      appointments: result.appointments
+    });
+
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   getPublicCompany,
   getPublicProfessionals,
   getPublicServicesByProfessional,
   getPublicAvailability,
   createPublicAppointment,
-  lookupPublicAppointments
+  lookupPublicAppointments,
+  lookupClientWithAppointments
+
 };

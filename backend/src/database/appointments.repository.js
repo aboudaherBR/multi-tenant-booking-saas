@@ -311,6 +311,34 @@ async function findAppointmentsByClientId({ companyId, clientId }) {
   return result.rows;
 }
 
+async function findClientWithAppointments({ companyId, phone }) {
+  // 1. buscar cliente
+  const client = await findClientByPhone({
+    companyId,
+    phone
+  });
+
+  // 2. se não existe
+  if (!client) {
+    return {
+      client: null,
+      appointments: []
+    };
+  }
+
+  // 3. buscar agendamentos
+  const appointments = await findAppointmentsByClientId({
+    companyId,
+    clientId: client.id
+  });
+
+  // 4. retorno padronizado
+  return {
+    client,
+    appointments
+  };
+}
+
 module.exports = {
   createAppointment,
   findConflicts,
@@ -321,5 +349,6 @@ module.exports = {
   cancelAppointment,
   findProfessionalByUserId,
   markAsNotified,
-  findAppointmentsByClientId
+  findAppointmentsByClientId,
+  findClientWithAppointments
 };
