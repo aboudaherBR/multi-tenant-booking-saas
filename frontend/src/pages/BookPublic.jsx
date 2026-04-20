@@ -9,8 +9,9 @@ import PhoneErrorModal from "../components/PhoneErrorModal";
 import NameErrorModal from "../components/NameErrorModal";
 import { formatPhone } from "../utils/phone.utils";
 import { formatDateBR } from "../utils/date.utils";
+import AppointmentsModal from "../components/AppointmentsModal";
 import logo from "../assets/logo_png.png";
-console.log("LOGO:", logo);
+
 
 // 🔥 FUNÇÃO UTILITÁRIA (TOPO - PADRÃO CORRETO)
 function normalizePhone(value) {
@@ -52,7 +53,12 @@ export default function BookPublic() {
     const [existingClient, setExistingClient] = useState(false);
     const [showPhoneConfirmModal, setShowPhoneConfirmModal] = useState(false);
 
+
+
     const isDisabled = !phone || !!phoneError;
+
+    const [appointments, setAppointments] = useState([]);
+    const [showAppointmentsModal, setShowAppointmentsModal] = useState(false);
 
     const [stage, setStage] = useState("welcome"); //Animation 
 
@@ -102,10 +108,15 @@ export default function BookPublic() {
                     setClientName(res.name);
                     setExistingClient(true);
                     setClientFound(true);
+                    const appointmentsRes = await apiClient(
+                        `/book/${slug}/client-lookup?phone=${encodeURIComponent(normalized)}`
+                    );
+                    setAppointments(appointmentsRes.appointments || []);
                 } else {
                     setClientName("");
                     setExistingClient(false);
                     setClientFound(false);
+                    setAppointments([]); // 🔥 limpa dados antigos
                 }
 
             } catch (err) {
@@ -183,6 +194,27 @@ export default function BookPublic() {
         }
 
         console.log("RENDER:", { clientFound, existingClient, clientName });
+    }
+
+    async function fetchClientAppointments(normalizedPhone) {
+        try {
+            const res = await apiClient(
+                `/book/${slug}/client-lookup?phone=${encodeURIComponent(normalizedPhone)}`
+            );
+
+            if (res) {
+                setAppointments(res.appointments || []);
+
+                // opcional: garantir nome atualizado
+                if (res.client?.name) {
+                    setClientName(res.client.name);
+                }
+            }
+
+        } catch (err) {
+            console.error("Erro ao buscar agendamentos:", err);
+            setAppointments([]);
+        }
     }
 
     return (
@@ -284,6 +316,14 @@ export default function BookPublic() {
                             <p className="mt-20">
                                 Obrigado, {clientName}!
                             </p>
+                            {appointments.length > 0 && (
+                                <button
+                                    className="button-link mt-10"
+                                    onClick={() => setShowAppointmentsModal(true)}
+                                >
+                                    Ver meus agendamentos
+                                </button>
+                            )}
                         </div>
                     ) : (
                         <>
@@ -488,6 +528,12 @@ export default function BookPublic() {
                                         </div>
                                     </div>
                                 </div>
+                            )}
+                            {showAppointmentsModal && (
+                                <AppointmentsModal
+                                    appointments={appointments}
+                                    onClose={() => setShowAppointmentsModal(false)}
+                                />
                             )}
                         </>
                     )}
