@@ -318,10 +318,10 @@ export default function BookPublic() {
                             </p>
                             {appointments.length > 0 && (
                                 <button
-                                    className="button-link mt-10"
+                                    className="button-link"
                                     onClick={() => setShowAppointmentsModal(true)}
                                 >
-                                    Ver meus agendamentos
+                                    Ver agendamentos
                                 </button>
                             )}
                         </div>
