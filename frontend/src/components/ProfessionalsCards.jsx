@@ -1,9 +1,12 @@
-export default function ProfessionalCard({ professional, onSelect }) {
+export default function ProfessionalCard({ professional, onSelect, isSelected }) {
   console.log("FOTO:", professional.photo_url);
 
   return (
     <div
-      style={cardContainer}
+      className={`selectable ${isSelected ? "is-selected" : ""}`}
+      style={{
+        ...cardContainer
+      }}
       onClick={() => onSelect(professional)}
       onMouseDown={(e) => {
         e.currentTarget.style.transform = "scale(0.97)";
@@ -33,7 +36,7 @@ export default function ProfessionalCard({ professional, onSelect }) {
         <h3 style={nameStyle}>{professional.name}</h3>
 
         <p style={subtitleStyle}>
-          Toque para ver serviços
+          {professional.services_preview || "Toque para ver serviços"}
         </p>
 
         {/* BOTÃO */}
@@ -55,14 +58,15 @@ export default function ProfessionalCard({ professional, onSelect }) {
 
 const cardContainer = {
   position: "relative",
-  background: "#0f172a",
+  background: "#f8fafc",
   borderRadius: "16px",
   padding: "20px",
   marginBottom: "16px",
   textAlign: "center",
-  color: "#fff",
+  color: "#0f172a",
   cursor: "pointer",
   overflow: "hidden",
+  border: "2px solid rgba(15, 23, 42, 0.08)",
   transition: "all 0.2s ease",
   boxShadow: "0 15px 20px rgba(0,0,0,0.4)"
 };
@@ -73,7 +77,7 @@ const backgroundStyle = {
   left: "-40px",
   width: "120px",
   height: "120px",
-  background: "#f8faf8",
+  background: "#0f172a",
   borderRadius: "50%"
 };
 
@@ -103,17 +107,20 @@ const nameStyle = {
 };
 
 const subtitleStyle = {
-  fontSize: "14px",
-  color: "#cbd5f5",
-  marginBottom: "12px"
+  fontSize: "13px",
+  color: "#64748b",
+  marginTop: "6px",
+  lineHeight: "1.4",
+  whiteSpace: "normal",
+  wordBreak: "break-word"
 };
 
 const buttonStyle = {
-  background: "#f3f8f5",
+  background: "#0f172a",
   border: "none",
   padding: "10px 14px",
   borderRadius: "20px",
   cursor: "pointer",
-  color: "#000",
+  color: "#fff",
   fontWeight: "bold"
 };

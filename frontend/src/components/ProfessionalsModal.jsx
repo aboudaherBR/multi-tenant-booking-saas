@@ -1,10 +1,12 @@
 import ProfessionalsCards from "./ProfessionalsCards";
+import { useState } from "react";
 
 export default function ProfessionalsModal({
   professionals,
   onClose,
   onSelect
 }) {
+  const [selectedProfessionalId, setSelectedProfessionalId] = useState(null);
   return (
     <div style={overlayStyle}>
       <div style={modalStyle}>
@@ -39,7 +41,14 @@ export default function ProfessionalsModal({
               <ProfessionalsCards
                 key={p.id}
                 professional={p}
-                onSelect={onSelect}
+                isSelected={selectedProfessionalId === p.id}
+                onSelect={(professional) => {
+                  setSelectedProfessionalId(professional.id);
+
+                  setTimeout(() => {
+                    onSelect(professional);
+                  }, 800);
+                }}
               />
             ))}
           </div>
@@ -53,26 +62,25 @@ export default function ProfessionalsModal({
 
 const overlayStyle = {
   position: "fixed",
-  top: 0,
-  left: 0,
-  width: "100%",
-  height: "100%",
+  inset: 0,
   background: "rgba(0,0,0,0.5)",
   display: "flex",
-  alignItems: "center",
   justifyContent: "center",
-  zIndex: 9999
+  alignItems: "center",
+  zIndex: 9999,
+  border: "3px solid red"
 };
 
 const modalStyle = {
   background: "#fff",
   padding: "20px",
-  borderRadius: "12px",
-  width: "90%",
-  maxWidth: "400px",
+  borderRadius: "16px",
+  width: "95%",
+  maxWidth: "520px", 
   maxHeight: "80vh",
   display: "flex",
-  flexDirection: "column"
+  flexDirection: "column",
+  boxShadow: "0 20px 40px rgba(0,0,0,0.25)"
 };
 
 const backButtonStyle = {
@@ -84,5 +92,7 @@ const backButtonStyle = {
 
 const listContainerStyle = {
   overflowY: "auto",
-  marginTop: "10px"
+  marginTop: "10px",
+  flex: 1,
+  minHeight: 0
 };

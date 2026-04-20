@@ -16,6 +16,7 @@ export default function AvailabilityModal({
         const d = new Date();
         d.setDate(d.getDate() + i);
 
+
         return {
             date: d,
             label: d.toLocaleDateString("pt-BR", { weekday: "short" }).toUpperCase(),
@@ -64,6 +65,7 @@ export default function AvailabilityModal({
         }
     }
     const [selectedSlot, setSelectedSlot] = useState(null);
+    const [selectedDate, setSelectedDate] = useState(null);
 
     function handleDateChange(e) {
         const selectedDate = e.target.value;
@@ -175,32 +177,29 @@ export default function AvailabilityModal({
                     >
                         {slots.map((slot, index) => {
                             const isSelected =
-                                selectedSlot?.startTime === slot.startTime;
-
+                                selectedSlot?.startTime === slot.startTime &&
+                                selectedDate === date;
+                            console.log("DEBUG SLOT:", {
+                                slotStart: slot.startTime,
+                                selectedStart: selectedSlot?.startTime,
+                                selectedDate,
+                                currentDate: date,
+                                isSelected
+                            });
                             return (
                                 <div
-                                    key={index}
+                                    key={`${date}-${slot.startTime}`}
+                                    className={`slot ${isSelected ? "slot-selected" : ""}`}
                                     onClick={() => {
-                                        console.log("🔥 SLOT:", slot);
                                         setSelectedSlot(slot);
-                                        onSelect({
-                                            ...slot,
-                                            date
-                                        });
-                                    }}
-                                    style={{
-                                        padding: "12px",
-                                        borderRadius: "10px",
-                                        textAlign: "center",
-                                        cursor: "pointer",
-                                        fontWeight: "bold",
-                                        background: isSelected ? "#0F172A" : "#fff",
-                                        color: isSelected ? "#fff" : "#0F172A",
-                                        border: isSelected ? "none" : "1px solid #e5e7eb",
-                                        boxShadow: isSelected
-                                            ? "0 8px 20px rgba(0,0,0,0.25)"
-                                            : "none",
-                                        transition: "all 0.2s ease"
+                                        setSelectedDate(date);
+
+                                        setTimeout(() => {
+                                            onSelect({
+                                                ...slot,
+                                                date
+                                            });
+                                        }, 200); // 200ms
                                     }}
                                 >
                                     {slot.startTime}

@@ -4,7 +4,8 @@ const pool = require('../database/db');
 const {
   findActiveProfessionalsByCompanyId,
   findActiveProfessionalsPublicByCompanyId,
-  createProfessional
+  createProfessional,
+  findActiveProfessionalsWithPreviewByCompanyId
 } = require('../database/professionals.repository');
 
 const {
@@ -18,11 +19,20 @@ const {
 const { findCompanyBySlug } = require('../database/companies.repository');
 
 
+
+
 async function list(req, res, next) {
   try {
 
-    // 🔥 CORREÇÃO AQUI (JWT)
     const companyId = req.user.companyId;
+    const withPreview = req.query.withPreview === 'true';
+
+    if (withPreview) {
+      const professionals =
+        await findActiveProfessionalsWithPreviewByCompanyId(companyId);
+
+      return res.status(200).json(professionals);
+    }
 
     const professionals =
       await findActiveProfessionalsByCompanyId(companyId);
@@ -126,8 +136,8 @@ async function listPublic(req, res, next) {
   try {
 
     const { companySlug } = req.params;
-
     const company = await findCompanyBySlug(companySlug);
+    const withPreview = req.query.withPreview === 'true';
 
     if (!company) {
       return res.status(404).json({
@@ -136,6 +146,13 @@ async function listPublic(req, res, next) {
     }
 
     const companyId = company.id;
+
+    if (withPreview) {
+      const professionals =
+        await findActiveProfessionalsWithPreviewByCompanyId(companyId);
+
+      return res.status(200).json(professionals);
+    }
 
     const professionals =
       await findActiveProfessionalsPublicByCompanyId(companyId);
