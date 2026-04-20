@@ -399,7 +399,10 @@ export default function BookPublic() {
                                         <button
                                             className="button-soft"
                                             style={{ width: "auto", padding: "8px 14px" }}
-                                            onClick={() => setShowAppointmentsModal(true)}
+                                            onClick={() => {
+                                                console.log("APPOINTMENTS:", appointments);
+                                                setShowAppointmentsModal(true);
+                                            }}
                                         >
                                             Ver meus agendamentos
                                         </button>
