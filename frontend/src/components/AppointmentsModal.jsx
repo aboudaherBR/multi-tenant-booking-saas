@@ -68,3 +68,15 @@ const overlayStyle = {
   justifyContent: "center",
   zIndex: 9999
 };
+
+const modalStyle = {
+  background: "#fff",
+  position: "relative",
+  padding: "20px",
+  borderRadius: "8px",
+  width: "90%",
+  maxWidth: "400px",
+  maxHeight: "80vh",
+  display: "flex",
+  flexDirection: "column"
+};
