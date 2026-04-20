@@ -395,12 +395,15 @@ export default function BookPublic() {
                                     </div>
 
                                     {/* 🔥 botão abaixo */}
-                                    <button
-                                        className="button-soft mb-20"
-                                        onClick={() => setShowAppointmentsModal(true)}
-                                    >
-                                        Ver meus agendamentos
-                                    </button>
+                                    <div style={{ marginTop: "12px", marginBottom: "20px" }}>
+                                        <button
+                                            className="button-soft"
+                                            style={{ width: "auto", padding: "8px 14px" }}
+                                            onClick={() => setShowAppointmentsModal(true)}
+                                        >
+                                            Ver meus agendamentos
+                                        </button>
+                                    </div>
                                 </div>
                             ) : phone ? (
                                 <div className="mb-20">
