@@ -374,28 +374,32 @@ export default function BookPublic() {
                                     </span>
                                 </p>
                             ) : clientFound ? (
-                                <div className="mb-20" style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                                    <p className="text-row" style={{ margin: 0 }}>
-                                        Olá, <strong>{clientName}</strong>
-                                    </p>
+                                <div className="mb-20">
+                                    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                                        <p className="text-row" style={{ margin: 0 }}>
+                                            Olá, <strong>{clientName}</strong>
+                                        </p>
 
+                                        <button
+                                            className="button-link"
+                                            onClick={() => {
+                                                setPhone("");
+                                                setClientName("");
+                                                setClientFound(false);
+                                                setExistingClient(false);
+                                                setAppointments([]); // 🔥 limpa também
+                                            }}
+                                        >
+                                            Trocar número
+                                        </button>
+                                    </div>
+
+                                    {/* 🔥 botão abaixo */}
                                     <button
-                                        className="button-link"
+                                        className="button-secondary mt-10"
                                         onClick={() => setShowAppointmentsModal(true)}
                                     >
-                                        Ver agendamentos
-                                    </button>
-
-                                    <button
-                                        className="button-link"
-                                        onClick={() => {
-                                            setPhone("");
-                                            setClientName("");
-                                            setClientFound(false);
-                                            setExistingClient(false);
-                                        }}
-                                    >
-                                        Trocar número
+                                        Ver meus agendamentos
                                     </button>
                                 </div>
                             ) : phone ? (
