@@ -402,6 +402,7 @@ export default function BookPublic() {
                                             onClick={() => {
                                                 console.log("APPOINTMENTS:", appointments);
                                                 setShowAppointmentsModal(true);
+                                                console.log("STATE:", true);
                                             }}
                                         >
                                             Ver meus agendamentos
