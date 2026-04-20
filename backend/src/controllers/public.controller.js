@@ -8,7 +8,9 @@ const { getAvailableSlots } = require('../services/availability.service');
 const pool = require('../database/db');
 const { normalizeBrazilianPhone } = require('../utils/phone.utils');
 const { findAppointmentsByClientId } = require('../database/appointments.repository');
-const { findClientWithAppointments } = require('../repositories/clients.repository'); 
+const { findClientByPhone } = require('../database/clients.repository');
+
+
 
 async function getPublicCompany(req, res, next) {
   try {
@@ -360,7 +362,7 @@ async function lookupPublicAppointments(req, res, next) {
 
     console.log('slug:', slug);
 
-    
+
     const companySlug = slug;
 
     if (!companySlug || !phone) {
@@ -440,10 +442,33 @@ async function lookupClientWithAppointments(req, res, next) {
       });
     }
 
-    // 🔥 chamada única ao repository (orquestra tudo)
-    const result = await findClientWithAppointments({
+    // 1. buscar cliente
+    const client = await findClientByPhone({
       companyId: company.id,
       phone: normalizedPhone
+    });
+
+    // 2. se não existir
+    if (!client) {
+      return res.status(200).json({
+        client: null,
+        appointments: []
+      });
+    }
+
+    // 3. buscar agendamentos
+    const appointments = await findAppointmentsByClientId({
+      companyId: company.id,
+      clientId: client.id
+    });
+
+    // 4. retorno final
+    return res.status(200).json({
+      client: {
+        id: client.id,
+        name: client.name
+      },
+      appointments
     });
 
     // resposta padronizada
