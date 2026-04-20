@@ -355,7 +355,7 @@ async function createPublicAppointment(req, res, next) {
 async function lookupPublicAppointments(req, res, next) {
   try {
     const { slug } = req.params;
-    const { phone } = req.body;
+    const { phone } = req.query;
 
     console.log('slug:', slug);
 

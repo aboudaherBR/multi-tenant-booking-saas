@@ -7,6 +7,11 @@ const { lookupPublicAppointments } = require('../controllers/public.controller')
 
 
 
+router.post(
+  '/book/:slug/appointments/lookup',
+  lookupPublicAppointments
+);
+
 router.get(
   '/book/:slug/appointments/lookup',
   lookupPublicAppointments
