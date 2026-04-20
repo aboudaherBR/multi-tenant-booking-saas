@@ -18,6 +18,11 @@ router.get(
 );
 
 router.get(
+  '/book/:slug/appointments',
+  lookupPublicAppointments
+);
+
+router.get(
   '/agendar/:slug',
   publicController.getPublicCompany
 );
