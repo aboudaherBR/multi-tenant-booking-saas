@@ -302,14 +302,14 @@ export default function BookPublic() {
                             <p className="mt-20">
                                 Obrigado, {clientName}!
                             </p>
-                            {appointments.length > 0 && (
+
                                 <button
-                                    className="button-link"
+                                    className="button-link mt-10"
                                     onClick={() => setShowAppointmentsModal(true)}
                                 >
-                                    Ver agendamentos
+                                    Ver meus agendamentos
                                 </button>
-                            )}
+
                         </div>
                     ) : (
                         <>
