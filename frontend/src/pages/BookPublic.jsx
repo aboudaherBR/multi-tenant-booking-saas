@@ -218,6 +218,19 @@ export default function BookPublic() {
         }
     }
 
+    function handleCloseFlow() {
+        setBookingSuccess(false);
+
+        setSelectedProfessional(null);
+        setSelectedService(null);
+        setSelectedSlot(null);
+
+        setShowConfirmModal(false);
+        setShowAvailabilityModal(false);
+        setShowServicesModal(false);
+        setShowProfessionalsModal(false);
+    }
+
     return (
         <div style={{ minHeight: "100vh", background: "#f5f5f5" }}>
 
@@ -314,6 +327,12 @@ export default function BookPublic() {
                                 }}
                             >
                                 Ver meus agendamentos
+                            </button>
+                            <button
+                                className="button-secondary mt-10"
+                                onClick={handleCloseFlow}
+                            >
+                                Fechar
                             </button>
 
                         </div>
