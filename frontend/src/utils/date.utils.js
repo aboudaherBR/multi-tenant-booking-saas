@@ -16,4 +16,3 @@ export function formatDateBR(dateString, time) {
 
   return `${capitalizedWeekday}, ${day} de ${monthName} às ${time}`;
 }
-
