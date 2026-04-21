@@ -14,5 +14,8 @@ export function formatDateBR(dateString, time) {
   const capitalizedWeekday =
     weekday.charAt(0).toUpperCase() + weekday.slice(1);
 
-  return `${capitalizedWeekday}, ${day} de ${monthName} às ${time}`;
+  // 🔥 CORREÇÃO AQUI
+  const formattedTime = time ? time.slice(0, 5) : "";
+
+  return `${capitalizedWeekday}, ${day} de ${monthName} às ${formattedTime}`;
 }
