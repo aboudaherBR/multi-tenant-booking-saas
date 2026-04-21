@@ -133,36 +133,23 @@ async function create(req, res, next) {
       bufferMinutes
     });
 
-    // 🔹 6️⃣.1 Conflito do cliente
-
-    console.log("VALORES ENVIADOS:", {
-      clientId: client.id,
-      date,
-      startTime
-    });
-
-    const formattedTime = startTime.length === 5
-      ? startTime + ":00"
-      : startTime;
-
-    const clientConflict = await pool.query(
-      `
-        SELECT id
-        FROM appointments
-        WHERE company_id = $1
-          AND client_id = $2
-          AND date = $3::date
-          AND start_time = $4::time
-        LIMIT 1
-        `,
-      [companyId, client.id, date, formattedTime]
-    );
-
-    if (clientConflict.rows.length > 0) {
-      return res.status(409).json({
-        message: 'Você já possui um agendamento nesse horário'
-      });
-    }
+ const clientConflict = await pool.query(
+  `
+    SELECT 1
+    FROM appointments
+    WHERE company_id = $1
+      AND client_id = $2
+      AND date = $3
+      AND start_time = $4
+    LIMIT 1
+  `,
+  [
+    companyId,
+    client.id,
+    date,
+    formattedTime
+  ]
+);
 
     // 🔹 6️⃣.2 conflito profissional
     if (conflicts.length > 0) {
