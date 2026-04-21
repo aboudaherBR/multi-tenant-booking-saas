@@ -149,7 +149,9 @@ async function create(req, res, next) {
     date,
     formattedTime
   ]
+  
 );
+console.log("CLIENT CONFLICT RESULT:", clientConflict.rows);
 
     // 🔹 6️⃣.2 conflito profissional
     if (conflicts.length > 0) {
