@@ -151,9 +151,9 @@ async function create(req, res, next) {
         WHERE company_id = $1
           AND client_id = $2
           AND date = $3
-          AND start_time = $4
+          AND start_time = $4::time
         LIMIT 1
-      `,
+        `,
       [companyId, client.id, date, startTime]
     );
 
