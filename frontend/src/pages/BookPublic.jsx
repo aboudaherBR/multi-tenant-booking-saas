@@ -304,7 +304,8 @@ export default function BookPublic() {
                             </p>
 
                                 <button
-                                    className="button-link mt-10"
+                                    className="button-soft mt-10"
+                                    style={{ width: "auto", padding: "8px 14px" }}
                                     onClick={() => setShowAppointmentsModal(true)}
                                 >
                                     Ver meus agendamentos
