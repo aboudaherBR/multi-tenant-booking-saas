@@ -32,6 +32,7 @@ function addMinutesToTime(time, minutesToAdd) {
 
 async function create(req, res, next) {
   try {
+    console.log("CHEGOU NO CREATE");
     const {
       professionalId,
       serviceId,
