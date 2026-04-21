@@ -134,7 +134,8 @@ async function create(req, res, next) {
     });
 
     // 🔹 6️⃣.1 Conflito do cliente
-    console.log("DEBUG CLIENT CHECK", {
+
+    console.log("VALORES ENVIADOS:", {
       clientId: client.id,
       date,
       startTime
