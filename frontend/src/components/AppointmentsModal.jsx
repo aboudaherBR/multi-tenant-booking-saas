@@ -1,4 +1,4 @@
-import { formatDateBR } from "../utils/date.utils";
+import { formatDateBR, formatDateBRSafe } from "../utils/date.utils";
 
 export default function AppointmentsModal({ appointments, onClose }) {
     return (
@@ -29,7 +29,7 @@ export default function AppointmentsModal({ appointments, onClose }) {
                                         style={cardStyle}
                                     >
                                         <strong style={{ fontSize: "16px" }}>
-                                            {formatDateBR(a.date, a.start_time)}
+                                            {formatDateBRSafe(a.date, a.start_time)}
                                         </strong>
 
                                         <div style={metaStyle}>

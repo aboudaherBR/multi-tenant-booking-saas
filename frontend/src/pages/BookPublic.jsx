@@ -265,20 +265,6 @@ export default function BookPublic() {
                             }}
                         />
 
-                        <h2
-                            style={{
-                                fontSize: "22px",
-                                fontWeight: "900",
-                                color: "#0f172a",
-                                opacity: stage === "welcome" ? 1 : 0,
-                                transform: stage === "welcome" ? "translateY(0)" : "translateY(10px)",
-                                transition: stage === "welcome"
-                                    ? "all 0.6s ease 0.2s"
-                                    : "all 1s ease"
-                            }}
-                        >
-                            Bem-vindo à Agendare
-                        </h2>
                     </div>
                 )}
 
