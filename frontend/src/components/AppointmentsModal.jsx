@@ -29,6 +29,7 @@ export default function AppointmentsModal({ appointments, onClose }) {
                                         style={cardStyle}
                                     >
                                         <strong style={{ fontSize: "16px" }}>
+                                            {console.log("DATE STRING:", a.date)}
                                             {formatDateBRSafe(a.date, a.start_time)}
                                         </strong>
 
