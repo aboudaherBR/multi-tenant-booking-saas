@@ -1,4 +1,5 @@
 import { formatDateBR } from "../utils/dateUtils";
+
 export default function ConfirmBookingModal({
   professional,
   service,
