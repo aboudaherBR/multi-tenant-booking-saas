@@ -187,6 +187,7 @@ export default function BookPublic() {
 
             setShowConfirmModal(false);
             setBookingSuccess(true);
+            await fetchClientAppointments(normalizedPhone);
 
         } catch (err) {
             console.error("Erro ao criar agendamento:", err);
