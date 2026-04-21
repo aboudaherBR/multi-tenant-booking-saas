@@ -303,13 +303,17 @@ export default function BookPublic() {
                                 Obrigado, {clientName}!
                             </p>
 
-                                <button
-                                    className="button-soft mt-10"
-                                    style={{ width: "auto", padding: "8px 14px" }}
-                                    onClick={() => setShowAppointmentsModal(true)}
-                                >
-                                    Ver meus agendamentos
-                                </button>
+                            <button
+                                className="button-soft mt-10"
+                                style={{ width: "auto", padding: "8px 14px" }}
+
+                                onClick={() => {
+                                    console.log("CLICK FINAL");
+                                    setShowAppointmentsModal(true);
+                                }}
+                            >
+                                Ver meus agendamentos
+                            </button>
 
                         </div>
                     ) : (
