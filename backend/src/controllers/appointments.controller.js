@@ -142,14 +142,14 @@ async function create(req, res, next) {
 
     const clientConflict = await pool.query(
       `
-      SELECT id
-      FROM appointments
-      WHERE company_id = $1
-        AND client_id = $2
-        AND date = $3
-        AND start_time = $4::time
-      LIMIT 1
-      `,
+        SELECT id
+        FROM appointments
+        WHERE company_id = $1
+          AND client_id = $2
+          AND date = $3::date
+          AND start_time = $4::time
+        LIMIT 1
+        `,
       [companyId, client.id, date, startTime]
     );
 
