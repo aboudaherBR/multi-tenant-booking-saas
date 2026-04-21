@@ -332,7 +332,7 @@ export default function BookPublic() {
                                 className="button-secondary mt-10"
                                 onClick={handleCloseFlow}
                             >
-                                Fechar
+                                Voltar ao início
                             </button>
 
                         </div>
