@@ -1,4 +1,4 @@
-import { formatDateBR } from "../utils/dateUtils";
+import { formatDateBR } from "../utils/date.utils";
 
 export default function ConfirmBookingModal({
   professional,
