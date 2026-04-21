@@ -538,14 +538,18 @@ export default function BookPublic() {
                                     </div>
                                 </div>
                             )}
+
                             {showAppointmentsModal && (
                                 <AppointmentsModal
                                     appointments={appointments}
                                     onClose={() => setShowAppointmentsModal(false)}
                                 />
                             )}
+
+
                         </>
                     )}
+
                 </div>
             </div>
         </div>
