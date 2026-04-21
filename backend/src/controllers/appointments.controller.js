@@ -141,6 +141,10 @@ async function create(req, res, next) {
       startTime
     });
 
+    const formattedTime = startTime.length === 5
+      ? startTime + ":00"
+      : startTime;
+
     const clientConflict = await pool.query(
       `
         SELECT id
@@ -151,7 +155,7 @@ async function create(req, res, next) {
           AND start_time = $4::time
         LIMIT 1
         `,
-      [companyId, client.id, date, startTime]
+      [companyId, client.id, date, formattedTime]
     );
 
     if (clientConflict.rows.length > 0) {
