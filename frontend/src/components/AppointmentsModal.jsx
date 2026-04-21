@@ -39,12 +39,6 @@ export default function AppointmentsModal({ appointments, onClose }) {
                                         <div style={metaStyle}>
                                             com {a.professional_name}
                                         </div>
-
-                                        <div style={priceStyle}>
-                                            R$ {Number(a.price || 0).toLocaleString("pt-BR", {
-                                                minimumFractionDigits: 2
-                                            })}
-                                        </div>
                                     </li>
                                 );
                             })}
