@@ -88,6 +88,41 @@ export default function BookPublic() {
         };
     }, []);
 
+    async function checkClientAndAppointments(normalizedPhone) {
+        try {
+            setIsCheckingClient(true);
+
+            const res = await apiClient(
+                `/clients/by-phone/${slug}?phone=${encodeURIComponent(normalizedPhone)}`
+            );
+
+            if (res && res.name) {
+                setClientName(res.name);
+                setExistingClient(true);
+                setClientFound(true);
+
+                const appointmentsRes = await apiClient(
+                    `/book/${slug}/client-lookup?phone=${encodeURIComponent(normalizedPhone)}`
+                );
+
+                setAppointments(appointmentsRes.appointments || []);
+            } else {
+                setClientName("");
+                setExistingClient(false);
+                setClientFound(false);
+                setAppointments([]);
+            }
+
+        } catch (err) {
+            console.error(err);
+            setClientName("");
+            setExistingClient(false);
+            setClientFound(false);
+        } finally {
+            setIsCheckingClient(false);
+        }
+    }
+
     useEffect(() => {
         if (!phone) return;
 
@@ -96,38 +131,8 @@ export default function BookPublic() {
 
         if (!normalized || normalized.length < 13) return;
 
-        const timeout = setTimeout(async () => {
-            try {
-                setIsCheckingClient(true);
-
-                const res = await apiClient(
-                    `/clients/by-phone/${slug}?phone=${encodeURIComponent(normalized)}`
-                );
-
-                if (res && res.name) {
-                    setClientName(res.name);
-                    setExistingClient(true);
-                    setClientFound(true);
-                    const appointmentsRes = await apiClient(
-                        `/book/${slug}/client-lookup?phone=${encodeURIComponent(normalized)}`
-                    );
-                    setAppointments(appointmentsRes.appointments || []);
-                } else {
-                    setClientName("");
-                    setExistingClient(false);
-                    setClientFound(false);
-                    setAppointments([]); // 🔥 limpa dados antigos
-                }
-
-            } catch (err) {
-                console.error("Erro ao buscar cliente:", err);
-
-                setClientName("");
-                setExistingClient(false);
-                setClientFound(false);
-            } finally {
-                setIsCheckingClient(false);
-            }
+        const timeout = setTimeout(() => {
+            checkClientAndAppointments(normalized);
         }, 500);
 
         return () => clearTimeout(timeout);
@@ -187,7 +192,7 @@ export default function BookPublic() {
 
             setShowConfirmModal(false);
             setBookingSuccess(true);
-            await fetchClientAppointments(normalizedPhone);
+            await checkClientAndAppointments(normalizedPhone);
 
         } catch (err) {
             console.error("Erro ao criar agendamento:", err);
