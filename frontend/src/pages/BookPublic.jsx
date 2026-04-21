@@ -229,6 +229,14 @@ export default function BookPublic() {
         setShowAvailabilityModal(false);
         setShowServicesModal(false);
         setShowProfessionalsModal(false);
+
+        // 🔥 FORÇA REVALIDAÇÃO
+        const digitsOnly = phone.replace(/\D/g, "");
+        const normalized = normalizePhone(digitsOnly);
+
+        if (normalized) {
+            checkClientAndAppointments(normalized);
+        }
     }
 
     return (
