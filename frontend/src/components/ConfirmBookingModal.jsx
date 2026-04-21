@@ -1,13 +1,4 @@
-function formatDateBR(dateString, time) {
-  const date = new Date(dateString);
-
-  const weekday = date.toLocaleDateString("pt-BR", { weekday: "long" });
-  const day = date.getDate();
-  const month = date.toLocaleDateString("pt-BR", { month: "long" });
-
-  return `${weekday}, ${day} de ${month} às ${time}`;
-}
-
+import { formatDateBR } from "../utils/date.utils";
 
 export default function ConfirmBookingModal({
   professional,

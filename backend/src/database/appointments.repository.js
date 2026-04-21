@@ -311,6 +311,8 @@ async function findAppointmentsByClientId({ companyId, clientId }) {
   return result.rows;
 }
 
+
+
 module.exports = {
   createAppointment,
   findConflicts,

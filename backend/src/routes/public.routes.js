@@ -3,12 +3,16 @@ const router = express.Router();
 
 const publicController = require('../controllers/public.controller');
 const { lookupPublicAppointments } = require('../controllers/public.controller');
-
-
+const { lookupClientWithAppointments } = require('../controllers/public.controller');
 
 
 router.get(
-  '/book/:slug/appointments/lookup',
+  '/book/:slug/client-lookup',
+  lookupClientWithAppointments
+);
+
+router.get(
+  '/book/:slug/appointments',
   lookupPublicAppointments
 );
 

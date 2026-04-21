@@ -9,8 +9,9 @@ import PhoneErrorModal from "../components/PhoneErrorModal";
 import NameErrorModal from "../components/NameErrorModal";
 import { formatPhone } from "../utils/phone.utils";
 import { formatDateBR } from "../utils/date.utils";
+import AppointmentsModal from "../components/AppointmentsModal";
 import logo from "../assets/logo_png.png";
-console.log("LOGO:", logo);
+
 
 // 🔥 FUNÇÃO UTILITÁRIA (TOPO - PADRÃO CORRETO)
 function normalizePhone(value) {
@@ -52,7 +53,12 @@ export default function BookPublic() {
     const [existingClient, setExistingClient] = useState(false);
     const [showPhoneConfirmModal, setShowPhoneConfirmModal] = useState(false);
 
+
+
     const isDisabled = !phone || !!phoneError;
+
+    const [appointments, setAppointments] = useState([]);
+    const [showAppointmentsModal, setShowAppointmentsModal] = useState(false);
 
     const [stage, setStage] = useState("welcome"); //Animation 
 
@@ -82,6 +88,41 @@ export default function BookPublic() {
         };
     }, []);
 
+    async function checkClientAndAppointments(normalizedPhone) {
+        try {
+            setIsCheckingClient(true);
+
+            const res = await apiClient(
+                `/clients/by-phone/${slug}?phone=${encodeURIComponent(normalizedPhone)}`
+            );
+
+            if (res && res.name) {
+                setClientName(res.name);
+                setExistingClient(true);
+                setClientFound(true);
+
+                const appointmentsRes = await apiClient(
+                    `/book/${slug}/client-lookup?phone=${encodeURIComponent(normalizedPhone)}`
+                );
+
+                setAppointments(appointmentsRes.appointments || []);
+            } else {
+                setClientName("");
+                setExistingClient(false);
+                setClientFound(false);
+                setAppointments([]);
+            }
+
+        } catch (err) {
+            console.error(err);
+            setClientName("");
+            setExistingClient(false);
+            setClientFound(false);
+        } finally {
+            setIsCheckingClient(false);
+        }
+    }
+
     useEffect(() => {
         if (!phone) return;
 
@@ -90,33 +131,8 @@ export default function BookPublic() {
 
         if (!normalized || normalized.length < 13) return;
 
-        const timeout = setTimeout(async () => {
-            try {
-                setIsCheckingClient(true);
-
-                const res = await apiClient(
-                    `/clients/by-phone/${slug}?phone=${encodeURIComponent(normalized)}`
-                );
-
-                if (res && res.name) {
-                    setClientName(res.name);
-                    setExistingClient(true);
-                    setClientFound(true);
-                } else {
-                    setClientName("");
-                    setExistingClient(false);
-                    setClientFound(false);
-                }
-
-            } catch (err) {
-                console.error("Erro ao buscar cliente:", err);
-
-                setClientName("");
-                setExistingClient(false);
-                setClientFound(false);
-            } finally {
-                setIsCheckingClient(false);
-            }
+        const timeout = setTimeout(() => {
+            checkClientAndAppointments(normalized);
         }, 500);
 
         return () => clearTimeout(timeout);
@@ -176,6 +192,7 @@ export default function BookPublic() {
 
             setShowConfirmModal(false);
             setBookingSuccess(true);
+            await checkClientAndAppointments(normalizedPhone);
 
         } catch (err) {
             console.error("Erro ao criar agendamento:", err);
@@ -183,6 +200,48 @@ export default function BookPublic() {
         }
 
         console.log("RENDER:", { clientFound, existingClient, clientName });
+    }
+
+    async function fetchClientAppointments(normalizedPhone) {
+        try {
+            const res = await apiClient(
+                `/book/${slug}/client-lookup?phone=${encodeURIComponent(normalizedPhone)}`
+            );
+
+            if (res) {
+                setAppointments(res.appointments || []);
+
+                // opcional: garantir nome atualizado
+                if (res.client?.name) {
+                    setClientName(res.client.name);
+                }
+            }
+
+        } catch (err) {
+            console.error("Erro ao buscar agendamentos:", err);
+            setAppointments([]);
+        }
+    }
+
+    function handleCloseFlow() {
+        setBookingSuccess(false);
+
+        setSelectedProfessional(null);
+        setSelectedService(null);
+        setSelectedSlot(null);
+
+        setShowConfirmModal(false);
+        setShowAvailabilityModal(false);
+        setShowServicesModal(false);
+        setShowProfessionalsModal(false);
+
+        // 🔥 FORÇA REVALIDAÇÃO
+        const digitsOnly = phone.replace(/\D/g, "");
+        const normalized = normalizePhone(digitsOnly);
+
+        if (normalized) {
+            checkClientAndAppointments(normalized);
+        }
     }
 
     return (
@@ -233,20 +292,6 @@ export default function BookPublic() {
                             }}
                         />
 
-                        <h2
-                            style={{
-                                fontSize: "22px",
-                                fontWeight: "900",
-                                color: "#0f172a",
-                                opacity: stage === "welcome" ? 1 : 0,
-                                transform: stage === "welcome" ? "translateY(0)" : "translateY(10px)",
-                                transition: stage === "welcome"
-                                    ? "all 0.6s ease 0.2s"
-                                    : "all 1s ease"
-                            }}
-                        >
-                            Bem-vindo à Agendare
-                        </h2>
                     </div>
                 )}
 
@@ -284,6 +329,25 @@ export default function BookPublic() {
                             <p className="mt-20">
                                 Obrigado, {clientName}!
                             </p>
+
+                            <button
+                                className="button-soft mt-10"
+                                style={{ width: "auto", padding: "8px 14px" }}
+
+                                onClick={() => {
+                                    console.log("CLICK FINAL");
+                                    setShowAppointmentsModal(true);
+                                }}
+                            >
+                                Ver meus agendamentos
+                            </button>
+                            <button
+                                className="button-secondary mt-10"
+                                onClick={handleCloseFlow}
+                            >
+                                Voltar ao início
+                            </button>
+
                         </div>
                     ) : (
                         <>
@@ -335,21 +399,39 @@ export default function BookPublic() {
                                 </p>
                             ) : clientFound ? (
                                 <div className="mb-20">
-                                    <p className="text-row">
-                                        Olá, <strong>{clientName}</strong>
-                                    </p>
+                                    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                                        <p className="text-row" style={{ margin: 0 }}>
+                                            Olá, <strong>{clientName}</strong>
+                                        </p>
 
-                                    <button
-                                        className="button-link"
-                                        onClick={() => {
-                                            setPhone("");
-                                            setClientName("");
-                                            setClientFound(false);
-                                            setExistingClient(false);
-                                        }}
-                                    >
-                                        Não é você? Trocar número
-                                    </button>
+                                        <button
+                                            className="button-link"
+                                            onClick={() => {
+                                                setPhone("");
+                                                setClientName("");
+                                                setClientFound(false);
+                                                setExistingClient(false);
+                                                setAppointments([]); // 🔥 limpa também
+                                            }}
+                                        >
+                                            Trocar número
+                                        </button>
+                                    </div>
+
+                                    {/* 🔥 botão abaixo */}
+                                    <div style={{ marginTop: "12px", marginBottom: "20px" }}>
+                                        <button
+                                            className="button-soft"
+                                            style={{ width: "auto", padding: "8px 14px" }}
+                                            onClick={() => {
+                                                console.log("APPOINTMENTS:", appointments);
+                                                setShowAppointmentsModal(true);
+                                                console.log("STATE:", true);
+                                            }}
+                                        >
+                                            Ver meus agendamentos
+                                        </button>
+                                    </div>
                                 </div>
                             ) : phone ? (
                                 <div className="mb-20">
@@ -489,10 +571,20 @@ export default function BookPublic() {
                                     </div>
                                 </div>
                             )}
+
                         </>
                     )}
+
                 </div>
             </div>
+
+            {showAppointmentsModal && (
+                <AppointmentsModal
+                    appointments={appointments}
+                    onClose={() => setShowAppointmentsModal(false)}
+                />
+            )}
+
         </div>
     );
 }

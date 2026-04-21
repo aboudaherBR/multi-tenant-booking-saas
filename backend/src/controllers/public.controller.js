@@ -8,6 +8,9 @@ const { getAvailableSlots } = require('../services/availability.service');
 const pool = require('../database/db');
 const { normalizeBrazilianPhone } = require('../utils/phone.utils');
 const { findAppointmentsByClientId } = require('../database/appointments.repository');
+const { findClientByPhone } = require('../database/clients.repository');
+
+
 
 async function getPublicCompany(req, res, next) {
   try {
@@ -355,11 +358,11 @@ async function createPublicAppointment(req, res, next) {
 async function lookupPublicAppointments(req, res, next) {
   try {
     const { slug } = req.params;
-    const { phone } = req.body;
+    const { phone } = req.query;
 
     console.log('slug:', slug);
 
-    
+
     const companySlug = slug;
 
     if (!companySlug || !phone) {
@@ -411,11 +414,83 @@ async function lookupPublicAppointments(req, res, next) {
   }
 }
 
+async function lookupClientWithAppointments(req, res, next) {
+  try {
+    const { slug } = req.params;
+    const { phone } = req.query;
+
+    if (!slug || !phone) {
+      return res.status(400).json({
+        message: "Dados obrigatórios não informados"
+      });
+    }
+
+    // mesma normalização que você já usa
+    let normalizedPhone;
+    try {
+      normalizedPhone = normalizeBrazilianPhone(phone);
+    } catch (err) {
+      return res.status(400).json({ message: 'Telefone inválido' });
+    }
+
+    // resolve a empresa
+    const company = await findCompanyBySlug(slug);
+
+    if (!company || company.status !== 'active') {
+      return res.status(404).json({
+        message: "Empresa não encontrada"
+      });
+    }
+
+    // 1. buscar cliente
+    const client = await findClientByPhone({
+      companyId: company.id,
+      phone: normalizedPhone
+    });
+
+    // 2. se não existir
+    if (!client) {
+      return res.status(200).json({
+        client: null,
+        appointments: []
+      });
+    }
+
+    // 3. buscar agendamentos
+    const appointments = await findAppointmentsByClientId({
+      companyId: company.id,
+      clientId: client.id
+    });
+
+    // 4. retorno final
+    return res.status(200).json({
+      client: {
+        id: client.id,
+        name: client.name
+      },
+      appointments
+    });
+
+    // resposta padronizada
+    return res.status(200).json({
+      client: result.client
+        ? { id: result.client.id, name: result.client.name }
+        : null,
+      appointments: result.appointments
+    });
+
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   getPublicCompany,
   getPublicProfessionals,
   getPublicServicesByProfessional,
   getPublicAvailability,
   createPublicAppointment,
-  lookupPublicAppointments
+  lookupPublicAppointments,
+  lookupClientWithAppointments
+
 };
