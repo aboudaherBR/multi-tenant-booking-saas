@@ -133,6 +133,37 @@ async function create(req, res, next) {
       bufferMinutes
     });
 
+
+    const conflicts = await findConflicts({
+      companyId,
+      professionalId,
+      date,
+      startTime,
+      endTime,
+      bufferMinutes
+    });
+
+    // 🔹 6️⃣.1 conflito do cliente (PRIMEIRO)
+    const clientConflict = await pool.query(
+      `
+        SELECT id
+        FROM appointments
+        WHERE company_id = $1
+          AND client_id = $2
+          AND date = $3
+          AND start_time = $4
+        LIMIT 1
+      `,
+      [companyId, client.id, date, startTime]
+    );
+
+    if (clientConflict.rows.length > 0) {
+      return res.status(409).json({
+        message: 'Você já possui um agendamento nesse horário'
+      });
+    }
+
+    // 🔹 6️⃣.2 conflito do profissional (DEPOIS)
     if (conflicts.length > 0) {
       return res.status(409).json({
         message: 'Horário em conflito com outro agendamento'
