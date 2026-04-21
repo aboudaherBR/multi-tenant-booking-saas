@@ -134,14 +134,6 @@ async function create(req, res, next) {
     });
 
 
-    const conflicts = await findConflicts({
-      companyId,
-      professionalId,
-      date,
-      startTime,
-      endTime,
-      bufferMinutes
-    });
 
     // 🔹 6️⃣.1 conflito do cliente (PRIMEIRO)
     const clientConflict = await pool.query(
