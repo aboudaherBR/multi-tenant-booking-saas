@@ -137,7 +137,12 @@ async function create(req, res, next) {
 
     // 🔹 6️⃣.1 conflito do cliente (PRIMEIRO)
     const clientConflict = await pool.query(
-      `
+      console.log("DEBUG CLIENT CHECK", {
+        clientId: client.id,
+        date,
+        startTime
+      });
+    `
         SELECT id
         FROM appointments
         WHERE company_id = $1
