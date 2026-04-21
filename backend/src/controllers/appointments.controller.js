@@ -134,25 +134,30 @@ async function create(req, res, next) {
       bufferMinutes
     });
 
- const clientConflict = await pool.query(
-  `
-    SELECT 1
-    FROM appointments
-    WHERE company_id = $1
-      AND client_id = $2
-      AND date = $3
-      AND start_time = $4
-    LIMIT 1
-  `,
-  [
-    companyId,
-    client.id,
-    date,
-    formattedTime
-  ]
-  
-);
-console.log("CLIENT CONFLICT RESULT:", clientConflict.rows);
+    const clientConflict = await pool.query(
+      `
+          SELECT 1
+          FROM appointments
+          WHERE company_id = $1
+            AND client_id = $2
+            AND date = $3
+            AND start_time = $4
+          LIMIT 1
+        `,
+      [
+        companyId,
+        client.id,
+        date,
+        formattedTime
+      ]
+
+    );
+    console.log("CLIENT CONFLICT RESULT:", clientConflict.rows);
+    if (clientConflict.rows.length > 0) {
+      return res.status(409).json({
+        message: 'Você já possui um agendamento nesse horário'
+      });
+    }
 
     // 🔹 6️⃣.2 conflito profissional
     if (conflicts.length > 0) {
