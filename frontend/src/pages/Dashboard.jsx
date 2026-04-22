@@ -84,7 +84,7 @@ export default function Dashboard() {
                             {stats.services.map((service, index) => (
                                 <div key={index} className="service-item">
                                     <span>{service.name}</span>
-                                    <strong>{service.count}</strong>
+                                    <strong>{"  "}{service.count}</strong>
                                 </div>
                             ))}
                         </div>
