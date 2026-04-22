@@ -60,6 +60,8 @@ export default function BookPublic() {
     const [appointments, setAppointments] = useState([]);
     const [showAppointmentsModal, setShowAppointmentsModal] = useState(false);
 
+    const [errorModalOpen, setErrorModalOpen] = useState(false);
+
     const [stage, setStage] = useState("welcome"); //Animation 
 
     useEffect(() => {
@@ -196,10 +198,15 @@ export default function BookPublic() {
 
         } catch (err) {
             console.error("Erro ao criar agendamento:", err);
+
+            if (err.status === 409) {
+                setErrorModalOpen(true);
+                return;
+            }
+
             alert("Erro ao agendar");
         }
 
-        console.log("RENDER:", { clientFound, existingClient, clientName });
     }
 
     async function fetchClientAppointments(normalizedPhone) {
