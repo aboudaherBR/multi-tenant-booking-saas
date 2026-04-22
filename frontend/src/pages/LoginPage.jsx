@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../hooks/AuthContext';
 import './LoginPage.css';
+import logo from "../assets/logo_png.png";
 
 function LoginPage() {
   const [username, setUsername] = useState('');
@@ -44,6 +45,17 @@ function LoginPage() {
     <div className="login-page">
 
       <div className="card container-main">
+
+        <div style={{ textAlign: "center", marginBottom: "10px" }}>
+          <img
+            src={logo}
+            alt="Agendare"
+            style={{
+              width: "120px",
+              opacity: 0.9
+            }}
+          />
+        </div>
 
         <h2 className="heading text-center">
           Acesso do administrador
