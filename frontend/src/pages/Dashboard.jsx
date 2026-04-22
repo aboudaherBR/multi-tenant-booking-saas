@@ -55,7 +55,7 @@ export default function Dashboard() {
             </div>
 
             {/* CONTEÚDO */}
-            <div className="container-main">
+            <div className="container-main" style={{ minHeight: "calc(100vh - 120px)" }}>
 
                 <div className="card" style={{ padding: "20px" }}>
 
@@ -76,13 +76,20 @@ export default function Dashboard() {
 
                     <h2 className="heading">Serviços</h2>
 
-                    <ul style={{ paddingLeft: "16px" }}>
-                        {stats?.services?.map((service, index) => (
-                            <li key={index} className="text-row">
-                                {service.name} — {service.count}
-                            </li>
-                        ))}
-                    </ul>
+                    {!stats?.services || stats.services.length === 0 ? (
+                        <p className="text-muted">
+                            Nenhum serviço realizado hoje
+                        </p>
+                    ) : (
+                        <div className="services-grid">
+                            {stats.services.map((service, index) => (
+                                <div key={index} className="service-item">
+                                    <span>{service.name}</span>
+                                    <strong>{service.count}</strong>
+                                </div>
+                            ))}
+                        </div>
+                    )}
 
                     <button
                         className="button-primary mt-20"
