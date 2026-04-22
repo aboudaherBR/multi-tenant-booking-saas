@@ -206,8 +206,8 @@ export default function BookPublic() {
             console.log("STATUS:", err.status); // 👈 3
 
             if (err instanceof ApiError && err.status === 409) {
-                console.log("ENTROU NO IF 409"); // 👈 4
                 setErrorModalOpen(true);
+                console.log("STATE FOI SETADO PRA TRUE"); // 👈 AQUI
                 return;
             }
 
