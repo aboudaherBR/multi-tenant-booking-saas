@@ -51,10 +51,7 @@ export default function Dashboard() {
             </div>
 
             {/* CONTEÚDO */}
-            <div
-                className="container-main"
-                style={{ minHeight: "calc(100vh - 160px)" }} // 🔥 ajuste melhor de altura
-            >
+            <div className="container-main" style={{ marginTop: "-40px" }}>
 
                 <div className="card" style={{ padding: "20px" }}>
 
