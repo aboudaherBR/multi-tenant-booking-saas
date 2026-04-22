@@ -25,20 +25,16 @@ export default function Dashboard() {
         }
     }
 
-    // 🔹 carga inicial
     useEffect(() => {
         loadDashboard();
     }, []);
 
-    // 🔥 polling (produção real)
     useEffect(() => {
-
         const interval = setInterval(() => {
             loadDashboard();
         }, 5000);
 
         return () => clearInterval(interval);
-
     }, []);
 
     if (loading) return <div>Carregando...</div>;
@@ -55,7 +51,10 @@ export default function Dashboard() {
             </div>
 
             {/* CONTEÚDO */}
-            <div className="container-main" style={{ minHeight: "calc(100vh - 120px)" }}>
+            <div
+                className="container-main"
+                style={{ minHeight: "calc(100vh - 160px)" }} // 🔥 ajuste melhor de altura
+            >
 
                 <div className="card" style={{ padding: "20px" }}>
 
@@ -91,15 +90,27 @@ export default function Dashboard() {
                         </div>
                     )}
 
-                    <button
-                        className="button-primary mt-20"
-                        onClick={() => navigate('/reports')}
-                    >
-                        Ver relatórios
-                    </button>
-
                 </div>
 
+            </div>
+
+            {/* 🔥 BOTÃO FIXO NO FUNDO (CORRETO) */}
+            <div
+                style={{
+                    position: "fixed",
+                    bottom: "70px", // acima do menu inferior
+                    left: 0,
+                    width: "100%",
+                    padding: "10px 16px",
+                    background: "transparent"
+                }}
+            >
+                <button
+                    className="button-primary"
+                    onClick={() => navigate('/reports')}
+                >
+                    Ver relatórios
+                </button>
             </div>
 
         </div>
