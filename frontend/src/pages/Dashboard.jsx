@@ -45,27 +45,56 @@ export default function Dashboard() {
     if (error) return <div>{error}</div>;
 
     return (
-        <div>
-            <h1>Olá, {user?.name}</h1>
+        <div style={{ minHeight: "100vh", background: "var(--color-bg)" }}>
 
-            <h2>Hoje</h2>
+            {/* HEADER */}
+            <div className="header-gradient">
+                <h2 style={{ color: "white" }}>
+                    Olá, {user?.name}
+                </h2>
+            </div>
 
-            <p>Atendimentos: {stats?.totalAppointments}</p>
-            <p>Faturamento: R$ {stats?.totalRevenue}</p>
+            {/* CONTEÚDO */}
+            <div className="container-main">
 
-            <h2>Serviços</h2>
+                <div className="card" style={{ padding: "20px" }}>
 
-            <ul>
-                {stats?.services?.map((service, index) => (
-                    <li key={index}>
-                        {service.name} — {service.count}
-                    </li>
-                ))}
-            </ul>
+                    <h2 className="heading">Hoje</h2>
 
-            <button onClick={() => navigate('/reports')}>
-                Relatórios
-            </button>
+                    <div className="mb-20">
+                        <p className="text-row">
+                            <strong>Atendimentos:</strong> {stats?.totalAppointments}
+                        </p>
+
+                        <p className="text-row">
+                            <strong>Faturamento:</strong>{" "}
+                            R$ {Number(stats?.totalRevenue || 0).toLocaleString("pt-BR", {
+                                minimumFractionDigits: 2
+                            })}
+                        </p>
+                    </div>
+
+                    <h2 className="heading">Serviços</h2>
+
+                    <ul style={{ paddingLeft: "16px" }}>
+                        {stats?.services?.map((service, index) => (
+                            <li key={index} className="text-row">
+                                {service.name} — {service.count}
+                            </li>
+                        ))}
+                    </ul>
+
+                    <button
+                        className="button-primary mt-20"
+                        onClick={() => navigate('/reports')}
+                    >
+                        Ver relatórios
+                    </button>
+
+                </div>
+
+            </div>
+
         </div>
     );
 }
