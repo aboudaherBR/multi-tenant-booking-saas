@@ -591,6 +591,11 @@ export default function BookPublic() {
                     onClose={() => setShowAppointmentsModal(false)}
                 />
             )}
+            {errorModalOpen && (
+                <div>
+                    ERRO: você já possui um agendamento nesse horário
+                </div>
+            )}
 
         </div>
     );
