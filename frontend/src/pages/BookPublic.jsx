@@ -4,7 +4,7 @@ import ProfessionalsModal from "../components/ProfessionalsModal";
 import ServicesModal from "../components/ServicesModal";
 import AvailabilityModal from "../components/AvailabilityModal";
 import ConfirmBookingModal from "../components/ConfirmBookingModal";
-import apiClient from "../api/apiClient";
+import apiClient, { ApiError } from "../api/apiClient";
 import PhoneErrorModal from "../components/PhoneErrorModal";
 import NameErrorModal from "../components/NameErrorModal";
 import { formatPhone } from "../utils/phone.utils";
@@ -24,6 +24,8 @@ function normalizePhone(value) {
 
     return null;
 }
+
+
 
 export default function BookPublic() {
     const { slug } = useParams();
@@ -199,16 +201,13 @@ export default function BookPublic() {
         } catch (err) {
             console.error("Erro ao criar agendamento:", err);
 
-
-
-            if (err.message.includes("Você já possui um agendamento")) {
+            if (err instanceof ApiError && err.status === 409) {
                 setErrorModalOpen(true);
                 return;
             }
 
             alert("Erro ao agendar");
         }
-
     }
 
     async function fetchClientAppointments(normalizedPhone) {
