@@ -201,11 +201,17 @@ export default function BookPublic() {
         } catch (err) {
             console.error("Erro ao criar agendamento:", err);
 
+            console.log("ENTROU NO CATCH"); // 👈 1
+            console.log("INSTANCEOF:", err instanceof ApiError); // 👈 2
+            console.log("STATUS:", err.status); // 👈 3
+
             if (err instanceof ApiError && err.status === 409) {
+                console.log("ENTROU NO IF 409"); // 👈 4
                 setErrorModalOpen(true);
                 return;
             }
 
+            console.log("CAIU NO ALERT"); // 👈 5
             alert("Erro ao agendar");
         }
     }
