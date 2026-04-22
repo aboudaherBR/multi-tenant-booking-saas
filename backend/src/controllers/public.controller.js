@@ -178,6 +178,8 @@ async function getPublicAvailability(req, res, next) {
 
       const endTime = `${String(endHours).padStart(2, '0')}:${String(endMins).padStart(2, '0')}`;
 
+
+
       return {
         startTime,
         endTime
@@ -300,6 +302,30 @@ async function createPublicAppointment(req, res, next) {
     }
 
     const endTime = addMinutes(startTime, serviceData.duration_minutes);
+
+    const clientConflict = await pool.query(
+      `
+  SELECT 1
+  FROM appointments
+  WHERE company_id = $1
+    AND client_id = $2
+    AND date = $3
+    AND start_time = $4
+  LIMIT 1
+  `,
+      [
+        company.id,
+        clientId,
+        date,
+        startTime.length === 5 ? startTime + ":00" : startTime
+      ]
+    );
+
+    if (clientConflict.rows.length > 0) {
+      return res.status(409).json({
+        message: "Você já possui um agendamento nesse horário"
+      });
+    }
 
     await pool.query(
       `

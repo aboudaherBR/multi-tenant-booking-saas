@@ -1,3 +1,5 @@
+const pool = require('../database/db');
+
 const {
   createAppointment,
   findConflicts,
@@ -18,8 +20,6 @@ const {
 
 const appointmentsRepository = require('../database/appointments.repository');
 
-
-
 function addMinutesToTime(time, minutesToAdd) {
   const [hours, minutes] = time.split(':').map(Number);
   const totalMinutes = hours * 60 + minutes + minutesToAdd;
@@ -32,6 +32,7 @@ function addMinutesToTime(time, minutesToAdd) {
 
 async function create(req, res, next) {
   try {
+    console.log("CHEGOU NO CREATE");
     const {
       professionalId,
       serviceId,
@@ -93,7 +94,7 @@ async function create(req, res, next) {
       }
     }
 
-    // 🔹 3️⃣ Buscar serviço já validado para o profissional
+    // 🔹 3️⃣ Buscar serviço
     const service = await findServiceForProfessional({
       companyId,
       professionalId,
@@ -112,7 +113,7 @@ async function create(req, res, next) {
       service.duration_minutes
     );
 
-    // 🔹 5️⃣ Buscar empresa (buffer)
+    // 🔹 5️⃣ Buscar empresa
     const company = await findCompanyById(companyId);
 
     if (!company) {
@@ -123,7 +124,7 @@ async function create(req, res, next) {
 
     const bufferMinutes = company.appointment_buffer_minutes;
 
-    // 🔹 6️⃣ Verificar conflitos com appointments
+    // 🔹 6️⃣ Conflito profissional
     const conflicts = await findConflicts({
       companyId,
       professionalId,
@@ -133,13 +134,39 @@ async function create(req, res, next) {
       bufferMinutes
     });
 
+    const clientConflict = await pool.query(
+      `
+          SELECT 1
+          FROM appointments
+          WHERE company_id = $1
+            AND client_id = $2
+            AND date = $3
+            AND start_time = $4
+          LIMIT 1
+        `,
+      [
+        companyId,
+        client.id,
+        date,
+        formattedTime
+      ]
+
+    );
+    console.log("CLIENT CONFLICT RESULT:", clientConflict.rows);
+    if (clientConflict.rows.length > 0) {
+      return res.status(409).json({
+        message: 'Você já possui um agendamento nesse horário'
+      });
+    }
+
+    // 🔹 6️⃣.2 conflito profissional
     if (conflicts.length > 0) {
       return res.status(409).json({
         message: 'Horário em conflito com outro agendamento'
       });
     }
 
-    // 🔹 7️⃣ Verificar conflito com schedule blocks
+    // 🔹 7️⃣ schedule blocks
     const blocks =
       await findScheduleBlocksByProfessionalAndDate({
         companyId,
@@ -164,7 +191,7 @@ async function create(req, res, next) {
       }
     }
 
-    // 🔹 8️⃣ Criar appointment com snapshot correto
+    // 🔹 8️⃣ Criar appointment
     const appointment = await createAppointment({
       companyId,
       professionalId,
@@ -213,7 +240,6 @@ async function list(req, res, next) {
 
 async function cancel(req, res, next) {
   try {
-
     const { id } = req.params;
     const companyId = req.user.companyId;
 
@@ -253,12 +279,9 @@ async function markAsNotified(req, res, next) {
   }
 }
 
-
-
 module.exports = {
   create,
   list,
-  cancel,
   cancel,
   markAsNotified
 };

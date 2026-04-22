@@ -4,12 +4,13 @@ import ProfessionalsModal from "../components/ProfessionalsModal";
 import ServicesModal from "../components/ServicesModal";
 import AvailabilityModal from "../components/AvailabilityModal";
 import ConfirmBookingModal from "../components/ConfirmBookingModal";
-import apiClient from "../api/apiClient";
+import apiClient, { ApiError } from "../api/apiClient";
 import PhoneErrorModal from "../components/PhoneErrorModal";
 import NameErrorModal from "../components/NameErrorModal";
 import { formatPhone } from "../utils/phone.utils";
 import { formatDateBR } from "../utils/date.utils";
 import AppointmentsModal from "../components/AppointmentsModal";
+import ErrorModal from "../components/ErrorModal";
 import logo from "../assets/logo_png.png";
 
 
@@ -24,6 +25,8 @@ function normalizePhone(value) {
 
     return null;
 }
+
+
 
 export default function BookPublic() {
     const { slug } = useParams();
@@ -59,6 +62,8 @@ export default function BookPublic() {
 
     const [appointments, setAppointments] = useState([]);
     const [showAppointmentsModal, setShowAppointmentsModal] = useState(false);
+
+    const [errorModalOpen, setErrorModalOpen] = useState(false);
 
     const [stage, setStage] = useState("welcome"); //Animation 
 
@@ -196,10 +201,21 @@ export default function BookPublic() {
 
         } catch (err) {
             console.error("Erro ao criar agendamento:", err);
+
+            console.log("ENTROU NO CATCH"); // 👈 1
+            console.log("INSTANCEOF:", err instanceof ApiError); // 👈 2
+            console.log("STATUS:", err.status); // 👈 3
+
+            if (err instanceof ApiError && err.status === 409) {
+                setErrorModalOpen(true);
+                console.log("STATE FOI SETADO PRA TRUE"); // 👈 AQUI
+                return;
+            }
+            //teste
+
+            console.log("CAIU NO ALERT"); // 👈 5
             alert("Erro ao agendar");
         }
-
-        console.log("RENDER:", { clientFound, existingClient, clientName });
     }
 
     async function fetchClientAppointments(normalizedPhone) {
@@ -582,6 +598,12 @@ export default function BookPublic() {
                 <AppointmentsModal
                     appointments={appointments}
                     onClose={() => setShowAppointmentsModal(false)}
+                />
+            )}
+            {errorModalOpen && (
+                <ErrorModal
+                    message="Você já possui um agendamento nesse horário"
+                    onClose={() => setErrorModalOpen(false)}
                 />
             )}
 

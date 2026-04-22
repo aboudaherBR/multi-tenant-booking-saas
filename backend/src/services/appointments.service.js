@@ -20,7 +20,7 @@
  *
  * @throws {Error} 
  */
-
+console.log("🔥 SERVICE CREATE EXECUTOU");
 
 const MINIMUM_HOURS_BEFORE_CHANGE = 4;
 const {
