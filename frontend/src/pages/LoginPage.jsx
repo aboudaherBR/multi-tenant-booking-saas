@@ -51,7 +51,7 @@ function LoginPage() {
             src={logo}
             alt="Agendare"
             style={{
-              width: "620px",
+              width: "300px",
               opacity: 0.9
             }}
           />
