@@ -600,8 +600,40 @@ export default function BookPublic() {
                 />
             )}
             {errorModalOpen && (
-                <div>
-                    ERRO: você já possui um agendamento nesse horário
+                <div style={{
+                    position: "fixed",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "100%",
+                    background: "rgba(0,0,0,0.6)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    zIndex: 999999
+                }}>
+                    <div style={{
+                        background: "#fff",
+                        padding: "20px",
+                        borderRadius: "8px",
+                        textAlign: "center"
+                    }}>
+                        <p>Você já possui um agendamento nesse horário</p>
+
+                        <button
+                            onClick={() => setErrorModalOpen(false)}
+                            style={{
+                                marginTop: "10px",
+                                padding: "8px 16px",
+                                border: "none",
+                                borderRadius: "6px",
+                                background: "#0f172a",
+                                color: "#fff"
+                            }}
+                        >
+                            Fechar
+                        </button>
+                    </div>
                 </div>
             )}
 
