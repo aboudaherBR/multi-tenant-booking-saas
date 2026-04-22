@@ -198,10 +198,10 @@ export default function BookPublic() {
 
         } catch (err) {
             console.error("Erro ao criar agendamento:", err);
-            console.log("STATUS DO ERRO:", err.status); // 👈 AQUI
 
 
-            if (err.status === 409) {
+
+            if (err.message.includes("Você já possui um agendamento")) {
                 setErrorModalOpen(true);
                 return;
             }
