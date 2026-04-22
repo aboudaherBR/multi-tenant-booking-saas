@@ -210,6 +210,7 @@ export default function BookPublic() {
                 console.log("STATE FOI SETADO PRA TRUE"); // 👈 AQUI
                 return;
             }
+            //teste
 
             console.log("CAIU NO ALERT"); // 👈 5
             alert("Erro ao agendar");
