@@ -187,15 +187,16 @@ select {
 
 
 .settingsButton {
-  background: transparent;
+  background: transparent !important;
   border: none;
-  color: white;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
   padding: 6px;
+
+  color: white; /* 👈 força o ícone branco */
 }
 
 /* ========================================
