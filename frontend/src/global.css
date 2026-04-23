@@ -394,3 +394,14 @@ select {
 .slot:active {
   transform: scale(0.95);
 }
+
+
+/* ========================================
+   DESIGN SYSTEM - RESPONSIVENESS
+   ======================================== */
+
+@media (min-width: 768px) {
+  .container-main {
+    max-width: 500px;
+  }
+}
