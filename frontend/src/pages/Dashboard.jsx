@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import apiClient from "../api/apiClient";
 import { useAuth } from "../hooks/AuthContext";
+import "./Dashboard.css";
 
 export default function Dashboard() {
     const { user } = useAuth();
@@ -41,20 +42,12 @@ export default function Dashboard() {
     if (error) return <div>{error}</div>;
 
     return (
-        <div style={{ minHeight: "100vh", background: "var(--color-bg)" }}>
+        <div className="card" style={{ padding: "20px" }}>
 
-            {/* HEADER */}
-            <div className="header-gradient">
-                <h2 style={{ color: "white" }}>
-                    Olá, {user?.name}
-                </h2>
-            </div>
+            <div className="dashboard-grid">
 
-            {/* CONTEÚDO */}
-            <div className="container-main" style={{ marginTop: "-40px" }}>
-
-                <div className="card" style={{ padding: "20px" }}>
-
+                {/* HOJE */}
+                <div>
                     <h2 className="heading">Hoje</h2>
 
                     <div className="mb-20">
@@ -69,7 +62,10 @@ export default function Dashboard() {
                             })}
                         </p>
                     </div>
+                </div>
 
+                {/* SERVIÇOS */}
+                <div>
                     <h2 className="heading">Serviços</h2>
 
                     {!stats?.services || stats.services.length === 0 ? (
@@ -81,33 +77,13 @@ export default function Dashboard() {
                             {stats.services.map((service, index) => (
                                 <div key={index} className="service-item">
                                     <span>{service.name}</span>
-                                    <strong>{"  "}{service.count}</strong>
+                                    <strong>{service.count}</strong>
                                 </div>
                             ))}
                         </div>
                     )}
-
                 </div>
 
-            </div>
-
-            {/* 🔥 BOTÃO FIXO NO FUNDO (CORRETO) */}
-            <div
-                style={{
-                    position: "fixed",
-                    bottom: "70px", // acima do menu inferior
-                    left: 0,
-                    width: "100%",
-                    padding: "10px 16px",
-                    background: "transparent"
-                }}
-            >
-                <button
-                    className="button-primary"
-                    onClick={() => navigate('/reports')}
-                >
-                    Ver relatórios
-                </button>
             </div>
 
         </div>

@@ -1,0 +1,15 @@
+/* DESKTOP */
+@media (min-width: 768px) {
+
+  .container-main {
+    max-width: 900px;
+    margin: -40px auto 0 auto;
+  }
+
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+}
