@@ -5,6 +5,7 @@ import apiClient from "../api/apiClient";
 export default function AppointmentsPage() {
 
     const navigate = useNavigate();
+
     const [professionals, setProfessionals] = useState([]);
     const [selectedProfessional, setSelectedProfessional] = useState("all");
     const [appointments, setAppointments] = useState([]);
@@ -17,25 +18,20 @@ export default function AppointmentsPage() {
         setDate(d.toISOString().split("T")[0]);
     }
 
-    // 🔹 carregar profissionais (correto)
     useEffect(() => {
         loadProfessionals();
     }, []);
 
-    // 🔥 carregar agendamentos quando data OU profissional mudar
     useEffect(() => {
         loadAppointments(date);
     }, [date, selectedProfessional]);
 
-    // 🔥 polling automático
     useEffect(() => {
-
         const interval = setInterval(() => {
             loadAppointments(date);
         }, 5000);
 
         return () => clearInterval(interval);
-
     }, [date, selectedProfessional]);
 
     async function loadProfessionals() {
@@ -49,7 +45,6 @@ export default function AppointmentsPage() {
 
     async function loadAppointments(date) {
         try {
-
             let url = `/appointments?date=${date}`;
 
             if (selectedProfessional !== "all") {
@@ -57,7 +52,6 @@ export default function AppointmentsPage() {
             }
 
             const data = await apiClient(url);
-
             setAppointments(data);
 
         } catch (error) {
@@ -67,95 +61,151 @@ export default function AppointmentsPage() {
     }
 
     return (
-        <div>
+        <div style={{ minHeight: "100vh", background: "var(--color-bg)" }}>
 
-            <h1>Agendamentos</h1>
-
-            <button onClick={() => navigate("/")}>
-                ← Dashboard
-            </button>
-
-            <button onClick={goToYesterday}>◀ Ontem</button>
-
-            <div>
-                <label>Data:</label>
-                <input
-                    type="date"
-                    value={date}
-                    onChange={(e) => setDate(e.target.value)}
-                />
+            {/* HEADER */}
+            <div className="header-gradient">
+                <h2 style={{ color: "white" }}>
+                    Agendamentos
+                </h2>
             </div>
 
-            <div>
-                <label>Profissional:</label>
-                <select
-                    value={selectedProfessional}
-                    onChange={(e) => setSelectedProfessional(e.target.value)}
-                >
-                    <option value="all">Todos</option>
+            {/* FILTROS */}
+            <div className="container-main" style={{ marginTop: "-40px" }}>
 
-                    {professionals.map((p) => (
-                        <option key={p.id} value={p.id}>
-                            {p.name}
-                        </option>
-                    ))}
-                </select>
-            </div>
+                <div className="card" style={{ padding: "20px" }}>
 
-            <h2>Agenda</h2>
+                    <h2 className="heading">Filtros</h2>
 
-            <ul>
-                {appointments.map((a) => (
-                    <li key={a.id} onClick={() => setSelectedAppointment(a)}>
-                        {a.start_time} {a.professional_name} — {a.client_name} ({a.service_name})
-                    </li>
-                ))}
-
-                {selectedAppointment && (
-                    <div style={{
-                        position: "fixed",
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        background: "rgba(0,0,0,0.4)",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center"
-                    }}>
-                        <div style={{
-                            background: "white",
-                            padding: "20px",
-                            borderRadius: "8px",
-                            minWidth: "300px"
-                        }}>
-
-                            <h3>Agendamento</h3>
-
-                            <p><b>Cliente:</b> {selectedAppointment.client_name}</p>
-                            <p><b>Serviço:</b> {selectedAppointment.service_name}</p>
-                            <p><b>Profissional:</b> {selectedAppointment.professional_name}</p>
-                            <p><b>Horário:</b> {selectedAppointment.start_time}</p>
-
-                            <button onClick={handleCancel}>Cancelar agendamento</button>
-                            <button onClick={() => setSelectedAppointment(null)}>Fechar</button>
-
-                        </div>
+                    <div className="mb-10">
+                        <button
+                            className="button-secondary"
+                            onClick={() => navigate("/")}
+                        >
+                            ← Dashboard
+                        </button>
                     </div>
-                )}
-            </ul>
+
+                    <div className="mb-10">
+                        <button
+                            className="button-secondary"
+                            onClick={goToYesterday}
+                        >
+                            ◀ Ontem
+                        </button>
+                    </div>
+
+                    <div className="mb-10">
+                        <input
+                            type="date"
+                            className="input-field"
+                            value={date}
+                            onChange={(e) => setDate(e.target.value)}
+                        />
+                    </div>
+
+                    <div>
+                        <select
+                            className="input-field"
+                            value={selectedProfessional}
+                            onChange={(e) => setSelectedProfessional(e.target.value)}
+                        >
+                            <option value="all">Todos</option>
+
+                            {professionals.map((p) => (
+                                <option key={p.id} value={p.id}>
+                                    {p.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                </div>
+
+            </div>
+
+            {/* AGENDA */}
+            <div className="container-main">
+
+                <div className="card" style={{ padding: "20px" }}>
+
+                    <h2 className="heading">Agenda</h2>
+
+                    {appointments.length === 0 ? (
+                        <p className="text-muted">
+                            Nenhum agendamento para este dia
+                        </p>
+                    ) : (
+                        <div>
+                            {appointments.map((a) => (
+                                <div
+                                    key={a.id}
+                                    className="mb-10"
+                                    style={{
+                                        padding: "12px",
+                                        borderRadius: "var(--radius)",
+                                        background: "#f8fafc",
+                                        cursor: "pointer"
+                                    }}
+                                    onClick={() => setSelectedAppointment(a)}
+                                >
+                                    <strong>{a.start_time}</strong>
+
+                                    <div>{a.client_name}</div>
+
+                                    <div className="text-muted">
+                                        {a.service_name} — {a.professional_name}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                </div>
+
+            </div>
+
+            {/* MODAL */}
+            {selectedAppointment && (
+                <div className="modal-backdrop">
+
+                    <div className="modal-content">
+
+                        <h3>Agendamento</h3>
+
+                        <p><b>Cliente:</b> {selectedAppointment.client_name}</p>
+                        <p><b>Serviço:</b> {selectedAppointment.service_name}</p>
+                        <p><b>Profissional:</b> {selectedAppointment.professional_name}</p>
+                        <p><b>Horário:</b> {selectedAppointment.start_time}</p>
+
+                        <button
+                            className="button-primary mb-10"
+                            onClick={handleCancel}
+                        >
+                            Cancelar agendamento
+                        </button>
+
+                        <button
+                            className="button-secondary"
+                            onClick={() => setSelectedAppointment(null)}
+                        >
+                            Fechar
+                        </button>
+
+                    </div>
+
+                </div>
+            )}
 
         </div>
     );
 
     async function handleCancel() {
-
         await apiClient(`/appointments/${selectedAppointment.id}`, {
             method: "DELETE"
         });
 
         setSelectedAppointment(null);
-
         loadAppointments(date);
     }
 }
