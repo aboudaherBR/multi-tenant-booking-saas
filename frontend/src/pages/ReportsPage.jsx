@@ -116,92 +116,124 @@ export default function ReportsPage() {
   }
 
   return (
-    <div>
+    <div style={{ minHeight: "100vh", background: "var(--color-bg)" }}>
 
-      <h1>Relatórios</h1>
-
-      <button onClick={() => navigate("/")}>
-        ← Voltar ao Dashboard
-      </button>
-
-      <div style={{ marginTop: "20px" }}>
-
-        <label>Data inicial</label>
-        <input
-          type="date"
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
-        />
-
-        <label style={{ marginLeft: "10px" }}>Data final</label>
-        <input
-          type="date"
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
-        />
-
-        <label style={{ marginLeft: "10px" }}>Profissional</label>
-
-        <select
-          value={professionalId}
-          onChange={(e) => setProfessionalId(e.target.value)}
-        >
-          <option value="">Todos</option>
-
-          {professionals.map((professional) => (
-            <option key={professional.id} value={professional.id}>
-              {professional.name}
-            </option>
-          ))}
-        </select>
-
-        <label style={{ marginLeft: "10px" }}>Serviço</label>
-
-        <select
-          value={serviceId}
-          onChange={(e) => setServiceId(e.target.value)}
-        >
-          <option value="">Todos</option>
-
-          {services.map((service) => (
-            <option key={service.id} value={service.id}>
-              {service.name}
-            </option>
-          ))}
-        </select>
-
-        <button
-          style={{ marginLeft: "10px" }}
-          onClick={() => loadSummary(startDate, endDate)}
-        >
-          Atualizar
-        </button>
-
+      {/* HEADER */}
+      <div className="header-gradient">
+        <h2 style={{ color: "white" }}>Relatórios</h2>
       </div>
 
-      {loading ? (
-        <p style={{ marginTop: "20px" }}>Atualizando dados...</p>
-      ) : summary && (
-        <div style={{ marginTop: "20px" }}>
+      {/* FILTROS */}
+      <div className="container-main" style={{ marginTop: "-40px" }}>
+        <div className="card" style={{ padding: "20px" }}>
 
-          <h2>
-            {monthName.charAt(0).toUpperCase() + monthName.slice(1)} {year}
-          </h2>
+          <h2 className="heading">Filtros</h2>
 
-          <p>
-            Total de serviços: <strong>{summary.totalServices}</strong>
-          </p>
+          <div className="mb-10">
+            <button
+              className="button-secondary"
+              onClick={() => navigate("/")}
+            >
+              ← Dashboard
+            </button>
+          </div>
 
-          <p>
-            Faturamento: <strong>R$ {summary.totalRevenue}</strong>
-          </p>
+          <div className="mb-10">
+            <label className="subtext">Data inicial</label>
+            <input
+              className="input-field"
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+            />
+          </div>
 
-          <p>
-            Ticket médio: <strong>R$ {summary.ticketAverage.toFixed(2)}</strong>
-          </p>
+          <div className="mb-10">
+            <label className="subtext">Data final</label>
+            <input
+              className="input-field"
+              type="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+            />
+          </div>
+
+          <div className="mb-10">
+            <label className="subtext">Profissional</label>
+            <select
+              className="input-field"
+              value={professionalId}
+              onChange={(e) => setProfessionalId(e.target.value)}
+            >
+              <option value="">Todos</option>
+              {professionals.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="mb-10">
+            <label className="subtext">Serviço</label>
+            <select
+              className="input-field"
+              value={serviceId}
+              onChange={(e) => setServiceId(e.target.value)}
+            >
+              <option value="">Todos</option>
+              {services.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <button
+            className="button-primary"
+            onClick={() => loadSummary(startDate, endDate)}
+          >
+            Atualizar
+          </button>
 
         </div>
-      )}
+      </div>
+
+      {/* RESULTADO */}
+      <div className="container-main">
+        <div className="card" style={{ padding: "20px" }}>
+
+          {loading ? (
+            <p className="text-muted">Atualizando dados...</p>
+          ) : summary ? (
+            <>
+              <h2 className="heading">
+                {monthName.charAt(0).toUpperCase() + monthName.slice(1)} {year}
+              </h2>
+
+              <div className="mb-20">
+                <p className="text-row">
+                  <strong>Total de serviços:</strong> {summary.totalServices}
+                </p>
+
+                <p className="text-row">
+                  <strong>Faturamento:</strong>{" "}
+                  R$ {Number(summary.totalRevenue).toLocaleString("pt-BR")}
+                </p>
+
+                <p className="text-row">
+                  <strong>Ticket médio:</strong>{" "}
+                  R$ {Number(summary.ticketAverage).toFixed(2)}
+                </p>
+              </div>
+            </>
+          ) : (
+            <p className="text-muted">Nenhum dado disponível</p>
+          )}
+
+        </div>
+      </div>
 
     </div>
   );
