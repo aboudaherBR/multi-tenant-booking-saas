@@ -222,7 +222,7 @@ select {
   margin-top: 5px;
   padding: 10px 14px;
   border-radius: var(--radius);
-  border: 0.7px solid #1d3350;
+  border: 0.3px solid #1d3350;
   background: var(--color-surface);
   color: var(--color-text);
   font-size: 14px;
