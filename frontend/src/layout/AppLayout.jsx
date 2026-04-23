@@ -1,4 +1,4 @@
-import styles from './AppLayout.css';
+import styles from './AppLayout.module.css';
 import { Settings } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import logo from "../assets/logo_png.png";
