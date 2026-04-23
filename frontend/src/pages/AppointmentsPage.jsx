@@ -126,7 +126,7 @@ export default function AppointmentsPage() {
 
                 <div className="card" style={{ padding: "20px" }}>
 
-                    <h2 className="heading">Agenda</h2>
+                    <h2 className="heading">Agenda do dia</h2>
 
                     {appointments.length === 0 ? (
                         <p className="text-muted">
