@@ -1,6 +1,7 @@
 import styles from './AppLayout.module.css';
 import { Settings } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import logo from "../assets/logo_png.png";
 
 
 function AppLayout({ children }) {
@@ -9,7 +10,7 @@ function AppLayout({ children }) {
     <div className={styles.appContainer}>
       <header className={styles.header}>
 
-        <img src="./logo_png.png" alt="Logo" />
+        <img src={logo} alt="Logo" />
         <button
           className={styles.settingsButton}
           onClick={() => navigate('/settings')}
