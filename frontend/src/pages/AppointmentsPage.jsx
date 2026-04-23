@@ -87,6 +87,7 @@ export default function AppointmentsPage() {
                     </div>
 
                     <div className="mb-10">
+                        <p>Escolha o dia</p>
                         <input
                             type="date"
                             className="input-field"
@@ -96,6 +97,7 @@ export default function AppointmentsPage() {
                     </div>
 
                     <div>
+                        <p>Escolha por profissional</p>
                         <select
                             className="input-field"
                             value={selectedProfessional}
