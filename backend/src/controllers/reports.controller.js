@@ -13,11 +13,23 @@ async function getSummary(req, res) {
         const companyId = req.user.companyId;
 
         const { startDate, endDate, professionalId, serviceId } = req.query;
+        console.log("SERVICE ID CONTROLLER:", serviceId);
         if (!startDate || !endDate) {
             return res.status(400).json({
                 message: "startDate e endDate são obrigatórios"
             });
         }
+        const { startDate, endDate, professionalId, serviceId } = req.query;
+
+
+        console.log("PARAMS ENVIADOS:", {
+            companyId,
+            startDate,
+            endDate,
+            professionalId,
+            serviceId
+        });
+
 
         const summary = await reportsRepository.getSummary({
             companyId,
