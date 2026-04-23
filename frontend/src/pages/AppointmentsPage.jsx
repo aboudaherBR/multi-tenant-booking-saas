@@ -75,7 +75,9 @@ export default function AppointmentsPage() {
             {/* FILTROS */}
             <div className="container-main" >
 
-                <div className="card" >
+                <div className="card" style={{
+                    alignItems: "center"
+                }} >
 
                     <h2 className="heading">Filtros</h2>
 
