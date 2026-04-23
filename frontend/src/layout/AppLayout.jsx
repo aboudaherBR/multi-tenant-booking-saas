@@ -15,7 +15,9 @@ function AppLayout({ children }) {
         <img
           src={logo}
           alt="Logo"
-          className={styles.logo} // 👈 sem inline style
+          style={{
+            width: "100px"
+          }}
         />
 
         <button
