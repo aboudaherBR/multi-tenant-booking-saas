@@ -8,32 +8,12 @@ const app = express();
 app.set('trust proxy', 1);
 
 
-const allowedOrigins = [
-  "https://barber-shop-indol-three.vercel.app",
-];
+const cors = require('cors');
 
-const corsOptions = {
-  origin: (origin, callback) => {
-    if (!origin) return callback(null, true);
-
-    if (origin.includes("localhost")) {
-      return callback(null, origin);
-    }
-
-    if (origin.includes("vercel.app")) {
-      return callback(null, origin);
-    }
-
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, origin);
-    }
-
-    return callback(new Error("Not allowed by CORS"));
-  },
-};
-
-app.use(cors(corsOptions));
-
+app.use(cors({
+  origin: true,
+  credentials: true
+}));
 
 
 app.use(express.json());
