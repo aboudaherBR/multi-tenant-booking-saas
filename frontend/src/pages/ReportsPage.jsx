@@ -134,7 +134,7 @@ export default function ReportsPage() {
               className="button-secondary"
               onClick={() => navigate("/")}
             >
-              ← Dashboard
+              ←Voltar ao início
             </button>
           </div>
 
