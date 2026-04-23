@@ -187,7 +187,7 @@ select {
 
 
 .settingsButton {
-  background: transparent !important;
+  background: transparent;
   border: none;
 
   display: flex;
@@ -196,7 +196,7 @@ select {
 
   padding: 6px;
 
-  color: white; /* 👈 força o ícone branco */
+  color: white;
 }
 
 /* ========================================
