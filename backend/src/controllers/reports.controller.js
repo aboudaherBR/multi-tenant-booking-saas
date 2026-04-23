@@ -19,7 +19,7 @@ async function getSummary(req, res) {
                 message: "startDate e endDate são obrigatórios"
             });
         }
-        const { startDate, endDate, professionalId, serviceId } = req.query;
+
 
 
         console.log("PARAMS ENVIADOS:", {
