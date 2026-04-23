@@ -185,6 +185,31 @@ select {
   color: var(--color-text-secondary);
 }
 
+
+.settingsButton {
+  width: 36px;
+  height: 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+
+  color: white; /* 👈 deixa o ícone branco */
+
+  transition: all 0.2s ease;
+}
+
+.settingsButton:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.settingsButton:active {
+  transform: scale(0.95);
+}
+
 /* ========================================
    DESIGN SYSTEM - INPUT FIELDS
    ======================================== */
