@@ -12,7 +12,7 @@ async function getSummary(req, res) {
 
         const companyId = req.user.companyId;
 
-        const { startDate, endDate, professionalId } = req.query;
+        const { startDate, endDate, professionalId, serviceId } = req.query;
         if (!startDate || !endDate) {
             return res.status(400).json({
                 message: "startDate e endDate são obrigatórios"
@@ -23,7 +23,8 @@ async function getSummary(req, res) {
             companyId,
             startDate,
             endDate,
-            professionalId
+            professionalId,
+            serviceId
         });
 
         res.json({
