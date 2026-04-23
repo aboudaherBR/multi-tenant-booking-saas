@@ -66,6 +66,8 @@ export default function AppointmentsPage() {
             {/* HEADER */}
             <div className="header-gradient" style={{
                 height: "80px",
+                display: "flex",
+                alignItems: "center"
             }}>
                 <h2 style={{ color: "white" }}>  
                     Agendamentos
@@ -75,9 +77,7 @@ export default function AppointmentsPage() {
             {/* FILTROS */}
             <div className="container-main" >
 
-                <div className="card" style={{
-                    justifyContent: "center",
-                }} >
+                <div className="card" >
 
                     <h2 className="heading">Filtros</h2>
 
