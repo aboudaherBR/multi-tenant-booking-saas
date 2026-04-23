@@ -22,8 +22,14 @@ function AppLayout({ children }) {
           }}
         />
 
-        {/* <button
+        <button
           className={styles.settingsButton}
+          style={{
+            backgroundColor: "transparent",
+            border: "none",
+            color: "white",
+            cursor: "pointer"
+          }}
           onClick={() => navigate('/settings')}
         >
           <svg
@@ -39,14 +45,8 @@ function AppLayout({ children }) {
             <circle cx="12" cy="12" r="3" />
             <path d="M19.4 15a1.7 1.7 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1.06V21a2 2 0 1 1-4 0v-.14a1.7 1.7 0 0 0-.4-1.06 1.7 1.7 0 0 0-1-.6 1.7 1.7 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-.6-1 1.7 1.7 0 0 0-1.06-.4H3a2 2 0 1 1 0-4h.14a1.7 1.7 0 0 0 1.06-.4 1.7 1.7 0 0 0 .6-1 1.7 1.7 0 0 0-.33-1.82l-.06-.06A2 2 0 1 1 7.24 3.5l.06.06A1.7 1.7 0 0 0 9 4.6c.38 0 .74-.14 1-.4.26-.26.4-.62.4-1V3a2 2 0 1 1 4 0v.14c0 .38.14.74.4 1 .26.26.62.4 1 .4.38 0 .74-.14 1-.4l.06-.06A2 2 0 1 1 20.5 7.24l-.06.06c-.26.26-.4.62-.4 1 0 .38.14.74.4 1 .26.26.62.4 1 .4H21a2 2 0 1 1 0 4h-.14c-.38 0-.74.14-1 .4-.26.26-.4.62-.4 1z" />
           </svg>
-        </button> */}
-        <button
-          className={styles.settingsButton}
-          style={{ backgroundColor: "transparent", border: "none", color: "white" }}
-          onClick={() => navigate('/settings')}
-        >
-          TESTE
         </button>
+
       </header>
 
       {/* CONTEÚDO */}
