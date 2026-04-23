@@ -10,7 +10,11 @@ function AppLayout({ children }) {
     <div className={styles.appContainer}>
       <header className={styles.header}>
 
-        <img src={logo} alt="Logo" />
+        <img 
+        style = {{
+          width: "120px",
+          opacity: 0.9
+        }}src={logo} alt="Logo" />
         <button
           className={styles.settingsButton}
           onClick={() => navigate('/settings')}
