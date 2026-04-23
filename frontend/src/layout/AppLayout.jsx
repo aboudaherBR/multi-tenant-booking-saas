@@ -42,7 +42,7 @@ function AppLayout({ children }) {
         </button> */}
         <button
           className={styles.settingsButton}
-          style={{ border: "4px solid red" }}
+          style={{ backgroundColor: "transparent", border: "none", color: "white" }}
           onClick={() => navigate('/settings')}
         >
           TESTE
