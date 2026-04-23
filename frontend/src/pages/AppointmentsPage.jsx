@@ -65,7 +65,7 @@ export default function AppointmentsPage() {
 
             {/* HEADER */}
             <div className="header-gradient" style={{
-                height: "120px",
+                height: "80px",
             }}>
                 <h2 style={{ color: "white" }}>  
                     Agendamentos
