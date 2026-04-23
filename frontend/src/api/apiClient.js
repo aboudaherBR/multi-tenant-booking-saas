@@ -1,6 +1,7 @@
 const BASE_URL = import.meta.env.VITE_API_URL || "/api";
 
 // ✅ NOVO: classe de erro estruturada (antes não existia ou não era usada corretamente)
+// ✅ NOVO: classe de erro estruturada (antes não existia ou não era usada corretamente)
 export class ApiError extends Error {
   constructor({ message, status, body, response }) {
     super(message);
