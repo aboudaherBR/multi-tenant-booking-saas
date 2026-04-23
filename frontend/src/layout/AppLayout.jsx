@@ -9,7 +9,7 @@ function AppLayout({ children }) {
     <div className={styles.appContainer}>
       <header className={styles.header}>
 
-        <h3 className={styles.title}>Agendô</h3>
+        <img src="./logo_png.png" alt="Logo" />
         <button
           className={styles.settingsButton}
           onClick={() => navigate('/settings')}
@@ -24,7 +24,7 @@ function AppLayout({ children }) {
 
       <nav className={styles.bottomNav}>
         <button onClick={() => navigate('/appointments')}>
-          Agenda
+          Ver Agenda
         </button>
         <button
           className={styles.navButton}
