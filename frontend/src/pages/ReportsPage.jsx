@@ -89,7 +89,7 @@ export default function ReportsPage() {
   async function loadSummary(start, end) {
 
     try {
-
+      
       setLoading(true);
 
       let url = `/reports/summary?startDate=${start}&endDate=${end}`;
@@ -101,6 +101,7 @@ export default function ReportsPage() {
       if (serviceId) {
         url += `&serviceId=${serviceId}`;
       }
+      console.log("URL FINAL:", url);
 
       const data = await apiClient(url);
 
@@ -134,7 +135,7 @@ export default function ReportsPage() {
               className="button-secondary"
               onClick={() => navigate("/")}
             >
-              ←Voltar ao início
+              Voltar ao início
             </button>
           </div>
 
@@ -190,12 +191,7 @@ export default function ReportsPage() {
             </select>
           </div>
 
-          <button
-            className="button-primary"
-            onClick={() => loadSummary(startDate, endDate)}
-          >
-            Atualizar
-          </button>
+
 
         </div>
       </div>
