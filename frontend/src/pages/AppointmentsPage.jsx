@@ -76,7 +76,7 @@ export default function AppointmentsPage() {
             <div className="container-main" >
 
                 <div className="card" style={{
-                    alignItems: "center"
+                    justifyContent: "center",
                 }} >
 
                     <h2 className="heading">Filtros</h2>
