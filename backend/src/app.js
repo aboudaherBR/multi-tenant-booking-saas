@@ -1,9 +1,19 @@
+
+
 const express = require('express');
 const cors = require('cors');
 
 console.log("🔥 VERSION CHECK - NOVO BUILD");
 
 const app = express();
+
+console.log("🔥 APP INICIOU");
+
+// 🔴 LOG GLOBAL NO TOPO REAL
+app.use((req, res, next) => {
+  console.log("🔥 GLOBAL TOP:", req.method, req.url);
+  next();
+});
 
 app.set('trust proxy', 1);
 
