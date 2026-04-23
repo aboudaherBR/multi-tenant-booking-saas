@@ -1,4 +1,4 @@
-
+throw new Error("🔥 TESTE FORÇADO - BACKEND CERTO");
 require('dotenv').config();
 
 const app = require('./app');
