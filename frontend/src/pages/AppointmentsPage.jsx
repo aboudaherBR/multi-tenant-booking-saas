@@ -71,9 +71,9 @@ export default function AppointmentsPage() {
             </div>
 
             {/* FILTROS */}
-            <div className="container-main" style={{ marginTop: "-40px" }}>
+            <div className="container-main" >
 
-                <div className="card" style={{ padding: "20px" }}>
+                <div className="card" >
 
                     <h2 className="heading">Filtros</h2>
 
@@ -82,16 +82,7 @@ export default function AppointmentsPage() {
                             className="button-secondary"
                             onClick={() => navigate("/")}
                         >
-                            ← Dashboard
-                        </button>
-                    </div>
-
-                    <div className="mb-10">
-                        <button
-                            className="button-secondary"
-                            onClick={goToYesterday}
-                        >
-                            ◀ Ontem
+                            Voltar ao início
                         </button>
                     </div>
 
