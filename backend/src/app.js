@@ -20,9 +20,27 @@ app.set('trust proxy', 1);
 
 
 
+const cors = require('cors');
+
+const allowedOrigins = [
+  "https://barber-shop-indol-three.vercel.app",
+  "http://localhost:5173", // Vite dev
+  "http://localhost:3000"  // se usar outra porta
+];
+
 app.use(cors({
-  origin: true,
-  credentials: true
+  origin: (origin, callback) => {
+
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    console.log("❌ CORS bloqueado:", origin);
+    return callback(new Error("Not allowed by CORS"));
+  },
+  credentials: true,
 }));
 
 
