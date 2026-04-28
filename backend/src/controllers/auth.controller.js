@@ -105,8 +105,10 @@ async function signup(req, res) {
   console.log("COMPANY CRIADA:", company);
 
   return res.json({
-    message: "Company criada com sucesso",
-    company
+    message: "Payload válido",
+    salonName,
+    name,
+    phone
   });
 }
 module.exports = {
