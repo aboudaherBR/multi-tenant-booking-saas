@@ -3,6 +3,10 @@ const { findProfessionalByUserId } = require('../database/professionals.reposito
 const { findCompanyBySlug } = require('../database/companies.repository');
 const jwt = require('jsonwebtoken');
 
+const slugify = require('../utils/slugify');
+
+
+
 async function login(req, res, next) {
   try {
 
@@ -77,6 +81,7 @@ async function login(req, res, next) {
 
 async function signup(req, res) {
   const { salonName, name, phone, password } = req.body;
+  console.log("SLUG TESTE:", slugify("Barbearia do João"));
 
   if (!salonName || !name || !phone || !password) {
     return res.status(400).json({
