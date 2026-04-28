@@ -2,6 +2,7 @@ const { authenticate, authenticateWithCompany } = require('../services/auth.serv
 const { findProfessionalByUserId } = require('../database/professionals.repository');
 const { findCompanyBySlug } = require('../database/companies.repository');
 const jwt = require('jsonwebtoken');
+const { createCompany } = require('../database/companies.repository');
 
 const slugify = require('../utils/slugify');
 
@@ -99,11 +100,13 @@ async function signup(req, res) {
 
   console.log("COMPANY DATA:", companyData);
 
+  const company = await createCompany(companyData);
+
+  console.log("COMPANY CRIADA:", company);
+
   return res.json({
-    message: "Payload válido",
-    salonName,
-    name,
-    phone
+    message: "Company criada com sucesso",
+    company
   });
 }
 module.exports = {
