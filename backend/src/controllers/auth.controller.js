@@ -3,6 +3,7 @@ const { findProfessionalByUserId } = require('../database/professionals.reposito
 const { findCompanyBySlug } = require('../database/companies.repository');
 const jwt = require('jsonwebtoken');
 const { createCompany } = require('../database/companies.repository');
+const { findCompanyBySlug } = require('../database/companies.repository');
 
 const slugify = require('../utils/slugify');
 
@@ -93,6 +94,10 @@ async function signup(req, res) {
 
   console.log("SLUG GERADO:", slug);
 
+  // 🔥 AQUI
+  const existingCompany = await findCompanyBySlug(slug);
+  console.log("SLUG EXISTE?", !!existingCompany);
+
   const companyData = {
     name: salonName,
     slug: slug
@@ -110,6 +115,7 @@ async function signup(req, res) {
     name,
     phone
   });
+}
 }
 module.exports = {
   login,
