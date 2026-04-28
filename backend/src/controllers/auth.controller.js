@@ -3,7 +3,7 @@ const { findProfessionalByUserId } = require('../database/professionals.reposito
 const { findCompanyBySlug } = require('../database/companies.repository');
 const jwt = require('jsonwebtoken');
 const { createCompany } = require('../database/companies.repository');
-const { findCompanyBySlug } = require('../database/companies.repository');
+
 
 const slugify = require('../utils/slugify');
 
