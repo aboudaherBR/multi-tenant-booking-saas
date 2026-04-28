@@ -75,6 +75,13 @@ async function login(req, res, next) {
   }
 }
 
+async function signup(req, res) {
+  return res.json({
+    message: "Signup endpoint funcionando"
+  });
+}
+
 module.exports = {
-  login
+  login,
+  signup
 };
