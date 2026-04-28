@@ -1,13 +1,13 @@
 const pool = require('./db');
 
-async function createCompany(name) {
+async function createCompany({ name, slug }) {
   const result = await pool.query(
     `
-      INSERT INTO companies (name)
-      VALUES ($1)
-      RETURNING id, name, status, created_at, subscription_ends_at
+      INSERT INTO companies (name, slug)
+      VALUES ($1, $2)
+      RETURNING id, name, slug, status, created_at, subscription_ends_at
     `,
-    [name]
+    [name, slug]
   );
 
   return result.rows[0];
