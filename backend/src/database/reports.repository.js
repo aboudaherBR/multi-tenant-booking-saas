@@ -43,6 +43,3 @@ module.exports = {
     getSummary
 };
 
-module.exports = {
-    getSummary
-};

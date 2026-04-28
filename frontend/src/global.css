@@ -185,6 +185,20 @@ select {
   color: var(--color-text-secondary);
 }
 
+
+.settingsButton {
+  background: transparent;
+  border: none;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 6px;
+
+  color: white;
+}
+
 /* ========================================
    DESIGN SYSTEM - INPUT FIELDS
    ======================================== */
@@ -192,7 +206,7 @@ select {
   width: 100%;
   padding: 12px;
   border-radius: var(--radius);
-  border: 1px solid #e2e8f0;
+  border: 0.3px solid #365d91;
   font-size: 16px;
   box-sizing: border-box;
   background: var(--color-surface);
@@ -222,7 +236,7 @@ select {
   margin-top: 5px;
   padding: 10px 14px;
   border-radius: var(--radius);
-  border: 1px solid #e2e8f0;
+  border: 0.3px solid #1d3350;
   background: var(--color-surface);
   color: var(--color-text);
   font-size: 14px;
@@ -393,4 +407,23 @@ select {
 
 .slot:active {
   transform: scale(0.95);
+}
+
+
+/* ========================================
+   DESIGN SYSTEM - RESPONSIVENESS
+   ======================================== */
+
+@media (min-width: 768px) {
+  .container-main {
+    max-width: 500px;
+  }
+}
+
+@media (min-width: 768px) {
+  .button-primary {
+    max-width: 400px;
+    margin: 0 auto;
+    display: block;
+  }
 }

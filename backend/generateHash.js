@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 
 async function generate() {
-  const password = '123456'; // senha temporária para os usuários existentes
+  const password = '123456'; 
   const saltRounds = 10;
 
   const hash = await bcrypt.hash(password, saltRounds);

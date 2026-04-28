@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../hooks/AuthContext';
+import './LoginPage.css';
+import logo from "../assets/logo_png.png";
 
 function LoginPage() {
   const [username, setUsername] = useState('');
@@ -40,28 +42,61 @@ function LoginPage() {
   }
 
   return (
-    <div>
-      <h2>Login</h2>
+    <div className="login-page">
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
+      <div className="card container-main">
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        <div style={{ textAlign: "center", marginBottom: "10px" }}>
+          <img
+            src={logo}
+            alt="Agendare"
+            style={{
+              width: "300px",
+              opacity: 0.9
+            }}
+          />
+        </div>
 
-        <button type="submit">Login</button>
-      </form>
+        <h2 className="heading text-center">
+          Acesso do administrador
+        </h2>
 
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+        <p className="subtext text-center">
+          Faça login para continuar
+        </p>
+
+        <form onSubmit={handleSubmit}>
+
+          <input
+            type="text"
+            placeholder="Usuário"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="input-field mb-10"
+          />
+
+          <input
+            type="password"
+            placeholder="Senha"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="input-field mb-20"
+          />
+
+          <button type="submit" className="button-primary">
+            Entrar
+          </button>
+
+        </form>
+
+        {error && (
+          <p className="text-error text-center mt-10">
+            {error}
+          </p>
+        )}
+
+      </div>
+
     </div>
   );
 }

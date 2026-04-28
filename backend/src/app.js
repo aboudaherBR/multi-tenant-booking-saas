@@ -1,3 +1,5 @@
+
+
 const express = require('express');
 const cors = require('cors');
 
@@ -5,41 +7,52 @@ console.log("🔥 VERSION CHECK - NOVO BUILD");
 
 const app = express();
 
+console.log("🔥 APP INICIOU");
+
+// 🔴 LOG GLOBAL NO TOPO REAL
+app.use((req, res, next) => {
+  console.log("🔥 GLOBAL TOP:", req.method, req.url);
+  next();
+});
+
 app.set('trust proxy', 1);
 
 
+
+
+const cors = require('cors');
+
 const allowedOrigins = [
   "https://barber-shop-indol-three.vercel.app",
+  "http://localhost:5173", // Vite dev
+  "http://localhost:3000"  // se usar outra porta
 ];
 
-const corsOptions = {
+app.use(cors({
   origin: (origin, callback) => {
+
     if (!origin) return callback(null, true);
 
-    if (origin.includes("localhost")) {
-      return callback(null, origin);
-    }
-
-    if (origin.includes("vercel.app")) {
-      return callback(null, origin);
-    }
-
     if (allowedOrigins.includes(origin)) {
-      return callback(null, origin);
+      return callback(null, true);
     }
 
+    console.log("❌ CORS bloqueado:", origin);
     return callback(new Error("Not allowed by CORS"));
   },
-};
-
-app.use(cors(corsOptions));
-
+  credentials: true,
+}));
 
 
 app.use(express.json());
 
 app.use((req, _res, next) => {
   console.log("🔥 PASSOU AQUI:", req.method, req.url);
+  next();
+});
+
+app.use((req, res, next) => {
+  console.log("🔥 DEBUG:", req.method, req.url);
   next();
 });
 

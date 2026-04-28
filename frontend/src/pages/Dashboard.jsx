@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import apiClient from "../api/apiClient";
 import { useAuth } from "../hooks/AuthContext";
 
+
 export default function Dashboard() {
     const { user } = useAuth();
 
@@ -25,47 +26,91 @@ export default function Dashboard() {
         }
     }
 
-    // 🔹 carga inicial
     useEffect(() => {
         loadDashboard();
     }, []);
 
-    // 🔥 polling (produção real)
     useEffect(() => {
-
         const interval = setInterval(() => {
             loadDashboard();
         }, 5000);
 
         return () => clearInterval(interval);
-
     }, []);
 
     if (loading) return <div>Carregando...</div>;
     if (error) return <div>{error}</div>;
 
     return (
-        <div>
-            <h1>Olá, {user?.name}</h1>
+        <div style={{ minHeight: "100vh", background: "var(--color-bg)" }}>
 
-            <h2>Hoje</h2>
+            {/* HEADER */}
+            <div className="header-gradient">
+                <h2 style={{ color: "white" }}>
+                    Olá, {user?.name}
+                </h2>
+            </div>
 
-            <p>Atendimentos: {stats?.totalAppointments}</p>
-            <p>Faturamento: R$ {stats?.totalRevenue}</p>
+            {/* CONTEÚDO */}
+            <div className="container-main" style={{ marginTop: "-40px" }}>
 
-            <h2>Serviços</h2>
+                <div className="card" style={{ padding: "20px" }}>
 
-            <ul>
-                {stats?.services?.map((service, index) => (
-                    <li key={index}>
-                        {service.name} — {service.count}
-                    </li>
-                ))}
-            </ul>
+                    <h2 className="heading">Hoje</h2>
 
-            <button onClick={() => navigate('/reports')}>
-                Relatórios
-            </button>
+                    <div className="mb-20">
+                        <p className="text-row">
+                            <strong>Atendimentos:</strong> {stats?.totalAppointments}
+                        </p>
+
+                        <p className="text-row">
+                            <strong>Faturamento:</strong>{" "}
+                            R$ {Number(stats?.totalRevenue || 0).toLocaleString("pt-BR", {
+                                minimumFractionDigits: 2
+                            })}
+                        </p>
+                    </div>
+
+                    <h2 className="heading">Serviços</h2>
+
+                    {!stats?.services || stats.services.length === 0 ? (
+                        <p className="text-muted">
+                            Nenhum serviço realizado hoje
+                        </p>
+                    ) : (
+                        <div className="services-grid">
+                            {stats.services.map((service, index) => (
+                                <div key={index} className="service-item">
+                                    <span>{service.name}</span>
+                                    <strong>{"  "}{service.count}</strong>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                </div>
+
+            </div>
+
+            {/* 🔥 BOTÃO FIXO NO FUNDO (CORRETO) */}
+            <div
+                style={{
+                    position: "fixed",
+                    bottom: "70px", // acima do menu inferior
+                    left: 0,
+                    width: "100%",
+                    padding: "10px 16px",
+                    background: "transparent"
+                }}
+            >
+                <button
+                    className="button-primary"
+                    onClick={() => navigate('/reports')}
+                >
+                    Ver relatórios
+                </button>
+            </div>
+
         </div>
     );
 }
