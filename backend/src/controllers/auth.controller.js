@@ -76,8 +76,19 @@ async function login(req, res, next) {
 }
 
 async function signup(req, res) {
+  const { salonName, name, phone, password } = req.body;
+
+  if (!salonName || !name || !phone || !password) {
+    return res.status(400).json({
+      message: "Dados obrigatórios faltando"
+    });
+  }
+
   return res.json({
-    message: "Signup endpoint funcionando"
+    message: "Payload válido",
+    salonName,
+    name,
+    phone
   });
 }
 
