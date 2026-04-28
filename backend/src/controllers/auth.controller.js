@@ -81,7 +81,10 @@ async function login(req, res, next) {
 
 async function signup(req, res) {
   const { salonName, name, phone, password } = req.body;
-  console.log("SLUG TESTE:", slugify("Barbearia do João"));
+  const slug = slugify(salonName);
+
+  const slug = slugify(salonName);
+  
 
   if (!salonName || !name || !phone || !password) {
     return res.status(400).json({
