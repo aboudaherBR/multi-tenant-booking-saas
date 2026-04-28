@@ -39,9 +39,9 @@ async function login(req, res, next) {
     // 🔥 CORREÇÃO PRINCIPAL
     const professional = user.company_id
       ? await findProfessionalByUserId({
-          userId: user.id,
-          companyId: user.company_id
-        })
+        userId: user.id,
+        companyId: user.company_id
+      })
       : null;
 
     console.log('LOGIN DEBUG - PROFESSIONAL LOOKUP:', {
@@ -81,16 +81,23 @@ async function login(req, res, next) {
 
 async function signup(req, res) {
   const { salonName, name, phone, password } = req.body;
-  const slug = slugify(salonName);
-
-  console.log("SLUG GERADO:", slug);
-  
 
   if (!salonName || !name || !phone || !password) {
     return res.status(400).json({
       message: "Dados obrigatórios faltando"
     });
   }
+
+  const slug = slugify(salonName);
+
+  console.log("SLUG GERADO:", slug);
+
+  const companyData = {
+    name: salonName,
+    slug: slug
+  };
+
+  console.log("COMPANY DATA:", companyData);
 
   return res.json({
     message: "Payload válido",
@@ -99,7 +106,6 @@ async function signup(req, res) {
     phone
   });
 }
-
 module.exports = {
   login,
   signup
