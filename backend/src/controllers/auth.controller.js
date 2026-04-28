@@ -56,7 +56,7 @@ async function login(req, res, next) {
     };
 
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
-      expiresIn: '8h'
+      expiresIn: '10s' // 10 segundos para testes
     });
 
     return res.json({

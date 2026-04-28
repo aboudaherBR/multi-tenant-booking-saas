@@ -24,8 +24,8 @@ const cors = require('cors');
 
 const allowedOrigins = [
   "https://barber-shop-indol-three.vercel.app",
-  "http://localhost:5173", // Vite dev
-  "http://localhost:3000"  // se usar outra porta
+  "http://localhost:5173", 
+  "http://localhost:3000"  
 ];
 
 app.use(cors({
