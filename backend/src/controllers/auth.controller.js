@@ -83,7 +83,7 @@ async function signup(req, res) {
   const { salonName, name, phone, password } = req.body;
   const slug = slugify(salonName);
 
-  const slug = slugify(salonName);
+  console.log("SLUG GERADO:", slug);
   
 
   if (!salonName || !name || !phone || !password) {
