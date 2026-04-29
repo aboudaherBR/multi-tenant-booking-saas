@@ -1,14 +1,11 @@
 const { authenticate, authenticateWithCompany } = require('../services/auth.service');
-const { findProfessionalByUserId } = require('../database/professionals.repository');
+const { findProfessionalByUserId, createProfessional } = require('../database/professionals.repository');
 const { createCompany, findCompanyBySlug } = require('../database/companies.repository');
 const generateUniqueSlug = require('../utils/generateUniqueSlug');
 const jwt = require('jsonwebtoken');
 const slugify = require('../utils/slugify');
 const bcrypt = require('bcrypt');
-const { createUser } = require('../database/users.repository');
-const { findByUsernameAndCompany } = require('../database/users.repository');
-const { createProfessional } = require('../database/professionals.repository');
-
+const { createUser, findByUsernameAndCompany } = require('../database/users.repository');
 
 async function login(req, res, next) {
   try {
@@ -40,16 +37,10 @@ async function login(req, res, next) {
 
     const professional = user.company_id
       ? await findProfessionalByUserId({
-        userId: user.id,
-        companyId: user.company_id
-      })
+          userId: user.id,
+          companyId: user.company_id
+        })
       : null;
-
-    console.log('LOGIN DEBUG - PROFESSIONAL LOOKUP:', {
-      userId: user.id,
-      companyId: user.company_id,
-      found: !!professional
-    });
 
     const payload = {
       userId: user.id,
@@ -93,14 +84,14 @@ async function signup(req, res) {
       address_state
     } = req.body;
 
-    const passwordHash = await bcrypt.hash(password, 10);
-    console.log("HASH GERADO:", passwordHash);
-
     if (!salonName || !companyPhone || !name || !username || !password) {
       return res.status(400).json({
         message: "Dados obrigatórios faltando"
       });
     }
+
+    const passwordHash = await bcrypt.hash(password, 10);
+    console.log("HASH GERADO:", passwordHash);
 
     const baseSlug = slugify(salonName);
     const slug = await generateUniqueSlug(baseSlug);
@@ -112,7 +103,6 @@ async function signup(req, res) {
       slug: slug,
       phone: companyPhone,
       seller_name: "Sistema",
-
       address_street,
       address_number,
       address_neighborhood,
@@ -120,7 +110,6 @@ async function signup(req, res) {
       address_state
     };
 
-    console.log("COMPANY DATA:", companyData);
     const company = await createCompany(companyData);
     console.log("COMPANY CRIADA:", company);
 
@@ -142,6 +131,10 @@ async function signup(req, res) {
 
     console.log("USER CRIADO:", user);
 
+    // ✅ CORREÇÃO AQUI
+    const professionalSlug = slugify(name);
+    console.log("PROFESSIONAL SLUG:", professionalSlug);
+
     const professional = await createProfessional({
       companyId: company.id,
       userId: user.id,
@@ -150,13 +143,13 @@ async function signup(req, res) {
 
     console.log("PROFESSIONAL CRIADO:", professional);
 
-
+    // ✅ AGORA FAZ SENTIDO SER TRUE
     const payload = {
       userId: user.id,
       name: name,
       companyId: company.id,
       isCompanyAdmin: true,
-      isProfessional: false,
+      isProfessional: true,
       isSuperAdmin: false
     };
 
@@ -165,11 +158,8 @@ async function signup(req, res) {
     });
 
     return res.json({
-      message: "Payload válido",
-      salonName,
-      companyPhone,
-      name,
-      username
+      message: "Signup realizado com sucesso",
+      token
     });
 
   } catch (error) {
