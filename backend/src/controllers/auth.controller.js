@@ -1,10 +1,9 @@
 const { authenticate, authenticateWithCompany } = require('../services/auth.service');
 const { findProfessionalByUserId } = require('../database/professionals.repository');
 const { createCompany, findCompanyBySlug } = require('../database/companies.repository');
+const generateUniqueSlug = require('../utils/generateUniqueSlug');
 const jwt = require('jsonwebtoken');
-const baseSlug = slugify(salonName);
-
-
+const slugify = require('../utils/slugify');
 
 async function login(req, res, next) {
   try {
@@ -36,9 +35,9 @@ async function login(req, res, next) {
 
     const professional = user.company_id
       ? await findProfessionalByUserId({
-        userId: user.id,
-        companyId: user.company_id
-      })
+          userId: user.id,
+          companyId: user.company_id
+        })
       : null;
 
     console.log('LOGIN DEBUG - PROFESSIONAL LOOKUP:', {
@@ -87,8 +86,6 @@ async function signup(req, res) {
     const baseSlug = slugify(salonName);
     const slug = await generateUniqueSlug(baseSlug);
 
-
-   
     console.log("SLUG FINAL:", slug);
 
     const companyData = {
