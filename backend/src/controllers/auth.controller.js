@@ -4,6 +4,8 @@ const { createCompany, findCompanyBySlug } = require('../database/companies.repo
 const generateUniqueSlug = require('../utils/generateUniqueSlug');
 const jwt = require('jsonwebtoken');
 const slugify = require('../utils/slugify');
+const bcrypt = require('bcrypt');
+const { createUser } = require('../database/users.repository');
 
 async function login(req, res, next) {
   try {
@@ -88,6 +90,9 @@ async function signup(req, res) {
       address_state
     } = req.body;
 
+    const passwordHash = await bcrypt.hash(password, 10);
+    console.log("HASH GERADO:", passwordHash);
+
     if (!salonName || !companyPhone || !name || !username || !password) {
       return res.status(400).json({
         message: "Dados obrigatórios faltando"
@@ -117,6 +122,16 @@ async function signup(req, res) {
     const company = await createCompany(companyData);
 
     console.log("COMPANY CRIADA:", company);
+
+    const user = await createUser({
+      companyId: company.id,
+      name,
+      username,
+      passwordHash,
+      isCompanyAdmin: true
+    });
+
+    console.log("USER CRIADO:", user);
 
     return res.json({
       message: "Payload válido",

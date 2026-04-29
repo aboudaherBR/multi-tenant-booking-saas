@@ -20,7 +20,6 @@ async function findByUsername(username) {
   return result.rows[0] || null;
 }
 
-
 async function findByUsernameAndCompany(username, companyId) {
   const result = await pool.query(
     `
@@ -46,9 +45,9 @@ async function createUser({
   companyId,
   name,
   username,
-  passwordHash
+  passwordHash,
+  isCompanyAdmin
 }) {
-
   const result = await pool.query(
     `
     INSERT INTO users (
@@ -58,16 +57,19 @@ async function createUser({
       password_hash,
       is_company_admin
     )
-    VALUES ($1, $2, $3, $4, false)
-    RETURNING id
+    VALUES ($1, $2, $3, $4, $5)
+    RETURNING 
+      id,
+      name,
+      username,
+      company_id,
+      is_company_admin
     `,
-    [companyId, name, username, passwordHash]
+    [companyId, name, username, passwordHash, isCompanyAdmin]
   );
 
   return result.rows[0];
 }
-
-
 
 module.exports = {
   findByUsername,
