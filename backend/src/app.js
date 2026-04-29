@@ -1,110 +1,77 @@
-const express = require('express');
-const cors = require('cors');
-
-console.log("🔥 VERSION CHECK - NOVO BUILD");
+const express = require("express");
+const cors = require("cors");
 
 const app = express();
 
-console.log("🔥 APP INICIOU");
-
-// 🔴 LOG GLOBAL NO TOPO REAL
-app.use((req, res, next) => {
-  console.log("🔥 GLOBAL TOP:", req.method, req.url);
-  next();
-});
-
-app.set('trust proxy', 1);
-
-// ✅ LISTA DE ORIGENS
 const allowedOrigins = [
   "https://barber-shop-indol-three.vercel.app",
   "http://localhost:5173",
   "http://localhost:3000",
-  "https://barber-shop-git-feature-signup-salon-aboudahers-projects.vercel.app"
+  "https://barber-shop-git-feature-signup-salon-aboudahers-projects.vercel.app",
 ];
 
-// ✅ CONFIG CORS COMPLETA
-const corsOptions = {
-  origin: function (origin, callback) {
-    console.log("🌍 CORS ORIGIN:", origin);
+// LOG GLOBAL
+app.use((req, _res, next) => {
+  console.log(`[REQUEST] ${req.method} ${req.originalUrl}`);
+  next();
+});
 
-    // permite requests sem origin (postman, curl)
+// CORS
+const corsOptions = {
+  origin(origin, callback) {
+    console.log(`[CORS] Origin: ${origin || "no-origin"}`);
+
     if (!origin) return callback(null, true);
 
     if (allowedOrigins.includes(origin)) {
       return callback(null, true);
     }
 
-    console.log("❌ CORS bloqueado:", origin);
-    return callback(new Error("Not allowed by CORS"));
+    return callback(new Error(`CORS blocked for origin: ${origin}`));
   },
   credentials: true,
 };
 
-// 🔥 AQUI É CRÍTICO
 app.use(cors(corsOptions));
-
-// 🔥 TRATA PREFLIGHT (ESSENCIAL)
-app.options('*', cors(corsOptions));
 
 app.use(express.json());
 
-// DEBUGS
-app.use((req, _res, next) => {
-  console.log("🔥 PASSOU AQUI:", req.method, req.url);
-  next();
+// HEALTH CHECK
+app.get("/", (_req, res) => {
+  res.status(200).json({ status: "ok" });
 });
 
-app.use((req, res, next) => {
-  console.log("🔥 DEBUG:", req.method, req.url);
-  next();
+/* ROTAS REAIS DO SEU PROJETO */
+
+app.use("/api", require("./routes/auth.routes"));
+app.use("/api", require("./routes/session.routes"));
+app.use("/api", require("./routes/availability.routes"));
+app.use("/api", require("./routes/appointments.routes"));
+app.use("/api", require("./routes/company.routes"));
+app.use("/api", require("./routes/scheduleBlocks.routes"));
+app.use("/api", require("./routes/clients.routes"));
+app.use("/api", require("./routes/professionalServices.routes"));
+app.use("/api", require("./routes/public.routes"));
+app.use("/api", require("./routes/professionals.routes"));
+app.use("/api", require("./routes/dashboard.routes"));
+app.use("/api", require("./routes/businessHours.routes"));
+app.use("/api", require("./routes/services.routes"));
+app.use("/api", require("./routes/reports.routes"));
+app.use("/api", require("./routes/professional.me.routes"));
+
+// 404
+app.use((req, res) => {
+  res.status(404).json({ message: "Route not found" });
 });
 
-/* ROTAS */
+// ERROR HANDLER
+app.use((err, _req, res, _next) => {
+  if (err && err.message && err.message.startsWith("CORS blocked")) {
+    return res.status(403).json({ message: err.message });
+  }
 
-const authRoutes = require('./routes/auth.routes');
-app.use('/api', authRoutes);
-
-const sessionRoutes = require('./routes/session.routes');
-app.use('/api', sessionRoutes);
-
-const availabilityRoutes = require('./routes/availability.routes');
-app.use('/api', availabilityRoutes);
-
-const appointmentsRoutes = require('./routes/appointments.routes');
-app.use('/api', appointmentsRoutes);
-
-const companyRoutes = require('./routes/company.routes');
-app.use('/api', companyRoutes);
-
-const scheduleBlocksRoutes = require('./routes/scheduleBlocks.routes');
-app.use('/api', scheduleBlocksRoutes);
-
-const clientsRoutes = require('./routes/clients.routes');
-app.use('/api', clientsRoutes);
-
-const professionalServicesRoutes = require('./routes/professionalServices.routes');
-app.use('/api', professionalServicesRoutes);
-
-const publicRoutes = require('./routes/public.routes');
-app.use('/api', publicRoutes);
-
-const professionalsRoutes = require('./routes/professionals.routes');
-app.use('/api', professionalsRoutes);
-
-const dashboardRoutes = require('./routes/dashboard.routes');
-app.use('/api', dashboardRoutes);
-
-const businessHoursRoutes = require('./routes/businessHours.routes');
-app.use('/api', businessHoursRoutes);
-
-const servicesRoutes = require('./routes/services.routes');
-app.use('/api', servicesRoutes);
-
-const reportsRoutes = require('./routes/reports.routes');
-app.use('/api', reportsRoutes);
-
-const professionalMeRoutes = require('./routes/professional.me.routes');
-app.use('/api', professionalMeRoutes);
+  console.error("[ERROR]", err);
+  return res.status(500).json({ message: "Internal server error" });
+});
 
 module.exports = app;
