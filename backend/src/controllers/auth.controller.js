@@ -121,8 +121,9 @@ async function signup(req, res) {
     return res.json({
       message: "Payload válido",
       salonName,
+      companyPhone,
       name,
-      phone
+      username
     });
 
   } catch (error) {
