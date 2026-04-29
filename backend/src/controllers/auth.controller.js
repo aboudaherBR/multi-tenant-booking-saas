@@ -6,6 +6,9 @@ const jwt = require('jsonwebtoken');
 const slugify = require('../utils/slugify');
 const bcrypt = require('bcrypt');
 const { createUser } = require('../database/users.repository');
+const { findByUsernameAndCompany } = require('../database/users.repository');
+const { createProfessional } = require('../database/professionals.repository');
+
 
 async function login(req, res, next) {
   try {
@@ -118,10 +121,16 @@ async function signup(req, res) {
     };
 
     console.log("COMPANY DATA:", companyData);
-
     const company = await createCompany(companyData);
-
     console.log("COMPANY CRIADA:", company);
+
+    const existingUser = await findByUsernameAndCompany(username, company.id);
+
+    if (existingUser) {
+      return res.status(400).json({
+        message: "Username já existe neste salão"
+      });
+    }
 
     const user = await createUser({
       companyId: company.id,
@@ -132,6 +141,28 @@ async function signup(req, res) {
     });
 
     console.log("USER CRIADO:", user);
+
+    const professional = await createProfessional({
+      companyId: company.id,
+      userId: user.id,
+      slug: professionalSlug
+    });
+
+    console.log("PROFESSIONAL CRIADO:", professional);
+
+
+    const payload = {
+      userId: user.id,
+      name: name,
+      companyId: company.id,
+      isCompanyAdmin: true,
+      isProfessional: false,
+      isSuperAdmin: false
+    };
+
+    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+      expiresIn: '8h'
+    });
 
     return res.json({
       message: "Payload válido",
