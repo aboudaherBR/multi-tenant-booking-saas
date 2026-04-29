@@ -1,5 +1,3 @@
-
-
 const express = require('express');
 const cors = require('cors');
 
@@ -17,21 +15,20 @@ app.use((req, res, next) => {
 
 app.set('trust proxy', 1);
 
-
-
-
-
-
+// ✅ LISTA DE ORIGENS
 const allowedOrigins = [
   "https://barber-shop-indol-three.vercel.app",
-  "http://localhost:5173", 
+  "http://localhost:5173",
   "http://localhost:3000",
   "https://barber-shop-git-feature-signup-salon-aboudahers-projects.vercel.app"
 ];
 
-app.use(cors({
-  origin: (origin, callback) => {
+// ✅ CONFIG CORS COMPLETA
+const corsOptions = {
+  origin: function (origin, callback) {
+    console.log("🌍 CORS ORIGIN:", origin);
 
+    // permite requests sem origin (postman, curl)
     if (!origin) return callback(null, true);
 
     if (allowedOrigins.includes(origin)) {
@@ -42,11 +39,17 @@ app.use(cors({
     return callback(new Error("Not allowed by CORS"));
   },
   credentials: true,
-}));
+};
 
+// 🔥 AQUI É CRÍTICO
+app.use(cors(corsOptions));
+
+// 🔥 TRATA PREFLIGHT (ESSENCIAL)
+app.options('*', cors(corsOptions));
 
 app.use(express.json());
 
+// DEBUGS
 app.use((req, _res, next) => {
   console.log("🔥 PASSOU AQUI:", req.method, req.url);
   next();
@@ -103,7 +106,5 @@ app.use('/api', reportsRoutes);
 
 const professionalMeRoutes = require('./routes/professional.me.routes');
 app.use('/api', professionalMeRoutes);
-
-
 
 module.exports = app;
