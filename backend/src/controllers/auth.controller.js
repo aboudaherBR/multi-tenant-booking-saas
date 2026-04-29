@@ -2,7 +2,9 @@ const { authenticate, authenticateWithCompany } = require('../services/auth.serv
 const { findProfessionalByUserId } = require('../database/professionals.repository');
 const { createCompany, findCompanyBySlug } = require('../database/companies.repository');
 const jwt = require('jsonwebtoken');
-const slugify = require('../utils/slugify');
+const baseSlug = slugify(salonName);
+const slug = await generateUniqueSlug(baseSlug);
+
 
 async function login(req, res, next) {
   try {
