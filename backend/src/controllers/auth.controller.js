@@ -75,9 +75,9 @@ async function login(req, res, next) {
 
 async function signup(req, res) {
   try {
-    const { salonName, name, phone, password } = req.body;
+    const { salonName, companyPhone, name, username, password } = req.body;
 
-    if (!salonName || !name || !phone || !password) {
+    if (!salonName || !companyPhone || !name || !username || !password) {
       return res.status(400).json({
         message: "Dados obrigatórios faltando"
       });
