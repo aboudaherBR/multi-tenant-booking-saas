@@ -32,8 +32,8 @@ const allowedOrigins = [
 // ✅ CONFIG CORS
 const corsOptions = {
   origin: function (origin, callback) {
-    console.log("🌍 CORS ORIGIN:", origin);
-
+    console.log("🌍 CORS ORIGIN REAL >>>", origin);
+    
     if (!origin) return callback(null, true);
 
     if (allowedOrigins.includes(origin)) {
