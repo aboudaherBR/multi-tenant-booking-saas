@@ -7,7 +7,13 @@ const app = express();
 
 console.log("🔥 APP INICIOU");
 
-// 🔴 LOG GLOBAL NO TOPO REAL
+// 🔥 MIDDLEWARE MAIS ALTO POSSÍVEL (DIAGNÓSTICO REAL)
+app.use((req, res, next) => {
+  console.log("🔥 PRIMEIRO MIDDLEWARE:", req.method, req.url);
+  next();
+});
+
+// 🔴 LOG GLOBAL
 app.use((req, res, next) => {
   console.log("🔥 GLOBAL TOP:", req.method, req.url);
   next();
@@ -23,12 +29,11 @@ const allowedOrigins = [
   "https://barber-shop-git-feature-signup-salon-aboudahers-projects.vercel.app"
 ];
 
-// ✅ CONFIG CORS COMPLETA
+// ✅ CONFIG CORS
 const corsOptions = {
   origin: function (origin, callback) {
     console.log("🌍 CORS ORIGIN:", origin);
 
-    // permite requests sem origin (postman, curl) filho da puta
     if (!origin) return callback(null, true);
 
     if (allowedOrigins.includes(origin)) {
@@ -41,12 +46,19 @@ const corsOptions = {
   credentials: true,
 };
 
-// 🔥 AQUI É CRÍTICO
+// 🔥 CORS PRIMEIRO
 app.use(cors(corsOptions));
 
-// 🔥 TRATA PREFLIGHT (ESSENCIAL)
+// 🔥 TRATAMENTO EXPLÍCITO DE PREFLIGHT (SEM QUEBRAR EXPRESS)
+app.use((req, res, next) => {
+  if (req.method === 'OPTIONS') {
+    console.log("⚡ INTERCEPTANDO OPTIONS:", req.url);
+    return res.sendStatus(204);
+  }
+  next();
+});
 
-
+// 🔥 BODY PARSER DEPOIS DO OPTIONS
 app.use(express.json());
 
 // DEBUGS
