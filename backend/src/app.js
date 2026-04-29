@@ -25,7 +25,8 @@ app.set('trust proxy', 1);
 const allowedOrigins = [
   "https://barber-shop-indol-three.vercel.app",
   "http://localhost:5173", 
-  "http://localhost:3000"  
+  "http://localhost:3000",
+  "https://barber-shop-git-feature-signup-salon-aboudahers-projects.vercel.app"
 ];
 
 app.use(cors({
