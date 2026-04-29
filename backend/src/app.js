@@ -28,7 +28,7 @@ const corsOptions = {
   origin: function (origin, callback) {
     console.log("🌍 CORS ORIGIN:", origin);
 
-    // permite requests sem origin (postman, curl)
+    // permite requests sem origin (postman, curl) filho da puta
     if (!origin) return callback(null, true);
 
     if (allowedOrigins.includes(origin)) {
