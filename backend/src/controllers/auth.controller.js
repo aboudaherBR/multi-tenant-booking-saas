@@ -35,9 +35,9 @@ async function login(req, res, next) {
 
     const professional = user.company_id
       ? await findProfessionalByUserId({
-          userId: user.id,
-          companyId: user.company_id
-        })
+        userId: user.id,
+        companyId: user.company_id
+      })
       : null;
 
     console.log('LOGIN DEBUG - PROFESSIONAL LOOKUP:', {
@@ -75,7 +75,18 @@ async function login(req, res, next) {
 
 async function signup(req, res) {
   try {
-    const { salonName, companyPhone, name, username, password } = req.body;
+    const {
+      salonName,
+      companyPhone,
+      name,
+      username,
+      password,
+      address_street,
+      address_number,
+      address_neighborhood,
+      address_city,
+      address_state
+    } = req.body;
 
     if (!salonName || !companyPhone || !name || !username || !password) {
       return res.status(400).json({
@@ -90,7 +101,15 @@ async function signup(req, res) {
 
     const companyData = {
       name: salonName,
-      slug: slug
+      slug: slug,
+      phone: companyPhone,
+      seller_name: "Sistema",
+
+      address_street,
+      address_number,
+      address_neighborhood,
+      address_city,
+      address_state
     };
 
     console.log("COMPANY DATA:", companyData);

@@ -1,13 +1,56 @@
 const pool = require('./db');
 
-async function createCompany({ name, slug }) {
+async function createCompany({
+  name,
+  slug,
+  phone,
+  seller_name,
+  address_street,
+  address_number,
+  address_neighborhood,
+  address_city,
+  address_state
+}) {
   const result = await pool.query(
     `
-      INSERT INTO companies (name, slug)
-      VALUES ($1, $2)
-      RETURNING id, name, slug, status, created_at, subscription_ends_at
+      INSERT INTO companies (
+        name,
+        slug,
+        phone,
+        seller_name,
+        address_street,
+        address_number,
+        address_neighborhood,
+        address_city,
+        address_state
+      )
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
+      RETURNING 
+        id,
+        name,
+        slug,
+        phone,
+        seller_name,
+        address_street,
+        address_number,
+        address_neighborhood,
+        address_city,
+        address_state,
+        status,
+        created_at,
+        subscription_ends_at
     `,
-    [name, slug]
+    [
+      name,
+      slug,
+      phone,
+      seller_name,
+      address_street,
+      address_number,
+      address_neighborhood,
+      address_city,
+      address_state
+    ]
   );
 
   return result.rows[0];
