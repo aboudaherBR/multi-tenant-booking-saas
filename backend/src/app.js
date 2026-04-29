@@ -45,7 +45,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 // 🔥 TRATA PREFLIGHT (ESSENCIAL)
-app.options('*', cors(corsOptions));
+
 
 app.use(express.json());
 
