@@ -44,8 +44,12 @@ app.use(cors(corsOptions));
 // 🔥 TRATAMENTO EXPLÍCITO DE PREFLIGHT (SEM QUEBRAR EXPRESS)
 app.use((req, res, next) => {
   if (req.method === 'OPTIONS') {
-    console.log("⚡ INTERCEPTANDO OPTIONS:", req.url);
-    // return res.sendStatus(204);
+    console.log("⚡ OPTIONS INTERCEPTADO");
+
+    // 🔥 LOG DOS HEADERS ANTES DE RESPONDER
+    console.log("HEADERS ANTES:", res.getHeaders());
+
+    return res.sendStatus(204);
   }
   next();
 });
