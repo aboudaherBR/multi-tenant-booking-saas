@@ -10,7 +10,7 @@ export class ApiError extends Error {
     this.response = response;
   }
 }
-// UHUUUUUUUUU
+// UHUU
 async function apiClient(endpoint, options = {}) {
   const token = localStorage.getItem('token');
 
