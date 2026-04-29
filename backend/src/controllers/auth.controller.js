@@ -3,7 +3,7 @@ const { findProfessionalByUserId } = require('../database/professionals.reposito
 const { createCompany, findCompanyBySlug } = require('../database/companies.repository');
 const jwt = require('jsonwebtoken');
 const baseSlug = slugify(salonName);
-const slug = await generateUniqueSlug(baseSlug);
+
 
 
 async function login(req, res, next) {
@@ -36,9 +36,9 @@ async function login(req, res, next) {
 
     const professional = user.company_id
       ? await findProfessionalByUserId({
-          userId: user.id,
-          companyId: user.company_id
-        })
+        userId: user.id,
+        companyId: user.company_id
+      })
       : null;
 
     console.log('LOGIN DEBUG - PROFESSIONAL LOOKUP:', {
@@ -84,12 +84,12 @@ async function signup(req, res) {
       });
     }
 
-    const slug = slugify(salonName);
+    const baseSlug = slugify(salonName);
+    const slug = await generateUniqueSlug(baseSlug);
 
-    console.log("SLUG GERADO:", slug);
 
-    const existingCompany = await findCompanyBySlug(slug);
-    console.log("SLUG EXISTE?", !!existingCompany);
+   
+    console.log("SLUG FINAL:", slug);
 
     const companyData = {
       name: salonName,
