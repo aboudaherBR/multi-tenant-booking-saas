@@ -16,7 +16,7 @@ app.use((req, _res, next) => {
   next();
 });
 
-// CORS
+// CORS CONFIG
 const corsOptions = {
   origin(origin, callback) {
     console.log(`[CORS] Origin: ${origin || "no-origin"}`);
@@ -32,8 +32,18 @@ const corsOptions = {
   credentials: true,
 };
 
+// 🔥 CORS PRIMEIRO
 app.use(cors(corsOptions));
 
+// 🔥 INTERCEPTA PREFLIGHT (ANTES DE TUDO)
+app.use((req, res, next) => {
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+  next();
+});
+
+// BODY PARSER
 app.use(express.json());
 
 // HEALTH CHECK
@@ -41,8 +51,7 @@ app.get("/", (_req, res) => {
   res.status(200).json({ status: "ok" });
 });
 
-/* ROTAS REAIS DO SEU PROJETO */
-
+/* ROTAS */
 app.use("/api", require("./routes/auth.routes"));
 app.use("/api", require("./routes/session.routes"));
 app.use("/api", require("./routes/availability.routes"));
