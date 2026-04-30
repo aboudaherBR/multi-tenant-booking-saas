@@ -47,20 +47,21 @@ function WizardContainer() {
                 }
             );
 
-            const data = await response.json();
+            const text = await response.text();
+
+            console.log("RESPONSE RAW:", text);
 
             if (!response.ok) {
-                throw new Error(data.message || "Erro no cadastro");
+                throw new Error(text);
             }
 
-            // salva token
-            localStorage.setItem("token", data.token);
+            const data = JSON.parse(text);
 
-            // redireciona
+            localStorage.setItem("token", data.token);
             window.location.href = "/";
 
         } catch (err) {
-            alert(err.message);
+            alert("ERRO REAL:\n\n" + err.message);
         }
     }
 
