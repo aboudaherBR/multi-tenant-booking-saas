@@ -20,8 +20,12 @@ async function findByUsername(username) {
   return result.rows[0] || null;
 }
 
-async function findByUsernameAndCompany(username, companyId) {
-  const result = await pool.query(
+async function findByUsernameAndCompany(
+  username,
+  companyId,
+  client = pool
+) {
+  const result = await client.query(
     `
       SELECT id,
              name,

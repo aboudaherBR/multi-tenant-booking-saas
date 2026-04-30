@@ -115,7 +115,11 @@ async function signup(req, res) {
 
     const company = await createCompany(companyData, client);
 
-    const existingUser = await findByUsernameAndCompany(username, company.id);
+    const existingUser = await findByUsernameAndCompany(
+      username,
+      company.id,
+      client
+    );
 
     if (existingUser) {
       await client.query('ROLLBACK');
