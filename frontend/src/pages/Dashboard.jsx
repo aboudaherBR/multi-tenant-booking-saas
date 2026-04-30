@@ -57,7 +57,7 @@ export default function Dashboard() {
 
                 <div className="card" style={{ padding: "20px" }}>
 
-                    
+
 
                     <h2 className="heading">Hoje</h2>
 
@@ -95,26 +95,28 @@ export default function Dashboard() {
 
                 <BookingLinkCard />
 
+                <div
+                    style={{
+                        position: "fixed",
+                        bottom: "70px", // acima do menu inferior
+                        left: 0,
+                        width: "100%",
+                        padding: "10px 16px",
+                        background: "transparent"
+                    }}
+                >
+                    <button
+                        className="button-primary"
+                        onClick={() => navigate('/reports')}
+                    >
+                        Ver relatórios
+                    </button>
+                </div>
+
             </div>
 
-            {/* 🔥 BOTÃO FIXO NO FUNDO (CORRETO) */}
-            <div
-                style={{
-                    position: "fixed",
-                    bottom: "70px", // acima do menu inferior
-                    left: 0,
-                    width: "100%",
-                    padding: "10px 16px",
-                    background: "transparent"
-                }}
-            >
-                <button
-                    className="button-primary"
-                    onClick={() => navigate('/reports')}
-                >
-                    Ver relatórios
-                </button>
-            </div>
+
+
 
         </div>
     );
