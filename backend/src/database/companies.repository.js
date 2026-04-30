@@ -1,17 +1,21 @@
 const pool = require('./db');
 
-async function createCompany({
-  name,
-  slug,
-  phone,
-  seller_name,
-  address_street,
-  address_number,
-  address_neighborhood,
-  address_city,
-  address_state
-}) {
-  const result = await pool.query(
+
+async function createCompany(
+  {
+    name,
+    slug,
+    phone,
+    seller_name,
+    address_street,
+    address_number,
+    address_neighborhood,
+    address_city,
+    address_state
+  },
+  client = pool
+) {
+  const result = await client.query(
     `
       INSERT INTO companies (
         name,

@@ -37,9 +37,9 @@ async function login(req, res, next) {
 
     const professional = user.company_id
       ? await findProfessionalByUserId({
-          userId: user.id,
-          companyId: user.company_id
-        })
+        userId: user.id,
+        companyId: user.company_id
+      })
       : null;
 
     const payload = {
@@ -70,7 +70,11 @@ async function login(req, res, next) {
 }
 
 async function signup(req, res) {
+  const client = await pool.connect();
+
   try {
+    await client.query('BEGIN');
+
     const {
       salonName,
       companyPhone,
@@ -85,18 +89,16 @@ async function signup(req, res) {
     } = req.body;
 
     if (!salonName || !companyPhone || !name || !username || !password) {
+      await client.query('ROLLBACK');
       return res.status(400).json({
         message: "Dados obrigatórios faltando"
       });
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
-    console.log("HASH GERADO:", passwordHash);
 
     const baseSlug = slugify(salonName);
     const slug = await generateUniqueSlug(baseSlug);
-
-    console.log("SLUG FINAL:", slug);
 
     const companyData = {
       name: salonName,
@@ -110,12 +112,12 @@ async function signup(req, res) {
       address_state
     };
 
-    const company = await createCompany(companyData);
-    console.log("COMPANY CRIADA:", company);
+    const company = await createCompany(companyData, client);
 
     const existingUser = await findByUsernameAndCompany(username, company.id);
 
     if (existingUser) {
+      await client.query('ROLLBACK');
       return res.status(400).json({
         message: "Username já existe neste salão"
       });
@@ -127,23 +129,16 @@ async function signup(req, res) {
       username,
       passwordHash,
       isCompanyAdmin: true
-    });
+    }, client);
 
-    console.log("USER CRIADO:", user);
-
-    // ✅ CORREÇÃO AQUI
     const professionalSlug = slugify(name);
-    console.log("PROFESSIONAL SLUG:", professionalSlug);
 
     const professional = await createProfessional({
       companyId: company.id,
       userId: user.id,
       slug: professionalSlug
-    });
+    }, client);
 
-    console.log("PROFESSIONAL CRIADO:", professional);
-
-    // ✅ AGORA FAZ SENTIDO SER TRUE
     const payload = {
       userId: user.id,
       name: name,
@@ -157,17 +152,24 @@ async function signup(req, res) {
       expiresIn: '8h'
     });
 
+    await client.query('COMMIT');
+
     return res.json({
       message: "Signup realizado com sucesso",
       token
     });
 
   } catch (error) {
+    await client.query('ROLLBACK');
+
     console.error("SIGNUP ERROR:", error.message);
 
     return res.status(500).json({
       message: "Erro ao criar conta"
     });
+
+  } finally {
+    client.release();
   }
 }
 

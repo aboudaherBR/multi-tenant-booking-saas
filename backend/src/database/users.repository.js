@@ -41,14 +41,17 @@ async function findByUsernameAndCompany(username, companyId) {
   return result.rows[0] || null;
 }
 
-async function createUser({
-  companyId,
-  name,
-  username,
-  passwordHash,
-  isCompanyAdmin
-}) {
-  const result = await pool.query(
+async function createUser(
+  {
+    companyId,
+    name,
+    username,
+    passwordHash,
+    isCompanyAdmin
+  },
+  client = pool
+) {
+  const result = await client.query(
     `
     INSERT INTO users (
       company_id,

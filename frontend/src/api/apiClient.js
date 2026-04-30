@@ -1,5 +1,4 @@
-const BASE_URL = "https://barbershop-backend-szdy.onrender.com/api";
-
+const BASE_URL = import.meta.env.VITE_API_URL;
 // ✅ NOVO: classe de erro estruturada (antes não existia ou não era usada corretamente)
 export class ApiError extends Error {
   constructor({ message, status, body, response }) {
@@ -10,7 +9,7 @@ export class ApiError extends Error {
     this.response = response;
   }
 }
-// UHUU
+
 async function apiClient(endpoint, options = {}) {
   const token = localStorage.getItem('token');
 

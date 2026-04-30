@@ -90,13 +90,16 @@ async function findActiveProfessionalsByCompanyId(companyId) {
   return result.rows;
 }
 
-async function createProfessional({
-  companyId,
-  userId,
-  slug
-}) {
+async function createProfessional(
+  {
+    companyId,
+    userId,
+    slug
+  },
+  client = pool
+) {
 
-  const result = await pool.query(
+  const result = await client.query(
     `
     INSERT INTO professionals (
       company_id,
