@@ -1,5 +1,6 @@
 import { useState } from "react";
 import StepSalon from "./StepSalon";
+import StepAddress from "./StepAddress";
 
 function WizardContainer() {
     const [step, setStep] = useState(1);
@@ -47,7 +48,12 @@ function WizardContainer() {
                         updateField={updateField}
                     />
                 )}
-                {step === 2 && <div>StepAddress</div>}
+                {step === 2 && (
+                    <StepAddress
+                        formData={formData}
+                        updateField={updateField}
+                    />
+                )}
                 {step === 3 && <div>StepAccount</div>}
             </div>
 
