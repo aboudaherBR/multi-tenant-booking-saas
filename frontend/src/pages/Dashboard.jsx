@@ -7,7 +7,8 @@ import BookingLinkCard from "../components/BookingLinkCard";
 
 export default function Dashboard() {
     const { user } = useAuth();
-    console.log("USER:", user);
+    console.log("STEP 1 - USER:", user);
+    console.log("STEP 1 - SLUG:", user?.companySlug);
 
     const [stats, setStats] = useState(null);
     const [loading, setLoading] = useState(true);
