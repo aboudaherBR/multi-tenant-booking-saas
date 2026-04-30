@@ -37,6 +37,16 @@ async function login(req, res, next) {
       user = await authenticate(username, password);
     }
 
+    // 🔥 DEBUG TEMPORÁRIO
+    if (user.company_id) {
+      const result = await pool.query(
+        'SELECT slug FROM companies WHERE id = $1',
+        [user.company_id]
+      );
+
+      console.log('DEBUG COMPANY SLUG:', result.rows[0]);
+    }
+
     const professional = user.company_id
       ? await findProfessionalByUserId({
         userId: user.id,
