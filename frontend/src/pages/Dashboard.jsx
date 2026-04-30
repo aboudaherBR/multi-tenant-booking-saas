@@ -56,8 +56,8 @@ export default function Dashboard() {
             <div className="container-main" style={{ marginTop: "-40px" }}>
 
                 <div className="card" style={{ padding: "20px" }}>
+
                     
-                    <BookingLinkCard />
 
                     <h2 className="heading">Hoje</h2>
 
@@ -92,6 +92,8 @@ export default function Dashboard() {
                     )}
 
                 </div>
+
+                <BookingLinkCard />
 
             </div>
 
