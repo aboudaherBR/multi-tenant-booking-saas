@@ -14,6 +14,9 @@ import ProfessionalDashboard from "./pages/ProfessionalDashboard";
 import ProfessionalLayout from "./layout/ProfessionalLayout";
 import ProfessionalSchedulePage from "./pages/ProfessionalSchedulePage";
 
+//Landing page e signup ficam fora do Routes principal, para não carregarem o layout admin/profissional
+import SignupPage from "./pages/SignupPage";
+
 function App() {
   const { isAuthenticated, user } = useAuth(); // 🔥 ADICIONADO
 
@@ -21,6 +24,7 @@ function App() {
     <Routes>
       {/* 🔥 ROTA PÚBLICA (TEM QUE VIR ANTES) */}
       <Route path="/book/:slug" element={<BookPublic />} />
+      <Route path="/signup" element={<SignupPage />} />
 
       {/* LOGIN */}
       <Route path="/:slug/login" element={<LoginPage />} />

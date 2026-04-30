@@ -1,5 +1,3 @@
-
-
 const express = require('express');
 const cors = require('cors');
 
@@ -9,7 +7,13 @@ const app = express();
 
 console.log("🔥 APP INICIOU");
 
-// 🔴 LOG GLOBAL NO TOPO REAL
+// 🔥 MIDDLEWARE MAIS ALTO POSSÍVEL (DIAGNÓSTICO REAL)
+app.use((req, res, next) => {
+  console.log("🔥 PRIMEIRO MIDDLEWARE:", req.method, req.url);
+  next();
+});
+
+// 🔴 LOG GLOBAL
 app.use((req, res, next) => {
   console.log("🔥 GLOBAL TOP:", req.method, req.url);
   next();
@@ -17,35 +21,43 @@ app.use((req, res, next) => {
 
 app.set('trust proxy', 1);
 
-
-
-
-
-
+// ✅ LISTA DE ORIGENS
 const allowedOrigins = [
   "https://barber-shop-indol-three.vercel.app",
-  "http://localhost:5173", 
-  "http://localhost:3000"  
+  "http://localhost:5173",
+  "http://localhost:3000",
+  "https://barber-shop-git-feature-signup-salon-aboudahers-projects.vercel.app"
 ];
 
-app.use(cors({
-  origin: (origin, callback) => {
-
-    if (!origin) return callback(null, true);
-
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    }
-
-    console.log("❌ CORS bloqueado:", origin);
-    return callback(new Error("Not allowed by CORS"));
+// ✅ CONFIG CORS
+const corsOptions = {
+  origin: function (origin, callback) {
+    console.log("🌍 CORS ORIGIN REAL >>>", origin);
+    return callback(null, true);
   },
   credentials: true,
-}));
+};
 
+// 🔥 CORS PRIMEIRO
+app.use(cors(corsOptions));
 
+// 🔥 TRATAMENTO EXPLÍCITO DE PREFLIGHT (SEM QUEBRAR EXPRESS)
+app.use((req, res, next) => {
+  if (req.method === 'OPTIONS') {
+    console.log("⚡ OPTIONS INTERCEPTADO");
+
+    // 🔥 LOG DOS HEADERS ANTES DE RESPONDER
+    console.log("HEADERS ANTES:", res.getHeaders());
+
+    return res.sendStatus(204);
+  }
+  next();
+});
+
+// 🔥 BODY PARSER DEPOIS DO OPTIONS
 app.use(express.json());
 
+// DEBUGS
 app.use((req, _res, next) => {
   console.log("🔥 PASSOU AQUI:", req.method, req.url);
   next();
@@ -102,7 +114,5 @@ app.use('/api', reportsRoutes);
 
 const professionalMeRoutes = require('./routes/professional.me.routes');
 app.use('/api', professionalMeRoutes);
-
-
 
 module.exports = app;

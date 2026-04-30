@@ -298,7 +298,7 @@ export default function BookPublic() {
                             src={logo}
                             alt="Agendare"
                             style={{
-                                width: "500px",
+                                width: "300px",
                                 marginBottom: "5px",
                                 opacity: stage === "welcome" ? 1 : 0,
                                 transform: stage === "welcome" ? "translateY(0)" : "translateY(10px)",
