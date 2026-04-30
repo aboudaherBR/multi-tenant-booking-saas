@@ -97,7 +97,6 @@ export default function Dashboard() {
 
                 <div
                     style={{
-                        position: "fixed",
                         bottom: "70px", // acima do menu inferior
                         left: 0,
                         width: "100%",
