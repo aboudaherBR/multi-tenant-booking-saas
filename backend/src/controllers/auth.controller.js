@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const slugify = require('../utils/slugify');
 const bcrypt = require('bcrypt');
 const { createUser, findByUsernameAndCompany } = require('../database/users.repository');
+const pool = require('../database/db');
 
 async function login(req, res, next) {
   try {
