@@ -7,6 +7,7 @@ import BookingLinkCard from "../components/BookingLinkCard";
 
 export default function Dashboard() {
     const { user } = useAuth();
+    console.log("USER:", user);
 
     const [stats, setStats] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -93,8 +94,7 @@ export default function Dashboard() {
 
                 </div>
 
-                <BookingLinkCard />
-
+                <BookingLinkCard companySlug={user?.companySlug} />
                 <div
                     style={{
                         bottom: "70px", // acima do menu inferior
