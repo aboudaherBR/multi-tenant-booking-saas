@@ -1,5 +1,5 @@
 import { useState } from "react";
-import WizardContainer from "../components/wizard/WizardContainer";
+import WizardContainer from "../components/WizardContainer";
 
 function SignupPage() {
     const [isWizardOpen, setIsWizardOpen] = useState(false);
