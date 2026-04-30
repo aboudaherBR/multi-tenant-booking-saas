@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import apiClient from "../api/apiClient";
 import { useAuth } from "../hooks/AuthContext";
+import BookingLinkCard from "../components/BookingLinkCard";
 
 
 export default function Dashboard() {
@@ -55,6 +56,8 @@ export default function Dashboard() {
             <div className="container-main" style={{ marginTop: "-40px" }}>
 
                 <div className="card" style={{ padding: "20px" }}>
+                    
+                    <BookingLinkCard />
 
                     <h2 className="heading">Hoje</h2>
 
