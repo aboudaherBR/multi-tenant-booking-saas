@@ -1,5 +1,5 @@
 import { useState } from "react";
-import StepSalon from "../StepSalon";
+import StepSalon from "./StepSalon";
 
 function WizardContainer() {
     const [step, setStep] = useState(1);
