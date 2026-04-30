@@ -20,6 +20,7 @@ async function login(req, res, next) {
 
     if (slug) {
       const company = await findCompanyBySlug(slug);
+      console.log("COMPANY LOGIN:", company);
 
       console.log('LOGIN DEBUG - COMPANY LOOKUP:', {
         slug,
