@@ -34,6 +34,36 @@ function WizardContainer() {
         }));
     }
 
+    async function handleSubmit() {
+        try {
+            const response = await fetch(
+                "https://barbershop-backend-szdy.onrender.com/api/signup",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(formData)
+                }
+            );
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || "Erro no cadastro");
+            }
+
+            // salva token
+            localStorage.setItem("token", data.token);
+
+            // redireciona
+            window.location.href = "/";
+
+        } catch (err) {
+            alert(err.message);
+        }
+    }
+
     return (
         <div style={styles.container}>
             {/* indicador */}
@@ -76,7 +106,7 @@ function WizardContainer() {
                         Próximo
                     </button>
                 ) : (
-                    <button>
+                    <button onClick={handleSubmit}>
                         Finalizar
                     </button>
                 )}
