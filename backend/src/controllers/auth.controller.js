@@ -9,7 +9,7 @@ const { createUser, findByUsernameAndCompany } = require('../database/users.repo
 const pool = require('../database/db');
 
 async function login(req, res, next) {
-  
+
   try {
     const { slug, username, password } = req.body;
 
@@ -158,11 +158,12 @@ async function signup(req, res) {
 
     const payload = {
       userId: user.id,
-      name: name,
-      companyId: company.id,
-      isCompanyAdmin: true,
-      isProfessional: true,
-      isSuperAdmin: false
+      name: user.name,
+      companyId: user.company_id,
+      companySlug: result.rows[0]?.slug, // 🔥 ADICIONA ISSO
+      isCompanyAdmin: user.is_company_admin,
+      isProfessional: Boolean(professional),
+      isSuperAdmin: user.company_id === null
     };
 
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
