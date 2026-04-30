@@ -1,13 +1,17 @@
-export default function BookingLinkCard() {
+export default function BookingLinkCard({ companySlug }) {
+  const baseUrl = window.location.origin;
+
+  const link = companySlug
+    ? `${baseUrl}/book/${companySlug}`
+    : "";
+
   return (
     <div className="card" style={{ padding: "20px", marginBottom: "16px" }}>
       <h3 className="heading">Compartilhe seu link</h3>
 
       <p className="text-muted">Seu link:</p>
-      <p>app.com/book/seu-slug</p>
 
-      <button className="button-primary">Copiar link</button>
-      <button className="button-secondary">Enviar no WhatsApp</button>
+      <p>{link || "Carregando..."}</p>
     </div>
   );
 }
