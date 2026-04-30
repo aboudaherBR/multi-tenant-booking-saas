@@ -9,6 +9,7 @@ const { createUser, findByUsernameAndCompany } = require('../database/users.repo
 const pool = require('../database/db');
 
 async function login(req, res, next) {
+  throw new Error("LOGIN TESTE");
   try {
     const { slug, username, password } = req.body;
 
