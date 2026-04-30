@@ -162,12 +162,14 @@ async function signup(req, res) {
   } catch (error) {
     await client.query('ROLLBACK');
 
-    console.error("SIGNUP ERROR:", error.message);
+    console.error("SIGNUP ERROR COMPLETO:");
+    console.error(error);
 
     return res.status(500).json({
-      message: "Erro ao criar conta"
+      message: error.message,
+      detail: error.detail,
+      stack: error.stack
     });
-
   } finally {
     client.release();
   }
