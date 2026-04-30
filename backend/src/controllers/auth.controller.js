@@ -21,12 +21,6 @@ async function login(req, res, next) {
     if (slug) {
       const company = await findCompanyBySlug(slug);
 
-      console.log('LOGIN DEBUG - COMPANY LOOKUP:', {
-        slug,
-        companyId: company?.id,
-        username
-      });
-
       if (!company) {
         throw new Error('Invalid credentials');
       }
@@ -36,17 +30,32 @@ async function login(req, res, next) {
       user = await authenticate(username, password);
     }
 
+    // 🔥 BUSCAR SLUG SEMPRE (fonte única)
+    let companySlug = null;
+
+    if (user.company_id) {
+      const result = await pool.query(
+        'SELECT slug FROM companies WHERE id = $1',
+        [user.company_id]
+      );
+
+      companySlug = result.rows[0]?.slug || null;
+
+      console.log('SLUG FINAL:', companySlug);
+    }
+
     const professional = user.company_id
       ? await findProfessionalByUserId({
-        userId: user.id,
-        companyId: user.company_id
-      })
+          userId: user.id,
+          companyId: user.company_id
+        })
       : null;
 
     const payload = {
       userId: user.id,
       name: user.name,
       companyId: user.company_id,
+      companySlug: companySlug, // ✅ AGORA CORRETO
       isCompanyAdmin: user.is_company_admin,
       isProfessional: Boolean(professional),
       isSuperAdmin: user.company_id === null
@@ -144,10 +153,12 @@ async function signup(req, res) {
       slug: professionalSlug
     }, client);
 
+    // 🔥 AQUI JÁ TEMOS O SLUG DIRETO
     const payload = {
       userId: user.id,
       name: name,
       companyId: company.id,
+      companySlug: company.slug, // ✅ CORRETO
       isCompanyAdmin: true,
       isProfessional: true,
       isSuperAdmin: false

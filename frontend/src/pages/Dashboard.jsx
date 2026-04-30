@@ -2,10 +2,13 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import apiClient from "../api/apiClient";
 import { useAuth } from "../hooks/AuthContext";
+import BookingLinkCard from "../components/BookingLinkCard";
 
 
 export default function Dashboard() {
     const { user } = useAuth();
+    console.log("STEP 1 - USER:", user);
+    console.log("STEP 1 - SLUG:", user?.companySlug);
 
     const [stats, setStats] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -56,6 +59,8 @@ export default function Dashboard() {
 
                 <div className="card" style={{ padding: "20px" }}>
 
+
+
                     <h2 className="heading">Hoje</h2>
 
                     <div className="mb-20">
@@ -90,26 +95,28 @@ export default function Dashboard() {
 
                 </div>
 
+                <BookingLinkCard companySlug={user?.companySlug} />
+                <div
+                    style={{
+                        bottom: "70px", // acima do menu inferior
+                        left: 0,
+                        width: "100%",
+                        padding: "10px 16px",
+                        background: "transparent"
+                    }}
+                >
+                    <button
+                        className="button-primary"
+                        onClick={() => navigate('/reports')}
+                    >
+                        Ver relatórios
+                    </button>
+                </div>
+
             </div>
 
-            {/* 🔥 BOTÃO FIXO NO FUNDO (CORRETO) */}
-            <div
-                style={{
-                    position: "fixed",
-                    bottom: "70px", // acima do menu inferior
-                    left: 0,
-                    width: "100%",
-                    padding: "10px 16px",
-                    background: "transparent"
-                }}
-            >
-                <button
-                    className="button-primary"
-                    onClick={() => navigate('/reports')}
-                >
-                    Ver relatórios
-                </button>
-            </div>
+
+
 
         </div>
     );

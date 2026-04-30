@@ -19,6 +19,7 @@ function AuthProvider({ children }) {
           name: payload.name,
           userId: payload.userId,
           companyId: payload.companyId,
+          companySlug: payload.companySlug, // 🔥 AQUI
           isCompanyAdmin: payload.isCompanyAdmin,
           isProfessional: payload.isProfessional
         });
@@ -63,6 +64,7 @@ function AuthProvider({ children }) {
           name: payload.name,
           userId: payload.userId,
           companyId: payload.companyId,
+          companySlug: payload.companySlug, 
           isCompanyAdmin: payload.isCompanyAdmin,
           isProfessional: payload.isProfessional
         });
@@ -71,6 +73,7 @@ function AuthProvider({ children }) {
           name: payload.name,
           userId: payload.userId,
           companyId: payload.companyId,
+          companySlug: payload.companySlug,
           isCompanyAdmin: payload.isCompanyAdmin,
           isProfessional: payload.isProfessional
         });
