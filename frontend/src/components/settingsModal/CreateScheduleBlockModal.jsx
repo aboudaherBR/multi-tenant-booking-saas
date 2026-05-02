@@ -36,6 +36,13 @@ export default function CreateScheduleBlockModal({
                 return;
             }
 
+            if (blockMode === "recurring") {
+                if (recurringStartTime >= recurringEndTime) {
+                    alert("Horário inicial deve ser menor que o final");
+                    return;
+                }
+            }
+
             if (recurringDays.length === 0) {
                 alert("Selecione pelo menos um dia da semana");
                 return;
