@@ -9,6 +9,8 @@ export default function CreateScheduleBlockModal({
   const [endDateTime, setEndDateTime] = useState("");
   const [blockType, setBlockType] = useState("global");
   const [selectedProfessionalId, setSelectedProfessionalId] = useState("");
+  const [isRecurring, setIsRecurring] = useState(false);
+  const [recurringDays, setRecurringDays] = useState([]);
 
   if (!isOpen) return null;
 
@@ -69,13 +71,7 @@ export default function CreateScheduleBlockModal({
             Tipo de bloqueio
           </h4>
 
-          <div
-            style={{
-              marginTop: "10px",
-              display: "flex",
-              gap: "12px"
-            }}
-          >
+          <div style={{ marginTop: "10px", display: "flex", gap: "12px" }}>
             <label style={{ display: "flex", alignItems: "center", gap: "6px" }}>
               <input
                 type="radio"
@@ -96,7 +92,7 @@ export default function CreateScheduleBlockModal({
           </div>
         </div>
 
-        {/* PROFISSIONAL (CONDICIONAL) */}
+        {/* PROFISSIONAL */}
         {blockType === "professional" && (
           <div style={{ marginTop: "16px" }}>
             <h4 className="heading" style={{ fontSize: "16px" }}>
@@ -117,6 +113,81 @@ export default function CreateScheduleBlockModal({
                 </option>
               ))}
             </select>
+          </div>
+        )}
+
+        {/* TIPO (RECORRÊNCIA) */}
+        <div style={{ marginTop: "16px" }}>
+          <h4 className="heading" style={{ fontSize: "16px" }}>
+            Tipo
+          </h4>
+
+          <div style={{ marginTop: "10px", display: "flex", gap: "12px" }}>
+            <label style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+              <input
+                type="radio"
+                checked={!isRecurring}
+                onChange={() => setIsRecurring(false)}
+              />
+              Uma vez
+            </label>
+
+            <label style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+              <input
+                type="radio"
+                checked={isRecurring}
+                onChange={() => setIsRecurring(true)}
+              />
+              Recorrente
+            </label>
+          </div>
+        </div>
+
+        {/* DIAS DA SEMANA */}
+        {isRecurring && (
+          <div style={{ marginTop: "16px" }}>
+            <h4 className="heading" style={{ fontSize: "16px" }}>
+              Dias da semana
+            </h4>
+
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: "8px",
+                marginTop: "10px"
+              }}
+            >
+              {[
+                { id: 0, label: "Dom" },
+                { id: 1, label: "Seg" },
+                { id: 2, label: "Ter" },
+                { id: 3, label: "Qua" },
+                { id: 4, label: "Qui" },
+                { id: 5, label: "Sex" },
+                { id: 6, label: "Sáb" }
+              ].map((day) => (
+                <label
+                  key={day.id}
+                  style={{ display: "flex", alignItems: "center", gap: "4px" }}
+                >
+                  <input
+                    type="checkbox"
+                    checked={recurringDays.includes(day.id)}
+                    onChange={() => {
+                      if (recurringDays.includes(day.id)) {
+                        setRecurringDays(
+                          recurringDays.filter((d) => d !== day.id)
+                        );
+                      } else {
+                        setRecurringDays([...recurringDays, day.id]);
+                      }
+                    }}
+                  />
+                  {day.label}
+                </label>
+              ))}
+            </div>
           </div>
         )}
 
