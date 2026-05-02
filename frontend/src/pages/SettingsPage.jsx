@@ -3,7 +3,7 @@ import { useState } from "react";
 import ProfessionalServicesModal from "../components/ProfessionalServicesModal";
 import apiClient from "../api/apiClient";
 import BusinessHoursModal from "../components/settingsModal/BusinessHoursModal";
-import ScheduleBlocksModal from "../components/modals/ScheduleBlocksModal";
+import ScheduleBlocksModal from "../components/settingsModal/ScheduleBlocksModal";
 
 
 
