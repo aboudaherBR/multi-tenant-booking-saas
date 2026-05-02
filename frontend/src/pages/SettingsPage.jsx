@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import ProfessionalServicesModal from "../components/ProfessionalServicesModal";
 import apiClient from "../api/apiClient";
+import BusinessHoursModal from "../components/modals/BusinessHoursModal";
 
 export default function SettingsPage() {
 
@@ -347,35 +348,62 @@ export default function SettingsPage() {
             <div className="container-main" style={{ marginTop: "-40px" }}>
 
                 {/* CARD AGENDA */}
-                <div className="card" style={{ padding: "20px", marginBottom: "16px" }}>
-                    <h2 className="heading">Agenda</h2>
+                <div className="container-main">
 
-                    <button
-                        className="button-secondary"
-                        onClick={openBusinessHoursModal}
-                    >
-                        Horário de funcionamento
-                    </button>
+                    {/* CARD AGENDA */}
+                    <div className="card" style={{ padding: "20px", marginBottom: "16px" }}>
+                        <h2 className="heading">Agenda</h2>
 
-                    <button
-                        className="button-secondary"
-                        onClick={async () => {
-                            setSelectedBlock(null);
-                            await loadScheduleBlocks();
-                            setShowScheduleBlocksModal(true);
-                        }}
-                    >
-                        Bloqueios de agenda
-                    </button>
-                    <button
-                        className="button-secondary"
-                        onClick={() => {
-                            console.log("Promoções do dia clicado");
-                        }}
-                    >
-                        Promoções do dia
-                    </button>
+                        <button
+                            className="button-secondary"
+                            onClick={openBusinessHoursModal}
+                        >
+                            Horário de funcionamento
+                        </button>
+
+                        <button
+                            className="button-secondary"
+                            onClick={async () => {
+                                setSelectedBlock(null);
+                                await loadScheduleBlocks();
+                                setShowScheduleBlocksModal(true);
+                            }}
+                        >
+                            Bloqueios de agenda
+                        </button>
+
+                        <button
+                            className="button-secondary"
+                            onClick={() => {
+                                console.log("Promoções do dia clicado");
+                            }}
+                        >
+                            Promoções do dia
+                        </button>
+                    </div>
+
+                    {/* 🔥 AQUI, FORA DO CARD */}
+                    <BusinessHoursModal
+                        isOpen={showBusinessHoursModal}
+                        onClose={() => setShowBusinessHoursModal(false)}
+
+                        businessHours={businessHours}
+                        weekdayNames={weekdayNames}
+                        setBusinessHours={setBusinessHours}
+
+                        lunchStart={lunchStart}
+                        lunchEnd={lunchEnd}
+                        setLunchStart={setLunchStart}
+                        setLunchEnd={setLunchEnd}
+
+                        bufferMinutes={bufferMinutes}
+                        setBufferMinutes={setBufferMinutes}
+
+                        saveBusinessHours={saveBusinessHours}
+                    />
+
                 </div>
+
 
                 {/* CARD SERVIÇOS */}
                 <div className="card" style={{ padding: "20px", marginBottom: "16px" }}>
