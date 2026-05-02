@@ -18,16 +18,12 @@ export default function CreateScheduleBlockModal({
     }
 
     function handleSave() {
-        const payload = {
-            start: startDateTime,
-            end: endDateTime,
-            type: blockType,
-            professionalId: blockType === "professional" ? selectedProfessionalId : null,
-            isRecurring,
-            days: isRecurring ? recurringDays : []
-        };
+        console.log("HANDLE SAVE FOI CHAMADO");
 
-        console.log("PAYLOAD:", payload);
+        if (!startDateTime || !endDateTime) {
+            alert("Preencha início e fim do bloqueio");
+            return;
+        }
     }
 
     if (!isOpen) return null;
