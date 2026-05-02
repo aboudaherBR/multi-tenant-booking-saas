@@ -7,6 +7,7 @@ export default function CreateScheduleBlockModal({
 }) {
     const [startDateTime, setStartDateTime] = useState("");
     const [endDateTime, setEndDateTime] = useState("");
+    const [blockType, setBlockType] = useState("global");
     if (!isOpen) return null;
 
 
@@ -55,6 +56,33 @@ export default function CreateScheduleBlockModal({
                             value={endDateTime}
                             onChange={(e) => setEndDateTime(e.target.value)}
                         />
+                    </div>
+                    <div style={{ marginTop: "16px" }}>
+                        <h4 className="heading" style={{ fontSize: "16px" }}>
+                            Tipo de bloqueio
+                        </h4>
+
+                        <div style={{ marginTop: "10px", display: "flex", gap: "12px" }}>
+
+                            <label style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                                <input
+                                    type="radio"
+                                    checked={blockType === "global"}
+                                    onChange={() => setBlockType("global")}
+                                />
+                                Global
+                            </label>
+
+                            <label style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                                <input
+                                    type="radio"
+                                    checked={blockType === "professional"}
+                                    onChange={() => setBlockType("professional")}
+                                />
+                                Por profissional
+                            </label>
+
+                        </div>
                     </div>
                 </div>
 
