@@ -86,7 +86,8 @@ export default function CreateScheduleBlockModal({
                         style={{
                             display: "flex",
                             gap: "10px",
-                            marginTop: "10px"
+                            marginTop: "10px",
+                            flexDirection: "column"
                         }}
                     >
                         <input
