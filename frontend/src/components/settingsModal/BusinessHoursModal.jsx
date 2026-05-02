@@ -66,6 +66,7 @@ export default function BusinessHoursModal({
             >
               <input
                 type="time"
+                className="input-field"
                 value={day.start_time.slice(0, 5)}
                 disabled={!day.is_active}
                 onChange={(e) => {
@@ -82,6 +83,7 @@ export default function BusinessHoursModal({
 
               <input
                 type="time"
+                className="input-field"
                 value={day.end_time.slice(0, 5)}
                 disabled={!day.is_active}
                 onChange={(e) => {
@@ -104,6 +106,7 @@ export default function BusinessHoursModal({
           <div style={{ display: "flex", gap: "8px", marginTop: "5px" }}>
             <input
               type="time"
+              className="input-field"
               value={lunchStart}
               onChange={(e) => setLunchStart(e.target.value)}
             />
@@ -112,6 +115,7 @@ export default function BusinessHoursModal({
 
             <input
               type="time"
+              className="input-field"
               value={lunchEnd}
               onChange={(e) => setLunchEnd(e.target.value)}
             />
