@@ -188,12 +188,12 @@ export default function CreateScheduleBlockModal({
                                 </label>
                             ))}
 
-                            {/* 🔥 BOTÃO SALVAR */}
-                            <div style={{ marginTop: "20px", display: "flex", justifyContent: "flex-end" }}>
-                                <button className="button-primary">
-                                    Salvar
-                                </button>
-                            </div>
+                        </div>
+                        {/* 🔥 BOTÃO SALVAR */}
+                        <div style={{ marginTop: "20px", display: "flex", justifyContent: "flex-end" }}>
+                            <button className="button-primary">
+                                Salvar
+                            </button>
                         </div>
                     </div>
                 )}
