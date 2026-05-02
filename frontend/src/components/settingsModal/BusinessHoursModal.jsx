@@ -149,8 +149,8 @@ export default function BusinessHoursModal({
                     <div style={{ marginTop: "5px" }}>
                         <input
                             type="number"
-                            min="0"
-                            max="60"
+                            className="input-field"
+                            style={{ width: "80px", textAlign: "right" }}
                             value={bufferMinutes}
                             onChange={(e) => setBufferMinutes(e.target.value)}
                         />
