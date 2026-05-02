@@ -418,6 +418,7 @@ export default function SettingsPage() {
                     <CreateScheduleBlockModal
                         isOpen={showCreateBlockModal}
                         onClose={() => setShowCreateBlockModal(false)}
+                        professionals={professionals}
                     />
 
                 </div>
