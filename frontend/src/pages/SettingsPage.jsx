@@ -4,6 +4,7 @@ import ProfessionalServicesModal from "../components/ProfessionalServicesModal";
 import apiClient from "../api/apiClient";
 import BusinessHoursModal from "../components/settingsModal/BusinessHoursModal";
 import ScheduleBlocksModal from "../components/settingsModal/ScheduleBlocksModal";
+import CreateScheduleBlockModal from "../components/settingsModal/CreateScheduleBlockModal";
 
 
 
@@ -68,7 +69,7 @@ export default function SettingsPage() {
     const [lunchEnd, setLunchEnd] = useState("");
 
     const [blockType, setBlockType] = useState("global");
-    console.log("blockType:", blockType);
+    const [showCreateBlockModal, setShowCreateBlockModal] = useState(false);
 
 
 
@@ -411,6 +412,10 @@ export default function SettingsPage() {
                         isOpen={showScheduleBlocksModal}
                         onClose={() => setShowScheduleBlocksModal(false)}
                         scheduleBlocks={scheduleBlocks}
+                    />
+                    <CreateScheduleBlockModal
+                        isOpen={showCreateBlockModal}
+                        onClose={() => setShowCreateBlockModal(false)}
                     />
 
                 </div>
