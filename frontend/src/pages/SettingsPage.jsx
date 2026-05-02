@@ -3,6 +3,9 @@ import { useState } from "react";
 import ProfessionalServicesModal from "../components/ProfessionalServicesModal";
 import apiClient from "../api/apiClient";
 import BusinessHoursModal from "../components/settingsModal/BusinessHoursModal";
+import ScheduleBlocksModal from "../components/modals/ScheduleBlocksModal";
+
+
 
 export default function SettingsPage() {
 
@@ -403,6 +406,10 @@ export default function SettingsPage() {
                         setBufferMinutes={setBufferMinutes}
 
                         saveBusinessHours={saveBusinessHours}
+                    />
+                    <ScheduleBlocksModal
+                        isOpen={showScheduleBlocksModal}
+                        onClose={() => setShowScheduleBlocksModal(false)}
                     />
 
                 </div>
