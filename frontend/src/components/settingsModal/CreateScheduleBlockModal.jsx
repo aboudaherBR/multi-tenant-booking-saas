@@ -12,10 +12,7 @@ export default function CreateScheduleBlockModal({
     const [isRecurring, setIsRecurring] = useState(false);
     const [recurringDays, setRecurringDays] = useState([]);
 
-    if (!startDateTime || !endDateTime) {
-        alert("Preencha início e fim do bloqueio");
-        return;
-    }
+    
 
     function handleSave() {
         console.log("HANDLE SAVE FOI CHAMADO");
