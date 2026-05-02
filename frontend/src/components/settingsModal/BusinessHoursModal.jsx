@@ -16,7 +16,7 @@ export default function BusinessHoursModal({
 
     return (
         <div className="modal-backdrop">
-            <div className="modal-content">
+            <div className="modal-content modal-content--scrollable">
 
                 <div className="modal-header">
                     <h3 className="heading">Horário de funcionamento</h3>

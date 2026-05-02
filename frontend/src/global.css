@@ -339,6 +339,11 @@ select {
   text-align: center;
 }
 
+.modal-content--scrollable {
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
 
 /* ========================================
    DESIGN SYSTEM - STATES
