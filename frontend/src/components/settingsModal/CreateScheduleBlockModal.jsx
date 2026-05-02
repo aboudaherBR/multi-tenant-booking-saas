@@ -195,7 +195,10 @@ export default function CreateScheduleBlockModal({
                 <div style={{ marginTop: "20px", display: "flex", justifyContent: "flex-end" }}>
                     {/* 🔥 BOTÃO SALVAR */}
                     <div style={{ marginTop: "20px", display: "flex", justifyContent: "flex-end" }}>
-                        <button className="button-primary">
+                        <button
+                            className="button-primary"
+                            onClick={() => console.log("CLICOU SALVAR")}
+                        >
                             Salvar
                         </button>
                     </div>
