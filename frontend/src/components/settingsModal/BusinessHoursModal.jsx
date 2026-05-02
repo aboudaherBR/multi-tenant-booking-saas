@@ -103,12 +103,13 @@ export default function BusinessHoursModal({
                 <div style={{ marginTop: "15px" }}>
                     <strong>Horário de almoço</strong>
 
+                    {/* LINHA DOS INPUTS */}
                     <div
                         style={{
                             display: "flex",
                             alignItems: "center",
                             gap: "8px",
-                            marginTop: "8px"
+                            marginTop: "5px"
                         }}
                     >
                         <input
@@ -118,7 +119,7 @@ export default function BusinessHoursModal({
                             onChange={(e) => setLunchStart(e.target.value)}
                         />
 
-                        <span>até</span>
+                        <span className="text-muted">até</span>
 
                         <input
                             type="time"
@@ -126,17 +127,19 @@ export default function BusinessHoursModal({
                             value={lunchEnd}
                             onChange={(e) => setLunchEnd(e.target.value)}
                         />
-
-                        <button
-                            className="button-secondary"
-                            onClick={() => {
-                                setLunchStart("");
-                                setLunchEnd("");
-                            }}
-                        >
-                            Remover
-                        </button>
                     </div>
+
+                    {/* BOTÃO EMBAIXO */}
+                    <button
+                        className="button-secondary"
+                        style={{ marginTop: "8px" }}
+                        onClick={() => {
+                            setLunchStart("");
+                            setLunchEnd("");
+                        }}
+                    >
+                        Remover horário de almoço
+                    </button>
                 </div>
 
                 {/* BUFFER */}
