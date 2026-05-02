@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import ProfessionalServicesModal from "../components/ProfessionalServicesModal";
 import apiClient from "../api/apiClient";
-import BusinessHoursModal from "../components/modals/BusinessHoursModal";
+import BusinessHoursModal from "../components/settingsModal/BusinessHoursModal";
 
 export default function SettingsPage() {
 
