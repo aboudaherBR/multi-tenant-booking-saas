@@ -12,6 +12,19 @@ export default function CreateScheduleBlockModal({
     const [isRecurring, setIsRecurring] = useState(false);
     const [recurringDays, setRecurringDays] = useState([]);
 
+    function handleSave() {
+        const payload = {
+            start: startDateTime,
+            end: endDateTime,
+            type: blockType,
+            professionalId: blockType === "professional" ? selectedProfessionalId : null,
+            isRecurring,
+            days: isRecurring ? recurringDays : []
+        };
+
+        console.log("PAYLOAD:", payload);
+    }
+
     if (!isOpen) return null;
 
     return (
@@ -197,7 +210,7 @@ export default function CreateScheduleBlockModal({
                     <div style={{ marginTop: "20px", display: "flex", justifyContent: "flex-end" }}>
                         <button
                             className="button-primary"
-                            onClick={() => console.log("CLICOU SALVAR")}
+                            onClick={handleSave}
                         >
                             Salvar
                         </button>
