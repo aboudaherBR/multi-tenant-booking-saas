@@ -64,6 +64,9 @@ export default function SettingsPage() {
     const [lunchStart, setLunchStart] = useState("");
     const [lunchEnd, setLunchEnd] = useState("");
 
+    const [blockType, setBlockType] = useState("global");
+    console.log("blockType:", blockType);
+
 
 
     async function loadBusinessHours() {
