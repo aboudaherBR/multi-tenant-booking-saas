@@ -11,8 +11,9 @@ export default function CreateScheduleBlockModal({
     const [selectedProfessionalId, setSelectedProfessionalId] = useState("");
     const [isRecurring, setIsRecurring] = useState(false);
     const [recurringDays, setRecurringDays] = useState([]);
+    const [blockMode, setBlockMode] = useState("single");
 
-    
+
 
     function handleSave() {
         console.log("HANDLE SAVE FOI CHAMADO");
@@ -45,6 +46,34 @@ export default function CreateScheduleBlockModal({
                 <p className="text-muted">
                     Aqui você criará um novo bloqueio.
                 </p>
+
+                <div style={{ marginTop: "16px" }}>
+                    <h4 className="heading" style={{ fontSize: "16px" }}>
+                        Tipo de bloqueio
+                    </h4>
+
+                    <div style={{ marginTop: "10px", display: "flex", gap: "12px" }}>
+
+                        <label style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                            <input
+                                type="radio"
+                                checked={blockMode === "single"}
+                                onChange={() => setBlockMode("single")}
+                            />
+                            Pontual
+                        </label>
+
+                        <label style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                            <input
+                                type="radio"
+                                checked={blockMode === "recurring"}
+                                onChange={() => setBlockMode("recurring")}
+                            />
+                            Recorrente
+                        </label>
+
+                    </div>
+                </div>
 
                 {/* PERÍODO */}
                 <div style={{ marginTop: "16px" }}>
