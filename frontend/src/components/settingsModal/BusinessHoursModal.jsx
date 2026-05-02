@@ -128,12 +128,19 @@ export default function BusinessHoursModal({
                     </div>
                 </div>
 
-                <button onClick={saveBusinessHours}>
+                <button
+                    className="button-primary"
+                    style={{ marginTop: "10px" }}
+                    onClick={saveBusinessHours}
+                >
                     Salvar
                 </button>
 
-                <button onClick={onClose}>
-                    Fechar
+                <button
+                    className="button-secondary"
+                    onClick={onClose}
+                >
+                    Cancelar
                 </button>
             </div>
         </div>
