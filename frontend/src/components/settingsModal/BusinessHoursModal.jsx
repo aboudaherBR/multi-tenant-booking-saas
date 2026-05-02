@@ -58,18 +58,7 @@ export default function BusinessHoursModal({
 
                         <div style={{ display: "flex", gap: "8px" }}>
 
-                            <input
-                                type="checkbox"
-                                checked={day.is_active}
-                                onChange={(e) => {
-                                    const updated = businessHours.map(d =>
-                                        d.weekday === day.weekday
-                                            ? { ...d, is_active: e.target.checked }
-                                            : d
-                                    );
-                                    setBusinessHours(updated);
-                                }}
-                            />
+                           
 
                             <input
                                 type="time"
