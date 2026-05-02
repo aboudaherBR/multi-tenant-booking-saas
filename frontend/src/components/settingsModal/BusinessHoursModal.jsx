@@ -30,8 +30,31 @@ export default function BusinessHoursModal({
                 </div>
 
                 {businessHours.map(day => (
-                    <div key={day.weekday} style={{ marginBottom: "10px" }}>
-                        <strong>{weekdayNames[day.weekday]}</strong>
+                    <div
+                        key={day.weekday}
+                        style={{
+                            marginBottom: "12px",
+                            padding: "10px",
+                            border: "1px solid var(--color-border)",
+                            borderRadius: "var(--radius)"
+                        }}
+                    >
+                        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                            <input
+                                type="checkbox"
+                                checked={day.is_active}
+                                onChange={(e) => {
+                                    const updated = businessHours.map(d =>
+                                        d.weekday === day.weekday
+                                            ? { ...d, is_active: e.target.checked }
+                                            : d
+                                    );
+                                    setBusinessHours(updated);
+                                }}
+                            />
+
+                            <strong>{weekdayNames[day.weekday]}</strong>
+                        </div>
 
                         <div style={{ display: "flex", gap: "8px" }}>
 
