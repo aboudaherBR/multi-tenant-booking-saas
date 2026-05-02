@@ -70,6 +70,7 @@ export default function SettingsPage() {
 
     const [blockType, setBlockType] = useState("global");
     const [showCreateBlockModal, setShowCreateBlockModal] = useState(false);
+    console.log("showCreateBlockModal:", showCreateBlockModal);
 
 
 
