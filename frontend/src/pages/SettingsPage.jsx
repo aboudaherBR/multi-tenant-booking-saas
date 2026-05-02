@@ -367,6 +367,14 @@ export default function SettingsPage() {
                     >
                         Bloqueios de agenda
                     </button>
+                    <button
+                        className="button-secondary"
+                        onClick={() => {
+                            console.log("Promoções do dia clicado");
+                        }}
+                    >
+                        Promoções do dia
+                    </button>
                 </div>
 
                 {/* CARD SERVIÇOS */}
