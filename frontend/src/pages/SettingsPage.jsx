@@ -413,6 +413,7 @@ export default function SettingsPage() {
                         isOpen={showScheduleBlocksModal}
                         onClose={() => setShowScheduleBlocksModal(false)}
                         scheduleBlocks={scheduleBlocks}
+                        onCreate={() => setShowCreateBlockModal(true)}
                     />
                     <CreateScheduleBlockModal
                         isOpen={showCreateBlockModal}

@@ -1,7 +1,8 @@
 export default function ScheduleBlocksModal({
     isOpen,
     onClose,
-    scheduleBlocks
+    scheduleBlocks,
+    onCreate
 }) {
     if (!isOpen) return null;
 
