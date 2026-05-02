@@ -12,6 +12,8 @@ export default function CreateScheduleBlockModal({
     const [isRecurring, setIsRecurring] = useState(false);
     const [recurringDays, setRecurringDays] = useState([]);
     const [blockMode, setBlockMode] = useState("single");
+    const [validFrom, setValidFrom] = useState("");
+    const [validTo, setValidTo] = useState("");
 
 
 
@@ -72,6 +74,34 @@ export default function CreateScheduleBlockModal({
                             Recorrente
                         </label>
 
+                    </div>
+                </div>
+
+                <div style={{ marginTop: "16px" }}>
+                    <h4 className="heading" style={{ fontSize: "16px" }}>
+                        Validade (opcional)
+                    </h4>
+
+                    <div
+                        style={{
+                            display: "flex",
+                            gap: "10px",
+                            marginTop: "10px"
+                        }}
+                    >
+                        <input
+                            type="date"
+                            className="input-field"
+                            value={validFrom}
+                            onChange={(e) => setValidFrom(e.target.value)}
+                        />
+
+                        <input
+                            type="date"
+                            className="input-field"
+                            value={validTo}
+                            onChange={(e) => setValidTo(e.target.value)}
+                        />
                     </div>
                 </div>
 
