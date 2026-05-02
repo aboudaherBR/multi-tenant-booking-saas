@@ -29,7 +29,8 @@ export default function ScheduleBlocksModal({
                     className="button-primary"
                     style={{ marginTop: "10px" }}
                     onClick={() => {
-                        console.log("NOVO BLOQUEIO");
+                        onClose();
+                        onCreate();
                     }}
                 >
                     Novo bloqueio
