@@ -7,16 +7,37 @@ async function findScheduleBlocksByProfessionalAndDate({
 }) {
   const result = await pool.query(
     `
-      SELECT id, start_time, end_time
+      SELECT 
+        id,
+        mode,
+        start_date,
+        end_date,
+        start_time,
+        end_time,
+        recurring_days,
+        valid_from,
+        valid_to
       FROM schedule_blocks
       WHERE company_id = $1
-      AND $2 BETWEEN start_date AND end_date
       AND (
         professional_id IS NULL
-        OR professional_id = $3
+        OR professional_id = $2
+      )
+      AND (
+        (
+          mode = 'single'
+          AND $3::date BETWEEN start_date AND end_date
+        )
+        OR
+        (
+          mode = 'recurring'
+          AND EXTRACT(DOW FROM $3::date)::int = ANY(recurring_days)
+          AND (valid_from IS NULL OR $3::date >= valid_from)
+          AND (valid_to IS NULL OR $3::date <= valid_to)
+        )
       )
     `,
-    [companyId, date, professionalId]
+    [companyId, professionalId, date]
   );
 
   return result.rows;
@@ -174,11 +195,62 @@ async function hasScheduleBlockConflict({
   return result.rows.length > 0;
 }
 
+async function findApplicableScheduleBlocksForDate({
+  companyId,
+  professionalId,
+  date
+}) {
+  console.log("PARAMS:", {
+    companyId,
+    professionalId,
+    date,
+    dateType: typeof date
+  });
+
+  const result = await pool.query(
+    `
+      SELECT 
+        id,
+        mode,
+        start_date,
+        end_date,
+        start_time,
+        end_time,
+        recurring_days,
+        valid_from,
+        valid_to
+      FROM schedule_blocks
+      WHERE company_id = $1
+      AND (
+        professional_id IS NULL
+        OR professional_id = $2
+      )
+      AND (
+        (
+          mode = 'single'
+          AND $3::date BETWEEN start_date AND end_date
+        )
+        OR
+        (
+          mode = 'recurring'
+          AND EXTRACT(DOW FROM $3::date)::int = ANY(recurring_days)
+          AND (valid_from IS NULL OR $3::date >= valid_from)
+          AND (valid_to IS NULL OR $3::date <= valid_to)
+        )
+      )
+    `,
+    [companyId, professionalId, date]
+  );
+
+  return result.rows;
+}
+
 module.exports = {
   findScheduleBlocksByProfessionalAndDate,
   createScheduleBlock,
   findScheduleBlocksByCompany,
   deleteScheduleBlock,
   updateScheduleBlock,
-  hasScheduleBlockConflict
+  hasScheduleBlockConflict,
+  findApplicableScheduleBlocksForDate
 };

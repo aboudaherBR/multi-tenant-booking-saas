@@ -47,9 +47,9 @@ async function getAvailableSlots({
   const lunchEnd = company.lunch_end_time;
 
   console.log("LUNCH CONFIG:", {
-  lunchStart,
-  lunchEnd
-});
+    lunchStart,
+    lunchEnd
+  });
 
   const baseSlots = generateBaseSlots({
     startTime: businessHours.start_time,
@@ -76,6 +76,15 @@ async function getAvailableSlots({
       professionalId,
       date
     });
+
+  const newBlocks = await findApplicableScheduleBlocksForDate({
+    companyId,
+    professionalId,
+    date
+  });
+
+  console.log("OLD BLOCKS:", scheduleBlocks);
+  console.log("NEW BLOCKS:", newBlocks);
 
   const hasFullDayBlock = scheduleBlocks.some(
     block => !block.start_time && !block.end_time
