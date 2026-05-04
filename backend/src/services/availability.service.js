@@ -28,7 +28,7 @@ async function getAvailableSlots({
   date
 }) {
 
-  console.log("AVAILABILITY SERVICE EXECUTANDO");
+  
 
   const weekday = getWeekdayFromDate(date);
 
@@ -78,13 +78,6 @@ async function getAvailableSlots({
     });
 
   // 🔍 DEBUG REAL
-  console.log("BLOCK RAW:", scheduleBlocks.map(b => ({
-    id: b.id,
-    start_time: b.start_time,
-    end_time: b.end_time,
-    type_start: typeof b.start_time,
-    type_end: typeof b.end_time
-  })));
 
   const hasFullDayBlock = scheduleBlocks.some(
     block => !block.start_time && !block.end_time
