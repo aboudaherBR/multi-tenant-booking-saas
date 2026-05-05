@@ -32,7 +32,7 @@ async function getAvailableSlots({
   date
 }) {
 
-  
+
 
   const weekday = getWeekdayFromDate(date);
 
@@ -74,6 +74,8 @@ async function getAvailableSlots({
       date
     });
 
+  console.log("CHEGOU NA FUNÇÃO");
+
   const scheduleBlocks =
     await findScheduleBlocksByProfessionalAndDate({
       companyId,
@@ -81,7 +83,8 @@ async function getAvailableSlots({
       date
     });
 
-  console.log("BLOCKS DEBUG:", scheduleBlocks); 
+  console.log("BLOCKS DEBUG RAW:", scheduleBlocks);
+  console.log("BLOCKS DEBUG JSON:", JSON.stringify(scheduleBlocks, null, 2));
 
   const hasFullDayBlock = scheduleBlocks.some(
     block => isFullDayBlock(block)
