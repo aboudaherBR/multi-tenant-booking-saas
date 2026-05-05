@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function CreateScheduleBlockModal({
     isOpen,
@@ -19,6 +19,16 @@ export default function CreateScheduleBlockModal({
     const [recurringStartTime, setRecurringStartTime] = useState("");
     const [recurringEndTime, setRecurringEndTime] = useState("");
     const [timeScope, setTimeScope] = useState("time_range");
+
+    useEffect(() => {
+        if (timeScope === "full_day") {
+            setRecurringStartTime("");
+            setRecurringEndTime("");
+            setEndDateTime("");
+        }
+    }, [timeScope]);
+
+
 
     function handleSave() {
         console.log("HANDLE SAVE FOI CHAMADO");
