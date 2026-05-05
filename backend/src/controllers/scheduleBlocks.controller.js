@@ -144,7 +144,7 @@ async function create(req, res, next) {
       startTime: startTime || null,
       endTime: endTime || null,
       reason: reason || null,
-      time_scope: time_scope 
+      time_scope: time_scope
     });
 
     if (existingAppointments.length > 0) {
