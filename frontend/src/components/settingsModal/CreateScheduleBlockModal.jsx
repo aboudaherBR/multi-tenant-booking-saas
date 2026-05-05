@@ -190,6 +190,7 @@ export default function CreateScheduleBlockModal({
                     </div>
                 </div>
 
+
                 {/* CONTEÚDO - PONTUAL */}
                 {blockMode === "single" && (
                     <div style={{ marginTop: "16px" }}>
@@ -199,7 +200,7 @@ export default function CreateScheduleBlockModal({
 
                         <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginTop: "10px" }}>
                             <input
-                                type="datetime-local"
+                                type={timeScope === "full_day" ? "date" : "datetime-local"}
                                 className="input-field"
                                 value={startDateTime}
                                 onChange={(e) => setStartDateTime(e.target.value)}
