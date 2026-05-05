@@ -20,6 +20,10 @@ function roundUpToNextInterval(currentMinutes, interval) {
 function isOverlapping(startA, endA, startB, endB) {
   return startA < endB && endA > startB;
 }
+// 🔴 REGRA CENTRALIZADA PARA BLOCO DE DIA INTEIRO
+function isFullDayBlock(block) {
+  return !block.start_time && !block.end_time;
+}
 
 async function getAvailableSlots({
   companyId,
@@ -80,7 +84,7 @@ async function getAvailableSlots({
   // 🔍 DEBUG REAL
 
   const hasFullDayBlock = scheduleBlocks.some(
-    block => !block.start_time && !block.end_time
+    block => isFullDayBlock(block)
   );
 
   if (hasFullDayBlock) return [];
@@ -100,7 +104,7 @@ async function getAvailableSlots({
 
     // blocks
     for (const block of scheduleBlocks) {
-      if (!block.start_time || !block.end_time) continue;
+      if (!isTimeRangeBlock(block)) continue;
 
       const blockStart = timeToMinutes(block.start_time);
       const blockEnd = timeToMinutes(block.end_time);
@@ -186,6 +190,9 @@ async function getAvailableSlots({
   return optimizedSlots;
 }
 
+
+
 module.exports = {
-  getAvailableSlots
+  getAvailableSlots,
+  isFullDayBlock
 };
