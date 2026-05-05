@@ -16,7 +16,8 @@ async function findScheduleBlocksByProfessionalAndDate({
         end_time,
         recurring_days,
         valid_from,
-        valid_to
+        valid_to,
+        time_scope
       FROM schedule_blocks
       WHERE company_id = $1
       AND (
