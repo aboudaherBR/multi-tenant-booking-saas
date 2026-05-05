@@ -69,6 +69,8 @@ export default function CreateScheduleBlockModal({
         const payload = {
             mode: blockMode,
 
+            time_scope: timeScope,
+
             valid_from: validFrom || null,
             valid_to: validTo || null,
 
