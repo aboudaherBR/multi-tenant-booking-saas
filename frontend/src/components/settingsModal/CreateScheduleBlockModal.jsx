@@ -172,7 +172,7 @@ export default function CreateScheduleBlockModal({
                 {blockMode === "single" && (
                     <div style={{ marginTop: "16px" }}>
                         <h4 className="heading" style={{ fontSize: "16px" }}>
-                            Data e hora do bloqueio
+                            Data do bloqueio
                         </h4>
 
                         <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginTop: "10px" }}>
@@ -183,12 +183,14 @@ export default function CreateScheduleBlockModal({
                                 onChange={(e) => setStartDateTime(e.target.value)}
                             />
 
-                            <input
-                                type="datetime-local"
-                                className="input-field"
-                                value={endDateTime}
-                                onChange={(e) => setEndDateTime(e.target.value)}
-                            />
+                            {timeScope === "time_range" && (
+                                <input
+                                    type="datetime-local"
+                                    className="input-field"
+                                    value={endDateTime}
+                                    onChange={(e) => setEndDateTime(e.target.value)}
+                                />
+                            )}
                         </div>
                     </div>
                 )}
