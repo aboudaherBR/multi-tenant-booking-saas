@@ -35,9 +35,30 @@ async function create(req, res, next) {
       time_scope
     } = req.body;
 
+    let parsedStartDate = startDate;
+    let parsedEndDate = endDate;
+    let parsedStartTime = startTime;
+    let parsedEndTime = endTime;
+
+
+    if (req.body.start_datetime) {
+      parsedStartDate = req.body.start_datetime.slice(0, 10);
+      parsedStartTime = req.body.start_datetime.includes("T")
+        ? req.body.start_datetime.slice(11, 16)
+        : null;
+
+      parsedEndDate = req.body.end_datetime
+        ? req.body.end_datetime.slice(0, 10)
+        : parsedStartDate;
+
+      parsedEndTime = req.body.end_datetime && req.body.end_datetime.includes("T")
+        ? req.body.end_datetime.slice(11, 16)
+        : null;
+    }
+
     console.log("DEBUG time_scope:", time_scope);
 
-    if (!startDate || !endDate) {
+    if (!parsedStartDate || !parsedEndDate) {
       return res.status(400).json({
         message: 'startDate and endDate are required'
       });
