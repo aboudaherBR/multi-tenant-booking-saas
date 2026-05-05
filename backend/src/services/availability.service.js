@@ -23,12 +23,13 @@ function isOverlapping(startA, endA, startB, endB) {
 
 // 🔴 FULL DAY
 function isFullDayBlock(block) {
-  return !block.start_time && !block.end_time;
+  return block.time_scope === 'full_day';
 }
+
 
 // 🔴 TIME RANGE (CORREÇÃO DO BUG)
 function isTimeRangeBlock(block) {
-  return block.start_time && block.end_time;
+  return block.time_scope === 'time_range';
 }
 
 async function getAvailableSlots({
