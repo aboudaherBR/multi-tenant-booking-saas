@@ -81,7 +81,7 @@ async function getAvailableSlots({
       date
     });
 
-  // 🔍 DEBUG REAL
+  console.log("BLOCKS DEBUG:", scheduleBlocks); 
 
   const hasFullDayBlock = scheduleBlocks.some(
     block => isFullDayBlock(block)
