@@ -94,6 +94,10 @@ export default function CreateScheduleBlockModal({
         };
 
         console.log("PAYLOAD FINAL:", payload);
+        await apiClient("/schedule-blocks", {
+            method: "POST",
+            body: payload
+        });
     }
 
     if (!isOpen) return null;
