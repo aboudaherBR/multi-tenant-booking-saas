@@ -30,7 +30,7 @@ export default function CreateScheduleBlockModal({
 
 
 
-    function handleSave() {
+    async function handleSave() {
         console.log("HANDLE SAVE FOI CHAMADO");
 
         // 🔥 VALIDAÇÕES BÁSICAS
