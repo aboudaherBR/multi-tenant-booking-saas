@@ -35,8 +35,13 @@ export default function CreateScheduleBlockModal({
 
         // 🔥 VALIDAÇÕES BÁSICAS
         if (blockMode === "single") {
-            if (!startDateTime || !endDateTime) {
-                alert("Preencha início e fim do bloqueio");
+            if (!startDateTime) {
+                alert("Preencha a data do bloqueio");
+                return;
+            }
+
+            if (timeScope === "time_range" && !endDateTime) {
+                alert("Preencha o fim do bloqueio");
                 return;
             }
         }
@@ -67,8 +72,15 @@ export default function CreateScheduleBlockModal({
             valid_from: validFrom || null,
             valid_to: validTo || null,
 
-            start_datetime: blockMode === "single" ? startDateTime : null,
-            end_datetime: blockMode === "single" ? endDateTime : null,
+            start_datetime:
+                blockMode === "single"
+                    ? startDateTime?.slice(0, 16)
+                    : null,
+
+            end_datetime:
+                blockMode === "single" && timeScope === "time_range"
+                    ? endDateTime?.slice(0, 16)
+                    : null,
 
             recurring_days: blockMode === "recurring" ? recurringDays : [],
             recurring_start_time: blockMode === "recurring" ? recurringStartTime : null,
