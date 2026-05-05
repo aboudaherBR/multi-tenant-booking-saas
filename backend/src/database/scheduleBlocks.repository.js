@@ -52,7 +52,8 @@ async function createScheduleBlock({
   startTime,
   endTime,
   reason,
-  time_scope // 🔴 NOVO
+  time_scope,
+  mode // 🔴 NOVO
 }) {
   await pool.query(
     `
@@ -64,9 +65,10 @@ async function createScheduleBlock({
         start_time,
         end_time,
         reason,
-        time_scope
+        time_scope,
+        mode
       )
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
     `,
     [
       companyId,
@@ -76,7 +78,8 @@ async function createScheduleBlock({
       startTime,
       endTime,
       reason,
-      time_scope 
+      time_scope,
+      mode 
     ]
   );
 }
