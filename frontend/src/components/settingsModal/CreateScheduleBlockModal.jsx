@@ -79,7 +79,7 @@ export default function CreateScheduleBlockModal({
 
             end_datetime:
                 blockMode === "single" && timeScope === "time_range"
-                    ? endDateTime?.slice(0, 16)
+                    ? (endDateTime ? endDateTime.slice(0, 16) : null)
                     : null,
 
             recurring_days: blockMode === "recurring" ? recurringDays : [],
