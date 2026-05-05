@@ -31,8 +31,11 @@ async function create(req, res, next) {
       endDate,
       startTime,
       endTime,
-      reason
+      reason,
+      time_scope
     } = req.body;
+
+    console.log("DEBUG time_scope:", time_scope);
 
     if (!startDate || !endDate) {
       return res.status(400).json({
