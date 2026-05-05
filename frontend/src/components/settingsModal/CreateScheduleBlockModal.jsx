@@ -118,6 +118,33 @@ export default function CreateScheduleBlockModal({
                     </div>
                 </div>
 
+                {/* ESCOPO DE HORÁRIO */}
+                <div style={{ marginTop: "16px" }}>
+                    <h4 className="heading" style={{ fontSize: "16px" }}>
+                        Escopo de horário
+                    </h4>
+
+                    <div style={{ display: "flex", gap: "12px", marginTop: "10px" }}>
+                        <label style={{ display: "flex", gap: "6px" }}>
+                            <input
+                                type="radio"
+                                checked={timeScope === "full_day"}
+                                onChange={() => setTimeScope("full_day")}
+                            />
+                            Dia inteiro
+                        </label>
+
+                        <label style={{ display: "flex", gap: "6px" }}>
+                            <input
+                                type="radio"
+                                checked={timeScope === "time_range"}
+                                onChange={() => setTimeScope("time_range")}
+                            />
+                            Intervalo de tempo
+                        </label>
+                    </div>
+                </div>
+
                 {/* VALIDADE */}
                 <div style={{ marginTop: "16px" }}>
                     <h4 className="heading" style={{ fontSize: "16px" }}>
