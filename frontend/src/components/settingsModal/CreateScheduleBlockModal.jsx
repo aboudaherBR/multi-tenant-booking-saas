@@ -18,6 +18,7 @@ export default function CreateScheduleBlockModal({
     const [recurringDays, setRecurringDays] = useState([]);
     const [recurringStartTime, setRecurringStartTime] = useState("");
     const [recurringEndTime, setRecurringEndTime] = useState("");
+    const [timeScope, setTimeScope] = useState("time_range");
 
     function handleSave() {
         console.log("HANDLE SAVE FOI CHAMADO");
