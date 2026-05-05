@@ -139,14 +139,14 @@ async function create(req, res, next) {
     await createScheduleBlock({
       companyId: req.user.companyId,
       professionalId: professionalId || null,
-      startDate,
-      endDate,
-      startTime: startTime || null,
-      endTime: endTime || null,
+      startDate: parsedStartDate,
+      endDate: parsedEndDate,
+      startTime: parsedStartTime || null,
+      endTime: parsedEndTime || null,
       reason: reason || null,
-      time_scope: time_scope
+      time_scope: time_scope,
+      mode: req.body.mode 
     });
-
     if (existingAppointments.length > 0) {
       return res.status(201).json({
         message: 'Schedule block created successfully',
