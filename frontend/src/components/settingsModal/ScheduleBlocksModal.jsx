@@ -30,7 +30,11 @@ export default function ScheduleBlocksModal({
                     className="button-primary"
                     style={{ marginTop: "10px" }}
                     onClick={() => {
-                        console.log("BOTÃO NOVO BLOQUEIO");
+                        onClose();
+
+                        setTimeout(() => {
+                            onCreate();
+                        }, 0);
                     }}
                 >
                     Novo bloqueio
