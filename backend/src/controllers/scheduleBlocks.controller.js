@@ -147,6 +147,8 @@ async function create(req, res, next) {
       time_scope: time_scope,
       mode: req.body.mode 
     });
+
+    
     if (existingAppointments.length > 0) {
       return res.status(201).json({
         message: 'Schedule block created successfully',
