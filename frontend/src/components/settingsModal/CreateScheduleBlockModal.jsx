@@ -10,6 +10,7 @@ export default function CreateScheduleBlockModal({
     const [mode, setMode] = useState(null);
     const [timeScope, setTimeScope] = useState(null);
     const [selectedDate, setSelectedDate] = useState("");
+    const [selectedProfessional, setSelectedProfessional] = useState("");
 
 
     function handleClose() {
@@ -95,6 +96,33 @@ export default function CreateScheduleBlockModal({
                                 onClick={() => setMode("recurring")}
                             />
                         )}
+
+                    </div>
+                )}
+
+                {scope === "professional" && (
+                    <div style={{ marginTop: "24px" }}>
+
+                        <h3>Qual profissional deseja bloquear?</h3>
+
+                        <select
+                            className="input-field"
+                            value={selectedProfessional}
+                            onChange={(e) => setSelectedProfessional(e.target.value)}
+                        >
+                            <option value="">
+                                Selecione um profissional
+                            </option>
+
+                            {professionals?.map((professional) => (
+                                <option
+                                    key={professional.id}
+                                    value={professional.id}
+                                >
+                                    {professional.name}
+                                </option>
+                            ))}
+                        </select>
 
                     </div>
                 )}
