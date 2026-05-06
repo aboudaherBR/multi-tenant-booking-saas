@@ -1,9 +1,12 @@
+import { useState } from "react";
 import SelectionCard from "./SelectionCard";
 
 export default function CreateScheduleBlockModal({
     isOpen,
     onClose
 }) {
+    const [scope, setScope] = useState(null);
+
 
     if (!isOpen) return null;
 
@@ -21,8 +24,15 @@ export default function CreateScheduleBlockModal({
                 <SelectionCard
                     title="Todos os profissionais"
                     description="Bloqueia horários para toda a agenda"
-                    selected={true}
-                    onClick={() => console.log("clicou")}
+                    selected={scope === "global"}
+                    onClick={() => setScope("global")}
+                />
+
+                <SelectionCard
+                    title="Profissional específico"
+                    description="Bloqueia horários apenas de um profissional"
+                    selected={scope === "professional"}
+                    onClick={() => setScope("professional")}
                 />
 
             </div>
