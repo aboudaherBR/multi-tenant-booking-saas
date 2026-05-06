@@ -22,7 +22,13 @@ export default function CreateScheduleBlockModal({
 
     return (
         <div className="modal-backdrop">
-            <div className="modal-content">
+            <div
+                className="modal-content modal-content--scrollable"
+                style={{
+                    maxWidth: "500px",
+                    maxHeight: "90vh"
+                }}
+            >
 
                 <button
                     className="button-icon"
