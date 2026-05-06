@@ -79,7 +79,7 @@ export default function CreateScheduleBlockModal({
                         onClick={() => setScope("professional")}
                     />
                 )}
-                {scope === "global" && (
+                {(scope === "global" || selectedProfessional) && (
                     <div style={{ marginTop: "24px" }}>
 
                         <h3>Como o bloqueio funciona?</h3>
