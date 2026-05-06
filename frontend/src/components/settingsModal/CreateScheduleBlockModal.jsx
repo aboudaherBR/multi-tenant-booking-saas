@@ -9,6 +9,15 @@ export default function CreateScheduleBlockModal({
     const [mode, setMode] = useState(null);
     const [timeScope, setTimeScope] = useState(null);
 
+
+    function handleClose() {
+        setScope(null);
+        setMode(null);
+        setTimeScope(null);
+
+        onClose();
+    }
+
     if (!isOpen) return null;
 
     return (
@@ -17,7 +26,7 @@ export default function CreateScheduleBlockModal({
 
                 <button
                     className="button-icon"
-                    onClick={onClose}
+                    onClick={handleClose}
                 >
                     ✕
                 </button>
