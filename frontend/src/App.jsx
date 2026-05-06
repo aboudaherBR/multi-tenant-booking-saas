@@ -13,7 +13,7 @@ import BookPublic from "./pages/BookPublic";
 import ProfessionalDashboard from "./pages/ProfessionalDashboard";
 import ProfessionalLayout from "./layout/ProfessionalLayout";
 import ProfessionalSchedulePage from "./pages/ProfessionalSchedulePage";
-import CreateScheduleBlockModal from "./components/settingsModal/CreateScheduleBlockModal";
+
 
 //Landing page e signup ficam fora do Routes principal, para não carregarem o layout admin/profissional
 import SignupPage from "./pages/SignupPage";
@@ -23,7 +23,7 @@ function App() {
 
   return (
     <Routes>
-      <CreateScheduleBlockModal />
+
       {/* 🔥 ROTA PÚBLICA (TEM QUE VIR ANTES) */}
       <Route path="/book/:slug" element={<BookPublic />} />
       <Route path="/signup" element={<SignupPage />} />
