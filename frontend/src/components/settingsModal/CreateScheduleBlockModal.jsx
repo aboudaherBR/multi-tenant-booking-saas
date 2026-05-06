@@ -41,6 +41,8 @@ export default function CreateScheduleBlockModal({
         handleClose();
     }
 
+    console.log("PROFESSIONALS:", professionals);
+
     if (!isOpen) return null;
 
     return (
