@@ -114,6 +114,17 @@ export default function CreateScheduleBlockModal({
                             onChange={(e) => setSelectedDate(e.target.value)}
                         />
 
+                        <button
+                            className="button-primary"
+                            disabled={!selectedDate}
+                            style={{
+                                marginTop: "20px",
+                                opacity: !selectedDate ? 0.5 : 1
+                            }}
+                        >
+                            Bloquear agenda
+                        </button>
+
                     </div>
                 )}
 
