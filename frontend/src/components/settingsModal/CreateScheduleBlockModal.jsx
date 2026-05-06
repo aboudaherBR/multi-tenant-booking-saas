@@ -44,12 +44,14 @@ export default function CreateScheduleBlockModal({
                     onClick={() => setScope("global")}
                 />
 
-                <SelectionCard
-                    title="Profissional específico"
-                    description="Bloqueia horários apenas de um profissional"
-                    selected={scope === "professional"}
-                    onClick={() => setScope("professional")}
-                />
+                {scope !== "global" && (
+                    <SelectionCard
+                        title="Profissional específico"
+                        description="Bloqueia horários apenas de um profissional"
+                        selected={scope === "professional"}
+                        onClick={() => setScope("professional")}
+                    />
+                )}
 
                 {scope === "global" && (
                     <div style={{ marginTop: "24px" }}>
