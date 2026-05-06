@@ -8,6 +8,9 @@ export default function SelectionCard({
         <div
             className={`selection-card ${selected ? "selection-card--active" : ""}`}
             onClick={onClick}
+            style={{
+                border: "1px solid #cbd5e1"
+            }}
         >
             <h4>{title}</h4>
 
