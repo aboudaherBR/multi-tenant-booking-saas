@@ -375,7 +375,10 @@ export default function SettingsPage() {
                             className="button-secondary"
                             onClick={async () => {
                                 setSelectedBlock(null);
+
                                 await loadScheduleBlocks();
+                                await loadProfessionals();
+
                                 setShowScheduleBlocksModal(true);
                             }}
                         >
