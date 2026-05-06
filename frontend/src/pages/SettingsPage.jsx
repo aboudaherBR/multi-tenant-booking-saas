@@ -346,7 +346,7 @@ export default function SettingsPage() {
     return (
         
         <div style={{ minHeight: "100vh", background: "var(--color-bg)" }}>
-            <CreateScheduleBlockModal />
+
             {/* HEADER */}
             <div className="header-gradient">
                 <h2 style={{ color: "white" }}>
