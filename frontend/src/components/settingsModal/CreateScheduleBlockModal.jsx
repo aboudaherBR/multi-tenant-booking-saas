@@ -1,5 +1,6 @@
 import { useState } from "react";
 import SelectionCard from "./SelectionCard";
+import apiClient from "../../api/apiClient";
 
 export default function CreateScheduleBlockModal({
     isOpen,
@@ -17,6 +18,25 @@ export default function CreateScheduleBlockModal({
         setTimeScope(null);
 
         onClose();
+    }
+
+    async function handleCreateBlock() {
+
+        const payload = {
+            mode: "single",
+            time_scope: "full_day",
+            start_datetime: selectedDate,
+            end_datetime: selectedDate
+        };
+
+        console.log("PAYLOAD:", payload);
+
+        await apiClient("/schedule-blocks", {
+            method: "POST",
+            body: payload
+        });
+
+        handleClose();
     }
 
     if (!isOpen) return null;
@@ -117,6 +137,7 @@ export default function CreateScheduleBlockModal({
                         <button
                             className="button-primary"
                             disabled={!selectedDate}
+                            onClick={handleCreateBlock}
                             style={{
                                 marginTop: "20px",
                                 opacity: !selectedDate ? 0.5 : 1
