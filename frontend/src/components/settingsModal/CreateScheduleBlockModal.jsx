@@ -4,7 +4,8 @@ import apiClient from "../../api/apiClient";
 
 export default function CreateScheduleBlockModal({
     isOpen,
-    onClose
+    onClose,
+    professionals
 }) {
     const [scope, setScope] = useState(null);
     const [mode, setMode] = useState(null);
