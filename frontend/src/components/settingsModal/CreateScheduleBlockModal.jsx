@@ -6,6 +6,7 @@ export default function CreateScheduleBlockModal({
     onClose
 }) {
     const [scope, setScope] = useState(null);
+    const [mode, setMode] = useState(null);
 
 
     if (!isOpen) return null;
@@ -34,6 +35,28 @@ export default function CreateScheduleBlockModal({
                     selected={scope === "professional"}
                     onClick={() => setScope("professional")}
                 />
+
+                {scope === "global" && (
+                    <div style={{ marginTop: "24px" }}>
+
+                        <h3>Como o bloqueio funciona?</h3>
+
+                        <SelectionCard
+                            title="Bloqueio pontual"
+                            description="Bloqueia datas específicas"
+                            selected={mode === "single"}
+                            onClick={() => setMode("single")}
+                        />
+
+                        <SelectionCard
+                            title="Bloqueio recorrente"
+                            description="Bloqueia horários recorrentes na agenda"
+                            selected={mode === "recurring"}
+                            onClick={() => setMode("recurring")}
+                        />
+
+                    </div>
+                )}
 
             </div>
         </div>
