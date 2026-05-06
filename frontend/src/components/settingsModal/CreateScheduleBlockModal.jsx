@@ -65,12 +65,14 @@ export default function CreateScheduleBlockModal({
                             onClick={() => setMode("single")}
                         />
 
-                        <SelectionCard
-                            title="Bloqueio recorrente"
-                            description="Bloqueia horários recorrentes na agenda"
-                            selected={mode === "recurring"}
-                            onClick={() => setMode("recurring")}
-                        />
+                        {mode !== "single" && (
+                            <SelectionCard
+                                title="Bloqueio recorrente"
+                                description="Bloqueia horários recorrentes na agenda"
+                                selected={mode === "recurring"}
+                                onClick={() => setMode("recurring")}
+                            />
+                        )}
 
                     </div>
                 )}
