@@ -7,7 +7,7 @@ export default function CreateScheduleBlockModal({
 }) {
     const [scope, setScope] = useState(null);
     const [mode, setMode] = useState(null);
-
+    const [timeScope, setTimeScope] = useState(null);
 
     if (!isOpen) return null;
 
@@ -53,6 +53,28 @@ export default function CreateScheduleBlockModal({
                             description="Bloqueia horários recorrentes na agenda"
                             selected={mode === "recurring"}
                             onClick={() => setMode("recurring")}
+                        />
+
+                    </div>
+                )}
+
+                {mode && (
+                    <div style={{ marginTop: "24px" }}>
+
+                        <h3>Qual a duração do bloqueio?</h3>
+
+                        <SelectionCard
+                            title="Dia inteiro"
+                            description="Bloqueia todos os horários do período"
+                            selected={timeScope === "full_day"}
+                            onClick={() => setTimeScope("full_day")}
+                        />
+
+                        <SelectionCard
+                            title="Horário específico"
+                            description="Bloqueia apenas um intervalo de horário"
+                            selected={timeScope === "time_range"}
+                            onClick={() => setTimeScope("time_range")}
                         />
 
                     </div>
