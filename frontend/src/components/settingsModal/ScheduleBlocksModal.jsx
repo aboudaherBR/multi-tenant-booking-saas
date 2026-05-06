@@ -30,6 +30,7 @@ export default function ScheduleBlocksModal({
                     className="button-primary"
                     style={{ marginTop: "10px" }}
                     onClick={() => {
+                        onClose();
                         onCreate();
                     }}
                 >
