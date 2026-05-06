@@ -373,12 +373,10 @@ export default function SettingsPage() {
 
                         <button
                             className="button-secondary"
-                            onClick={() => {
-                                onClose();
-
-                                setTimeout(() => {
-                                    onCreate();
-                                }, 0);
+                            onClick={async () => {
+                                setSelectedBlock(null);
+                                await loadScheduleBlocks();
+                                setShowScheduleBlocksModal(true);
                             }}
                         >
                             Bloqueios de agenda
