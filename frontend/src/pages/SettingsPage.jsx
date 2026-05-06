@@ -13,28 +13,9 @@ export default function SettingsPage() {
 
     const navigate = useNavigate();
 
-    const [showBusinessHoursModal, setShowBusinessHoursModal] = useState(false);
-    const [showScheduleBlocksModal, setShowScheduleBlocksModal] = useState(false);
+    const [activeModal, setActiveModal] = useState(null); // 'scheduleBlocks', 'createBlock', 'businessHours', etc.
 
     const [businessHours, setBusinessHours] = useState([]);
-    const [scheduleBlocks, setScheduleBlocks] = useState([]);
-    const [bufferMinutes, setBufferMinutes] = useState(0);
-    const [slotInterval, setSlotInterval] = useState(5);
-
-    const [showNewBlockForm, setShowNewBlockForm] = useState(false);
-    const [selectedBlock, setSelectedBlock] = useState(null);
-
-    const [filterStartDate, setFilterStartDate] = useState("");
-    const [filterEndDate, setFilterEndDate] = useState("");
-    const [filteredBlocks, setFilteredBlocks] = useState([]);
-
-    const [newBlock, setNewBlock] = useState({
-        startDate: "",
-        endDate: "",
-        startTime: "",
-        endTime: "",
-        reason: ""
-    });
 
     const weekdayNames = [
         "Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"
@@ -376,7 +357,7 @@ export default function SettingsPage() {
                             onClick={async () => {
                                 setSelectedBlock(null);
                                 await loadScheduleBlocks();
-                                setShowScheduleBlocksModal(true);
+                                setActiveModal('scheduleBlocks');
                             }}
                         >
                             Bloqueios de agenda
@@ -412,10 +393,16 @@ export default function SettingsPage() {
                         saveBusinessHours={saveBusinessHours}
                     />
                     <ScheduleBlocksModal
-                        isOpen={showScheduleBlocksModal}
-                        onClose={() => setShowScheduleBlocksModal(false)}
+                        isOpen={activeModal === 'scheduleBlocks'}
+                        onClose={() => setActiveModal(null)}
                         scheduleBlocks={scheduleBlocks}
-                        onCreate={() => setShowCreateBlockModal(true)}
+                        onCreate={() => setActiveModal('createBlock')}
+                    />
+
+                    <CreateScheduleBlockModal
+                        isOpen={activeModal === 'createBlock'}
+                        onClose={() => setActiveModal(null)}
+                        professionals={professionals}
                     />
 
 

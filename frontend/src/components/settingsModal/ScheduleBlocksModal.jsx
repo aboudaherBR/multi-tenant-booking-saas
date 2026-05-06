@@ -31,7 +31,10 @@ export default function ScheduleBlocksModal({
                     style={{ marginTop: "10px" }}
                     onClick={() => {
                         onClose();
-                        onCreate();
+
+                        setTimeout(() => {
+                            onCreate();
+                        }, 0);
                     }}
                 >
                     Novo bloqueio
