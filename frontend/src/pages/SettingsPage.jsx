@@ -13,9 +13,28 @@ export default function SettingsPage() {
 
     const navigate = useNavigate();
 
-    const [activeModal, setActiveModal] = useState(null); // 'scheduleBlocks', 'createBlock', 'businessHours', etc.
+    const [showBusinessHoursModal, setShowBusinessHoursModal] = useState(false);
+    const [showScheduleBlocksModal, setShowScheduleBlocksModal] = useState(false);
 
     const [businessHours, setBusinessHours] = useState([]);
+    const [scheduleBlocks, setScheduleBlocks] = useState([]);
+    const [bufferMinutes, setBufferMinutes] = useState(0);
+    const [slotInterval, setSlotInterval] = useState(5);
+
+    const [showNewBlockForm, setShowNewBlockForm] = useState(false);
+    const [selectedBlock, setSelectedBlock] = useState(null);
+
+    const [filterStartDate, setFilterStartDate] = useState("");
+    const [filterEndDate, setFilterEndDate] = useState("");
+    const [filteredBlocks, setFilteredBlocks] = useState([]);
+
+    const [newBlock, setNewBlock] = useState({
+        startDate: "",
+        endDate: "",
+        startTime: "",
+        endTime: "",
+        reason: ""
+    });
 
     const weekdayNames = [
         "Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"
@@ -325,7 +344,7 @@ export default function SettingsPage() {
 
 
     return (
-        
+
         <div style={{ minHeight: "100vh", background: "var(--color-bg)" }}>
 
             {/* HEADER */}
@@ -354,10 +373,12 @@ export default function SettingsPage() {
 
                         <button
                             className="button-secondary"
-                            onClick={async () => {
-                                setSelectedBlock(null);
-                                await loadScheduleBlocks();
-                                setActiveModal('scheduleBlocks');
+                            onClick={() => {
+                                onClose();
+
+                                setTimeout(() => {
+                                    onCreate();
+                                }, 0);
                             }}
                         >
                             Bloqueios de agenda
@@ -393,15 +414,14 @@ export default function SettingsPage() {
                         saveBusinessHours={saveBusinessHours}
                     />
                     <ScheduleBlocksModal
-                        isOpen={activeModal === 'scheduleBlocks'}
-                        onClose={() => setActiveModal(null)}
+                        isOpen={showScheduleBlocksModal}
+                        onClose={() => setShowScheduleBlocksModal(false)}
                         scheduleBlocks={scheduleBlocks}
-                        onCreate={() => setActiveModal('createBlock')}
+                        onCreate={() => setShowCreateBlockModal(true)}
                     />
-
                     <CreateScheduleBlockModal
-                        isOpen={activeModal === 'createBlock'}
-                        onClose={() => setActiveModal(null)}
+                        isOpen={showCreateBlockModal}
+                        onClose={() => setShowCreateBlockModal(false)}
                         professionals={professionals}
                     />
 
