@@ -8,6 +8,7 @@ export default function CreateScheduleBlockModal({
     const [scope, setScope] = useState(null);
     const [mode, setMode] = useState(null);
     const [timeScope, setTimeScope] = useState(null);
+    const [selectedDate, setSelectedDate] = useState("");
 
 
     function handleClose() {
@@ -89,11 +90,28 @@ export default function CreateScheduleBlockModal({
                             onClick={() => setTimeScope("full_day")}
                         />
 
-                        <SelectionCard
-                            title="Horário específico"
-                            description="Bloqueia apenas um intervalo de horário"
-                            selected={timeScope === "time_range"}
-                            onClick={() => setTimeScope("time_range")}
+                        {timeScope !== "full_day" && (
+                            <SelectionCard
+                                title="Horário específico"
+                                description="Bloqueia apenas um intervalo de horário"
+                                selected={timeScope === "time_range"}
+                                onClick={() => setTimeScope("time_range")}
+                            />
+                        )}
+
+                    </div>
+                )}
+
+                {timeScope === "full_day" && (
+                    <div style={{ marginTop: "24px" }}>
+
+                        <h3>Quando o bloqueio deve acontecer?</h3>
+
+                        <input
+                            type="date"
+                            className="input-field"
+                            value={selectedDate}
+                            onChange={(e) => setSelectedDate(e.target.value)}
                         />
 
                     </div>
