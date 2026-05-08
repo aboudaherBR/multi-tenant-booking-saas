@@ -261,6 +261,7 @@ export default function CreateScheduleBlockModal({
                         <button
                             className="button-primary"
                             disabled={selectedWeekdays.length === 0}
+                            onClick={handleCreateBlock}
                             style={{
                                 marginTop: "20px",
                                 opacity:
