@@ -31,7 +31,12 @@ export default function CreateScheduleBlockModal({
             mode: "single",
             time_scope: "full_day",
             start_datetime: selectedDate,
-            end_datetime: selectedDate
+            end_datetime: selectedDate,
+
+            professional_id:
+                scope === "professional"
+                    ? selectedProfessional
+                    : null
         };
 
         console.log("PAYLOAD:", payload);
@@ -82,7 +87,7 @@ export default function CreateScheduleBlockModal({
                         onClick={() => setScope("professional")}
                     />
                 )}
-                
+
                 {scope === "professional" && (
                     <div style={{ marginTop: "24px" }}>
 
