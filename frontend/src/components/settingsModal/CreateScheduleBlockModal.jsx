@@ -61,7 +61,19 @@ export default function CreateScheduleBlockModal({
         handleClose();
     }
 
-    console.log("PROFESSIONALS:", professionals);
+    async function handleCreateRecurringBlock() {
+
+        const payload = {
+            mode: "recurring",
+            time_scope: timeScope,
+            weekdays: selectedWeekdays,
+            professionalId:
+                scope === "professional"
+                    ? selectedProfessional
+                    : null
+        };
+        console.log("RECURRING PAYLOAD:", payload);
+    }
 
     if (!isOpen) return null;
 
