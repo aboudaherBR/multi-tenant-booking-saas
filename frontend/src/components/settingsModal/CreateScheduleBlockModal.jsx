@@ -11,6 +11,8 @@ export default function CreateScheduleBlockModal({
     const [mode, setMode] = useState(null);
     const [timeScope, setTimeScope] = useState(null);
     const [selectedDate, setSelectedDate] = useState("");
+    const [startTime, setStartTime] = useState("");
+    const [endTime, setEndTime] = useState("");
     const [selectedProfessional, setSelectedProfessional] = useState("");
 
 
@@ -186,6 +188,45 @@ export default function CreateScheduleBlockModal({
                         >
                             Bloquear agenda
                         </button>
+
+                    </div>
+                )}
+
+                {timeScope === "time_range" && (
+                    <div style={{ marginTop: "24px" }}>
+
+                        <h3>Quando o bloqueio deve acontecer?</h3>
+
+                        <input
+                            type="date"
+                            className="input-field"
+                            value={selectedDate}
+                            onChange={(e) => setSelectedDate(e.target.value)}
+                        />
+
+                        <div style={{ marginTop: "12px" }}>
+
+                            <label>Hora início</label>
+
+                            <input
+                                type="time"
+                                className="input-field"
+                                value={startTime}
+                                onChange={(e) => setStartTime(e.target.value)}
+                            />
+                        </div>
+
+                        <div style={{ marginTop: "12px" }}>
+
+                            <label>Hora fim</label>
+
+                            <input
+                                type="time"
+                                className="input-field"
+                                value={endTime}
+                                onChange={(e) => setEndTime(e.target.value)}
+                            />
+                        </div>
 
                     </div>
                 )}
