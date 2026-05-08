@@ -14,6 +14,7 @@ export default function CreateScheduleBlockModal({
     const [startTime, setStartTime] = useState("");
     const [endTime, setEndTime] = useState("");
     const [selectedProfessional, setSelectedProfessional] = useState("");
+    const [selectedWeekdays, setSelectedWeekdays] = useState([]);
 
 
     function handleClose() {
@@ -204,6 +205,58 @@ export default function CreateScheduleBlockModal({
                         >
                             Bloquear agenda
                         </button>
+
+                    </div>
+                )}
+
+                {mode === "recurring" && timeScope === "full_day" && (
+                    <div style={{ marginTop: "24px" }}>
+
+                        <h3>Quais dias deseja bloquear?</h3>
+
+                        {[
+                            { value: 0, label: "Domingo" },
+                            { value: 1, label: "Segunda" },
+                            { value: 2, label: "Terça" },
+                            { value: 3, label: "Quarta" },
+                            { value: 4, label: "Quinta" },
+                            { value: 5, label: "Sexta" },
+                            { value: 6, label: "Sábado" }
+                        ].map((day) => (
+
+                            <label
+                                key={day.value}
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "8px",
+                                    marginTop: "10px"
+                                }}
+                            >
+                                <input
+                                    type="checkbox"
+                                    checked={selectedWeekdays.includes(day.value)}
+                                    onChange={(e) => {
+
+                                        if (e.target.checked) {
+                                            setSelectedWeekdays([
+                                                ...selectedWeekdays,
+                                                day.value
+                                            ]);
+                                        } else {
+                                            setSelectedWeekdays(
+                                                selectedWeekdays.filter(
+                                                    (d) => d !== day.value
+                                                )
+                                            );
+                                        }
+                                    }}
+                                />
+
+                                {day.label}
+
+                            </label>
+                        ))}
 
                     </div>
                 )}
