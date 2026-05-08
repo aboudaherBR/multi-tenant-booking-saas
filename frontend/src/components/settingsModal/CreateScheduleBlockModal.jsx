@@ -19,6 +19,9 @@ export default function CreateScheduleBlockModal({
         setMode(null);
         setTimeScope(null);
 
+        setSelectedProfessional("");
+        setSelectedDate("");
+
         onClose();
     }
 
