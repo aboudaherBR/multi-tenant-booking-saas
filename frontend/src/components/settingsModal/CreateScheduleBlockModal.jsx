@@ -274,7 +274,7 @@ export default function CreateScheduleBlockModal({
                             className="button-primary"
                             disabled={selectedWeekdays.length === 0}
                             onClick={() => {
-                                console.log("CRIAR RECORRENTE");
+                                onClick={handleCreateRecurringBlock}
                             }}
                             style={{
                                 marginTop: "20px",
