@@ -256,7 +256,21 @@ export default function CreateScheduleBlockModal({
                                 {day.label}
 
                             </label>
+
                         ))}
+                        <button
+                            className="button-primary"
+                            disabled={selectedWeekdays.length === 0}
+                            style={{
+                                marginTop: "20px",
+                                opacity:
+                                    selectedWeekdays.length === 0
+                                        ? 0.5
+                                        : 1
+                            }}
+                        >
+                            Bloquear agenda
+                        </button>
 
                     </div>
                 )}
