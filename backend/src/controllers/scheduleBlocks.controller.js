@@ -34,7 +34,7 @@ async function create(req, res, next) {
       reason,
       time_scope,
       mode,
-      weekdays
+      recurring_days
     } = req.body;
 
     let parsedStartDate = startDate;
@@ -151,7 +151,7 @@ async function create(req, res, next) {
       reason: reason || null,
       time_scope,
       mode,
-      weekdays
+      recurring_days
     });
 
 

@@ -73,6 +73,13 @@ export default function CreateScheduleBlockModal({
                     : null
         };
         console.log("RECURRING PAYLOAD:", payload);
+
+        await apiClient("/schedule-blocks", {
+            method: "POST",
+            body: payload
+        });
+
+        handleClose();
     }
 
     if (!isOpen) return null;
