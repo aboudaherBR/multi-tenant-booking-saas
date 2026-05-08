@@ -270,7 +270,10 @@ async function update(req, res, next) {
       });
     }
 
-    if (startDate > endDate) {
+    if (
+      mode !== "recurring" &&
+      startDate > endDate
+    ) {
       return res.status(400).json({
         message: 'startDate cannot be after endDate'
       });
