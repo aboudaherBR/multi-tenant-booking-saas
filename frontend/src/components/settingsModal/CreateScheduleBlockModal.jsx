@@ -66,7 +66,7 @@ export default function CreateScheduleBlockModal({
         const payload = {
             mode: "recurring",
             time_scope: timeScope,
-            weekdays: selectedWeekdays,
+            recurring_days: selectedWeekdays,
             professionalId:
                 scope === "professional"
                     ? selectedProfessional

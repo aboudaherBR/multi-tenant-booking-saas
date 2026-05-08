@@ -32,7 +32,9 @@ async function create(req, res, next) {
       startTime,
       endTime,
       reason,
-      time_scope
+      time_scope,
+      mode,
+      weekdays
     } = req.body;
 
     let parsedStartDate = startDate;
@@ -58,7 +60,10 @@ async function create(req, res, next) {
 
     console.log("DEBUG time_scope:", time_scope);
 
-    if (!parsedStartDate || !parsedEndDate) {
+    if (
+      mode !== "recurring" &&
+      (!parsedStartDate || !parsedEndDate)
+    ) {
       return res.status(400).json({
         message: 'startDate and endDate are required'
       });
@@ -144,11 +149,12 @@ async function create(req, res, next) {
       startTime: parsedStartTime || null,
       endTime: parsedEndTime || null,
       reason: reason || null,
-      time_scope: time_scope,
-      mode: req.body.mode 
+      time_scope,
+      mode,
+      weekdays
     });
 
-    
+
     if (existingAppointments.length > 0) {
       return res.status(201).json({
         message: 'Schedule block created successfully',
