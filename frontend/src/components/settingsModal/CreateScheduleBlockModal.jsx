@@ -273,9 +273,7 @@ export default function CreateScheduleBlockModal({
                         <button
                             className="button-primary"
                             disabled={selectedWeekdays.length === 0}
-                            onClick={() => {
-                                onClick={handleCreateRecurringBlock}
-                            }}
+                            onClick={handleCreateRecurringBlock}
                             style={{
                                 marginTop: "20px",
                                 opacity:
