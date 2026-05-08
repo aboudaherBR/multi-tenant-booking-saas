@@ -181,7 +181,7 @@ export default function CreateScheduleBlockModal({
                     </div>
                 )}
 
-                {timeScope === "full_day" && (
+                {mode === "single" && timeScope === "full_day" && (
                     <div style={{ marginTop: "24px" }}>
 
                         <h3>Quando o bloqueio deve acontecer?</h3>
