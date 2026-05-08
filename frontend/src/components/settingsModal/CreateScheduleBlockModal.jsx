@@ -31,9 +31,18 @@ export default function CreateScheduleBlockModal({
 
         const payload = {
             mode: "single",
-            time_scope: "full_day",
-            start_datetime: selectedDate,
-            end_datetime: selectedDate,
+
+            time_scope: timeScope,
+
+            start_datetime:
+                timeScope === "full_day"
+                    ? selectedDate
+                    : `${selectedDate}T${startTime}`,
+
+            end_datetime:
+                timeScope === "full_day"
+                    ? selectedDate
+                    : `${selectedDate}T${endTime}`,
 
             professionalId:
                 scope === "professional"
@@ -240,6 +249,7 @@ export default function CreateScheduleBlockModal({
                                 !startTime ||
                                 !endTime
                             }
+                            onClick={handleCreateBlock}
                             style={{
                                 marginTop: "20px",
                                 opacity:
