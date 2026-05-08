@@ -33,7 +33,7 @@ export default function CreateScheduleBlockModal({
             start_datetime: selectedDate,
             end_datetime: selectedDate,
 
-            professional_id:
+            professionalId:
                 scope === "professional"
                     ? selectedProfessional
                     : null
