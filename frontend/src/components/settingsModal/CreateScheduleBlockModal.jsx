@@ -162,27 +162,10 @@ export default function CreateScheduleBlockModal({
                                 selected={timeScope === "time_range"}
                                 onClick={() => setTimeScope("time_range")}
                             />
+
                         )}
 
-                        <button
-                            className="button-primary"
-                            disabled={
-                                !selectedDate ||
-                                !startTime ||
-                                !endTime
-                            }
-                            style={{
-                                marginTop: "20px",
-                                opacity:
-                                    !selectedDate ||
-                                        !startTime ||
-                                        !endTime
-                                        ? 0.5
-                                        : 1
-                            }}
-                        >
-                            Bloquear agenda
-                        </button>
+
 
                     </div>
                 )}
@@ -249,6 +232,26 @@ export default function CreateScheduleBlockModal({
                                 onChange={(e) => setEndTime(e.target.value)}
                             />
                         </div>
+
+                        <button
+                            className="button-primary"
+                            disabled={
+                                !selectedDate ||
+                                !startTime ||
+                                !endTime
+                            }
+                            style={{
+                                marginTop: "20px",
+                                opacity:
+                                    !selectedDate ||
+                                        !startTime ||
+                                        !endTime
+                                        ? 0.5
+                                        : 1
+                            }}
+                        >
+                            Bloquear agenda
+                        </button>
 
                     </div>
                 )}
