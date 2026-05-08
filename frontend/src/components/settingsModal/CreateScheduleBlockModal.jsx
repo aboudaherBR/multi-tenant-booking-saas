@@ -82,30 +82,7 @@ export default function CreateScheduleBlockModal({
                         onClick={() => setScope("professional")}
                     />
                 )}
-                {(scope === "global" || selectedProfessional) && (
-                    <div style={{ marginTop: "24px" }}>
-
-                        <h3>Como o bloqueio funciona?</h3>
-
-                        <SelectionCard
-                            title="Bloqueio pontual"
-                            description="Bloqueia datas específicas"
-                            selected={mode === "single"}
-                            onClick={() => setMode("single")}
-                        />
-
-                        {mode !== "single" && (
-                            <SelectionCard
-                                title="Bloqueio recorrente"
-                                description="Bloqueia horários recorrentes na agenda"
-                                selected={mode === "recurring"}
-                                onClick={() => setMode("recurring")}
-                            />
-                        )}
-
-                    </div>
-                )}
-
+                
                 {scope === "professional" && (
                     <div style={{ marginTop: "24px" }}>
 
@@ -129,6 +106,30 @@ export default function CreateScheduleBlockModal({
                                 </option>
                             ))}
                         </select>
+
+                    </div>
+                )}
+
+                {(scope === "global" || selectedProfessional) && (
+                    <div style={{ marginTop: "24px" }}>
+
+                        <h3>Como o bloqueio funciona?</h3>
+
+                        <SelectionCard
+                            title="Bloqueio pontual"
+                            description="Bloqueia datas específicas"
+                            selected={mode === "single"}
+                            onClick={() => setMode("single")}
+                        />
+
+                        {mode !== "single" && (
+                            <SelectionCard
+                                title="Bloqueio recorrente"
+                                description="Bloqueia horários recorrentes na agenda"
+                                selected={mode === "recurring"}
+                                onClick={() => setMode("recurring")}
+                            />
+                        )}
 
                     </div>
                 )}
