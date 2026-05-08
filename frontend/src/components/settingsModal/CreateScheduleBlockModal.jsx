@@ -131,12 +131,14 @@ export default function CreateScheduleBlockModal({
 
                         <h3>Como o bloqueio funciona?</h3>
 
-                        <SelectionCard
-                            title="Bloqueio pontual"
-                            description="Bloqueia datas específicas"
-                            selected={mode === "single"}
-                            onClick={() => setMode("single")}
-                        />
+                        {mode !== "recurring" && (
+                            <SelectionCard
+                                title="Bloqueio pontual"
+                                description="Bloqueia datas específicas"
+                                selected={mode === "single"}
+                                onClick={() => setMode("single")}
+                            />
+                        )}
 
                         {mode !== "single" && (
                             <SelectionCard
