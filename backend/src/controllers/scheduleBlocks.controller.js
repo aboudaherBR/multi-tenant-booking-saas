@@ -69,7 +69,13 @@ async function create(req, res, next) {
       });
     }
 
-    if (!isValidDateFormat(parsedStartDate) || !isValidDateFormat(parsedEndDate)) {
+    if (
+      mode !== "recurring" &&
+      (
+        !isValidDateFormat(parsedStartDate) ||
+        !isValidDateFormat(parsedEndDate)
+      )
+    ) {
       return res.status(400).json({
         message: 'Invalid date format. Use YYYY-MM-DD'
       });
