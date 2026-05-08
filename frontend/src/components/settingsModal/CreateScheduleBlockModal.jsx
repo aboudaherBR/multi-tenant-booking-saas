@@ -146,12 +146,14 @@ export default function CreateScheduleBlockModal({
 
                         <h3>Qual a duração do bloqueio?</h3>
 
-                        <SelectionCard
-                            title="Dia inteiro"
-                            description="Bloqueia todos os horários do período"
-                            selected={timeScope === "full_day"}
-                            onClick={() => setTimeScope("full_day")}
-                        />
+                        {timeScope !== "time_range" && (
+                            <SelectionCard
+                                title="Dia inteiro"
+                                description="Bloqueia todos os horários do período"
+                                selected={timeScope === "full_day"}
+                                onClick={() => setTimeScope("full_day")}
+                            />
+                        )}
 
                         {timeScope !== "full_day" && (
                             <SelectionCard
