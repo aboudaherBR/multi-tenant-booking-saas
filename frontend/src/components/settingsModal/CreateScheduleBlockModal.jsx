@@ -164,6 +164,26 @@ export default function CreateScheduleBlockModal({
                             />
                         )}
 
+                        <button
+                            className="button-primary"
+                            disabled={
+                                !selectedDate ||
+                                !startTime ||
+                                !endTime
+                            }
+                            style={{
+                                marginTop: "20px",
+                                opacity:
+                                    !selectedDate ||
+                                        !startTime ||
+                                        !endTime
+                                        ? 0.5
+                                        : 1
+                            }}
+                        >
+                            Bloquear agenda
+                        </button>
+
                     </div>
                 )}
 
