@@ -31,7 +31,7 @@ export default function CreateScheduleBlockModal({
     async function handleCreateBlock() {
 
         const payload = {
-            mode: "single",
+            mode: mode,
 
             time_scope: timeScope,
 
