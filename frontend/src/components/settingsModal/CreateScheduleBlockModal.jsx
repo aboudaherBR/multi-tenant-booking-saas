@@ -17,16 +17,21 @@ export default function CreateScheduleBlockModal({
     const [selectedWeekdays, setSelectedWeekdays] = useState([]);
 
 
-    function handleClose() {
-        setScope(null);
-        setMode(null);
-        setTimeScope(null);
+   function handleClose() {
+    setScope(null);
+    setMode(null);
+    setTimeScope(null);
 
-        setSelectedProfessional("");
-        setSelectedDate("");
+    setSelectedProfessional("");
+    setSelectedDate("");
 
-        onClose();
-    }
+    setStartTime("");
+    setEndTime("");
+
+    setSelectedWeekdays([]);
+
+    onClose();
+}
 
     async function handleCreateBlock() {
 
