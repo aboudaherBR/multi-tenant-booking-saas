@@ -93,7 +93,14 @@ export default function ScheduleBlocksModal({
                             {scheduleBlocks.map((block, index) => (
                                 <div
                                     key={index}
-                                    onClick={() => console.log(block)}
+                                    onClick={() =>
+                                        console.log({
+                                            mode: block.mode,
+                                            weekdays: block.weekdays,
+                                            recurring_days: block.recurring_days,
+                                            time_scope: block.time_scope
+                                        })
+                                    }
                                     style={{
                                         padding: "10px",
                                         border: "1px solid var(--color-border)",
