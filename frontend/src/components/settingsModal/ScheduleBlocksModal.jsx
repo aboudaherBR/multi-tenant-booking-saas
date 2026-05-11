@@ -61,13 +61,21 @@ export default function ScheduleBlocksModal({
                                         marginBottom: "8px",
                                         cursor: "pointer"
                                     }}
-                                    
+
                                 >
-                                    <div>
-                                        <strong>
-                                            {block.start_time} até {block.end_time}
-                                        </strong>
-                                    </div>
+                                    <strong>
+
+                                        {block.mode === "recurring"
+                                            ? "Recorrente"
+                                            : "Pontual"}
+
+                                        {" • "}
+
+                                        {block.time_scope === "full_day"
+                                            ? "Dia inteiro"
+                                            : `${block.start_time?.slice(0, 5)} às ${block.end_time?.slice(0, 5)}`}
+
+                                    </strong>
 
                                     <div className="text-muted">
                                         {block.reason || "Sem descrição"}
