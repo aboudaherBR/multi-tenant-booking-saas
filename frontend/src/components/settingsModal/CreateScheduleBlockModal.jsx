@@ -67,6 +67,15 @@ export default function CreateScheduleBlockModal({
             mode: "recurring",
             time_scope: timeScope,
             recurring_days: selectedWeekdays,
+            start_datetime:
+                timeScope === "time_range"
+                    ? `1970-01-01T${startTime}`
+                    : null,
+
+            end_datetime:
+                timeScope === "time_range"
+                    ? `1970-01-01T${endTime}`
+                    : null,
             professionalId:
                 scope === "professional"
                     ? selectedProfessional
