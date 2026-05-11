@@ -12,6 +12,19 @@ export default function ScheduleBlocksModal({
             : "Pontual";
     }
 
+    function getBlockTimeLabel(block) {
+
+        if (block.time_scope === "full_day") {
+            return "Dia inteiro";
+        }
+
+        if (block.start_time && block.end_time) {
+            return `${block.start_time.slice(0, 5)} às ${block.end_time.slice(0, 5)}`;
+        }
+
+        return "Horário não definido";
+    }
+
     return (
         <div className="modal-backdrop">
             <div className="modal-content modal-content--scrollable">
@@ -73,13 +86,7 @@ export default function ScheduleBlocksModal({
 
                                         {getBlockTypeLabel(block)}
 
-                                        {block.time_scope === "full_day"
-                                            ? "Dia inteiro"
-                                            : (
-                                                block.start_time && block.end_time
-                                                    ? `${block.start_time.slice(0, 5)} às ${block.end_time.slice(0, 5)}`
-                                                    : "Horário não definido"
-                                            )}
+                                        {getBlockTimeLabel(block)}
 
                                     </strong>
 
