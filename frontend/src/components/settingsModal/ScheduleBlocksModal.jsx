@@ -57,8 +57,10 @@ export default function ScheduleBlocksModal({
                                         padding: "10px",
                                         border: "1px solid var(--color-border)",
                                         borderRadius: "var(--radius)",
-                                        marginBottom: "8px"
+                                        marginBottom: "8px",
+                                        cursor: "pointer"
                                     }}
+                                    onClick={() => console.log(block)}
                                 >
                                     <div>
                                         <strong>
