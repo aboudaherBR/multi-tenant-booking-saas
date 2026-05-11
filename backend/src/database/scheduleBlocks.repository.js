@@ -111,7 +111,7 @@ async function findScheduleBlocksByCompany(companyId) {
         reason,
         mode,
         time_scope,
-        weekdays,
+        recurring_days,
         created_at
       FROM schedule_blocks
       WHERE company_id = $1

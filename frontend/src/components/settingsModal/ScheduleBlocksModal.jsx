@@ -27,7 +27,7 @@ export default function ScheduleBlocksModal({
 
     function getWeekdaysLabel(block) {
 
-        if (!block.weekdays?.length) {
+        if (!block.recurring_days?.length) {
             return "";
         }
 
@@ -41,7 +41,7 @@ export default function ScheduleBlocksModal({
             6: "Sáb"
         };
 
-        return block.weekdays
+        return block.recurring_days
             .map((day) => labels[day])
             .join(", ");
     }
