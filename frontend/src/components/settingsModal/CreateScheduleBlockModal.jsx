@@ -360,9 +360,77 @@ export default function CreateScheduleBlockModal({
 
                         <h3>Quais dias e horários deseja bloquear?</h3>
 
+                        {[
+                            { value: 0, label: "Domingo" },
+                            { value: 1, label: "Segunda" },
+                            { value: 2, label: "Terça" },
+                            { value: 3, label: "Quarta" },
+                            { value: 4, label: "Quinta" },
+                            { value: 5, label: "Sexta" },
+                            { value: 6, label: "Sábado" }
+                        ].map((day) => (
+
+                            <label
+                                key={day.value}
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "8px",
+                                    marginTop: "10px"
+                                }}
+                            >
+                                <input
+                                    type="checkbox"
+                                    checked={selectedWeekdays.includes(day.value)}
+                                    onChange={(e) => {
+
+                                        if (e.target.checked) {
+                                            setSelectedWeekdays([
+                                                ...selectedWeekdays,
+                                                day.value
+                                            ]);
+                                        } else {
+                                            setSelectedWeekdays(
+                                                selectedWeekdays.filter(
+                                                    (d) => d !== day.value
+                                                )
+                                            );
+                                        }
+                                    }}
+                                />
+
+                                {day.label}
+
+                            </label>
+
+                        ))}
+
+                        <div style={{ marginTop: "12px" }}>
+
+                            <label>Hora início</label>
+
+                            <input
+                                type="time"
+                                className="input-field"
+                                value={startTime}
+                                onChange={(e) => setStartTime(e.target.value)}
+                            />
+                        </div>
+
+                        <div style={{ marginTop: "12px" }}>
+
+                            <label>Hora fim</label>
+
+                            <input
+                                type="time"
+                                className="input-field"
+                                value={endTime}
+                                onChange={(e) => setEndTime(e.target.value)}
+                            />
+                        </div>
+
                     </div>
                 )}
-
             </div>
         </div>
     );
