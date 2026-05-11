@@ -25,6 +25,27 @@ export default function ScheduleBlocksModal({
         return "Horário não definido";
     }
 
+    function getWeekdaysLabel(block) {
+
+        if (!block.weekdays?.length) {
+            return "";
+        }
+
+        const labels = {
+            0: "Dom",
+            1: "Seg",
+            2: "Ter",
+            3: "Qua",
+            4: "Qui",
+            5: "Sex",
+            6: "Sáb"
+        };
+
+        return block.weekdays
+            .map((day) => labels[day])
+            .join(", ");
+    }
+
     return (
         <div className="modal-backdrop">
             <div className="modal-content modal-content--scrollable">
@@ -82,14 +103,26 @@ export default function ScheduleBlocksModal({
                                     }}
 
                                 >
-                                    <strong>
+                                    <div style={{ fontWeight: "600" }}>
 
                                         {getBlockTypeLabel(block)}
 
+                                        {block.mode === "recurring" && (
+                                            <>
+                                                {" • "}
+                                                {getWeekdaysLabel(block)}
+                                            </>
+                                        )}
+
+                                    </div>
+
+                                    <div
+                                        style={{
+                                            marginTop: "4px"
+                                        }}
+                                    >
                                         {getBlockTimeLabel(block)}
-
-                                    </strong>
-
+                                    </div>
                                     <div className="text-muted">
                                         {block.reason || "Sem descrição"}
                                     </div>
