@@ -53,7 +53,7 @@ async function createScheduleBlock({
   endTime,
   reason,
   mode,
-  weekdays,
+  recurring_days,
   time_scope
 }) {
   await pool.query(
@@ -68,7 +68,7 @@ async function createScheduleBlock({
         reason,
         time_scope,
         mode,
-        weekdays
+        recurring_days
       )
       VALUES (
         $1,
@@ -93,7 +93,7 @@ async function createScheduleBlock({
       reason,
       time_scope,
       mode,
-      weekdays
+      recurring_days
     ]
   );
 }
