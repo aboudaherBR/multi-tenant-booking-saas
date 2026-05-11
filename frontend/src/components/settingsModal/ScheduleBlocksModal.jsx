@@ -46,6 +46,16 @@ export default function ScheduleBlocksModal({
             .join(", ");
     }
 
+    function getBlockPrimaryLabel(block) {
+
+        if (block.mode === "recurring") {
+            return getWeekdaysLabel(block);
+        }
+
+        return new Date(block.start_date)
+            .toLocaleDateString("pt-BR");
+    }
+
     return (
         <div className="modal-backdrop">
             <div className="modal-content modal-content--scrollable">
