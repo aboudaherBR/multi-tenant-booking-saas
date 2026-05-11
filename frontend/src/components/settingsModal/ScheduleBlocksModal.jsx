@@ -65,7 +65,7 @@ export default function ScheduleBlocksModal({
                                 >
                                     <strong>
 
-                                        {block.mode === "recurring"
+                                        {(block.mode || "single") === "recurring"
                                             ? "Recorrente"
                                             : "Pontual"}
 
@@ -73,7 +73,11 @@ export default function ScheduleBlocksModal({
 
                                         {block.time_scope === "full_day"
                                             ? "Dia inteiro"
-                                            : `${block.start_time?.slice(0, 5)} às ${block.end_time?.slice(0, 5)}`}
+                                            : (
+                                                block.start_time && block.end_time
+                                                    ? `${block.start_time.slice(0, 5)} às ${block.end_time.slice(0, 5)}`
+                                                    : "Horário não definido"
+                                            )}
 
                                     </strong>
 
