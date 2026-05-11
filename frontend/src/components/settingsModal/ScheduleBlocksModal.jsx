@@ -53,6 +53,7 @@ export default function ScheduleBlocksModal({
                             {scheduleBlocks.map((block, index) => (
                                 <div
                                     key={index}
+                                    onClick={() => console.log(block)}
                                     style={{
                                         padding: "10px",
                                         border: "1px solid var(--color-border)",
@@ -60,7 +61,7 @@ export default function ScheduleBlocksModal({
                                         marginBottom: "8px",
                                         cursor: "pointer"
                                     }}
-                                    onClick={() => console.log(block)}
+                                    
                                 >
                                     <div>
                                         <strong>
