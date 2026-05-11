@@ -295,7 +295,7 @@ export default function CreateScheduleBlockModal({
                     </div>
                 )}
 
-                {timeScope === "time_range" && (
+                {mode === "single" && timeScope === "time_range" && (
                     <div style={{ marginTop: "24px" }}>
 
                         <h3>Quando o bloqueio deve acontecer?</h3>
@@ -351,6 +351,14 @@ export default function CreateScheduleBlockModal({
                         >
                             Bloquear agenda
                         </button>
+
+                    </div>
+                )}
+
+                {mode === "recurring" && timeScope === "time_range" && (
+                    <div style={{ marginTop: "24px" }}>
+
+                        <h3>Quais dias e horários deseja bloquear?</h3>
 
                     </div>
                 )}
