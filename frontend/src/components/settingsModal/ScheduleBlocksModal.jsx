@@ -6,6 +6,12 @@ export default function ScheduleBlocksModal({
 }) {
     if (!isOpen) return null;
 
+    function getBlockTypeLabel(block) {
+        return block.mode === "recurring"
+            ? "Recorrente"
+            : "Pontual";
+    }
+
     return (
         <div className="modal-backdrop">
             <div className="modal-content modal-content--scrollable">
@@ -65,11 +71,7 @@ export default function ScheduleBlocksModal({
                                 >
                                     <strong>
 
-                                        {(block.mode || "single") === "recurring"
-                                            ? "Recorrente"
-                                            : "Pontual"}
-
-                                        {" • "}
+                                        {getBlockTypeLabel(block)}
 
                                         {block.time_scope === "full_day"
                                             ? "Dia inteiro"
