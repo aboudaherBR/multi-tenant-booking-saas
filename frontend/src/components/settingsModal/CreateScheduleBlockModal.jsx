@@ -1,6 +1,7 @@
 import { useState } from "react";
 import SelectionCard from "./SelectionCard";
 import apiClient from "../../api/apiClient";
+import WeekdaySelector from "./WeekdaySelector";
 
 export default function CreateScheduleBlockModal({
     isOpen,
@@ -17,21 +18,21 @@ export default function CreateScheduleBlockModal({
     const [selectedWeekdays, setSelectedWeekdays] = useState([]);
 
 
-   function handleClose() {
-    setScope(null);
-    setMode(null);
-    setTimeScope(null);
+    function handleClose() {
+        setScope(null);
+        setMode(null);
+        setTimeScope(null);
 
-    setSelectedProfessional("");
-    setSelectedDate("");
+        setSelectedProfessional("");
+        setSelectedDate("");
 
-    setStartTime("");
-    setEndTime("");
+        setStartTime("");
+        setEndTime("");
 
-    setSelectedWeekdays([]);
+        setSelectedWeekdays([]);
 
-    onClose();
-}
+        onClose();
+    }
 
     async function handleCreateBlock() {
 
@@ -247,50 +248,10 @@ export default function CreateScheduleBlockModal({
 
                         <h3>Quais dias deseja bloquear?</h3>
 
-                        {[
-                            { value: 0, label: "Domingo" },
-                            { value: 1, label: "Segunda" },
-                            { value: 2, label: "Terça" },
-                            { value: 3, label: "Quarta" },
-                            { value: 4, label: "Quinta" },
-                            { value: 5, label: "Sexta" },
-                            { value: 6, label: "Sábado" }
-                        ].map((day) => (
-
-                            <label
-                                key={day.value}
-                                style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    gap: "8px",
-                                    marginTop: "10px"
-                                }}
-                            >
-                                <input
-                                    type="checkbox"
-                                    checked={selectedWeekdays.includes(day.value)}
-                                    onChange={(e) => {
-
-                                        if (e.target.checked) {
-                                            setSelectedWeekdays([
-                                                ...selectedWeekdays,
-                                                day.value
-                                            ]);
-                                        } else {
-                                            setSelectedWeekdays(
-                                                selectedWeekdays.filter(
-                                                    (d) => d !== day.value
-                                                )
-                                            );
-                                        }
-                                    }}
-                                />
-
-                                {day.label}
-
-                            </label>
-
-                        ))}
+                        <WeekdaySelector
+                            selectedWeekdays={selectedWeekdays}
+                            setSelectedWeekdays={setSelectedWeekdays}
+                        />
                         <button
                             className="button-primary"
                             disabled={selectedWeekdays.length === 0}
@@ -374,51 +335,10 @@ export default function CreateScheduleBlockModal({
 
                         <h3>Quais dias e horários deseja bloquear?</h3>
 
-                        {[
-                            { value: 0, label: "Domingo" },
-                            { value: 1, label: "Segunda" },
-                            { value: 2, label: "Terça" },
-                            { value: 3, label: "Quarta" },
-                            { value: 4, label: "Quinta" },
-                            { value: 5, label: "Sexta" },
-                            { value: 6, label: "Sábado" }
-                        ].map((day) => (
-
-                            <label
-                                key={day.value}
-                                style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    gap: "8px",
-                                    marginTop: "10px"
-                                }}
-                            >
-                                <input
-                                    type="checkbox"
-                                    checked={selectedWeekdays.includes(day.value)}
-                                    onChange={(e) => {
-
-                                        if (e.target.checked) {
-                                            setSelectedWeekdays([
-                                                ...selectedWeekdays,
-                                                day.value
-                                            ]);
-                                        } else {
-                                            setSelectedWeekdays(
-                                                selectedWeekdays.filter(
-                                                    (d) => d !== day.value
-                                                )
-                                            );
-                                        }
-                                    }}
-                                />
-
-                                {day.label}
-
-                            </label>
-
-                        ))}
-
+                        <WeekdaySelector
+                            selectedWeekdays={selectedWeekdays}
+                            setSelectedWeekdays={setSelectedWeekdays}
+                        />
                         <div style={{ marginTop: "12px" }}>
 
                             <label>Hora início</label>
