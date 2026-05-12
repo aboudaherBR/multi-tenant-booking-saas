@@ -164,11 +164,13 @@ export default function ScheduleBlocksModal({
                 {selectedBlock && (
                     <div
                         style={{
-                            marginTop: "20px",
-                            padding: "16px",
-                            border: "1px solid var(--color-border)",
-                            borderRadius: "var(--radius)",
-                            background: "white"
+                            position: "fixed",
+                            inset: 0,
+                            background: "rgba(0, 0, 0, 0.5)",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            zIndex: 9999
                         }}
                     >
 
