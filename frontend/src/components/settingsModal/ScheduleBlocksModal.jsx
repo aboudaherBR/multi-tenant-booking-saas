@@ -221,7 +221,6 @@ export default function ScheduleBlocksModal({
                                 <button
                                     className="button-danger"
                                     style={{
-                                        marginTop: "16px",
                                         display: "flex",
                                         alignItems: "center",
                                     }}
