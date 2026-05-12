@@ -56,6 +56,15 @@ export default function ScheduleBlocksModal({
             .toLocaleDateString("pt-BR");
     }
 
+    function getBlockScopeLabel(block) {
+
+        if (block.professional_id) {
+            return block.professional_name || "Profissional";
+        }
+
+        return "Todos os profissionais";
+    }
+
     return (
         <div className="modal-backdrop">
             <div className="modal-content modal-content--scrollable">
@@ -124,13 +133,22 @@ export default function ScheduleBlocksModal({
 
                                         {getBlockTypeLabel(block)}
 
-                                        {block.mode === "recurring" && (
-                                            <>
-                                                {" • "}
-                                                {getWeekdaysLabel(block)}
-                                            </>
-                                        )}
+                                        {" • "}
 
+                                        {getBlockPrimaryLabel(block)}
+
+                                    </div>
+
+                                    <div
+                                        style={{
+                                            marginTop: "4px"
+                                        }}
+                                    >
+                                        {getBlockTimeLabel(block)}
+                                    </div>
+
+                                    <div className="text-muted">
+                                        {getBlockScopeLabel(block)}
                                     </div>
 
                                     <div
