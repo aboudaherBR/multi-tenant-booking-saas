@@ -475,6 +475,7 @@ export default function SettingsPage() {
             <ServicesManagementModal
                 isOpen={showServicesModal}
                 onClose={() => setShowServicesModal(false)}
+                services={services}
             />
         </div>
     );

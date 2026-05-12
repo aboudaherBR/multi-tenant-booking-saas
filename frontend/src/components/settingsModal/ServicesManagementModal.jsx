@@ -1,6 +1,7 @@
 export default function ServicesManagementModal({
     isOpen,
-    onClose
+    onClose,
+    services
 }) {
 
     console.log("ServicesManagementModal renderizou", {
@@ -29,6 +30,47 @@ export default function ServicesManagementModal({
                 <p className="text-muted">
                     Aqui você poderá gerenciar os serviços.
                 </p>
+                <div style={{ marginTop: "20px" }}>
+
+                    <strong>
+                        Serviços cadastrados
+                    </strong>
+
+                    {services?.length === 0 ? (
+                        <p className="text-muted">
+                            Nenhum serviço cadastrado
+                        </p>
+                    ) : (
+                        <div style={{ marginTop: "10px" }}>
+
+                            {services.map((service) => (
+                                <div
+                                    key={service.id}
+                                    style={{
+                                        padding: "12px",
+                                        border: "1px solid var(--color-border)",
+                                        borderRadius: "var(--radius)",
+                                        marginBottom: "8px"
+                                    }}
+                                >
+                                    <strong>
+                                        {service.name}
+                                    </strong>
+
+                                    <div className="text-muted">
+                                        {service.duration_minutes} min
+                                    </div>
+
+                                    <div>
+                                        R$ {Number(service.base_price).toFixed(2)}
+                                    </div>
+                                </div>
+                            ))}
+
+                        </div>
+                    )}
+
+                </div>
 
             </div>
         </div>
