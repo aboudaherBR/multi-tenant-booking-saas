@@ -176,79 +176,95 @@ export default function ScheduleBlocksModal({
 
                         <div
                             style={{
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                marginBottom: "12px"
+                                background: "white",
+                                padding: "20px",
+                                borderRadius: "var(--radius)",
+                                width: "90%",
+                                maxWidth: "400px"
                             }}
                         >
-                            <strong
-                                style={{
-                                    alingntemItems: "center",
-                                }}>Bloqueio selecionado</strong>
 
-                        </div>
-
-                        <div style={{ marginTop: "8px" }}>
-
-                            <div>
-                                <strong>Tipo:</strong>{" "}
-                                {getBlockTypeLabel(selectedBlock)}
-                            </div>
-
-                            <div>
-                                <strong>Data/Dias:</strong>{" "}
-                                {getBlockPrimaryLabel(selectedBlock)}
-                            </div>
-
-                            <div>
-                                <strong>Horário:</strong>{" "}
-                                {getBlockTimeLabel(selectedBlock)}
-                            </div>
-
-                            <div>
-                                <strong>Escopo:</strong>{" "}
-                                {getBlockScopeLabel(selectedBlock)}
-                            </div>
                             <div
                                 style={{
                                     display: "flex",
-                                    justifyContent: "space-between",
+                                    justifyContent: "center",
                                     alignItems: "center",
-                                    marginTop: "16px"
-                                }}>
-                                <button
-                                    className="button-icon"
-                                    onClick={() => setSelectedBlock(null)}
-                                >
-                                    Fechar
-                                </button>
-                                <button
-                                    className="button-danger"
+                                    marginBottom: "12px"
+                                }}
+                            >
+                                <strong>
+                                    Bloqueio selecionado
+                                </strong>
+                            </div>
+
+                            <div style={{ marginTop: "8px" }}>
+
+                                <div>
+                                    <strong>Tipo:</strong>{" "}
+                                    {getBlockTypeLabel(selectedBlock)}
+                                </div>
+
+                                <div>
+                                    <strong>Data/Dias:</strong>{" "}
+                                    {getBlockPrimaryLabel(selectedBlock)}
+                                </div>
+
+                                <div>
+                                    <strong>Horário:</strong>{" "}
+                                    {getBlockTimeLabel(selectedBlock)}
+                                </div>
+
+                                <div>
+                                    <strong>Escopo:</strong>{" "}
+                                    {getBlockScopeLabel(selectedBlock)}
+                                </div>
+
+                                <div
                                     style={{
                                         display: "flex",
+                                        justifyContent: "space-between",
                                         alignItems: "center",
-                                    }}
-                                    onClick={async () => {
-
-                                        await apiClient(
-                                            `/schedule-blocks/${selectedBlock.id}`,
-                                            {
-                                                method: "DELETE"
-                                            }
-                                        );
-                                        await reloadBlocks();
-                                        setSelectedBlock(null);
+                                        marginTop: "16px"
                                     }}
                                 >
-                                    Excluir bloqueio
-                                </button>
+                                    <button
+                                        className="button-icon"
+                                        onClick={() => setSelectedBlock(null)}
+                                    >
+                                        Fechar
+                                    </button>
+
+                                    <button
+                                        className="button-danger"
+                                        style={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                        }}
+                                        onClick={async () => {
+
+                                            await apiClient(
+                                                `/schedule-blocks/${selectedBlock.id}`,
+                                                {
+                                                    method: "DELETE"
+                                                }
+                                            );
+
+                                            await reloadBlocks();
+
+                                            setSelectedBlock(null);
+                                        }}
+                                    >
+                                        Excluir bloqueio
+                                    </button>
+
+                                </div>
+
                             </div>
 
                         </div>
+
                     </div>
                 )}
-
             </div>
         </div>
     );
