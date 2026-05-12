@@ -104,7 +104,7 @@ async function findScheduleBlocksByCompany(companyId) {
       SELECT 
         sb.id,
         sb.professional_id,
-        p.name AS professional_name,
+        u.name AS professional_name,
         sb.start_date,
         sb.end_date,
         sb.start_time,
@@ -119,6 +119,9 @@ async function findScheduleBlocksByCompany(companyId) {
 
       LEFT JOIN professionals p
         ON p.id = sb.professional_id
+
+      LEFT JOIN users u
+        ON u.id = p.user_id
 
       WHERE sb.company_id = $1
 
