@@ -178,10 +178,10 @@ export default function ScheduleBlocksModal({
                                 marginBottom: "12px"
                             }}
                         >
-                            <strong 
-                            style={{
-                                alingntemItems: "center",
-                            }}>Bloqueio selecionado</strong>
+                            <strong
+                                style={{
+                                    alingntemItems: "center",
+                                }}>Bloqueio selecionado</strong>
 
                         </div>
 
@@ -211,6 +211,14 @@ export default function ScheduleBlocksModal({
                                 onClick={() => setSelectedBlock(null)}
                             >
                                 ✕
+                            </button>
+                            <button
+                                className="button-danger"
+                                style={{
+                                    marginTop: "16px"
+                                }}
+                            >
+                                Excluir bloqueio
                             </button>
 
                         </div>
