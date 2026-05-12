@@ -178,7 +178,10 @@ export default function ScheduleBlocksModal({
                                 marginBottom: "12px"
                             }}
                         >
-                            <strong>Bloqueio selecionado</strong>
+                            <strong 
+                            style={{
+                                alingntemItems: "center",
+                            }}>Bloqueio selecionado</strong>
 
                             <button
                                 className="button-icon"
