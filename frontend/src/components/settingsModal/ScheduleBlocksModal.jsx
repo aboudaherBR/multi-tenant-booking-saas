@@ -206,20 +206,26 @@ export default function ScheduleBlocksModal({
                                 <strong>Escopo:</strong>{" "}
                                 {getBlockScopeLabel(selectedBlock)}
                             </div>
-                            <button
-                                className="button-icon"
-                                onClick={() => setSelectedBlock(null)}
-                            >
-                                ✕
-                            </button>
-                            <button
-                                className="button-danger"
-                                style={{
-                                    marginTop: "16px"
-                                }}
-                            >
-                                Excluir bloqueio
-                            </button>
+                            <div
+                            style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                            }}>
+                                <button
+                                    className="button-icon"
+                                    onClick={() => setSelectedBlock(null)}
+                                >
+                                    Fechar
+                                </button>
+                                <button
+                                    className="button-danger"
+                                    style={{
+                                        marginTop: "16px"
+                                    }}
+                                >
+                                    Excluir bloqueio
+                                </button>
+                            </div>
 
                         </div>
                     </div>
