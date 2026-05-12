@@ -151,16 +151,7 @@ export default function ScheduleBlocksModal({
                                         {getBlockScopeLabel(block)}
                                     </div>
 
-                                    <div
-                                        style={{
-                                            marginTop: "4px"
-                                        }}
-                                    >
-                                        {getBlockTimeLabel(block)}
-                                    </div>
-                                    <div className="text-muted">
-                                        {block.reason || "Sem descrição"}
-                                    </div>
+
                                 </div>
                             ))}
                         </div>
