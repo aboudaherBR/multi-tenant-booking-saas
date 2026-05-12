@@ -6,7 +6,8 @@ export default function ScheduleBlocksModal({
     isOpen,
     onClose,
     scheduleBlocks,
-    onCreate
+    onCreate,
+    reloadBlocks
 }) {
 
     const [selectedBlock, setSelectedBlock] = useState(null);
@@ -234,7 +235,7 @@ export default function ScheduleBlocksModal({
                                                 method: "DELETE"
                                             }
                                         );
-
+                                        await reloadBlocks();
                                         setSelectedBlock(null);
                                     }}
                                 >

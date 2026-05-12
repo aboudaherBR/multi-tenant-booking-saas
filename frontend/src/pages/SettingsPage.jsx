@@ -419,6 +419,7 @@ export default function SettingsPage() {
                         onClose={() => setShowScheduleBlocksModal(false)}
                         scheduleBlocks={scheduleBlocks}
                         onCreate={() => setShowCreateBlockModal(true)}
+                        reloadBlocks={loadScheduleBlocks}
                     />
                     <CreateScheduleBlockModal
                         isOpen={showCreateBlockModal}
