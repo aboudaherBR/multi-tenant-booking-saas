@@ -166,8 +166,24 @@ export default function ServicesManagementModal({
                                     </div>
 
                                     <div>
+
                                         <strong>Nome:</strong>{" "}
-                                        {selectedService.name}
+
+                                        {isEditing ? (
+                                            <input
+                                                className="input"
+                                                value={selectedService.name}
+                                                onChange={(e) =>
+                                                    setSelectedService({
+                                                        ...selectedService,
+                                                        name: e.target.value
+                                                    })
+                                                }
+                                            />
+                                        ) : (
+                                            selectedService.name
+                                        )}
+
                                     </div>
 
                                     <div>
