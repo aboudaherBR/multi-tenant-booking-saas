@@ -133,14 +133,48 @@ export default function ServicesManagementModal({
                             ))}
 
                             {selectedService && (
-                                <div style={{ marginTop: "20px" }}>
+                                <div
+                                    style={{
+                                        marginTop: "20px",
+                                        padding: "16px",
+                                        border: "1px solid var(--color-border)",
+                                        borderRadius: "var(--radius)"
+                                    }}
+                                >
 
-                                    <strong>
-                                        Serviço selecionado:
-                                    </strong>
+                                    <div
+                                        style={{
+                                            display: "flex",
+                                            justifyContent: "space-between",
+                                            alignItems: "center",
+                                            marginBottom: "12px"
+                                        }}
+                                    >
+                                        <strong>
+                                            Serviço selecionado
+                                        </strong>
 
-                                    <div style={{ marginTop: "8px" }}>
+                                        <button
+                                            className="button-icon"
+                                            onClick={() => setSelectedService(null)}
+                                        >
+                                            ✕
+                                        </button>
+                                    </div>
+
+                                    <div>
+                                        <strong>Nome:</strong>{" "}
                                         {selectedService.name}
+                                    </div>
+
+                                    <div>
+                                        <strong>Duração:</strong>{" "}
+                                        {selectedService.duration_minutes} min
+                                    </div>
+
+                                    <div>
+                                        <strong>Preço:</strong>{" "}
+                                        R$ {Number(selectedService.base_price).toFixed(2)}
                                     </div>
 
                                 </div>
