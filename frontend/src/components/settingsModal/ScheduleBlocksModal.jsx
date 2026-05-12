@@ -183,12 +183,6 @@ export default function ScheduleBlocksModal({
                                 alingntemItems: "center",
                             }}>Bloqueio selecionado</strong>
 
-                            <button
-                                className="button-icon"
-                                onClick={() => setSelectedBlock(null)}
-                            >
-                                ✕
-                            </button>
                         </div>
 
                         <div style={{ marginTop: "8px" }}>
@@ -212,6 +206,12 @@ export default function ScheduleBlocksModal({
                                 <strong>Escopo:</strong>{" "}
                                 {getBlockScopeLabel(selectedBlock)}
                             </div>
+                            <button
+                                className="button-icon"
+                                onClick={() => setSelectedBlock(null)}
+                            >
+                                ✕
+                            </button>
 
                         </div>
                     </div>
