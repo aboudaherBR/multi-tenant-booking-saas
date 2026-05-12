@@ -1,7 +1,10 @@
 export default function ServicesManagementModal({
     isOpen,
     onClose,
-    services
+    services,
+    newService,
+    setNewService,
+    onCreate
 }) {
 
     console.log("ServicesManagementModal renderizou", {
@@ -30,6 +33,58 @@ export default function ServicesManagementModal({
                 <p className="text-muted">
                     Aqui você poderá gerenciar os serviços.
                 </p>
+                <div style={{ marginTop: "20px" }}>
+
+                    <input
+                        type="text"
+                        placeholder="Nome do serviço"
+                        value={newService.name}
+                        onChange={(e) =>
+                            setNewService({
+                                ...newService,
+                                name: e.target.value
+                            })
+                        }
+                        className="input"
+                    />
+
+                    <input
+                        type="number"
+                        placeholder="Duração (min)"
+                        value={newService.duration_minutes}
+                        onChange={(e) =>
+                            setNewService({
+                                ...newService,
+                                duration_minutes: e.target.value
+                            })
+                        }
+                        className="input"
+                        style={{ marginTop: "10px" }}
+                    />
+
+                    <input
+                        type="number"
+                        placeholder="Preço"
+                        value={newService.base_price}
+                        onChange={(e) =>
+                            setNewService({
+                                ...newService,
+                                base_price: e.target.value
+                            })
+                        }
+                        className="input"
+                        style={{ marginTop: "10px" }}
+                    />
+
+                    <button
+                        className="button-primary"
+                        style={{ marginTop: "10px" }}
+                        onClick={onCreate}
+                    >
+                        Adicionar serviço
+                    </button>
+
+                </div>
                 <div style={{ marginTop: "20px" }}>
 
                     <strong>

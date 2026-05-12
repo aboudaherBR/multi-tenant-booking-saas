@@ -476,6 +476,9 @@ export default function SettingsPage() {
                 isOpen={showServicesModal}
                 onClose={() => setShowServicesModal(false)}
                 services={services}
+                newService={newService}
+                setNewService={setNewService}
+                onCreate={createService}
             />
         </div>
     );
