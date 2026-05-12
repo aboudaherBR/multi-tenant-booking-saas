@@ -207,12 +207,12 @@ export default function ScheduleBlocksModal({
                                 {getBlockScopeLabel(selectedBlock)}
                             </div>
                             <div
-                            style={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                                alignItems: "center",
-                                marginTop: "16px"
-                            }}>
+                                style={{
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                    alignItems: "center",
+                                    marginTop: "16px"
+                                }}>
                                 <button
                                     className="button-icon"
                                     onClick={() => setSelectedBlock(null)}
@@ -224,6 +224,17 @@ export default function ScheduleBlocksModal({
                                     style={{
                                         display: "flex",
                                         alignItems: "center",
+                                    }}
+                                    onClick={async () => {
+
+                                        await apiClient(
+                                            `/schedule-blocks/${selectedBlock.id}`,
+                                            {
+                                                method: "DELETE"
+                                            }
+                                        );
+
+                                        setSelectedBlock(null);
                                     }}
                                 >
                                     Excluir bloqueio
