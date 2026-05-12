@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 export default function ServicesManagementModal({
     isOpen,
     onClose,
@@ -10,6 +12,7 @@ export default function ServicesManagementModal({
     console.log("ServicesManagementModal renderizou", {
         isOpen
     });
+    const [selectedService, setSelectedService] = useState(null);
 
     if (!isOpen) return null;
 
@@ -101,11 +104,13 @@ export default function ServicesManagementModal({
                             {services.map((service) => (
                                 <div
                                     key={service.id}
+                                    onClick={() => setSelectedService(service)}
                                     style={{
                                         padding: "12px",
                                         border: "1px solid var(--color-border)",
                                         borderRadius: "var(--radius)",
-                                        marginBottom: "8px"
+                                        marginBottom: "8px",
+                                        cursor: "pointer",
                                     }}
                                 >
                                     <strong>
