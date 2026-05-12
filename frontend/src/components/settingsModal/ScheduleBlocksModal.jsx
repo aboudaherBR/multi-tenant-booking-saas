@@ -160,7 +160,15 @@ export default function ScheduleBlocksModal({
                 </div>
 
                 {selectedBlock && (
-                    <div style={{ marginTop: "20px" }}>
+                    <div
+                        style={{
+                            marginTop: "20px",
+                            padding: "16px",
+                            border: "1px solid var(--color-border)",
+                            borderRadius: "var(--radius)",
+                            background: "white"
+                        }}
+                    >
                         <strong>Bloqueio selecionado:</strong>
 
                         <div style={{ marginTop: "8px" }}>
