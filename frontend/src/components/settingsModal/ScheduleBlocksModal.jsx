@@ -159,6 +159,36 @@ export default function ScheduleBlocksModal({
                     )}
                 </div>
 
+                {selectedBlock && (
+                    <div style={{ marginTop: "20px" }}>
+                        <strong>Bloqueio selecionado:</strong>
+
+                        <div style={{ marginTop: "8px" }}>
+
+                            <div>
+                                <strong>Tipo:</strong>{" "}
+                                {getBlockTypeLabel(selectedBlock)}
+                            </div>
+
+                            <div>
+                                <strong>Data/Dias:</strong>{" "}
+                                {getBlockPrimaryLabel(selectedBlock)}
+                            </div>
+
+                            <div>
+                                <strong>Horário:</strong>{" "}
+                                {getBlockTimeLabel(selectedBlock)}
+                            </div>
+
+                            <div>
+                                <strong>Escopo:</strong>{" "}
+                                {getBlockScopeLabel(selectedBlock)}
+                            </div>
+
+                        </div>
+                    </div>
+                )}
+
             </div>
         </div>
     );
