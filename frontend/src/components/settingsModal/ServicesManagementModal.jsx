@@ -14,6 +14,7 @@ export default function ServicesManagementModal({
         isOpen
     });
     const [selectedService, setSelectedService] = useState(null);
+    const [isEditing, setIsEditing] = useState(false);
 
     if (!isOpen) return null;
 
