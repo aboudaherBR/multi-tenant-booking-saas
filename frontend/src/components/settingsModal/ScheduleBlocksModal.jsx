@@ -71,6 +71,8 @@ export default function ScheduleBlocksModal({
         return "Todos os profissionais";
     }
 
+    console.log(selectedBlock);
+
     return (
         <div className="modal-backdrop">
             <div className="modal-content modal-content--scrollable">
