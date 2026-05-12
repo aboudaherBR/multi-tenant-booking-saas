@@ -210,6 +210,7 @@ export default function ScheduleBlocksModal({
                             style={{
                                 display: "flex",
                                 justifyContent: "space-between",
+                                alignItems: "center",
                             }}>
                                 <button
                                     className="button-icon"
