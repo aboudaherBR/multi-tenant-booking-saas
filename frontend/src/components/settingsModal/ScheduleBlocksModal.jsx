@@ -173,7 +173,7 @@ export default function ScheduleBlocksModal({
                         <div
                             style={{
                                 display: "flex",
-                                justifyContent: "space-between",
+                                justifyContent: "center",
                                 alignItems: "center",
                                 marginBottom: "12px"
                             }}
