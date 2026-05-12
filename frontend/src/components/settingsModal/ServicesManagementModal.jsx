@@ -18,7 +18,12 @@ export default function ServicesManagementModal({
 
     return (
         <div className="modal-backdrop">
-            <div className="modal-content">
+            <div
+                className="modal-content modal-content--scrollable"
+                style={{
+                    maxHeight: "90vh"
+                }}
+            >
 
                 <div className="modal-header">
                     <h3 className="heading">
