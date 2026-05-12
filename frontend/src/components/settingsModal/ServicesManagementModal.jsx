@@ -130,15 +130,7 @@ export default function ServicesManagementModal({
                                     <div>
                                         R$ {Number(service.base_price).toFixed(2)}
                                     </div>
-                                    <button
-                                        className="button-danger"
-                                        style={{
-                                            marginTop: "16px"
-                                        }}
-                                        onClick={() => onDelete(selectedService.id)}
-                                    >
-                                        Excluir serviço
-                                    </button>
+
                                 </div>
                             ))}
 
@@ -186,6 +178,15 @@ export default function ServicesManagementModal({
                                         <strong>Preço:</strong>{" "}
                                         R$ {Number(selectedService.base_price).toFixed(2)}
                                     </div>
+                                    <button
+                                        className="button-danger"
+                                        style={{
+                                            marginTop: "16px"
+                                        }}
+                                        onClick={() => onDelete(selectedService.id)}
+                                    >
+                                        Excluir serviço
+                                    </button>
 
                                 </div>
                             )}
