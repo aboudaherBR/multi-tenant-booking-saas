@@ -479,6 +479,7 @@ export default function SettingsPage() {
                 newService={newService}
                 setNewService={setNewService}
                 onCreate={createService}
+                onDelete={deleteService}
             />
         </div>
     );
