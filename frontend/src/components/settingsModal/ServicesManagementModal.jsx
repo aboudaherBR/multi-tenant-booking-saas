@@ -127,6 +127,20 @@ export default function ServicesManagementModal({
                                 </div>
                             ))}
 
+                            {selectedService && (
+                                <div style={{ marginTop: "20px" }}>
+
+                                    <strong>
+                                        Serviço selecionado:
+                                    </strong>
+
+                                    <div style={{ marginTop: "8px" }}>
+                                        {selectedService.name}
+                                    </div>
+
+                                </div>
+                            )}
+
                         </div>
                     )}
 
