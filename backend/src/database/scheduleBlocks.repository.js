@@ -102,20 +102,27 @@ async function findScheduleBlocksByCompany(companyId) {
   const result = await pool.query(
     `
       SELECT 
-        id,
-        professional_id,
-        start_date,
-        end_date,
-        start_time,
-        end_time,
-        reason,
-        mode,
-        time_scope,
-        recurring_days,
-        created_at
-      FROM schedule_blocks
-      WHERE company_id = $1
-      ORDER BY start_date, start_time
+        sb.id,
+        sb.professional_id,
+        p.name AS professional_name,
+        sb.start_date,
+        sb.end_date,
+        sb.start_time,
+        sb.end_time,
+        sb.reason,
+        sb.mode,
+        sb.time_scope,
+        sb.recurring_days,
+        sb.created_at
+
+      FROM schedule_blocks sb
+
+      LEFT JOIN professionals p
+        ON p.id = sb.professional_id
+
+      WHERE sb.company_id = $1
+
+      ORDER BY sb.start_date, sb.start_time
     `,
     [companyId]
   );
