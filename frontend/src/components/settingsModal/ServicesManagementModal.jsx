@@ -3,6 +3,10 @@ export default function ServicesManagementModal({
     onClose
 }) {
 
+    console.log("ServicesManagementModal renderizou", {
+        isOpen
+    });
+
     if (!isOpen) return null;
 
     return (

@@ -5,6 +5,7 @@ import apiClient from "../api/apiClient";
 import BusinessHoursModal from "../components/settingsModal/BusinessHoursModal";
 import ScheduleBlocksModal from "../components/settingsModal/ScheduleBlocksModal";
 import CreateScheduleBlockModal from "../components/settingsModal/CreateScheduleBlockModal";
+import ServicesManagementModal from "../components/settingsModal/ServicesManagementModal";
 
 
 
@@ -471,6 +472,10 @@ export default function SettingsPage() {
                 </button>
 
             </div>
+            <ServicesManagementModal
+                isOpen={showServicesModal}
+                onClose={() => setShowServicesModal(false)}
+            />
         </div>
     );
 }
