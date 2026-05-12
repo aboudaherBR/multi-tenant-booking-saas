@@ -169,7 +169,24 @@ export default function ScheduleBlocksModal({
                             background: "white"
                         }}
                     >
-                        <strong>Bloqueio selecionado:</strong>
+
+                        <div
+                            style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                                marginBottom: "12px"
+                            }}
+                        >
+                            <strong>Bloqueio selecionado</strong>
+
+                            <button
+                                className="button-icon"
+                                onClick={() => setSelectedBlock(null)}
+                            >
+                                ✕
+                            </button>
+                        </div>
 
                         <div style={{ marginTop: "8px" }}>
 
