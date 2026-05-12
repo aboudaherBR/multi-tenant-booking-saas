@@ -4,6 +4,9 @@ export default function ScheduleBlocksModal({
     scheduleBlocks,
     onCreate
 }) {
+
+    const [selectedBlock, setSelectedBlock] = useState(null);
+
     if (!isOpen) return null;
 
     function getBlockTypeLabel(block) {
@@ -112,10 +115,7 @@ export default function ScheduleBlocksModal({
                             {scheduleBlocks.map((block, index) => (
                                 <div
                                     key={index}
-                                    onClick={() => {
-                                        console.log("Clicou no bloqueio", block);
-                                        
-                                    }}
+                                    onClick={() => setSelectedBlock(block)}
                                     style={{
                                         padding: "10px",
                                         border: "1px solid var(--color-border)",
