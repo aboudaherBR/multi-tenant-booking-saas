@@ -180,6 +180,16 @@ export default function ServicesManagementModal({
                                         R$ {Number(selectedService.base_price).toFixed(2)}
                                     </div>
                                     <button
+                                        className="button-secondary"
+                                        style={{
+                                            marginTop: "16px",
+                                            marginRight: "8px"
+                                        }}
+                                        onClick={() => setIsEditing(true)}
+                                    >
+                                        Editar serviço
+                                    </button>
+                                    <button
                                         className="button-danger"
                                         style={{
                                             marginTop: "16px"
