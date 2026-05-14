@@ -187,13 +187,47 @@ export default function ServicesManagementModal({
                                     </div>
 
                                     <div>
+
                                         <strong>Duração:</strong>{" "}
-                                        {selectedService.duration_minutes} min
+
+                                        {isEditing ? (
+                                            <input
+                                                type="number"
+                                                className="input"
+                                                value={selectedService.duration_minutes}
+                                                onChange={(e) =>
+                                                    setSelectedService({
+                                                        ...selectedService,
+                                                        duration_minutes: e.target.value
+                                                    })
+                                                }
+                                            />
+                                        ) : (
+                                            `${selectedService.duration_minutes} min`
+                                        )}
+
                                     </div>
 
                                     <div>
+
                                         <strong>Preço:</strong>{" "}
-                                        R$ {Number(selectedService.base_price).toFixed(2)}
+
+                                        {isEditing ? (
+                                            <input
+                                                type="number"
+                                                className="input"
+                                                value={selectedService.base_price}
+                                                onChange={(e) =>
+                                                    setSelectedService({
+                                                        ...selectedService,
+                                                        base_price: e.target.value
+                                                    })
+                                                }
+                                            />
+                                        ) : (
+                                            `R$ ${Number(selectedService.base_price).toFixed(2)}`
+                                        )}
+
                                     </div>
                                     <button
                                         className="button-secondary"
