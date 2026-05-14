@@ -1,4 +1,5 @@
 import { useState } from "react";
+import ServiceDetailsModal from "./ServiceDetailsModal";
 
 export default function ServicesManagementModal({
     isOpen,
@@ -135,7 +136,7 @@ export default function ServicesManagementModal({
                                 </div>
                             ))}
 
-                            {selectedService && (
+                            {/* {selectedService && (
                                 <div
                                     style={{
                                         marginTop: "20px",
@@ -250,7 +251,11 @@ export default function ServicesManagementModal({
                                     </button>
 
                                 </div>
-                            )}
+                            )} */}
+                            <ServiceDetailsModal
+                                service={selectedService}
+                                onClose={() => setSelectedService(null)}
+                            />
 
                         </div>
                     )}
