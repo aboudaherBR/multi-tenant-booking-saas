@@ -52,8 +52,7 @@ export default function SettingsPage() {
 
     const [newProfessional, setNewProfessional] = useState({
         name: "",
-        email: "",
-        password: ""
+        phone: ""
     });
 
     const [newService, setNewService] = useState({
@@ -511,6 +510,8 @@ export default function SettingsPage() {
                 isOpen={showProfessionalsModal}
                 onClose={() => setShowProfessionalsModal(false)}
                 professionals={professionals}
+                newProfessional={newProfessional}
+                setNewProfessional={setNewProfessional}
             />
         </div>
     );

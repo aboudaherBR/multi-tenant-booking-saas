@@ -1,7 +1,9 @@
 export default function ProfessionalsManagementModal({
     isOpen,
     onClose,
-    professionals
+    professionals,
+    newProfessional,
+    setNewProfessional
 }) {
 
     if (!isOpen) return null;
@@ -27,6 +29,48 @@ export default function ProfessionalsManagementModal({
                         onClick={onClose}
                     >
                         ✕
+                    </button>
+
+                </div>
+
+                <div style={{ marginTop: "20px" }}>
+
+                    <input
+                        type="text"
+                        placeholder="Nome do profissional"
+                        value={newProfessional.name}
+                        onChange={(e) =>
+                            setNewProfessional({
+                                ...newProfessional,
+                                name: e.target.value
+                            })
+                        }
+                        className="input"
+                    />
+
+                    <input
+                        type="text"
+                        placeholder="Telefone"
+                        value={newProfessional.phone}
+                        onChange={(e) =>
+                            setNewProfessional({
+                                ...newProfessional,
+                                phone: e.target.value
+                            })
+                        }
+                        className="input"
+                        style={{
+                            marginTop: "10px"
+                        }}
+                    />
+
+                    <button
+                        className="button-primary"
+                        style={{
+                            marginTop: "10px"
+                        }}
+                    >
+                        Adicionar profissional
                     </button>
 
                 </div>
