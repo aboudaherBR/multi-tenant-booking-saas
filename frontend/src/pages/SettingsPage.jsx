@@ -343,6 +343,30 @@ export default function SettingsPage() {
         setShowProfessionalServicesModal(true);
     }
 
+    async function updateService(service) {
+
+        try {
+
+            await apiClient(
+                `/services/${service.id}`,
+                {
+                    method: "PUT",
+                    body: {
+                        name: service.name,
+                        duration_minutes: Number(service.duration_minutes),
+                        base_price: Number(service.base_price)
+                    }
+                }
+            );
+
+            await loadServices();
+
+        } catch (err) {
+
+            console.error("Erro ao atualizar serviço", err);
+        }
+    }
+
 
     return (
 
@@ -480,6 +504,7 @@ export default function SettingsPage() {
                 setNewService={setNewService}
                 onCreate={createService}
                 onDelete={deleteService}
+                onUpdate={updateService}
             />
         </div>
     );

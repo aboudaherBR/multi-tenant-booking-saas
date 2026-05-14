@@ -7,7 +7,8 @@ export default function ServicesManagementModal({
     newService,
     setNewService,
     onCreate,
-    onDelete
+    onDelete,
+    onUpdate
 }) {
 
     console.log("ServicesManagementModal renderizou", {
@@ -136,6 +137,7 @@ export default function ServicesManagementModal({
 
                         <button
                             className="button-secondary"
+
                             style={{
                                 marginTop: "20px",
                                 marginRight: "8px"
@@ -154,6 +156,23 @@ export default function ServicesManagementModal({
                         >
                             Excluir serviço
                         </button>
+                        {isEditing && (
+                            <button
+                                className="button-primary"
+                                style={{
+                                    marginTop: "20px",
+                                    marginRight: "8px"
+                                }}
+                                onClick={async () => {
+
+                                    await onUpdate(selectedService);
+
+                                    setIsEditing(false);
+                                }}
+                            >
+                                Salvar alterações
+                            </button>
+                        )}
 
                     </div>
 
