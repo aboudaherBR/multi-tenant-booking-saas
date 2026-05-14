@@ -292,25 +292,21 @@ export default function SettingsPage() {
 
     async function createProfessional() {
 
-        await apiClient("/professionals", {
-            method: "POST",
-            body: {
-                name: newProfessional.name,
-                email: newProfessional.email,
-                password: newProfessional.password
-            }
-        });
+    await apiClient("/professionals", {
+        method: "POST",
+        body: {
+            name: newProfessional.name,
+            phone: newProfessional.phone
+        }
+    });
 
-        await loadProfessionals();
+    await loadProfessionals();
 
-        setShowNewProfessionalForm(false);
-
-        setNewProfessional({
-            name: "",
-            email: "",
-            password: ""
-        });
-    }
+    setNewProfessional({
+        name: "",
+        phone: ""
+    });
+}
 
     async function deleteService(serviceId) {
 
