@@ -6,6 +6,7 @@ import BusinessHoursModal from "../components/settingsModal/BusinessHoursModal";
 import ScheduleBlocksModal from "../components/settingsModal/ScheduleBlocksModal";
 import CreateScheduleBlockModal from "../components/settingsModal/CreateScheduleBlockModal";
 import ServicesManagementModal from "../components/settingsModal/ServicesManagementModal";
+import ProfessionalsManagementModal from "../components/settingsModal/ProfessionalsManagementModal";
 
 
 
@@ -505,6 +506,11 @@ export default function SettingsPage() {
                 onCreate={createService}
                 onDelete={deleteService}
                 onUpdate={updateService}
+            />
+            <ProfessionalsManagementModal
+                isOpen={showProfessionalsModal}
+                onClose={() => setShowProfessionalsModal(false)}
+                professionals={professionals}
             />
         </div>
     );
