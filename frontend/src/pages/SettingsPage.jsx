@@ -72,6 +72,7 @@ export default function SettingsPage() {
 
     const [blockType, setBlockType] = useState("global");
     const [showCreateBlockModal, setShowCreateBlockModal] = useState(false);
+    const [selectedProfessional, setSelectedProfessional] = useState(null);
     console.log("showCreateBlockModal:", showCreateBlockModal);
 
 
@@ -292,21 +293,21 @@ export default function SettingsPage() {
 
     async function createProfessional() {
 
-    await apiClient("/professionals", {
-        method: "POST",
-        body: {
-            name: newProfessional.name,
-            phone: newProfessional.phone
-        }
-    });
+        await apiClient("/professionals", {
+            method: "POST",
+            body: {
+                name: newProfessional.name,
+                phone: newProfessional.phone
+            }
+        });
 
-    await loadProfessionals();
+        await loadProfessionals();
 
-    setNewProfessional({
-        name: "",
-        phone: ""
-    });
-}
+        setNewProfessional({
+            name: "",
+            phone: ""
+        });
+    }
 
     async function deleteService(serviceId) {
 
@@ -509,6 +510,8 @@ export default function SettingsPage() {
                 newProfessional={newProfessional}
                 setNewProfessional={setNewProfessional}
                 onCreate={createProfessional}
+                selectedProfessional={selectedProfessional}
+                setSelectedProfessional={setSelectedProfessional}
             />
         </div>
     );

@@ -4,7 +4,9 @@ export default function ProfessionalsManagementModal({
     professionals,
     newProfessional,
     setNewProfessional,
-    onCreate
+    onCreate,
+    selectedProfessional,
+    setSelectedProfessional
 }) {
 
     if (!isOpen) return null;
@@ -88,11 +90,13 @@ export default function ProfessionalsManagementModal({
                         {professionals?.map((professional) => (
                             <div
                                 key={professional.id}
+                                onClick={() => setSelectedProfessional(professional)}
                                 style={{
                                     padding: "12px",
                                     border: "1px solid var(--color-border)",
                                     borderRadius: "var(--radius)",
-                                    marginBottom: "8px"
+                                    marginBottom: "8px",
+                                    cursor: "pointer"
                                 }}
                             >
 
@@ -102,6 +106,20 @@ export default function ProfessionalsManagementModal({
 
                             </div>
                         ))}
+
+                        {selectedProfessional && (
+                            <div style={{ marginTop: "20px" }}>
+
+                                <strong>
+                                    Profissional selecionado:
+                                </strong>
+
+                                <div style={{ marginTop: "8px" }}>
+                                    {selectedProfessional.name}
+                                </div>
+
+                            </div>
+                        )}
 
                     </div>
 
