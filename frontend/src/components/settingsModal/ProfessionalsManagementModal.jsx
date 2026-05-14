@@ -3,7 +3,8 @@ export default function ProfessionalsManagementModal({
     onClose,
     professionals,
     newProfessional,
-    setNewProfessional
+    setNewProfessional,
+    onCreate
 }) {
 
     if (!isOpen) return null;
@@ -69,6 +70,7 @@ export default function ProfessionalsManagementModal({
                         style={{
                             marginTop: "10px"
                         }}
+                        onClick={onCreate}
                     >
                         Adicionar profissional
                     </button>

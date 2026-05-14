@@ -512,6 +512,7 @@ export default function SettingsPage() {
                 professionals={professionals}
                 newProfessional={newProfessional}
                 setNewProfessional={setNewProfessional}
+                onCreate={createProfessional}
             />
         </div>
     );
