@@ -6,7 +6,14 @@ export default function ServiceDetailsModal({
     if (!service) return null;
 
     return (
-        <div className="modal-backdrop">
+        <div
+            className="modal-backdrop"
+            style={{
+                position: "fixed",
+                inset: 0,
+                zIndex: 10000
+            }}
+        >
 
             <div
                 className="modal-content modal-content--scrollable"
