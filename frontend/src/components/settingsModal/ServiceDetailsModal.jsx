@@ -30,10 +30,24 @@ export default function ServiceDetailsModal({
 
                 </div>
 
-                <div>
-                    {service.name}
-                </div>
+                <div style={{ marginTop: "16px" }}>
 
+                    <div>
+                        <strong>Nome:</strong>{" "}
+                        {service.name}
+                    </div>
+
+                    <div style={{ marginTop: "8px" }}>
+                        <strong>Duração:</strong>{" "}
+                        {service.duration_minutes} min
+                    </div>
+
+                    <div style={{ marginTop: "8px" }}>
+                        <strong>Preço:</strong>{" "}
+                        R$ {Number(service.base_price).toFixed(2)}
+                    </div>
+
+                </div>
             </div>
 
         </div>
