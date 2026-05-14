@@ -108,14 +108,62 @@ export default function ProfessionalsManagementModal({
                         ))}
 
                         {selectedProfessional && (
-                            <div style={{ marginTop: "20px" }}>
 
-                                <strong>
-                                    Profissional selecionado:
-                                </strong>
+                            <div
+                                style={{
+                                    position: "fixed",
+                                    inset: 0,
+                                    background: "rgba(0, 0, 0, 0.5)",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    zIndex: 9999
+                                }}
+                            >
 
-                                <div style={{ marginTop: "8px" }}>
-                                    {selectedProfessional.name}
+                                <div
+                                    className="modal-content"
+                                    style={{
+                                        width: "90%",
+                                        maxWidth: "400px"
+                                    }}
+                                >
+
+                                    <div
+                                        style={{
+                                            display: "flex",
+                                            justifyContent: "space-between",
+                                            alignItems: "center"
+                                        }}
+                                    >
+
+                                        <h3 className="heading">
+                                            Profissional
+                                        </h3>
+
+                                        <button
+                                            className="button-icon"
+                                            onClick={() => setSelectedProfessional(null)}
+                                        >
+                                            ✕
+                                        </button>
+
+                                    </div>
+
+                                    <div style={{ marginTop: "20px" }}>
+
+                                        <div>
+                                            <strong>Nome:</strong>{" "}
+                                            {selectedProfessional.name}
+                                        </div>
+
+                                        <div style={{ marginTop: "10px" }}>
+                                            <strong>Telefone:</strong>{" "}
+                                            {selectedProfessional.phone || "Não informado"}
+                                        </div>
+
+                                    </div>
+
                                 </div>
 
                             </div>
