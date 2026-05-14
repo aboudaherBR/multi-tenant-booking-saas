@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const pool = require('../database/db');
+const crypto = require('crypto');
 
 const {
   findActiveProfessionalsByCompanyId,
@@ -48,18 +49,18 @@ async function list(req, res, next) {
 async function create(req, res, next) {
   try {
 
-    const { name, password } = req.body;
+    const { name, phone } = req.body;
 
-    // 🔥 JÁ ESTAVA CORRETO
     const companyId = req.user.companyId;
 
-    if (!name || !password) {
+    if (!name || !phone) {
       return res.status(400).json({
-        message: 'name e password são obrigatórios'
+        message: 'name e phone são obrigatórios'
       });
     }
 
-    const username = name.trim();
+    const username =
+      `professional_${Date.now()}`;
 
     const slug =
       username
@@ -68,7 +69,11 @@ async function create(req, res, next) {
       '-' +
       Date.now().toString().slice(-6);
 
-    const passwordHash = await bcrypt.hash(password, 10);
+    const generatedPassword =
+      crypto.randomUUID();
+
+    const passwordHash =
+      await bcrypt.hash(generatedPassword, 10);
 
     const client = await pool.connect();
 
@@ -100,19 +105,26 @@ async function create(req, res, next) {
         INSERT INTO professionals (
           company_id,
           user_id,
-          slug
+          slug,
+          phone
         )
-        VALUES ($1, $2, $3)
+        VALUES ($1, $2, $3, $4)
         RETURNING id
         `,
-        [companyId, userId, slug]
+        [
+          companyId,
+          userId,
+          slug,
+          phone
+        ]
       );
 
       await client.query('COMMIT');
 
       return res.status(201).json({
         id: professionalResult.rows[0].id,
-        name
+        name,
+        phone
       });
 
     } catch (error) {
@@ -130,7 +142,6 @@ async function create(req, res, next) {
     next(error);
   }
 }
-
 
 async function listPublic(req, res, next) {
   try {
