@@ -255,6 +255,7 @@ export default function ServicesManagementModal({
                             <ServiceDetailsModal
                                 service={selectedService}
                                 onClose={() => setSelectedService(null)}
+                                onDelete={onDelete}
                             />
 
                         </div>

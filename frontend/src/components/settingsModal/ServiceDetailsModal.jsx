@@ -1,6 +1,7 @@
 export default function ServiceDetailsModal({
     service,
-    onClose
+    onClose,
+    onDelete
 }) {
 
     if (!service) return null;
@@ -53,6 +54,16 @@ export default function ServiceDetailsModal({
                         <strong>Preço:</strong>{" "}
                         R$ {Number(service.base_price).toFixed(2)}
                     </div>
+
+                    <button
+                        className="button-danger"
+                        style={{
+                            marginTop: "20px"
+                        }}
+                        onClick={() => onDelete(service.id)}
+                    >
+                        Excluir serviço
+                    </button>
 
                 </div>
             </div>
