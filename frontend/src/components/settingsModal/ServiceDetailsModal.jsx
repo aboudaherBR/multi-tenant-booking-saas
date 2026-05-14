@@ -12,7 +12,8 @@ export default function ServiceDetailsModal({
             style={{
                 position: "fixed",
                 inset: 0,
-                zIndex: 10000
+                zIndex: 10000,
+                background: "transparent"
             }}
         >
 
