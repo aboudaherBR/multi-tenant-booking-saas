@@ -411,31 +411,39 @@ export default function ProfessionalsManagementModal({
 
                                                     </div>
 
-                                                    <div
-                                                        style={{
-                                                            display: "flex",
-                                                            gap: "10px",
-                                                            marginTop: "20px"
-                                                        }}
-                                                    >
+                                                    <div style={{ marginTop: "20px" }}>
 
-                                                        <button
-                                                            className="button-primary"
+                                                        <strong>
+                                                            Enviar link do profissional
+                                                        </strong>
+
+                                                        <div
                                                             style={{
-                                                                flex: 1
+                                                                display: "flex",
+                                                                gap: "10px",
+                                                                marginTop: "10px"
                                                             }}
                                                         >
-                                                            Copiar link
-                                                        </button>
 
-                                                        <button
-                                                            className="button-secondary"
-                                                            style={{
-                                                                flex: 1
-                                                            }}
-                                                        >
-                                                            WhatsApp
-                                                        </button>
+                                                            <button
+                                                                className="button-primary"
+                                                                style={{
+                                                                    flex: 1
+                                                                }}
+                                                            >
+                                                                Copiar link
+                                                            </button>
+
+                                                            <button
+                                                                className="button-secondary"
+                                                                style={{
+                                                                    flex: 1
+                                                                }}
+                                                            >
+                                                                WhatsApp
+                                                            </button>
+
+                                                        </div>
 
                                                     </div>
 
