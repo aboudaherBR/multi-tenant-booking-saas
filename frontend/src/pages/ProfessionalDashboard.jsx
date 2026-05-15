@@ -12,7 +12,6 @@ export default function ProfessionalDashboard() {
     professionalSlug
   } = useParams();
 
-
   async function fetchAppointments() {
 
     try {
@@ -110,57 +109,29 @@ export default function ProfessionalDashboard() {
 
                   <div
                     key={appt.id}
-                    className="card"
-                    style={{
-                      padding: "16px",
-                      marginTop: "12px"
-                    }}
+                    className="appointment-card"
                   >
 
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center"
-                      }}
-                    >
-
-                      <strong>
-                        {appt.start_time?.slice(0, 5)}
-                      </strong>
-
-                      <span
-                        style={{
-                          color: "var(--color-text-secondary)",
-                          fontSize: "14px"
-                        }}
-                      >
-                        R$ {Number(
-                          appt.service_price_snapshot || 0
-                        ).toFixed(2)}
-                      </span>
-
+                    <div className="appointment-hour">
+                      {appt.start_time?.slice(0, 5)}
                     </div>
 
-                    <div style={{ marginTop: "10px" }}>
+                    <div className="appointment-content">
 
-                      <div
-                        style={{
-                          fontWeight: "600"
-                        }}
-                      >
+                      <div className="appointment-client">
                         {appt.client_name}
                       </div>
 
-                      <div
-                        style={{
-                          color: "var(--color-text-secondary)",
-                          marginTop: "4px"
-                        }}
-                      >
+                      <div className="appointment-service">
                         {appt.service_name}
                       </div>
 
+                    </div>
+
+                    <div className="appointment-price">
+                      R$ {Number(
+                        appt.service_price_snapshot || 0
+                      ).toFixed(2)}
                     </div>
 
                   </div>
