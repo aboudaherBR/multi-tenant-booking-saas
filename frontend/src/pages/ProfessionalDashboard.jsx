@@ -103,21 +103,69 @@ export default function ProfessionalDashboard() {
 
             ) : (
 
-              <ul>
+              <div>
 
                 {data.appointments.map((appt) => (
 
-                  <li key={appt.id}>
+                  <div
+                    key={appt.id}
+                    className="card"
+                    style={{
+                      padding: "16px",
+                      marginTop: "12px"
+                    }}
+                  >
 
-                    <strong>
-                      {appt.start_time?.slice(0, 5)}
-                    </strong>{" "}
-                    — {appt.client_name} ({appt.service_name})
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center"
+                      }}
+                    >
 
-                  </li>
+                      <strong>
+                        {appt.start_time?.slice(0, 5)}
+                      </strong>
+
+                      <span
+                        style={{
+                          color: "var(--color-text-secondary)",
+                          fontSize: "14px"
+                        }}
+                      >
+                        R$ {Number(
+                          appt.service_price_snapshot || 0
+                        ).toFixed(2)}
+                      </span>
+
+                    </div>
+
+                    <div style={{ marginTop: "10px" }}>
+
+                      <div
+                        style={{
+                          fontWeight: "600"
+                        }}
+                      >
+                        {appt.client_name}
+                      </div>
+
+                      <div
+                        style={{
+                          color: "var(--color-text-secondary)",
+                          marginTop: "4px"
+                        }}
+                      >
+                        {appt.service_name}
+                      </div>
+
+                    </div>
+
+                  </div>
                 ))}
 
-              </ul>
+              </div>
             )}
 
           </div>
