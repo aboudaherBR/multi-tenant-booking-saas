@@ -6,7 +6,8 @@ export default function ProfessionalsManagementModal({
     setNewProfessional,
     onCreate,
     selectedProfessional,
-    setSelectedProfessional
+    setSelectedProfessional,
+    onOpenProfessionalServices
 }) {
 
     if (!isOpen) return null;
@@ -161,6 +162,18 @@ export default function ProfessionalsManagementModal({
                                             <strong>Telefone:</strong>{" "}
                                             {selectedProfessional.phone || "Não informado"}
                                         </div>
+
+                                        <button
+                                            className="button-primary"
+                                            style={{
+                                                marginTop: "20px"
+                                            }}
+                                            onClick={() =>
+                                                onOpenProfessionalServices(selectedProfessional)
+                                            }
+                                        >
+                                            Serviços do profissional
+                                        </button>
 
                                     </div>
 

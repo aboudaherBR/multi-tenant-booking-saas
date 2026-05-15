@@ -92,6 +92,7 @@ async function findActiveProfessionalsByCompanyId(companyId) {
   return result.rows;
 }
 
+
 async function createProfessional(
   {
     companyId,

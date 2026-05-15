@@ -512,6 +512,7 @@ export default function SettingsPage() {
                 onCreate={createProfessional}
                 selectedProfessional={selectedProfessional}
                 setSelectedProfessional={setSelectedProfessional}
+                onOpenProfessionalServices={openProfessionalServices}
             />
         </div>
     );
