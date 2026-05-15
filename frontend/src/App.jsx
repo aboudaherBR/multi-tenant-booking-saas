@@ -42,18 +42,11 @@ function App() {
         <Route path="/reports" element={<ReportsPage />} />
       </Route>
 
-      {/* 🔥 ROTA PROFISSIONAL PROTEGIDA */}
+      {/* ROTAS PROFISSIONAL */}
       <Route
-        element={
-          isAuthenticated && user?.isProfessional
-            ? <ProfessionalLayout />
-            : <Navigate to="/login" />
-        }
-      >
-        <Route path="/professional" element={<ProfessionalDashboard />} />
-        <Route path="/professional/schedule" element={<ProfessionalSchedulePage />} />
-      </Route>
-
+        path="/:companySlug/:professionalSlug"
+        element={<ProfessionalDashboard />}
+      />
       {/* FALLBACK */}
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>

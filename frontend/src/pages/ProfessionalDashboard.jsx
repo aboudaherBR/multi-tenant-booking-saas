@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import api from "../api/apiClient";
-import { useAuth } from "../hooks/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function ProfessionalDashboard() {
   const [data, setData] = useState(null);
-  const { user } = useAuth();
+  const {
+    companySlug,
+      professionalSlug
+  } = useParams();
   const navigate = useNavigate();
 
   async function fetchAppointments() {
@@ -25,7 +27,7 @@ export default function ProfessionalDashboard() {
 
   return (
     <div style={{ padding: 20 }}>
-      <h1>Olá, {user?.name}</h1>
+      <h1>Olá, Profissional</h1>
 
       <h2 style={{ marginTop: 20 }}>
         Agendamentos de hoje — R$ {Number(data.totalAmount || 0).toFixed(2)}
