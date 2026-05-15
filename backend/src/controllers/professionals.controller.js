@@ -238,6 +238,8 @@ async function getMyAppointments(req, res, next) {
       professionalId
     });
 
+    
+
     // 🔹 4. Total do dia
     const total = appointments.reduce((acc, item) => {
       return acc + (Number(item.service_price_snapshot) || 0);
@@ -323,6 +325,8 @@ async function publicDashboard(req, res, next) {
         date,
         professionalId: professional.id
       });
+
+      console.log(appointments);
 
     return res.status(200).json({
       professionalName: professional.name,
