@@ -321,17 +321,7 @@ export default function ProfessionalsManagementModal({
                                                                 marginBottom: "8px"
                                                             }}
                                                         >
-                                                            <button
-                                                                className="button-danger"
-                                                                style={{
-                                                                    marginTop: "10px"
-                                                                }}
-                                                                onClick={() =>
-                                                                    removeServiceFromProfessional(service.id)
-                                                                }
-                                                            >
-                                                                Remover serviço
-                                                            </button>
+
 
 
                                                             <div>
@@ -347,6 +337,17 @@ export default function ProfessionalsManagementModal({
                                                             <div>
                                                                 R$ {Number(service.price).toFixed(2)}
                                                             </div>
+                                                            <button
+                                                                className="button-danger"
+                                                                style={{
+                                                                    marginTop: "10px"
+                                                                }}
+                                                                onClick={() =>
+                                                                    removeServiceFromProfessional(service.id)
+                                                                }
+                                                            >
+                                                                Remover serviço
+                                                            </button>
 
                                                         </div>
                                                     ))
