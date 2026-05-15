@@ -254,11 +254,34 @@ async function getMyAppointments(req, res, next) {
   }
 }
 
+async function publicDashboard(req, res, next) {
+  try {
+
+    const {
+      companySlug,
+      professionalSlug
+    } = req.params;
+
+    console.log(
+      companySlug,
+      professionalSlug
+    );
+
+    return res.status(200).json({
+      ok: true
+    });
+
+  } catch (error) {
+    next(error);
+  }
+}
+
 
 module.exports = {
   list,
   create,
   listPublic,
   listServicesPublic,
-  getMyAppointments
+  getMyAppointments,
+  publicDashboard
 };

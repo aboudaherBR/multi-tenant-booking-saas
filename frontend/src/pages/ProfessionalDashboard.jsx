@@ -6,13 +6,15 @@ export default function ProfessionalDashboard() {
   const [data, setData] = useState(null);
   const {
     companySlug,
-      professionalSlug
+    professionalSlug
   } = useParams();
   const navigate = useNavigate();
 
   async function fetchAppointments() {
     try {
-      const data = await api("/professional/me/appointments");
+      const data = await api(
+        `/public/${companySlug}/${professionalSlug}/dashboard`
+      );
       setData(data);
     } catch (error) {
       console.error("Erro ao buscar agendamentos:", error);

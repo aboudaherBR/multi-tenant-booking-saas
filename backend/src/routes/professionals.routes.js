@@ -12,6 +12,11 @@ router.get(
 );
 
 router.get(
+  "/public/:companySlug/:professionalSlug/dashboard",
+  professionalsController.publicDashboard
+);
+
+router.get(
   '/public/:companySlug/professionals',
   professionalsController.listPublic
 );
@@ -32,5 +37,7 @@ router.post(
   requireAuth,
   professionalsController.create
 );
+
+
 
 module.exports = router;

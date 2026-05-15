@@ -47,6 +47,7 @@ function App() {
         path="/:companySlug/:professionalSlug"
         element={<ProfessionalDashboard />}
       />
+      
       {/* FALLBACK */}
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
