@@ -81,15 +81,30 @@ export default function ProfessionalDashboard() {
         >
 
           <h1 className="heading">
-            Olá, Profissional
+            Olá, {data.professionalName}
           </h1>
 
-          <h2 style={{ marginTop: 20 }}>
-            Agendamentos de hoje — R${" "}
-            {Number(data.totalAmount || 0).toFixed(2)}
-          </h2>
+          <p className="subtext">
+            Aqui estão seus agendamentos do dia
+          </p>
 
-          <div style={{ marginTop: 20 }}>
+          {/* SUMMARY */}
+          <div className="summary-card">
+
+            <div className="summary-label">
+              Faturamento hoje
+            </div>
+
+            <div className="summary-value">
+              R$ {Number(
+                data.totalAmount || 0
+              ).toFixed(2)}
+            </div>
+
+          </div>
+
+          {/* APPOINTMENTS */}
+          <div style={{ marginTop: 30 }}>
 
             <h3>
               Agendamentos

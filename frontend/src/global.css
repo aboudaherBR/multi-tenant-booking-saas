@@ -155,6 +155,32 @@ select {
   color: var(--color-primary);
 }
 
+.summary-card {
+  margin-top: 24px;
+
+  padding: 20px;
+
+  border-radius: 16px;
+
+  background: linear-gradient(135deg,
+      var(--color-primary),
+      var(--color-primary-light));
+
+  color: white;
+}
+
+.summary-label {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.summary-value {
+  margin-top: 8px;
+
+  font-size: 32px;
+  font-weight: 700;
+}
+
 
 /* ========================================
    DESIGN SYSTEM - LOADING AND ANIMATIONS
