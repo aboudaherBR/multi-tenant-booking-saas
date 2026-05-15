@@ -10,7 +10,7 @@ export default function ProfessionalDashboard() {
     companySlug,
     professionalSlug
   } = useParams();
-  
+
 
   async function fetchAppointments() {
 
@@ -32,7 +32,15 @@ export default function ProfessionalDashboard() {
   }
 
   useEffect(() => {
+
     fetchAppointments();
+
+    const interval = setInterval(() => {
+      fetchAppointments();
+    }, 15000);
+
+    return () => clearInterval(interval);
+
   }, []);
 
   if (!data) {
