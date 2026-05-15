@@ -1,3 +1,5 @@
+import apiClient from "../../api/apiClient";
+
 export default function ProfessionalsManagementModal({
     isOpen,
     onClose,
@@ -91,8 +93,27 @@ export default function ProfessionalsManagementModal({
                         {professionals?.map((professional) => (
                             <div
                                 key={professional.id}
-                                onClick={() => setSelectedProfessional(professional)}
-                                style={{
+                                onClick={async () => {
+
+                                    try {
+
+                                        const data = await apiClient(
+                                            `/admin/professionals/${professional.id}/services`
+                                        );
+
+                                        setSelectedProfessional({
+                                            ...professional,
+                                            services: data
+                                        });
+
+                                    } catch (error) {
+
+                                        console.error(
+                                            "Erro ao carregar serviços do profissional",
+                                            error
+                                        );
+                                    }
+                                }} style={{
                                     padding: "12px",
                                     border: "1px solid var(--color-border)",
                                     borderRadius: "var(--radius)",
@@ -162,18 +183,56 @@ export default function ProfessionalsManagementModal({
                                             <strong>Telefone:</strong>{" "}
                                             {selectedProfessional.phone || "Não informado"}
                                         </div>
+                                        <div style={{ marginTop: "20px" }}>
 
-                                        <button
-                                            className="button-primary"
-                                            style={{
-                                                marginTop: "20px"
-                                            }}
-                                            onClick={() =>
-                                                onOpenProfessionalServices(selectedProfessional)
-                                            }
-                                        >
-                                            Serviços do profissional
-                                        </button>
+                                            <strong>
+                                                Serviços do profissional
+                                            </strong>
+
+                                            <div style={{ marginTop: "10px" }}>
+
+                                                {selectedProfessional.services?.length === 0 ? (
+
+                                                    <div className="text-muted">
+                                                        Nenhum serviço vinculado
+                                                    </div>
+
+                                                ) : (
+
+                                                    selectedProfessional.services?.map((service) => (
+
+                                                        <div
+                                                            key={service.id}
+                                                            style={{
+                                                                padding: "10px",
+                                                                border: "1px solid var(--color-border)",
+                                                                borderRadius: "var(--radius)",
+                                                                marginBottom: "8px"
+                                                            }}
+                                                        >
+
+                                                            <div>
+                                                                <strong>
+                                                                    {service.name}
+                                                                </strong>
+                                                            </div>
+
+                                                            <div className="text-muted">
+                                                                {service.duration_minutes} min
+                                                            </div>
+
+                                                            <div>
+                                                                R$ {Number(service.price).toFixed(2)}
+                                                            </div>
+
+                                                        </div>
+                                                    ))
+                                                )}
+
+                                            </div>
+
+                                        </div>
+
 
                                     </div>
 
