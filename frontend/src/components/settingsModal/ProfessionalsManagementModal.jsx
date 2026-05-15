@@ -21,6 +21,9 @@ export default function ProfessionalsManagementModal({
     const [customPrice, setCustomPrice] =
         useState("");
 
+    const professionalLink =
+        `${window.location.origin}/book/${selectedProfessional?.slug}`;
+
 
     async function loadAvailableServices() {
 
@@ -430,6 +433,24 @@ export default function ProfessionalsManagementModal({
                                                                 style={{
                                                                     flex: 1
                                                                 }}
+                                                                onClick={async () => {
+
+                                                                    try {
+
+                                                                        await navigator.clipboard.writeText(
+                                                                            professionalLink
+                                                                        );
+
+                                                                        alert("Link copiado!");
+
+                                                                    } catch (error) {
+
+                                                                        console.error(
+                                                                            "Erro ao copiar link",
+                                                                            error
+                                                                        );
+                                                                    }
+                                                                }}
                                                             >
                                                                 Copiar link
                                                             </button>
@@ -438,6 +459,19 @@ export default function ProfessionalsManagementModal({
                                                                 className="button-secondary"
                                                                 style={{
                                                                     flex: 1
+                                                                }}
+                                                                onClick={() => {
+
+                                                                    const message =
+                                                                        `Olá! Seu link de agendamento:\n\n${professionalLink}`;
+
+                                                                    const encodedMessage =
+                                                                        encodeURIComponent(message);
+
+                                                                    window.open(
+                                                                        `https://wa.me/${selectedProfessional.phone?.replace(/\D/g, "")}?text=${encodedMessage}`,
+                                                                        "_blank"
+                                                                    );
                                                                 }}
                                                             >
                                                                 WhatsApp
