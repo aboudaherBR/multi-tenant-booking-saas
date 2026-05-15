@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../api/apiClient";
 import { useParams } from "react-router-dom";
+import "../../src/global.css";
 
 export default function ProfessionalDashboard() {
 
