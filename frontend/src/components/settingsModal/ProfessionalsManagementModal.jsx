@@ -411,6 +411,34 @@ export default function ProfessionalsManagementModal({
 
                                                     </div>
 
+                                                    <div
+                                                        style={{
+                                                            display: "flex",
+                                                            gap: "10px",
+                                                            marginTop: "20px"
+                                                        }}
+                                                    >
+
+                                                        <button
+                                                            className="button-primary"
+                                                            style={{
+                                                                flex: 1
+                                                            }}
+                                                        >
+                                                            Copiar link
+                                                        </button>
+
+                                                        <button
+                                                            className="button-secondary"
+                                                            style={{
+                                                                flex: 1
+                                                            }}
+                                                        >
+                                                            WhatsApp
+                                                        </button>
+
+                                                    </div>
+
                                                 </div>
 
                                             </div>
