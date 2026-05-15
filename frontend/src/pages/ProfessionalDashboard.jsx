@@ -10,6 +10,7 @@ export default function ProfessionalDashboard() {
     companySlug,
     professionalSlug
   } = useParams();
+  
 
   async function fetchAppointments() {
 

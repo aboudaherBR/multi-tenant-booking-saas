@@ -262,13 +262,72 @@ async function publicDashboard(req, res, next) {
       professionalSlug
     } = req.params;
 
-    console.log(
-      companySlug,
-      professionalSlug
+    const companyResult = await pool.query(
+      `
+        SELECT id
+        FROM companies
+        WHERE slug = $1
+      `,
+      [companySlug]
     );
 
+    const company =
+      companyResult.rows[0];
+
+    if (!company) {
+      return res.status(404).json({
+        message: "Empresa não encontrada"
+      });
+    }
+
+    const professionalResult = await pool.query(
+      `
+        SELECT
+          p.id,
+          u.name
+        FROM professionals p
+        JOIN users u
+          ON u.id = p.user_id
+        WHERE
+          p.company_id = $1
+          AND p.slug = $2
+          AND p.is_active = true
+          AND u.is_active = true
+      `,
+      [
+        company.id,
+        professionalSlug
+      ]
+    );
+
+    const professional =
+      professionalResult.rows[0];
+
+    if (!professional) {
+      return res.status(404).json({
+        message: "Profissional não encontrado"
+      });
+    }
+
+    const date =
+      req.query.date ||
+      new Date().toISOString().split('T')[0];
+
+    const {
+      findAppointmentsByDate
+    } = require('../database/appointments.repository');
+
+    const appointments =
+      await findAppointmentsByDate({
+        companyId: company.id,
+        date,
+        professionalId: professional.id
+      });
+
     return res.status(200).json({
-      ok: true
+      professionalName: professional.name,
+      totalAmount: 0,
+      appointments
     });
 
   } catch (error) {
