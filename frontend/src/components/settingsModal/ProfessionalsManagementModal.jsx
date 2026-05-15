@@ -1,4 +1,5 @@
 import apiClient from "../../api/apiClient";
+import { useState, useEffect } from "react";
 
 export default function ProfessionalsManagementModal({
     isOpen,
@@ -11,6 +12,34 @@ export default function ProfessionalsManagementModal({
     setSelectedProfessional,
     onOpenProfessionalServices
 }) {
+    const [availableServices, setAvailableServices] =
+        useState([]);
+
+    const [selectedServiceId, setSelectedServiceId] =
+        useState("");
+
+    const [customPrice, setCustomPrice] =
+        useState("");
+
+
+    async function loadAvailableServices() {
+
+        try {
+            const data = await apiClient("/services");
+            setAvailableServices(data.services || []);
+
+        } catch (error) {
+            console.error(
+                "Erro ao carregar serviços",
+                error
+            );
+            setAvailableServices([]);
+        }
+    }
+
+    useEffect(() => {
+        loadAvailableServices();
+    }, []);
 
     if (!isOpen) return null;
 
@@ -228,6 +257,43 @@ export default function ProfessionalsManagementModal({
                                                         </div>
                                                     ))
                                                 )}
+
+                                                <div style={{ marginTop: "20px" }}>
+
+                                                    <strong>
+                                                        Adicionar serviço
+                                                    </strong>
+
+                                                    <div style={{ marginTop: "10px" }}>
+
+                                                        <select
+                                                            className="input"
+                                                            value={selectedServiceId}
+                                                            onChange={(e) =>
+                                                                setSelectedServiceId(e.target.value)
+                                                            }
+                                                        >
+
+                                                            <option value="">
+                                                                Selecione um serviço
+                                                            </option>
+
+                                                            {availableServices.map((service) => (
+
+                                                                <option
+                                                                    key={service.id}
+                                                                    value={service.id}
+                                                                >
+                                                                    {service.name}
+                                                                </option>
+
+                                                            ))}
+
+                                                        </select>
+
+                                                    </div>
+
+                                                </div>
 
                                             </div>
 
