@@ -245,6 +245,8 @@ async function getMyAppointments(req, res, next) {
       return acc + (Number(item.service_price_snapshot) || 0);
     }, 0);
 
+    console.log(total);
+
     return res.status(200).json({
       date,
       totalAmount: total,
