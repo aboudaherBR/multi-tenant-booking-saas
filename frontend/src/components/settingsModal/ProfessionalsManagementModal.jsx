@@ -37,6 +37,49 @@ export default function ProfessionalsManagementModal({
         }
     }
 
+    async function addServiceToProfessional() {
+
+        if (!selectedServiceId) {
+            return;
+        }
+
+        try {
+
+            await apiClient(
+                `/admin/professionals/${selectedProfessional.id}/services`,
+                {
+                    method: "POST",
+                    body: {
+                        serviceId: selectedServiceId,
+                        customPrice:
+                            customPrice
+                                ? Number(customPrice)
+                                : null
+                    }
+                }
+            );
+
+            const data = await apiClient(
+                `/admin/professionals/${selectedProfessional.id}/services`
+            );
+
+            setSelectedProfessional({
+                ...selectedProfessional,
+                services: data
+            });
+
+            setSelectedServiceId("");
+            setCustomPrice("");
+
+        } catch (error) {
+
+            console.error(
+                "Erro ao adicionar serviço",
+                error
+            );
+        }
+    }
+
     useEffect(() => {
         loadAvailableServices();
     }, []);
@@ -309,6 +352,7 @@ export default function ProfessionalsManagementModal({
                                                             style={{
                                                                 marginTop: "10px"
                                                             }}
+                                                            onClick={addServiceToProfessional}
                                                         >
                                                             Adicionar serviço
                                                         </button>
