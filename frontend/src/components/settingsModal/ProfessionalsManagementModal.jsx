@@ -291,6 +291,28 @@ export default function ProfessionalsManagementModal({
 
                                                         </select>
 
+                                                        <input
+                                                            type="number"
+                                                            placeholder="Preço personalizado (opcional)"
+                                                            value={customPrice}
+                                                            onChange={(e) =>
+                                                                setCustomPrice(e.target.value)
+                                                            }
+                                                            className="input"
+                                                            style={{
+                                                                marginTop: "10px"
+                                                            }}
+                                                        />
+
+                                                        <button
+                                                            className="button-primary"
+                                                            style={{
+                                                                marginTop: "10px"
+                                                            }}
+                                                        >
+                                                            Adicionar serviço
+                                                        </button>
+
                                                     </div>
 
                                                 </div>
