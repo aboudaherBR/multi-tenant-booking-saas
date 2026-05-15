@@ -179,7 +179,8 @@ async function findAppointmentsByDate({ companyId, date, professionalId }) {
       a.end_time,
       c.name AS client_name,
       s.name AS service_name,
-      u.name AS professional_name
+      u.name AS professional_name,
+      a.service_price_snapshot
     FROM appointments a
     JOIN clients c
       ON c.id = a.client_id
