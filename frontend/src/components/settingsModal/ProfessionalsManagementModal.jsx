@@ -80,6 +80,45 @@ export default function ProfessionalsManagementModal({
         }
     }
 
+    async function removeServiceFromProfessional(
+        serviceId
+    ) {
+
+        const confirmDelete = confirm(
+            "Remover este serviço do profissional?"
+        );
+
+        if (!confirmDelete) {
+            return;
+        }
+
+        try {
+
+            await apiClient(
+                `/admin/professionals/${selectedProfessional.id}/services/${serviceId}`,
+                {
+                    method: "DELETE"
+                }
+            );
+
+            const data = await apiClient(
+                `/admin/professionals/${selectedProfessional.id}/services`
+            );
+
+            setSelectedProfessional({
+                ...selectedProfessional,
+                services: data
+            });
+
+        } catch (error) {
+
+            console.error(
+                "Erro ao remover serviço",
+                error
+            );
+        }
+    }
+
     useEffect(() => {
         loadAvailableServices();
     }, []);
@@ -282,6 +321,18 @@ export default function ProfessionalsManagementModal({
                                                                 marginBottom: "8px"
                                                             }}
                                                         >
+                                                            <button
+                                                                className="button-danger"
+                                                                style={{
+                                                                    marginTop: "10px"
+                                                                }}
+                                                                onClick={() =>
+                                                                    removeServiceFromProfessional(service.id)
+                                                                }
+                                                            >
+                                                                Remover serviço
+                                                            </button>
+
 
                                                             <div>
                                                                 <strong>
