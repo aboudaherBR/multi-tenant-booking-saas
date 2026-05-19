@@ -184,7 +184,9 @@ export default function ProfessionalDashboard() {
             <button
               className="button-primary"
               onClick={() =>
-                navigate("/professional/schedule")
+                navigate(
+                  `/${companySlug}/${professionalSlug}/schedule`
+                )
               }
             >
               Agenda
