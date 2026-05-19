@@ -1,16 +1,20 @@
 import { useEffect, useState } from "react";
 import api from "../api/apiClient";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import "../../src/global.css";
 
 export default function ProfessionalDashboard() {
 
   const [data, setData] = useState(null);
 
+
+
   const {
     companySlug,
     professionalSlug
   } = useParams();
+
+  const navigate = useNavigate();
 
   async function fetchAppointments() {
 
