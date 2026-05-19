@@ -114,126 +114,139 @@ export default function ProfessionalReportsPage() {
 
                     <div
                         style={{
-                            marginTop: "24px",
                             display: "flex",
-                            gap: "12px",
-                            flexWrap: "wrap"
+                            flexDirection: "column",
+                            gap: "6px"
                         }}
                     >
 
-                        <div
-                            style={{
-                                display: "flex",
-                                flexDirection: "column",
-                                gap: "6px"
-                            }}
+                        <label className="subtext">
+                            Início
+                        </label>
+
+                        <input
+                            type="date"
+                            value={startDate}
+                            onChange={(e) =>
+                                setStartDate(e.target.value)
+                            }
+                        />
+
+                    </div>
+
+                    <div
+                        style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: "6px"
+                        }}
+                    >
+
+                        <label className="subtext">
+                            Início
+                        </label>
+
+                        <input
+                            type="date"
+                            value={startDate}
+                            onChange={(e) =>
+                                setStartDate(e.target.value)
+                            }
+                        />
+
+                    </div>
+
+                    <div>
+
+                        <label className="subtext">
+                            Fim
+                        </label>
+
+                        <input
+                            type="date"
+                            value={endDate}
+                            onChange={(e) =>
+                                setEndDate(e.target.value)
+                            }
+                        />
+
+                    </div>
+
+                    <div
+                        style={{
+                            display: "flex",
+                            alignItems: "flex-end"
+                        }}
+                    >
+
+                        <button
+                            className="button-primary"
+                            onClick={fetchReport}
                         >
+                            Buscar
+                        </button>
 
-                            <label className="subtext">
-                                Início
-                            </label>
+                    </div>
 
-                            <input
-                                type="date"
-                                value={startDate}
-                                onChange={(e) =>
-                                    setStartDate(e.target.value)
-                                }
-                            />
+                </div>
+
+                {report && (
+
+                    <div
+                        style={{
+                            marginTop: "24px",
+                            display: "grid",
+                            gap: "16px"
+                        }}
+                    >
+
+                        <div className="summary-card">
+
+                            <div className="summary-label">
+                                Total de serviços
+                            </div>
+
+                            <div className="summary-value">
+                                {report.totalAppointments}
+                            </div>
 
                         </div>
 
-                        <div>
+                        <div className="summary-card">
 
-                            <label className="subtext">
-                                Fim
-                            </label>
+                            <div className="summary-label">
+                                Faturamento
+                            </div>
 
-                            <input
-                                type="date"
-                                value={endDate}
-                                onChange={(e) =>
-                                    setEndDate(e.target.value)
-                                }
-                            />
+                            <div className="summary-value">
+                                R$ {Number(
+                                    report.totalRevenue || 0
+                                ).toFixed(2)}
+                            </div>
 
                         </div>
 
-                        <div
-                            style={{
-                                display: "flex",
-                                alignItems: "flex-end"
-                            }}
-                        >
+                        <div className="summary-card">
 
-                            <button
-                                className="button-primary"
-                                onClick={fetchReport}
-                            >
-                                Buscar
-                            </button>
+                            <div className="summary-label">
+                                Ticket médio
+                            </div>
+
+                            <div className="summary-value">
+                                R$ {Number(
+                                    report.averageTicket || 0
+                                ).toFixed(2)}
+                            </div>
 
                         </div>
 
                     </div>
-
-                    {report && (
-
-                        <div
-                            style={{
-                                marginTop: "24px",
-                                display: "grid",
-                                gap: "16px"
-                            }}
-                        >
-
-                            <div className="summary-card">
-
-                                <div className="summary-label">
-                                    Total de serviços
-                                </div>
-
-                                <div className="summary-value">
-                                    {report.totalAppointments}
-                                </div>
-
-                            </div>
-
-                            <div className="summary-card">
-
-                                <div className="summary-label">
-                                    Faturamento
-                                </div>
-
-                                <div className="summary-value">
-                                    R$ {Number(
-                                        report.totalRevenue || 0
-                                    ).toFixed(2)}
-                                </div>
-
-                            </div>
-
-                            <div className="summary-card">
-
-                                <div className="summary-label">
-                                    Ticket médio
-                                </div>
-
-                                <div className="summary-value">
-                                    R$ {Number(
-                                        report.averageTicket || 0
-                                    ).toFixed(2)}
-                                </div>
-
-                            </div>
-
-                        </div>
-                    )}
-
-                </div>
+                )}
 
             </div>
 
         </div>
+
+        </div >
     );
 }
