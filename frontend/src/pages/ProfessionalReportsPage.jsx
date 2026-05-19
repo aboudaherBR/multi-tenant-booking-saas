@@ -5,7 +5,6 @@ import { useParams } from "react-router-dom";
 
 export default function ProfessionalReportsPage() {
 
-
     const [report, setReport] =
         useState(null);
 
@@ -26,7 +25,7 @@ export default function ProfessionalReportsPage() {
 
             const today = new Date();
 
-            const startDate =
+            const initialStartDate =
                 new Date(
                     today.getFullYear(),
                     today.getMonth(),
@@ -35,7 +34,7 @@ export default function ProfessionalReportsPage() {
                     .toISOString()
                     .split("T")[0];
 
-            const endDate =
+            const initialEndDate =
                 new Date(
                     today.getFullYear(),
                     today.getMonth() + 1,
@@ -44,15 +43,20 @@ export default function ProfessionalReportsPage() {
                     .toISOString()
                     .split("T")[0];
 
-            setStartDate(startDate);
-            setEndDate(endDate);
+            const finalStartDate =
+                startDate || initialStartDate;
+
+            const finalEndDate =
+                endDate || initialEndDate;
+
+            setStartDate(finalStartDate);
+            setEndDate(finalEndDate);
 
             const data = await api(
-                `/public/${companySlug}/${professionalSlug}/report?startDate=${startDate}&endDate=${endDate}`
+                `/public/${companySlug}/${professionalSlug}/report?startDate=${finalStartDate}&endDate=${finalEndDate}`
             );
 
             setReport(data);
-            console.log(data);
 
         } catch (error) {
 
@@ -66,7 +70,6 @@ export default function ProfessionalReportsPage() {
     useEffect(() => {
         fetchReport();
     }, []);
-
 
     return (
 
@@ -114,139 +117,132 @@ export default function ProfessionalReportsPage() {
 
                     <div
                         style={{
+                            marginTop: "24px",
                             display: "flex",
-                            flexDirection: "column",
-                            gap: "6px"
+                            gap: "12px",
+                            flexWrap: "wrap"
                         }}
                     >
 
-                        <label className="subtext">
-                            Início
-                        </label>
-
-                        <input
-                            type="date"
-                            value={startDate}
-                            onChange={(e) =>
-                                setStartDate(e.target.value)
-                            }
-                        />
-
-                    </div>
-
-                    <div
-                        style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: "6px"
-                        }}
-                    >
-
-                        <label className="subtext">
-                            Início
-                        </label>
-
-                        <input
-                            type="date"
-                            value={startDate}
-                            onChange={(e) =>
-                                setStartDate(e.target.value)
-                            }
-                        />
-
-                    </div>
-
-                    <div>
-
-                        <label className="subtext">
-                            Fim
-                        </label>
-
-                        <input
-                            type="date"
-                            value={endDate}
-                            onChange={(e) =>
-                                setEndDate(e.target.value)
-                            }
-                        />
-
-                    </div>
-
-                    <div
-                        style={{
-                            display: "flex",
-                            alignItems: "flex-end"
-                        }}
-                    >
-
-                        <button
-                            className="button-primary"
-                            onClick={fetchReport}
+                        <div
+                            style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: "6px"
+                            }}
                         >
-                            Buscar
-                        </button>
+
+                            <label className="subtext">
+                                Início
+                            </label>
+
+                            <input
+                                type="date"
+                                value={startDate}
+                                onChange={(e) =>
+                                    setStartDate(e.target.value)
+                                }
+                            />
+
+                        </div>
+
+                        <div
+                            style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: "6px"
+                            }}
+                        >
+
+                            <label className="subtext">
+                                Fim
+                            </label>
+
+                            <input
+                                type="date"
+                                value={endDate}
+                                onChange={(e) =>
+                                    setEndDate(e.target.value)
+                                }
+                            />
+
+                        </div>
+
+                        <div
+                            style={{
+                                display: "flex",
+                                alignItems: "flex-end"
+                            }}
+                        >
+
+                            <button
+                                className="button-primary"
+                                onClick={fetchReport}
+                            >
+                                Buscar
+                            </button>
+
+                        </div>
 
                     </div>
+
+                    {report && (
+
+                        <div
+                            style={{
+                                marginTop: "24px",
+                                display: "grid",
+                                gap: "16px"
+                            }}
+                        >
+
+                            <div className="summary-card">
+
+                                <div className="summary-label">
+                                    Total de serviços
+                                </div>
+
+                                <div className="summary-value">
+                                    {report.totalAppointments}
+                                </div>
+
+                            </div>
+
+                            <div className="summary-card">
+
+                                <div className="summary-label">
+                                    Faturamento
+                                </div>
+
+                                <div className="summary-value">
+                                    R$ {Number(
+                                        report.totalRevenue || 0
+                                    ).toFixed(2)}
+                                </div>
+
+                            </div>
+
+                            <div className="summary-card">
+
+                                <div className="summary-label">
+                                    Ticket médio
+                                </div>
+
+                                <div className="summary-value">
+                                    R$ {Number(
+                                        report.averageTicket || 0
+                                    ).toFixed(2)}
+                                </div>
+
+                            </div>
+
+                        </div>
+                    )}
 
                 </div>
-
-                {report && (
-
-                    <div
-                        style={{
-                            marginTop: "24px",
-                            display: "grid",
-                            gap: "16px"
-                        }}
-                    >
-
-                        <div className="summary-card">
-
-                            <div className="summary-label">
-                                Total de serviços
-                            </div>
-
-                            <div className="summary-value">
-                                {report.totalAppointments}
-                            </div>
-
-                        </div>
-
-                        <div className="summary-card">
-
-                            <div className="summary-label">
-                                Faturamento
-                            </div>
-
-                            <div className="summary-value">
-                                R$ {Number(
-                                    report.totalRevenue || 0
-                                ).toFixed(2)}
-                            </div>
-
-                        </div>
-
-                        <div className="summary-card">
-
-                            <div className="summary-label">
-                                Ticket médio
-                            </div>
-
-                            <div className="summary-value">
-                                R$ {Number(
-                                    report.averageTicket || 0
-                                ).toFixed(2)}
-                            </div>
-
-                        </div>
-
-                    </div>
-                )}
 
             </div>
 
         </div>
-
-        </div >
     );
 }
