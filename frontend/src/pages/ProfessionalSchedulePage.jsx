@@ -30,7 +30,7 @@ export default function ProfessionalSchedulePage() {
     try {
 
       const data = await api(
-        `/professional/me/appointments?date=${date}`
+        `/public/${companySlug}/${professionalSlug}/dashboard?date=${date}`
       );
 
       setAppointments(
