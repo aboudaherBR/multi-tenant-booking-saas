@@ -137,6 +137,7 @@ export default function ProfessionalReportsPage() {
                             </label>
 
                             <input
+                                className="input-field"
                                 type="date"
                                 value={startDate}
                                 onChange={(e) =>
@@ -163,6 +164,7 @@ export default function ProfessionalReportsPage() {
                         </label>
 
                         <input
+                            className="input-field"
                             type="date"
                             value={endDate}
                             onChange={(e) =>
