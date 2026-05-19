@@ -158,7 +158,8 @@ export default function ProfessionalReportsPage() {
                         style={{
                             display: "flex",
                             flexDirection: "column",
-                            gap: "6px"
+                            gap: "6px",
+                            marginTop: "12px"
                         }}
                     >
 
