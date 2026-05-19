@@ -349,20 +349,113 @@ async function publicReport(req, res, next) {
   try {
 
     const {
+      companySlug,
+      professionalSlug
+    } = req.params;
+
+    const {
       startDate,
       endDate
     } = req.query;
 
-    console.log(startDate, endDate);
+    const companyResult = await pool.query(
+      `
+        SELECT id
+        FROM companies
+        WHERE slug = $1
+      `,
+      [companySlug]
+    );
+
+    const company =
+      companyResult.rows[0];
+
+    if (!company) {
+
+      return res.status(404).json({
+        message: "Empresa não encontrada"
+      });
+    }
+
+    const professionalResult = await pool.query(
+      `
+        SELECT
+          p.id,
+          u.name
+        FROM professionals p
+        JOIN users u
+          ON u.id = p.user_id
+        WHERE
+          p.company_id = $1
+          AND p.slug = $2
+          AND p.is_active = true
+          AND u.is_active = true
+      `,
+      [
+        company.id,
+        professionalSlug
+      ]
+    );
+
+    const professional =
+      professionalResult.rows[0];
+
+    if (!professional) {
+      return res.status(404).json({
+        message: "Profissional não encontrado"
+      });
+    }
+
+    const reportResult = await pool.query(
+      `
+        SELECT
+          COUNT(*) AS total_appointments,
+
+          COALESCE(
+            SUM(service_price_snapshot),
+            0
+          ) AS total_revenue,
+
+          COALESCE(
+            AVG(service_price_snapshot),
+            0
+          ) AS average_ticket
+
+        FROM appointments
+
+        WHERE
+          company_id = $1
+          AND professional_id = $2
+          AND date BETWEEN $3 AND $4
+      `,
+      [
+        company.id,
+        professional.id,
+        startDate,
+        endDate
+      ]
+    );
+
+    const report =
+      reportResult.rows[0];
+
     return res.status(200).json({
-      ok: true
+      professionalName: professional.name,
+      totalAppointments: Number(
+        report.total_appointments || 0
+      ),
+      totalRevenue: Number(
+        report.total_revenue || 0
+      ),
+      averageTicket: Number(
+        report.average_ticket || 0
+      )
     });
 
   } catch (error) {
     next(error);
   }
 }
-
 
 module.exports = {
   list,
