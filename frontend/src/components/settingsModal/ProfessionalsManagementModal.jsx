@@ -22,7 +22,7 @@ export default function ProfessionalsManagementModal({
         useState("");
 
     const professionalLink =
-        `${window.location.origin}/book/${selectedProfessional?.slug}`;
+        `${window.location.origin}/${selectedProfessional?.company_slug}/${selectedProfessional?.slug}`;
 
 
     async function loadAvailableServices() {
@@ -206,7 +206,7 @@ export default function ProfessionalsManagementModal({
 
                     <div style={{ marginTop: "10px" }}>
 
-                        
+
                         {professionals?.map((professional) => (
                             <div
                                 key={professional.id}
