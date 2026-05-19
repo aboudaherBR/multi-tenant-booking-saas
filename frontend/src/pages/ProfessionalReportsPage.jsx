@@ -144,45 +144,47 @@ export default function ProfessionalReportsPage() {
                                 }
                             />
 
-                            <div
-                                style={{
-                                    display: "flex",
-                                    alignItems: "flex-end"
-                                }}
-                            >
 
-                                <button
-                                    className="button-primary"
-                                    onClick={fetchReport}
-                                >
-                                    Buscar
-                                </button>
-
-                            </div>
 
                         </div>
 
-                        <div
-                            style={{
-                                display: "flex",
-                                flexDirection: "column",
-                                gap: "6px"
-                            }}
+                    </div>
+
+                    <div
+                        style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: "6px"
+                        }}
+                    >
+
+                        <label className="subtext">
+                            Fim
+                        </label>
+
+                        <input
+                            type="date"
+                            value={endDate}
+                            onChange={(e) =>
+                                setEndDate(e.target.value)
+                            }
+                        />
+
+                    </div>
+
+                    <div
+                        style={{
+                            display: "flex",
+                            alignItems: "flex-end"
+                        }}
+                    >
+
+                        <button
+                            className="button-primary"
+                            onClick={fetchReport}
                         >
-
-                            <label className="subtext">
-                                Fim
-                            </label>
-
-                            <input
-                                type="date"
-                                value={endDate}
-                                onChange={(e) =>
-                                    setEndDate(e.target.value)
-                                }
-                            />
-
-                        </div>
+                            Buscar
+                        </button>
 
 
 
