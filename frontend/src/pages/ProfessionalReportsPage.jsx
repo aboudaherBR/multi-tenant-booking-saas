@@ -9,6 +9,12 @@ export default function ProfessionalReportsPage() {
     const [report, setReport] =
         useState(null);
 
+    const [startDate, setStartDate] =
+        useState("");
+
+    const [endDate, setEndDate] =
+        useState("");
+
     const {
         companySlug,
         professionalSlug
@@ -37,6 +43,9 @@ export default function ProfessionalReportsPage() {
                 )
                     .toISOString()
                     .split("T")[0];
+
+            setStartDate(startDate);
+            setEndDate(endDate);
 
             const data = await api(
                 `/public/${companySlug}/${professionalSlug}/report?startDate=${startDate}&endDate=${endDate}`
@@ -102,7 +111,66 @@ export default function ProfessionalReportsPage() {
                     >
                         Período atual: mês corrente
                     </p>
-                    
+
+                    <div
+                        style={{
+                            marginTop: "24px",
+                            display: "flex",
+                            gap: "12px",
+                            flexWrap: "wrap"
+                        }}
+                    >
+
+                        <div>
+
+                            <label className="subtext">
+                                Início
+                            </label>
+
+                            <input
+                                type="date"
+                                value={startDate}
+                                onChange={(e) =>
+                                    setStartDate(e.target.value)
+                                }
+                            />
+
+                        </div>
+
+                        <div>
+
+                            <label className="subtext">
+                                Fim
+                            </label>
+
+                            <input
+                                type="date"
+                                value={endDate}
+                                onChange={(e) =>
+                                    setEndDate(e.target.value)
+                                }
+                            />
+
+                        </div>
+
+                        <div
+                            style={{
+                                display: "flex",
+                                alignItems: "flex-end"
+                            }}
+                        >
+
+                            <button
+                                className="button-primary"
+                                onClick={fetchReport}
+                            >
+                                Buscar
+                            </button>
+
+                        </div>
+
+                    </div>
+
                     {report && (
 
                         <div
