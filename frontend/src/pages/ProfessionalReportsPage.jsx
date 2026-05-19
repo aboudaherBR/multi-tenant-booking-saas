@@ -1,7 +1,10 @@
 import "../../src/global.css";
 import { useEffect, useState } from "react";
 import api from "../api/apiClient";
-import { useParams } from "react-router-dom";
+import {
+  useParams,
+  useNavigate
+} from "react-router-dom";
 
 export default function ProfessionalReportsPage() {
 
