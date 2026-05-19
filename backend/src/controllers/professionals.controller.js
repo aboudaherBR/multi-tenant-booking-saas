@@ -348,6 +348,12 @@ async function publicDashboard(req, res, next) {
 async function publicReport(req, res, next) {
   try {
 
+    const {
+      startDate,
+      endDate
+    } = req.query;
+
+    console.log(startDate, endDate);
     return res.status(200).json({
       ok: true
     });
