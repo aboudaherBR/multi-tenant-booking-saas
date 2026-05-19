@@ -184,6 +184,10 @@ export default function ProfessionalReportsPage() {
 
                         <button
                             className="button-primary"
+                            style={{
+                                marginTop: "12px",
+                                width: "fit-content"
+                            }}
                             onClick={fetchReport}
                         >
                             Buscar
