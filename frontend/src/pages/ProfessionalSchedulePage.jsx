@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import api from "../api/apiClient";
 
 import {
-  useNavigate
+  useNavigate,
+  useParams
 } from "react-router-dom";
 
 export default function ProfessionalSchedulePage() {
@@ -18,6 +19,11 @@ export default function ProfessionalSchedulePage() {
     );
 
   const navigate = useNavigate();
+
+  const {
+    companySlug,
+    professionalSlug
+  } = useParams();
 
   async function fetchAppointments() {
 
