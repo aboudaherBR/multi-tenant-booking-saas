@@ -144,6 +144,22 @@ export default function ProfessionalReportsPage() {
                                 }
                             />
 
+                            <div
+                                style={{
+                                    display: "flex",
+                                    alignItems: "flex-end"
+                                }}
+                            >
+
+                                <button
+                                    className="button-primary"
+                                    onClick={fetchReport}
+                                >
+                                    Buscar
+                                </button>
+
+                            </div>
+
                         </div>
 
                         <div
@@ -168,21 +184,7 @@ export default function ProfessionalReportsPage() {
 
                         </div>
 
-                        <div
-                            style={{
-                                display: "flex",
-                                alignItems: "flex-end"
-                            }}
-                        >
 
-                            <button
-                                className="button-primary"
-                                onClick={fetchReport}
-                            >
-                                Buscar
-                            </button>
-
-                        </div>
 
                     </div>
 
