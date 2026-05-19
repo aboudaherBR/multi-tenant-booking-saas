@@ -13,6 +13,8 @@ import BookPublic from "./pages/BookPublic";
 import ProfessionalDashboard from "./pages/ProfessionalDashboard";
 import ProfessionalLayout from "./layout/ProfessionalLayout";
 import ProfessionalSchedulePage from "./pages/ProfessionalSchedulePage";
+import ProfessionalReportsPage from "./pages/ProfessionalReportsPage";
+
 
 //Landing page e signup ficam fora do Routes principal, para não carregarem o layout admin/profissional
 import SignupPage from "./pages/SignupPage";
@@ -22,6 +24,7 @@ function App() {
 
   return (
     <Routes>
+
       {/* 🔥 ROTA PÚBLICA (TEM QUE VIR ANTES) */}
       <Route path="/book/:slug" element={<BookPublic />} />
       <Route path="/signup" element={<SignupPage />} />
@@ -40,17 +43,19 @@ function App() {
         <Route path="/reports" element={<ReportsPage />} />
       </Route>
 
-      {/* 🔥 ROTA PROFISSIONAL PROTEGIDA */}
+      {/* ROTAS PROFISSIONAL */}
       <Route
-        element={
-          isAuthenticated && user?.isProfessional
-            ? <ProfessionalLayout />
-            : <Navigate to="/login" />
-        }
-      >
-        <Route path="/professional" element={<ProfessionalDashboard />} />
-        <Route path="/professional/schedule" element={<ProfessionalSchedulePage />} />
-      </Route>
+        path="/:companySlug/:professionalSlug"
+        element={<ProfessionalDashboard />}
+      />
+      <Route
+        path="/:companySlug/:professionalSlug/reports"
+        element={<ProfessionalReportsPage />}
+      />
+      <Route
+        path="/:companySlug/:professionalSlug/schedule"
+        element={<ProfessionalSchedulePage />}
+      />
 
       {/* FALLBACK */}
       <Route path="*" element={<Navigate to="/" />} />

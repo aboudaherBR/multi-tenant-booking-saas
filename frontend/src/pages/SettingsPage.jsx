@@ -2,6 +2,14 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import ProfessionalServicesModal from "../components/ProfessionalServicesModal";
 import apiClient from "../api/apiClient";
+import BusinessHoursModal from "../components/settingsModal/BusinessHoursModal";
+import ScheduleBlocksModal from "../components/settingsModal/ScheduleBlocksModal";
+import CreateScheduleBlockModal from "../components/settingsModal/CreateScheduleBlockModal";
+import ServicesManagementModal from "../components/settingsModal/ServicesManagementModal";
+import ProfessionalsManagementModal from "../components/settingsModal/ProfessionalsManagementModal";
+
+
+
 
 export default function SettingsPage() {
 
@@ -44,8 +52,7 @@ export default function SettingsPage() {
 
     const [newProfessional, setNewProfessional] = useState({
         name: "",
-        email: "",
-        password: ""
+        phone: ""
     });
 
     const [newService, setNewService] = useState({
@@ -62,6 +69,11 @@ export default function SettingsPage() {
 
     const [lunchStart, setLunchStart] = useState("");
     const [lunchEnd, setLunchEnd] = useState("");
+
+    const [blockType, setBlockType] = useState("global");
+    const [showCreateBlockModal, setShowCreateBlockModal] = useState(false);
+
+    console.log("showCreateBlockModal:", showCreateBlockModal);
 
 
 
@@ -285,19 +297,15 @@ export default function SettingsPage() {
             method: "POST",
             body: {
                 name: newProfessional.name,
-                email: newProfessional.email,
-                password: newProfessional.password
+                phone: newProfessional.phone
             }
         });
 
         await loadProfessionals();
 
-        setShowNewProfessionalForm(false);
-
         setNewProfessional({
             name: "",
-            email: "",
-            password: ""
+            phone: ""
         });
     }
 
@@ -332,767 +340,180 @@ export default function SettingsPage() {
         setShowProfessionalServicesModal(true);
     }
 
+    async function updateService(service) {
+
+        try {
+
+            await apiClient(
+                `/services/${service.id}`,
+                {
+                    method: "PUT",
+                    body: {
+                        name: service.name,
+                        duration_minutes: Number(service.duration_minutes),
+                        base_price: Number(service.base_price)
+                    }
+                }
+            );
+
+            await loadServices();
+
+        } catch (err) {
+
+            console.error("Erro ao atualizar serviço", err);
+        }
+    }
+
 
     return (
-        <div>
 
-            <h1>Configurações</h1>
+        <div style={{ minHeight: "100vh", background: "var(--color-bg)" }}>
 
-            <h2>Agenda</h2>
+            {/* HEADER */}
+            <div className="header-gradient">
+                <h2 style={{ color: "white" }}>
+                    Configurações
+                </h2>
+            </div>
 
-            <button
-                onClick={() => {
-                    console.log("clicou horario funcionamento");
-                    openBusinessHoursModal();
-                }}
-            >
-                Horário de funcionamento
-            </button>
-            {showBusinessHoursModal && (
+            {/* CONTEÚDO */}
+            <div className="container-main" style={{ marginTop: "-40px" }}>
 
-                <div style={{
-                    position: "fixed",
-                    inset: 0,
-                    background: "rgba(0,0,0,0.4)",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center"
-                }}>
+                {/* CARD AGENDA */}
+                <div className="container-main">
 
-                    <div style={{
-                        background: "white",
-                        padding: "20px",
-                        borderRadius: "8px",
-                        minWidth: "300px"
-                    }}>
-
-                        <h3>Horário de funcionamento</h3>
-
-                        {businessHours.map(day => (
-
-                            <div key={day.weekday} style={{ marginBottom: "10px" }}>
-
-                                <strong>{weekdayNames[day.weekday]}</strong>
-
-                                <div style={{ display: "flex", gap: "8px" }}>
-
-                                    <input
-                                        type="checkbox"
-                                        checked={day.is_active}
-                                        onChange={(e) => {
-                                            const updated = businessHours.map(d =>
-                                                d.weekday === day.weekday
-                                                    ? { ...d, is_active: e.target.checked }
-                                                    : d
-                                            );
-                                            setBusinessHours(updated);
-                                        }}
-                                    />
-
-                                    <input
-                                        type="time"
-                                        value={day.start_time.slice(0, 5)}
-                                        disabled={!day.is_active}
-                                        onChange={(e) => {
-                                            const updated = businessHours.map(d =>
-                                                d.weekday === day.weekday
-                                                    ? { ...d, start_time: e.target.value + ":00" }
-                                                    : d
-                                            );
-                                            setBusinessHours(updated);
-                                        }}
-                                    />
-
-                                    <span>até</span>
-
-                                    <input
-                                        type="time"
-                                        value={day.end_time.slice(0, 5)}
-                                        disabled={!day.is_active}
-                                        onChange={(e) => {
-                                            const updated = businessHours.map(d =>
-                                                d.weekday === day.weekday
-                                                    ? { ...d, end_time: e.target.value + ":00" }
-                                                    : d
-                                            );
-                                            setBusinessHours(updated);
-                                        }}
-                                    />
-
-                                </div>
-
-                            </div>
-
-                        ))}
-
-                        <div style={{ marginTop: "15px" }}>
-
-                            <strong>Horário de almoço</strong>
-
-                            <div style={{ display: "flex", gap: "8px", marginTop: "5px" }}>
-
-                                <input
-                                    type="time"
-                                    value={lunchStart}
-                                    onChange={(e) => setLunchStart(e.target.value)}
-                                />
-
-                                <span>até</span>
-
-                                <input
-                                    type="time"
-                                    value={lunchEnd}
-                                    onChange={(e) => setLunchEnd(e.target.value)}
-                                />
-
-                                <button
-                                    style={{ marginTop: "5px" }}
-                                    onClick={() => {
-                                        setLunchStart("");
-                                        setLunchEnd("");
-                                    }}
-                                >
-                                    Remover horário de almoço
-                                </button>
-
-                            </div>
-
-                        </div>
-
-                        <div style={{ marginTop: "15px" }}>
-
-                            <strong>Tempo entre clientes (minutos)</strong>
-
-                            <div style={{ marginTop: "5px" }}>
-
-                                <input
-                                    type="number"
-                                    min="0"
-                                    max="60"
-                                    value={bufferMinutes}
-                                    onChange={(e) => setBufferMinutes(e.target.value)}
-                                />
-
-                            </div>
-
-                        </div>
-
-                        <button onClick={saveBusinessHours}>
-                            Salvar
-                        </button>
-
-                        <button onClick={() => setShowBusinessHoursModal(false)}>
-                            Fechar
-                        </button>
-
-                    </div>
-
-                </div>
-
-            )}
-
-            <button
-                onClick={async () => {
-                    setSelectedBlock(null);
-                    await loadScheduleBlocks();
-                    setShowScheduleBlocksModal(true);
-                }}
-            >
-                Bloquear horário
-            </button>
-
-            <h2>Cadastros</h2>
-
-            <button
-                onClick={async () => {
-
-                    console.log("clicou serviços");
-                    setSelectedService(null);   // ← reset
-                    await loadServices();
-                    setShowServicesModal(true);
-                }}
-            >
-                Serviços
-            </button>
-
-            <button
-                onClick={async () => {
-
-                    console.log("clicou profissionais");
-
-                    await loadProfessionals();
-
-                    console.log("loadProfessionals terminou");
-
-                    setShowProfessionalsModal(true);
-
-                }}
-            >
-                Profissionais
-            </button>
-
-            <button onClick={() => navigate("/")}>
-                Voltar ao Dashboard
-            </button>
-
-            {showScheduleBlocksModal && (
-
-                <div style={{
-                    position: "fixed",
-                    inset: 0,
-                    background: "rgba(0,0,0,0.4)",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center"
-                }}>
-
-                    <div style={{
-                        background: "white",
-                        padding: "20px",
-                        borderRadius: "8px",
-                        minWidth: "300px"
-                    }}>
-
-                        <h3>Bloqueios de agenda</h3>
-
-                        <div style={{ marginBottom: "10px" }}>
-
-                            <input
-                                type="date"
-                                value={filterStartDate}
-                                onChange={(e) => setFilterStartDate(e.target.value)}
-                            />
-
-                            <input
-                                type="date"
-                                value={filterEndDate}
-                                onChange={(e) => setFilterEndDate(e.target.value)}
-                            />
-
-                            <button onClick={applyFilter}>
-                                Filtrar
-                            </button>
-
-                        </div>
-
-                        {!selectedBlock && (
-
-                            <>
-                                <button onClick={() => setShowNewBlockForm(true)}>
-                                    Novo bloqueio
-                                </button>
-
-                                {showNewBlockForm && (
-
-                                    <div style={{ marginTop: "10px" }}>
-
-                                        <input
-                                            type="date"
-                                            value={newBlock.startDate}
-                                            onChange={(e) => setNewBlock({ ...newBlock, startDate: e.target.value })}
-                                        />
-
-                                        <input
-                                            type="date"
-                                            value={newBlock.endDate}
-                                            onChange={(e) => setNewBlock({ ...newBlock, endDate: e.target.value })}
-                                        />
-
-                                        <input
-                                            type="time"
-                                            value={newBlock.startTime}
-                                            onChange={(e) => setNewBlock({ ...newBlock, startTime: e.target.value })}
-                                        />
-
-                                        <input
-                                            type="time"
-                                            value={newBlock.endTime}
-                                            onChange={(e) => setNewBlock({ ...newBlock, endTime: e.target.value })}
-                                        />
-
-                                        <input
-                                            type="text"
-                                            placeholder="Motivo"
-                                            value={newBlock.reason}
-                                            onChange={(e) => setNewBlock({ ...newBlock, reason: e.target.value })}
-                                        />
-
-                                        <button onClick={createScheduleBlock}>
-                                            Salvar
-                                        </button>
-
-                                        <button onClick={() => setShowNewBlockForm(false)}>
-                                            Cancelar
-                                        </button>
-
-                                    </div>
-                                )}
-
-                                {filteredBlocks.length === 0 && (
-                                    <p>Nenhum bloqueio cadastrado.</p>
-                                )}
-
-                                {filteredBlocks.length > 0 && (
-
-                                    <table style={{
-                                        width: "100%",
-                                        borderCollapse: "collapse",
-                                        marginTop: "10px"
-                                    }}>
-
-                                        <thead>
-                                            <tr style={{ background: "#f5f5f5" }}>
-                                                <th style={{ padding: "8px", border: "1px solid #ddd" }}>Início</th>
-                                                <th style={{ padding: "8px", border: "1px solid #ddd" }}>Fim</th>
-                                                <th style={{ padding: "8px", border: "1px solid #ddd" }}>Horário</th>
-                                                <th style={{ padding: "8px", border: "1px solid #ddd" }}>Motivo</th>
-                                            </tr>
-                                        </thead>
-
-                                        <tbody>
-
-                                            {filteredBlocks.map(block => (
-
-                                                <tr
-                                                    key={block.id}
-                                                    onClick={() => setSelectedBlock(block)}
-                                                    style={{ cursor: "pointer" }}
-                                                    onMouseEnter={(e) => e.currentTarget.style.background = "#fafafa"}
-                                                    onMouseLeave={(e) => e.currentTarget.style.background = "white"}
-                                                >
-
-                                                    <td style={{ padding: "8px", border: "1px solid #ddd" }}>
-                                                        {block.start_date.slice(0, 10)}
-                                                    </td>
-
-                                                    <td style={{ padding: "8px", border: "1px solid #ddd" }}>
-                                                        {block.end_date.slice(0, 10)}
-                                                    </td>
-
-                                                    <td style={{ padding: "8px", border: "1px solid #ddd" }}>
-                                                        {block.start_time && block.end_time
-                                                            ? `${block.start_time.slice(0, 5)} - ${block.end_time.slice(0, 5)}`
-                                                            : "Dia inteiro"}
-                                                    </td>
-
-                                                    <td style={{ padding: "8px", border: "1px solid #ddd" }}>
-                                                        {block.reason || "—"}
-                                                    </td>
-
-                                                </tr>
-
-                                            ))}
-
-                                        </tbody>
-
-                                    </table>
-
-                                )}
-
-                            </>
-                        )}
-
-                        {selectedBlock && (
-
-                            <div>
-
-                                <h4>Detalhes do bloqueio</h4>
-
-                                <p><strong>Início:</strong> {selectedBlock.start_date.slice(0, 10)}</p>
-                                <p><strong>Fim:</strong> {selectedBlock.end_date.slice(0, 10)}</p>
-
-                                <p>
-                                    <strong>Horário:</strong>{" "}
-                                    {selectedBlock.start_time && selectedBlock.end_time
-                                        ? `${selectedBlock.start_time.slice(0, 5)} - ${selectedBlock.end_time.slice(0, 5)}`
-                                        : "Dia inteiro"}
-                                </p>
-
-                                <p>
-                                    <strong>Motivo:</strong> {selectedBlock.reason || "Sem motivo"}
-                                </p>
-
-                                <button
-                                    style={{
-                                        background: "#ff4d4f",
-                                        color: "white",
-                                        border: "none",
-                                        padding: "6px 10px",
-                                        cursor: "pointer"
-                                    }}
-                                    onClick={() => deleteScheduleBlock(selectedBlock.id)}
-                                >
-                                    Excluir bloqueio
-                                </button>
-
-                                <button onClick={() => setSelectedBlock(null)}>
-                                    Voltar
-                                </button>
-
-                            </div>
-                        )}
-
-                        <button onClick={() => setShowScheduleBlocksModal(false)}>
-                            Fechar
-                        </button>
-
-                    </div>
-
-                </div>
-            )}
-
-            {showServicesModal && (
-
-                <div style={{
-                    position: "fixed",
-                    inset: 0,
-                    background: "rgba(0,0,0,0.4)",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center"
-                }}>
-
-                    <div style={{
-                        background: "white",
-                        padding: "20px",
-                        borderRadius: "8px",
-                        minWidth: "400px"
-                    }}>
-
-                        <h3>Serviços</h3>
-
-                        {!selectedService && (
-
-                            <button
-                                style={{ marginBottom: "10px" }}
-                                onClick={() => setShowNewServiceForm(true)}
-                            >
-                                Novo serviço
-                            </button>
-
-                        )}
-                        {!selectedService && showNewServiceForm && (
-
-                            <div style={{ marginBottom: "15px" }}>
-
-                                <input
-                                    type="text"
-                                    placeholder="Nome do serviço"
-                                    value={newService.name}
-                                    onChange={(e) =>
-                                        setNewService({
-                                            ...newService,
-                                            name: e.target.value
-                                        })
-                                    }
-                                />
-
-                                <input
-                                    type="number"
-                                    placeholder="Duração (minutos)"
-                                    value={newService.duration_minutes}
-                                    onChange={(e) =>
-                                        setNewService({
-                                            ...newService,
-                                            duration_minutes: e.target.value
-                                        })
-                                    }
-                                />
-
-                                <input
-                                    type="number"
-                                    step="0.01"
-                                    placeholder="Preço"
-                                    value={newService.base_price}
-                                    onChange={(e) =>
-                                        setNewService({
-                                            ...newService,
-                                            base_price: e.target.value
-                                        })
-                                    }
-                                />
-
-                                <button onClick={createService}>
-                                    Salvar
-                                </button>
-
-                                <button onClick={() => setShowNewServiceForm(false)}>
-                                    Cancelar
-                                </button>
-
-                            </div>
-
-                        )}
-
-                        {services.length === 0 && (
-                            <p>Nenhum serviço cadastrado.</p>
-                        )}
-
-                        {!selectedService && services.length > 0 && (
-
-                            <table style={{
-                                width: "100%",
-                                borderCollapse: "collapse",
-                                marginTop: "10px"
-                            }}>
-
-                                <thead>
-                                    <tr style={{ background: "#f5f5f5" }}>
-                                        <th style={{ padding: "8px", border: "1px solid #ddd" }}>Nome</th>
-                                        <th style={{ padding: "8px", border: "1px solid #ddd" }}>Duração</th>
-                                        <th style={{ padding: "8px", border: "1px solid #ddd" }}>Preço</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-
-                                    {services.map(service => (
-
-                                        <tr
-                                            key={service.id}
-                                            onClick={() => setSelectedService(service)}
-                                            style={{ cursor: "pointer" }}
-                                        >
-
-                                            <td style={{ padding: "8px", border: "1px solid #ddd" }}>
-                                                <div style={{ fontWeight: "bold" }}>
-                                                    🔥 {service.name}
-                                                </div>
-                                                <div style={{ fontSize: "12px", color: "#666" }}>
-                                                    {service.duration_minutes} min
-                                                </div>
-                                            </td>
-
-                                            <td style={{ padding: "8px", border: "1px solid #ddd" }}>
-                                                <strong style={{ fontSize: "16px" }}>
-                                                    R$ {service.base_price}
-                                                </strong>
-                                            </td>
-
-                                        </tr>
-
-                                    ))}
-
-                                </tbody>
-
-                            </table>
-
-                        )}
-
-                        {selectedService && (
-
-                            <div>
-
-                                <h4>Detalhes do serviço</h4>
-
-                                <p>
-                                    <strong>Nome:</strong> {selectedService.name}
-                                </p>
-
-                                <p>
-                                    <strong>Duração:</strong> {selectedService.duration_minutes} min
-                                </p>
-
-                                <p>
-                                    <strong>Preço:</strong> R$ {selectedService.base_price}
-                                </p>
-
-                                <button
-                                    style={{
-                                        background: "#ff4d4f",
-                                        color: "white",
-                                        border: "none",
-                                        padding: "6px 10px",
-                                        cursor: "pointer"
-                                    }}
-                                    onClick={() => deleteService(selectedService.id)}
-                                >
-                                    Excluir serviço
-                                </button>
-
-                                <button
-                                    onClick={() => setSelectedService(null)}
-                                >
-                                    Voltar
-                                </button>
-
-                            </div>
-
-                        )}
+                    {/* CARD AGENDA */}
+                    <div className="card" style={{ padding: "20px", marginBottom: "16px" }}>
+                        <h2 className="heading">Agenda</h2>
 
                         <button
-                            style={{ marginTop: "10px" }}
-                            onClick={() => setShowServicesModal(false)}
+                            className="button-secondary"
+                            onClick={openBusinessHoursModal}
                         >
-                            Fechar
+                            Horário de funcionamento
                         </button>
 
-                    </div>
-
-                </div>
-
-            )}
-
-            {showProfessionalsModal && (
-
-                <div style={{
-                    position: "fixed",
-                    inset: 0,
-                    background: "rgba(0,0,0,0.4)",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center"
-                }}>
-
-                    <div style={{
-                        background: "white",
-                        padding: "20px",
-                        borderRadius: "8px",
-                        minWidth: "400px"
-                    }}>
-
-                        <h3>Profissionais</h3>
-
                         <button
-                            style={{ marginBottom: "10px" }}
-                            onClick={() => {
-                                setShowNewProfessionalForm(true);
+                            className="button-secondary"
+                            onClick={async () => {
+                                setSelectedBlock(null);
+
+                                await loadScheduleBlocks();
+                                await loadProfessionals();
+
+                                setShowScheduleBlocksModal(true);
                             }}
                         >
-                            Novo profissional
+                            Bloqueios de agenda
                         </button>
-                        {showNewProfessionalForm && (
-
-                            <div style={{ marginBottom: "15px" }}>
-
-                                <input
-                                    type="text"
-                                    placeholder="Nome"
-                                    autoComplete="off"
-                                    value={newProfessional.name}
-                                    onChange={(e) =>
-                                        setNewProfessional({
-                                            ...newProfessional,
-                                            name: e.target.value
-                                        })
-                                    }
-                                />
-
-                                <input
-                                    type="email"
-                                    placeholder="Email"
-                                    autoComplete="off"
-                                    value={newProfessional.email}
-                                    onChange={(e) =>
-                                        setNewProfessional({
-                                            ...newProfessional,
-                                            email: e.target.value
-                                        })
-                                    }
-                                />
-
-                                <input
-                                    type="password"
-                                    placeholder="Senha"
-                                    autoComplete="off"
-                                    value={newProfessional.password}
-                                    onChange={(e) =>
-                                        setNewProfessional({
-                                            ...newProfessional,
-                                            password: e.target.value
-                                        })
-                                    }
-                                />
-
-                                <input
-                                    type="text"
-                                    name="fake-user"
-                                    autoComplete="username"
-                                    style={{ display: "none" }}
-                                />
-
-                                <input
-                                    type="password"
-                                    name="fake-pass"
-                                    autoComplete="current-password"
-                                    style={{ display: "none" }}
-                                />
-
-                                <button onClick={createProfessional}>
-                                    Salvar
-                                </button>
-
-                                <button
-                                    onClick={() => setShowNewProfessionalForm(false)}
-                                >
-                                    Cancelar
-                                </button>
-
-                            </div>
-
-                        )}
-
-                        {professionals.length === 0 && (
-                            <p>Nenhum profissional cadastrado.</p>
-                        )}
-
-                        {professionals.length > 0 && (
-
-                            <table style={{
-                                width: "100%",
-                                borderCollapse: "collapse",
-                                marginTop: "10px"
-                            }}>
-
-                                <thead>
-                                    <tr style={{ background: "#f5f5f5" }}>
-                                        <th style={{ padding: "8px", border: "1px solid #ddd" }}>Nome</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    {professionals.map(professional => (
-                                        <tr
-                                            key={professional.id}
-                                            style={{ cursor: "pointer" }}
-                                            onClick={() => openProfessionalServices(professional)}
-                                        >
-                                            <td style={{ padding: "8px", border: "1px solid #ddd" }}>
-                                                {professional.name}
-                                            </td>
-                                        </tr>
-
-                                    ))}
-                                </tbody>
-
-                            </table>
-
-                        )}
 
                         <button
-                            style={{ marginTop: "10px" }}
-                            onClick={() => setShowProfessionalsModal(false)}
+                            className="button-secondary"
+                            onClick={() => {
+                                console.log("Promoções do dia clicado");
+                            }}
                         >
-                            Fechar
+                            Promoções do dia
                         </button>
-
                     </div>
+
+                    {/* 🔥 AQUI, FORA DO CARD */}
+                    <BusinessHoursModal
+                        isOpen={showBusinessHoursModal}
+                        onClose={() => setShowBusinessHoursModal(false)}
+
+                        businessHours={businessHours}
+                        weekdayNames={weekdayNames}
+                        setBusinessHours={setBusinessHours}
+
+                        lunchStart={lunchStart}
+                        lunchEnd={lunchEnd}
+                        setLunchStart={setLunchStart}
+                        setLunchEnd={setLunchEnd}
+
+                        bufferMinutes={bufferMinutes}
+                        setBufferMinutes={setBufferMinutes}
+
+                        saveBusinessHours={saveBusinessHours}
+                    />
+                    <ScheduleBlocksModal
+                        isOpen={showScheduleBlocksModal}
+                        onClose={() => setShowScheduleBlocksModal(false)}
+                        scheduleBlocks={scheduleBlocks}
+                        onCreate={() => setShowCreateBlockModal(true)}
+                        reloadBlocks={loadScheduleBlocks}
+                    />
+                    <CreateScheduleBlockModal
+                        isOpen={showCreateBlockModal}
+                        onClose={() => setShowCreateBlockModal(false)}
+                        professionals={professionals}
+                    />
+
 
                 </div>
 
-            )}
-            {showProfessionalServicesModal && (
-                <ProfessionalServicesModal
-                    professional={selectedProfessional}
-                    services={professionalServices}
-                    onClose={() => {
-                        setShowProfessionalServicesModal(false);
-                        setShowProfessionalsModal(true);
-                    }}
-                    onServiceAdded={() => openProfessionalServices(selectedProfessional)}
-                />
-            )}
 
+                {/* CARD SERVIÇOS */}
+                <div className="card" style={{ padding: "20px", marginBottom: "16px" }}>
+                    <h2 className="heading">Serviços</h2>
+
+                    <button
+                        className="button-secondary"
+                        onClick={async () => {
+                            setSelectedService(null);
+                            await loadServices();
+                            setShowServicesModal(true);
+                        }}
+                    >
+                        Gerenciar serviços
+                    </button>
+                </div>
+
+                {/* CARD EQUIPE */}
+                <div className="card" style={{ padding: "20px", marginBottom: "16px" }}>
+                    <h2 className="heading">Equipe</h2>
+
+                    <button
+                        className="button-secondary"
+                        onClick={async () => {
+                            await loadProfessionals();
+                            setShowProfessionalsModal(true);
+                        }}
+                    >
+                        Gerenciar profissionais
+                    </button>
+                </div>
+
+                {/* VOLTAR */}
+                <button
+                    className="button-primary"
+                    onClick={() => navigate("/")}
+                >
+                    Voltar ao Dashboard
+                </button>
+
+            </div>
+            <ServicesManagementModal
+                isOpen={showServicesModal}
+                onClose={() => setShowServicesModal(false)}
+                services={services}
+                newService={newService}
+                setNewService={setNewService}
+                onCreate={createService}
+                onDelete={deleteService}
+                onUpdate={updateService}
+            />
+            <ProfessionalsManagementModal
+                isOpen={showProfessionalsModal}
+                onClose={() => setShowProfessionalsModal(false)}
+                professionals={professionals}
+                newProfessional={newProfessional}
+                setNewProfessional={setNewProfessional}
+                onCreate={createProfessional}
+                selectedProfessional={selectedProfessional}
+                setSelectedProfessional={setSelectedProfessional}
+                onOpenProfessionalServices={openProfessionalServices}
+            />
         </div>
     );
 }

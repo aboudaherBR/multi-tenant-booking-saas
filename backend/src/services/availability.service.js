@@ -16,9 +16,20 @@ function roundUpToNextInterval(currentMinutes, interval) {
   return Math.ceil(currentMinutes / interval) * interval;
 }
 
-// 🔴 REGRA CENTRALIZADA (importante)
+// 🔴 REGRA CENTRALIZADA
 function isOverlapping(startA, endA, startB, endB) {
   return startA < endB && endA > startB;
+}
+
+// 🔴 FULL DAY
+function isFullDayBlock(block) {
+  return block.time_scope === 'full_day';
+}
+
+
+// 🔴 TIME RANGE (CORREÇÃO DO BUG)
+function isTimeRangeBlock(block) {
+  return block.time_scope === 'time_range';
 }
 
 async function getAvailableSlots({
@@ -27,9 +38,6 @@ async function getAvailableSlots({
   serviceDurationMinutes,
   date
 }) {
-
-  console.log("AVAILABILITY SERVICE EXECUTANDO");
-
   const weekday = getWeekdayFromDate(date);
 
   const businessHours =
@@ -45,11 +53,6 @@ async function getAvailableSlots({
   const bufferMinutes = company.appointment_buffer_minutes;
   const lunchStart = company.lunch_start_time;
   const lunchEnd = company.lunch_end_time;
-
-  console.log("LUNCH CONFIG:", {
-  lunchStart,
-  lunchEnd
-});
 
   const baseSlots = generateBaseSlots({
     startTime: businessHours.start_time,
@@ -77,9 +80,11 @@ async function getAvailableSlots({
       date
     });
 
+  // 🔴 FULL DAY CHECK
   const hasFullDayBlock = scheduleBlocks.some(
-    block => !block.start_time && !block.end_time
+    block => isFullDayBlock(block)
   );
+
   if (hasFullDayBlock) return [];
 
   // 🔵 FILTRO PRINCIPAL
@@ -97,7 +102,7 @@ async function getAvailableSlots({
 
     // blocks
     for (const block of scheduleBlocks) {
-      if (!block.start_time || !block.end_time) continue;
+      if (!isTimeRangeBlock(block)) continue;
 
       const blockStart = timeToMinutes(block.start_time);
       const blockEnd = timeToMinutes(block.end_time);
@@ -121,12 +126,6 @@ async function getAvailableSlots({
   const today = getBusinessToday();
   let finalSlots = availableSlots;
 
-  console.log("DEBUG DATE CHECK", {
-    date,
-    today,
-    equal: date === today
-  });
-
   if (date === today) {
     const now = getBusinessNow();
     const MINIMUM_LEAD_TIME_MINUTES = 60;
@@ -144,7 +143,7 @@ async function getAvailableSlots({
     });
   }
 
-  // 🔴 OTIMIZAÇÃO COM REGRA DE NEGÓCIO GARANTIDA
+  // 🔴 OTIMIZAÇÃO
   const optimizedSlots = [];
 
   for (let i = 0; i < finalSlots.length; i++) {
@@ -152,7 +151,6 @@ async function getAvailableSlots({
     const currentStart = timeToMinutes(currentSlot);
     const currentEnd = currentStart + serviceDurationMinutes;
 
-    // 🔴 GARANTE que almoço nunca passa aqui
     if (lunchStart && lunchEnd) {
       const lunchStartMinutes = timeToMinutes(lunchStart);
       const lunchEndMinutes = timeToMinutes(lunchEnd);
@@ -176,13 +174,10 @@ async function getAvailableSlots({
     }
   }
 
-  console.log("serviceDurationMinutes:", serviceDurationMinutes);
-  console.log("finalSlots count:", finalSlots.length);
-  console.log("optimizedSlots count:", optimizedSlots.length);
-
   return optimizedSlots;
 }
 
 module.exports = {
-  getAvailableSlots
+  getAvailableSlots,
+  isFullDayBlock
 };

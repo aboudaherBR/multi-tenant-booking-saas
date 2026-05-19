@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const pool = require('../database/db');
+const crypto = require('crypto');
 
 const {
   findActiveProfessionalsByCompanyId,
@@ -48,18 +49,18 @@ async function list(req, res, next) {
 async function create(req, res, next) {
   try {
 
-    const { name, password } = req.body;
+    const { name, phone } = req.body;
 
-    // 🔥 JÁ ESTAVA CORRETO
     const companyId = req.user.companyId;
 
-    if (!name || !password) {
+    if (!name || !phone) {
       return res.status(400).json({
-        message: 'name e password são obrigatórios'
+        message: 'name e phone são obrigatórios'
       });
     }
 
-    const username = name.trim();
+    const username =
+      `professional_${Date.now()}`;
 
     const slug =
       username
@@ -68,7 +69,11 @@ async function create(req, res, next) {
       '-' +
       Date.now().toString().slice(-6);
 
-    const passwordHash = await bcrypt.hash(password, 10);
+    const generatedPassword =
+      crypto.randomUUID();
+
+    const passwordHash =
+      await bcrypt.hash(generatedPassword, 10);
 
     const client = await pool.connect();
 
@@ -100,19 +105,26 @@ async function create(req, res, next) {
         INSERT INTO professionals (
           company_id,
           user_id,
-          slug
+          slug,
+          phone
         )
-        VALUES ($1, $2, $3)
+        VALUES ($1, $2, $3, $4)
         RETURNING id
         `,
-        [companyId, userId, slug]
+        [
+          companyId,
+          userId,
+          slug,
+          phone
+        ]
       );
 
       await client.query('COMMIT');
 
       return res.status(201).json({
         id: professionalResult.rows[0].id,
-        name
+        name,
+        phone
       });
 
     } catch (error) {
@@ -130,7 +142,6 @@ async function create(req, res, next) {
     next(error);
   }
 }
-
 
 async function listPublic(req, res, next) {
   try {
@@ -227,10 +238,14 @@ async function getMyAppointments(req, res, next) {
       professionalId
     });
 
+
+
     // 🔹 4. Total do dia
     const total = appointments.reduce((acc, item) => {
       return acc + (Number(item.service_price_snapshot) || 0);
     }, 0);
+
+    console.log(total);
 
     return res.status(200).json({
       date,
@@ -243,11 +258,211 @@ async function getMyAppointments(req, res, next) {
   }
 }
 
+async function publicDashboard(req, res, next) {
+  try {
+
+    const {
+      companySlug,
+      professionalSlug
+    } = req.params;
+
+    const companyResult = await pool.query(
+      `
+        SELECT id
+        FROM companies
+        WHERE slug = $1
+      `,
+      [companySlug]
+    );
+
+    const company =
+      companyResult.rows[0];
+
+    if (!company) {
+      return res.status(404).json({
+        message: "Empresa não encontrada"
+      });
+    }
+
+    const professionalResult = await pool.query(
+      `
+        SELECT
+          p.id,
+          u.name
+        FROM professionals p
+        JOIN users u
+          ON u.id = p.user_id
+        WHERE
+          p.company_id = $1
+          AND p.slug = $2
+          AND p.is_active = true
+          AND u.is_active = true
+      `,
+      [
+        company.id,
+        professionalSlug
+      ]
+    );
+
+    const professional =
+      professionalResult.rows[0];
+
+    if (!professional) {
+      return res.status(404).json({
+        message: "Profissional não encontrado"
+      });
+    }
+
+    const date =
+      req.query.date ||
+      new Date().toISOString().split('T')[0];
+
+    const {
+      findAppointmentsByDate
+    } = require('../database/appointments.repository');
+
+    const appointments =
+      await findAppointmentsByDate({
+        companyId: company.id,
+        date,
+        professionalId: professional.id
+      });
+
+    const total = appointments.reduce((acc, item) => {
+      return acc + (Number(item.service_price_snapshot) || 0);
+    }, 0);
+
+    console.log(appointments);
+
+    return res.status(200).json({
+      professionalName: professional.name,
+      totalAmount: total,
+      appointments
+    });
+
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function publicReport(req, res, next) {
+  try {
+
+    const {
+      companySlug,
+      professionalSlug
+    } = req.params;
+
+    const {
+      startDate,
+      endDate
+    } = req.query;
+
+    const companyResult = await pool.query(
+      `
+        SELECT id
+        FROM companies
+        WHERE slug = $1
+      `,
+      [companySlug]
+    );
+
+    const company =
+      companyResult.rows[0];
+
+    if (!company) {
+
+      return res.status(404).json({
+        message: "Empresa não encontrada"
+      });
+    }
+
+    const professionalResult = await pool.query(
+      `
+        SELECT
+          p.id,
+          u.name
+        FROM professionals p
+        JOIN users u
+          ON u.id = p.user_id
+        WHERE
+          p.company_id = $1
+          AND p.slug = $2
+          AND p.is_active = true
+          AND u.is_active = true
+      `,
+      [
+        company.id,
+        professionalSlug
+      ]
+    );
+
+    const professional =
+      professionalResult.rows[0];
+
+    if (!professional) {
+      return res.status(404).json({
+        message: "Profissional não encontrado"
+      });
+    }
+
+    const reportResult = await pool.query(
+      `
+        SELECT
+          COUNT(*) AS total_appointments,
+
+          COALESCE(
+            SUM(service_price_snapshot),
+            0
+          ) AS total_revenue,
+
+          COALESCE(
+            AVG(service_price_snapshot),
+            0
+          ) AS average_ticket
+
+        FROM appointments
+
+        WHERE
+          company_id = $1
+          AND professional_id = $2
+          AND date BETWEEN $3 AND $4
+      `,
+      [
+        company.id,
+        professional.id,
+        startDate,
+        endDate
+      ]
+    );
+
+    const report =
+      reportResult.rows[0];
+
+    return res.status(200).json({
+      professionalName: professional.name,
+      totalAppointments: Number(
+        report.total_appointments || 0
+      ),
+      totalRevenue: Number(
+        report.total_revenue || 0
+      ),
+      averageTicket: Number(
+        report.average_ticket || 0
+      )
+    });
+
+  } catch (error) {
+    next(error);
+  }
+}
 
 module.exports = {
   list,
   create,
   listPublic,
   listServicesPublic,
-  getMyAppointments
+  getMyAppointments,
+  publicDashboard,
+  publicReport
 };

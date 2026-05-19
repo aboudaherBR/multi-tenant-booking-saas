@@ -93,6 +93,96 @@ select {
 
 
 /* ========================================
+   APPOINTMENT CARD
+   ======================================== */
+
+.appointment-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  padding: 16px;
+  margin-top: 12px;
+
+  background: var(--color-surface);
+
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+
+  transition: all 0.2s ease;
+}
+
+.appointment-card:hover {
+  transform: translateY(-1px);
+}
+
+.appointment-hour {
+  min-width: 70px;
+
+  padding: 10px;
+
+  border-radius: 12px;
+
+  background: var(--color-primary);
+  color: white;
+
+  text-align: center;
+
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.appointment-content {
+  flex: 1;
+}
+
+.appointment-client {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.appointment-service {
+  margin-top: 4px;
+
+  color: var(--color-text-secondary);
+  font-size: 14px;
+}
+
+.appointment-price {
+  font-size: 15px;
+  font-weight: 700;
+
+  color: var(--color-primary);
+}
+
+.summary-card {
+  margin-top: 24px;
+
+  padding: 20px;
+
+  border-radius: 16px;
+
+  background: linear-gradient(135deg,
+      var(--color-primary),
+      var(--color-primary-light));
+
+  color: white;
+}
+
+.summary-label {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.summary-value {
+  margin-top: 8px;
+
+  font-size: 32px;
+  font-weight: 700;
+}
+
+
+/* ========================================
    DESIGN SYSTEM - LOADING AND ANIMATIONS
    ======================================== */
 
@@ -337,6 +427,11 @@ select {
   width: 90%;
   max-width: 350px;
   text-align: center;
+}
+
+.modal-content--scrollable {
+  max-height: 80vh;
+  overflow-y: auto;
 }
 
 

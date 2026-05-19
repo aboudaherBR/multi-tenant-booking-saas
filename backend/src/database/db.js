@@ -3,6 +3,9 @@ const { Pool } = require('pg');
 
 const isTest = process.env.NODE_ENV === 'test';
 
+console.log("TYPE DATABASE_URL:", typeof process.env.DATABASE_URL);
+console.log("VALUE DATABASE_URL:", process.env.DATABASE_URL);
+
 const pool = process.env.DATABASE_URL
   ? new Pool({
       connectionString: process.env.DATABASE_URL,

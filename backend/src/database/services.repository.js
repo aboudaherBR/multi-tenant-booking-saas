@@ -143,6 +143,8 @@ async function findServiceForProfessionalBySlugs({
   return result.rows[0] || null;
 }
 
+
+
 module.exports = {
   findServiceById,
   findServiceForProfessional,

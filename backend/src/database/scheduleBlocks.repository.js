@@ -7,16 +7,38 @@ async function findScheduleBlocksByProfessionalAndDate({
 }) {
   const result = await pool.query(
     `
-      SELECT id, start_time, end_time
+      SELECT 
+        id,
+        mode,
+        start_date,
+        end_date,
+        start_time,
+        end_time,
+        recurring_days,
+        valid_from,
+        valid_to,
+        time_scope
       FROM schedule_blocks
       WHERE company_id = $1
-      AND $2 BETWEEN start_date AND end_date
       AND (
         professional_id IS NULL
-        OR professional_id = $3
+        OR professional_id = $2
+      )
+      AND (
+        (
+          mode = 'single'
+          AND $3::date BETWEEN start_date AND end_date
+        )
+        OR
+        (
+          mode = 'recurring'
+          AND EXTRACT(DOW FROM $3::date)::int = ANY(recurring_days)
+          AND (valid_from IS NULL OR $3::date >= valid_from)
+          AND (valid_to IS NULL OR $3::date <= valid_to)
+        )
       )
     `,
-    [companyId, date, professionalId]
+    [companyId, professionalId, date]
   );
 
   return result.rows;
@@ -29,7 +51,10 @@ async function createScheduleBlock({
   endDate,
   startTime,
   endTime,
-  reason
+  reason,
+  mode,
+  recurring_days,
+  time_scope
 }) {
   await pool.query(
     `
@@ -40,9 +65,23 @@ async function createScheduleBlock({
         end_date,
         start_time,
         end_time,
-        reason
+        reason,
+        time_scope,
+        mode,
+        recurring_days
       )
-      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      VALUES (
+        $1,
+        $2,
+        $3,
+        $4,
+        $5,
+        $6,
+        $7,
+        $8,
+        $9,
+        $10
+      )
     `,
     [
       companyId,
@@ -51,7 +90,10 @@ async function createScheduleBlock({
       endDate,
       startTime,
       endTime,
-      reason
+      reason,
+      time_scope,
+      mode,
+      recurring_days
     ]
   );
 }
@@ -60,17 +102,30 @@ async function findScheduleBlocksByCompany(companyId) {
   const result = await pool.query(
     `
       SELECT 
-        id,
-        professional_id,
-        start_date,
-        end_date,
-        start_time,
-        end_time,
-        reason,
-        created_at
-      FROM schedule_blocks
-      WHERE company_id = $1
-      ORDER BY start_date, start_time
+        sb.id,
+        sb.professional_id,
+        u.name AS professional_name,
+        sb.start_date,
+        sb.end_date,
+        sb.start_time,
+        sb.end_time,
+        sb.reason,
+        sb.mode,
+        sb.time_scope,
+        sb.recurring_days,
+        sb.created_at
+
+      FROM schedule_blocks sb
+
+      LEFT JOIN professionals p
+        ON p.id = sb.professional_id
+
+      LEFT JOIN users u
+        ON u.id = p.user_id
+
+      WHERE sb.company_id = $1
+
+      ORDER BY sb.start_date, sb.start_time
     `,
     [companyId]
   );
@@ -174,11 +229,63 @@ async function hasScheduleBlockConflict({
   return result.rows.length > 0;
 }
 
+async function findApplicableScheduleBlocksForDate({
+  companyId,
+  professionalId,
+  date
+}) {
+  console.log("PARAMS:", {
+    companyId,
+    professionalId,
+    date,
+    dateType: typeof date
+  });
+
+  const result = await pool.query(
+    `
+      SELECT 
+        id,
+        mode,
+        start_date,
+        end_date,
+        start_time,
+        end_time,
+        recurring_days,
+        valid_from,
+        valid_to,
+        time_scope
+      FROM schedule_blocks
+      WHERE company_id = $1
+      AND (
+        professional_id IS NULL
+        OR professional_id = $2
+      )
+      AND (
+        (
+          mode = 'single'
+          AND $3::date BETWEEN start_date AND end_date
+        )
+        OR
+        (
+          mode = 'recurring'
+          AND EXTRACT(DOW FROM $3::date)::int = ANY(recurring_days)
+          AND (valid_from IS NULL OR $3::date >= valid_from)
+          AND (valid_to IS NULL OR $3::date <= valid_to)
+        )
+      )
+    `,
+    [companyId, professionalId, date]
+  );
+
+  return result.rows;
+}
+
 module.exports = {
   findScheduleBlocksByProfessionalAndDate,
   createScheduleBlock,
   findScheduleBlocksByCompany,
   deleteScheduleBlock,
   updateScheduleBlock,
-  hasScheduleBlockConflict
+  hasScheduleBlockConflict,
+  findApplicableScheduleBlocksForDate
 };

@@ -31,16 +31,51 @@ async function create(req, res, next) {
       endDate,
       startTime,
       endTime,
-      reason
+      reason,
+      time_scope,
+      mode,
+      recurring_days
     } = req.body;
 
-    if (!startDate || !endDate) {
+    let parsedStartDate = startDate;
+    let parsedEndDate = endDate;
+    let parsedStartTime = startTime;
+    let parsedEndTime = endTime;
+
+
+    if (req.body.start_datetime) {
+      parsedStartDate = req.body.start_datetime.slice(0, 10);
+      parsedStartTime = req.body.start_datetime.includes("T")
+        ? req.body.start_datetime.slice(11, 16)
+        : null;
+
+      parsedEndDate = req.body.end_datetime
+        ? req.body.end_datetime.slice(0, 10)
+        : parsedStartDate;
+
+      parsedEndTime = req.body.end_datetime && req.body.end_datetime.includes("T")
+        ? req.body.end_datetime.slice(11, 16)
+        : null;
+    }
+
+    console.log("DEBUG time_scope:", time_scope);
+
+    if (
+      mode !== "recurring" &&
+      (!parsedStartDate || !parsedEndDate)
+    ) {
       return res.status(400).json({
         message: 'startDate and endDate are required'
       });
     }
 
-    if (!isValidDateFormat(startDate) || !isValidDateFormat(endDate)) {
+    if (
+      mode !== "recurring" &&
+      (
+        !isValidDateFormat(parsedStartDate) ||
+        !isValidDateFormat(parsedEndDate)
+      )
+    ) {
       return res.status(400).json({
         message: 'Invalid date format. Use YYYY-MM-DD'
       });
@@ -115,12 +150,16 @@ async function create(req, res, next) {
     await createScheduleBlock({
       companyId: req.user.companyId,
       professionalId: professionalId || null,
-      startDate,
-      endDate,
-      startTime: startTime || null,
-      endTime: endTime || null,
-      reason: reason || null
+      startDate: parsedStartDate,
+      endDate: parsedEndDate,
+      startTime: parsedStartTime || null,
+      endTime: parsedEndTime || null,
+      reason: reason || null,
+      time_scope,
+      mode,
+      recurring_days
     });
+
 
     if (existingAppointments.length > 0) {
       return res.status(201).json({
@@ -136,6 +175,7 @@ async function create(req, res, next) {
 
   } catch (error) {
     next(error);
+    console.error(error);
   }
 }
 
@@ -231,7 +271,10 @@ async function update(req, res, next) {
       });
     }
 
-    if (startDate > endDate) {
+    if (
+      mode !== "recurring" &&
+      startDate > endDate
+    ) {
       return res.status(400).json({
         message: 'startDate cannot be after endDate'
       });

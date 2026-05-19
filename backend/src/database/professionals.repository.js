@@ -67,12 +67,14 @@ async function findActiveProfessionalsPublicByCompanyId(companyId) {
 
 async function findActiveProfessionalsByCompanyId(companyId) {
   console.log("USANDO findActiveProfessionalsByCompanyId");
+
   const result = await pool.query(
     `
       SELECT
         p.id,
         p.photo_url,
         p.slug,
+        p.phone,
         u.name
       FROM professionals p
       JOIN users u
@@ -89,6 +91,7 @@ async function findActiveProfessionalsByCompanyId(companyId) {
 
   return result.rows;
 }
+
 
 async function createProfessional(
   {
