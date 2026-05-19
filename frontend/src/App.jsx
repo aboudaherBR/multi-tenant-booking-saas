@@ -14,6 +14,7 @@ import ProfessionalDashboard from "./pages/ProfessionalDashboard";
 import ProfessionalLayout from "./layout/ProfessionalLayout";
 import ProfessionalSchedulePage from "./pages/ProfessionalSchedulePage";
 import ProfessionalReportsPage from "./pages/ProfessionalReportsPage";
+import ProfessionalSchedulePage from "./pages/ProfessionalSchedulePage";
 
 
 //Landing page e signup ficam fora do Routes principal, para não carregarem o layout admin/profissional
@@ -51,6 +52,10 @@ function App() {
       <Route
         path="/:companySlug/:professionalSlug/reports"
         element={<ProfessionalReportsPage />}
+      />
+      <Route
+        path="/:companySlug/:professionalSlug/schedule"
+        element={<ProfessionalSchedulePage />}
       />
 
       {/* FALLBACK */}
