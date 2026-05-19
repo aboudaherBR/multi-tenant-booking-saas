@@ -18,6 +18,9 @@ export default function ProfessionalSchedulePage() {
       new Date().toISOString().slice(0, 10)
     );
 
+  const [serviceFilter, setServiceFilter] =
+    useState("");
+
   const navigate = useNavigate();
 
   const {
