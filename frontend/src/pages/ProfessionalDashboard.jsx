@@ -169,7 +169,9 @@ export default function ProfessionalDashboard() {
             <button
               className="button-secondary"
               onClick={() =>
-                alert("Relatórios (em breve)")
+                navigate(
+                  `/${companySlug}/${professionalSlug}/reports`
+                )
               }
             >
               Relatórios
