@@ -93,6 +93,16 @@ export default function ProfessionalReportsPage() {
                     <h1 className="heading">
                         Relatórios do profissional
                     </h1>
+
+                    <p
+                        className="subtext"
+                        style={{
+                            marginTop: "8px"
+                        }}
+                    >
+                        Período atual: mês corrente
+                    </p>
+                    
                     {report && (
 
                         <div
