@@ -184,7 +184,7 @@ export default function ProfessionalDashboard() {
             <button
               className="button-primary"
               onClick={() =>
-                alert("Agenda detalhada em breve")
+                navigate("/professional/schedule")
               }
             >
               Agenda
