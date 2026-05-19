@@ -14,6 +14,7 @@ import ProfessionalDashboard from "./pages/ProfessionalDashboard";
 import ProfessionalLayout from "./layout/ProfessionalLayout";
 import ProfessionalSchedulePage from "./pages/ProfessionalSchedulePage";
 import ProfessionalReportsPage from "./pages/ProfessionalReportsPage";
+import BookAdmin from "./pages/BookAdmin";
 
 
 //Landing page e signup ficam fora do Routes principal, para não carregarem o layout admin/profissional
@@ -41,6 +42,7 @@ function App() {
         <Route path="/schedule" element={<ScheduleWizard />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/reports" element={<ReportsPage />} />
+        <Route path="/admin/book" element={<BookAdmin />} />
       </Route>
 
       {/* ROTAS PROFISSIONAL */}
