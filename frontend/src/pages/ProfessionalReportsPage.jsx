@@ -121,7 +121,13 @@ export default function ProfessionalReportsPage() {
                         }}
                     >
 
-                        <div>
+                        <div
+                            style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: "6px"
+                            }}
+                        >
 
                             <label className="subtext">
                                 Início
