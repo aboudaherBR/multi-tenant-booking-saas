@@ -75,11 +75,16 @@ async function findActiveProfessionalsByCompanyId(companyId) {
         p.photo_url,
         p.slug,
         p.phone,
-        u.name
+        u.name,
+        c.slug AS company_slug
       FROM professionals p
       JOIN users u
         ON u.id = p.user_id
        AND u.company_id = p.company_id
+
+      JOIN companies c
+        ON c.id = p.company_id
+
       WHERE
         p.company_id = $1
         AND p.is_active = true

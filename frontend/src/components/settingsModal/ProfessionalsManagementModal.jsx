@@ -126,6 +126,8 @@ export default function ProfessionalsManagementModal({
         loadAvailableServices();
     }, []);
 
+    console.log(professionals);
+
     if (!isOpen) return null;
 
     return (
@@ -204,6 +206,7 @@ export default function ProfessionalsManagementModal({
 
                     <div style={{ marginTop: "10px" }}>
 
+                        
                         {professionals?.map((professional) => (
                             <div
                                 key={professional.id}
