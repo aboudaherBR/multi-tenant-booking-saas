@@ -127,7 +127,9 @@ export default function ProfessionalSchedulePage() {
             <button
               className="button-secondary"
               onClick={() =>
-                navigate("/professional")
+                navigate(
+                  `/${companySlug}/${professionalSlug}`
+                )
               }
             >
               Dashboard
