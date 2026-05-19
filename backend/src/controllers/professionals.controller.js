@@ -345,6 +345,18 @@ async function publicDashboard(req, res, next) {
   }
 }
 
+async function publicReport(req, res, next) {
+  try {
+
+    return res.status(200).json({
+      ok: true
+    });
+
+  } catch (error) {
+    next(error);
+  }
+}
+
 
 module.exports = {
   list,
@@ -352,5 +364,6 @@ module.exports = {
   listPublic,
   listServicesPublic,
   getMyAppointments,
-  publicDashboard
+  publicDashboard,
+  publicReport
 };

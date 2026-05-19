@@ -16,6 +16,13 @@ router.get(
   professionalsController.publicDashboard
 );
 
+
+router.get(
+  "/public/:companySlug/:professionalSlug/report",
+  professionalsController.publicReport
+);
+
+
 router.get(
   '/public/:companySlug/professionals',
   professionalsController.listPublic
