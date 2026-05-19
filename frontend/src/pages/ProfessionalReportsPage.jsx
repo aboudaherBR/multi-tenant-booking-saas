@@ -43,6 +43,7 @@ export default function ProfessionalReportsPage() {
             );
 
             setReport(data);
+            console.log(data);
 
         } catch (error) {
 
