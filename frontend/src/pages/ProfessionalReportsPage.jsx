@@ -19,6 +19,8 @@ export default function ProfessionalReportsPage() {
         professionalSlug
     } = useParams();
 
+    const navigate = useNavigate();
+
     async function fetchReport() {
 
         try {
@@ -105,6 +107,20 @@ export default function ProfessionalReportsPage() {
                     <h1 className="heading">
                         Relatórios do profissional
                     </h1>
+
+                    <button
+                        className="button-secondary"
+                        style={{
+                            marginTop: "12px"
+                        }}
+                        onClick={() =>
+                            navigate(
+                                `/${companySlug}/${professionalSlug}`
+                            )
+                        }
+                    >
+                        Voltar
+                    </button>
 
                     <p
                         className="subtext"
