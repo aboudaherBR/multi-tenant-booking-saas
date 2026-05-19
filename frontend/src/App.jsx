@@ -13,6 +13,7 @@ import BookPublic from "./pages/BookPublic";
 import ProfessionalDashboard from "./pages/ProfessionalDashboard";
 import ProfessionalLayout from "./layout/ProfessionalLayout";
 import ProfessionalSchedulePage from "./pages/ProfessionalSchedulePage";
+import ProfessionalReportsPage from "./pages/ProfessionalReportsPage";
 
 
 //Landing page e signup ficam fora do Routes principal, para não carregarem o layout admin/profissional
@@ -47,7 +48,11 @@ function App() {
         path="/:companySlug/:professionalSlug"
         element={<ProfessionalDashboard />}
       />
-      
+      <Route
+        path="/:companySlug/:professionalSlug/reports"
+        element={<ProfessionalReportsPage />}
+      />
+
       {/* FALLBACK */}
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
