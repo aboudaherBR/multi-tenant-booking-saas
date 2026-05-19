@@ -124,6 +124,48 @@ export default function ProfessionalSchedulePage() {
 
             </div>
 
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "6px"
+              }}
+            >
+
+              <label className="subtext">
+                Serviço
+              </label>
+
+              <select
+                className="input-field"
+                value={serviceFilter}
+                onChange={(e) =>
+                  setServiceFilter(e.target.value)
+                }
+              >
+
+                <option value="">
+                  Todos
+                </option>
+
+                {[...new Set(
+                  appointments.map(
+                    (appt) => appt.service_name
+                  )
+                )].map((service) => (
+
+                  <option
+                    key={service}
+                    value={service}
+                  >
+                    {service}
+                  </option>
+                ))}
+
+              </select>
+
+            </div>
+
             <button
               className="button-secondary"
               onClick={() =>
@@ -154,37 +196,49 @@ export default function ProfessionalSchedulePage() {
 
               <div>
 
-                {appointments.map((appt) => (
+                {appointments
+                  .filter((appt) => {
 
-                  <div
-                    key={appt.id}
-                    className="appointment-card"
-                  >
+                    if (!serviceFilter) {
+                      return true;
+                    }
 
-                    <div className="appointment-hour">
-                      {appt.start_time?.slice(0, 5)}
-                    </div>
+                    return (
+                      appt.service_name ===
+                      serviceFilter
+                    );
+                  })
+                  .map((appt) => (
 
-                    <div className="appointment-content">
+                    <div
+                      key={appt.id}
+                      className="appointment-card"
+                    >
 
-                      <div className="appointment-client">
-                        {appt.client_name}
+                      <div className="appointment-hour">
+                        {appt.start_time?.slice(0, 5)}
                       </div>
 
-                      <div className="appointment-service">
-                        {appt.service_name}
+                      <div className="appointment-content">
+
+                        <div className="appointment-client">
+                          {appt.client_name}
+                        </div>
+
+                        <div className="appointment-service">
+                          {appt.service_name}
+                        </div>
+
+                      </div>
+
+                      <div className="appointment-price">
+                        R$ {Number(
+                          appt.service_price_snapshot || 0
+                        ).toFixed(2)}
                       </div>
 
                     </div>
-
-                    <div className="appointment-price">
-                      R$ {Number(
-                        appt.service_price_snapshot || 0
-                      ).toFixed(2)}
-                    </div>
-
-                  </div>
-                ))}
+                  ))}
 
               </div>
             )}
