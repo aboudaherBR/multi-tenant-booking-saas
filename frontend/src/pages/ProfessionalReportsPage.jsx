@@ -93,6 +93,58 @@ export default function ProfessionalReportsPage() {
                     <h1 className="heading">
                         Relatórios do profissional
                     </h1>
+                    {report && (
+
+                        <div
+                            style={{
+                                marginTop: "24px",
+                                display: "grid",
+                                gap: "16px"
+                            }}
+                        >
+
+                            <div className="summary-card">
+
+                                <div className="summary-label">
+                                    Total de serviços
+                                </div>
+
+                                <div className="summary-value">
+                                    {report.totalAppointments}
+                                </div>
+
+                            </div>
+
+                            <div className="summary-card">
+
+                                <div className="summary-label">
+                                    Faturamento
+                                </div>
+
+                                <div className="summary-value">
+                                    R$ {Number(
+                                        report.totalRevenue || 0
+                                    ).toFixed(2)}
+                                </div>
+
+                            </div>
+
+                            <div className="summary-card">
+
+                                <div className="summary-label">
+                                    Ticket médio
+                                </div>
+
+                                <div className="summary-value">
+                                    R$ {Number(
+                                        report.averageTicket || 0
+                                    ).toFixed(2)}
+                                </div>
+
+                            </div>
+
+                        </div>
+                    )}
 
                 </div>
 
