@@ -138,6 +138,9 @@ export default function ProfessionalReportsPage() {
 
                             <input
                                 className="input-field"
+                                style={{
+                                    width: "150px"
+                                }}
                                 type="date"
                                 value={startDate}
                                 onChange={(e) =>
@@ -165,6 +168,9 @@ export default function ProfessionalReportsPage() {
 
                         <input
                             className="input-field"
+                            style={{
+                                width: "150px"
+                            }}
                             type="date"
                             value={endDate}
                             onChange={(e) =>
