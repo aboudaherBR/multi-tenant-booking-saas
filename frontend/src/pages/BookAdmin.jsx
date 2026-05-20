@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-
 import ProfessionalsModal from "../components/ProfessionalsModal";
 import ServicesModal from "../components/ServicesModal";
 import AvailabilityModal from "../components/AvailabilityModal";
@@ -10,7 +8,6 @@ import apiClient from "../api/apiClient";
 
 export default function BookAdmin() {
 
-    const { slug } = useParams();
 
     // CLIENT
     const [selectedClient, setSelectedClient] =
@@ -54,7 +51,7 @@ export default function BookAdmin() {
             try {
 
                 const data = await apiClient(
-                    `/public/${slug}/professionals?withPreview=true`
+                    `"/professionals"`
                 );
 
                 setProfessionals(data);
