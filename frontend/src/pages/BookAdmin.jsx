@@ -143,16 +143,7 @@ export default function BookAdmin() {
 
                 </div>
 
-                {/* ACTION */}
-                <button
-                    className="button-primary"
-                    disabled={!selectedClient}
-                    onClick={() =>
-                        setShowProfessionalsModal(true)
-                    }
-                >
-                    Iniciar agendamento
-                </button>
+                
 
             </div>
 
