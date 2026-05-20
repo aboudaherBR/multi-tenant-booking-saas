@@ -4,6 +4,7 @@ import ProfessionalsModal from "../components/ProfessionalsModal";
 import ServicesModal from "../components/ServicesModal";
 import AvailabilityModal from "../components/AvailabilityModal";
 import ConfirmBookingModal from "../components/ConfirmBookingModal";
+import ClientModal from "../components/BoolAdminComponents/ClientModal";
 
 import apiClient from "../api/apiClient";
 
@@ -252,6 +253,21 @@ export default function BookAdmin() {
                         }}
                     />
                 )}
+            {/* CLIENT MODAL */}
+            {showClientModal && (
+
+                <ClientModal
+                    onClose={() =>
+                        setShowClientModal(false)
+                    }
+                    onSelect={(client) => {
+
+                        setSelectedClient(client);
+
+                        setShowClientModal(false);
+                    }}
+                />
+            )}
 
         </div>
     );
