@@ -5,24 +5,8 @@ export default function ClientModal({
     onSelect
 }) {
 
-    const [name, setName] =
-        useState("");
-
-    const [phone, setPhone] =
-        useState("");
-
-    function handleSave() {
-
-        if (!name || !phone) {
-            return;
-        }
-
-        onSelect({
-            id: Date.now(),
-            name,
-            phone
-        });
-    }
+    const [mode, setMode] =
+        useState(null);
 
     return (
 
@@ -31,55 +15,80 @@ export default function ClientModal({
             <div className="modal-content">
 
                 <h3>
-                    Novo cliente
+                    Selecionar cliente
                 </h3>
 
-                <input
-                    className="input-field"
-                    type="text"
-                    placeholder="Nome"
-                    value={name}
-                    onChange={(e) =>
-                        setName(e.target.value)
-                    }
-                />
+                {!mode && (
 
-                <input
-                    className="input-field"
-                    type="text"
-                    placeholder="Telefone"
-                    value={phone}
-                    onChange={(e) =>
-                        setPhone(e.target.value)
-                    }
-                    style={{
-                        marginTop: "10px"
-                    }}
-                />
+                    <div
+                        style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: "12px",
+                            marginTop: "20px"
+                        }}
+                    >
 
-                <div
+                        <button
+                            className="button-primary"
+                            onClick={() =>
+                                setMode("existing")
+                            }
+                        >
+                            Cliente existente
+                        </button>
+
+                        <button
+                            className="button-secondary"
+                            onClick={() =>
+                                setMode("new")
+                            }
+                        >
+                            Novo cliente
+                        </button>
+
+                    </div>
+                )}
+
+                {mode === "existing" && (
+
+                    <div
+                        style={{
+                            marginTop: "20px"
+                        }}
+                    >
+
+                        <p>
+                            Busca de clientes virá aqui
+                        </p>
+
+                    </div>
+                )}
+
+                {mode === "new" && (
+
+                    <div
+                        style={{
+                            marginTop: "20px"
+                        }}
+                    >
+
+                        <p>
+                            Cadastro rápido virá aqui
+                        </p>
+
+                    </div>
+                )}
+
+                <button
+                    className="button-soft"
                     style={{
-                        display: "flex",
-                        gap: "10px",
                         marginTop: "20px"
                     }}
+                    onClick={onClose}
                 >
-
-                    <button
-                        className="button-secondary"
-                        onClick={onClose}
-                    >
-                        Cancelar
-                    </button>
-
-                    <button
-                        className="button-primary"
-                        onClick={handleSave}
-                    >
-                        Salvar cliente
-                    </button>
-
-                </div>
+                    Fechar
+                </button>
 
             </div>
 
