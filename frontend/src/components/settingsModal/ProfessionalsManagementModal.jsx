@@ -123,8 +123,12 @@ export default function ProfessionalsManagementModal({
     }
 
     useEffect(() => {
-        loadAvailableServices();
-    }, []);
+
+        if (isOpen) {
+            loadAvailableServices();
+        }
+
+    }, [isOpen]);
 
     console.log(professionals);
 
