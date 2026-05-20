@@ -54,6 +54,7 @@ export default function ProfessionalServicesModal({
 
             // 👇 chama função do pai
             onServiceAdded();
+            await loadAvailableServices();
 
         } catch (error) {
 
