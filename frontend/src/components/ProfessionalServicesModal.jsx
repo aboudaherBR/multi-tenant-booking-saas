@@ -148,7 +148,12 @@ export default function ProfessionalServicesModal({
 
                 <button
                     style={{ marginBottom: "16px" }}
-                    onClick={() => setShowAddService(true)}
+                    onClick={async () => {
+
+                        await loadAvailableServices();
+
+                        setShowAddService(true);
+                    }}
                 >
                     + Adicionar serviço
                 </button>
