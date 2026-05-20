@@ -59,7 +59,16 @@ async function search(req, res) {
 
   try {
 
-    return res.json([]);
+    const clientsRepository =
+      require('../repositories/client.repository');
+
+    const clients =
+      await clientsRepository.searchClients({
+        companyId: req.user.companyId,
+        query: req.query.q || ''
+      });
+
+    return res.json(clients);
 
   } catch (error) {
 
