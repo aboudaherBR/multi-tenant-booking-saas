@@ -58,9 +58,50 @@ export default function ClientModal({
                         }}
                     >
 
-                        <p>
-                            Busca de clientes virá aqui
-                        </p>
+                        <input
+                            className="input-field"
+                            type="text"
+                            placeholder="Buscar cliente"
+                        />
+
+                        <div
+                            style={{
+                                marginTop: "15px",
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: "10px"
+                            }}
+                        >
+
+                            <button
+                                className="button-soft"
+                                onClick={() => {
+
+                                    onSelect({
+                                        id: 1,
+                                        name: "João"
+                                    });
+
+                                }}
+                            >
+                                João - (85) 99999-9999
+                            </button>
+
+                            <button
+                                className="button-soft"
+                                onClick={() => {
+
+                                    onSelect({
+                                        id: 2,
+                                        name: "Maria"
+                                    });
+
+                                }}
+                            >
+                                Maria - (85) 98888-8888
+                            </button>
+
+                        </div>
 
                     </div>
                 )}
