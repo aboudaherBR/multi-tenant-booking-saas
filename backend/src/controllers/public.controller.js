@@ -246,6 +246,12 @@ async function createPublicAppointment(req, res, next) {
       });
     }
 
+    console.log({
+      companyId: company.id,
+      professionalSlug,
+      serviceSlug
+    });
+
     const serviceData = await findServiceForProfessionalBySlugs({
       companyId: company.id,
       professionalSlug,
