@@ -55,7 +55,24 @@ async function getByPhone(req, res, next) {
   }
 }
 
+async function search(req, res) {
+
+  try {
+
+    return res.json([]);
+
+  } catch (error) {
+
+    console.error(error);
+
+    return res.status(500).json({
+      error: "Erro ao buscar clientes"
+    });
+  }
+}
+
 module.exports = {
   list,
-  getByPhone
+  getByPhone,
+  search
 };

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import apiClient from "../api/apiClient";
 
 export default function ClientModal({
     onClose,
@@ -31,9 +32,23 @@ export default function ClientModal({
 
                         <button
                             className="button-primary"
-                            onClick={() =>
-                                setMode("existing")
-                            }
+                            onClick={async () => {
+
+                                setMode("existing");
+
+                                try {
+
+                                    const data = await apiClient(
+                                        "/clients/search"
+                                    );
+
+                                    console.log(data);
+
+                                } catch (err) {
+
+                                    console.error(err);
+                                }
+                            }}
                         >
                             Cliente existente
                         </button>

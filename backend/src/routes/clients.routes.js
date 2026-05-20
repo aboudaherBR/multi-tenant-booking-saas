@@ -10,4 +10,10 @@ router.get('/clients', requireAuth, list);
 // 🌍 rota pública (booking)
 router.get('/clients/by-phone/:slug', getByPhone);
 
+router.get(
+  '/clients/search',
+  requireAuth,
+  clientsController.search
+);
+
 module.exports = router;
