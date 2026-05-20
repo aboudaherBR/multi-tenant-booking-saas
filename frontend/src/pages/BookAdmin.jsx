@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+
 import ProfessionalsModal from "../components/ProfessionalsModal";
 import ServicesModal from "../components/ServicesModal";
 import AvailabilityModal from "../components/AvailabilityModal";
@@ -8,7 +9,6 @@ import apiClient from "../api/apiClient";
 
 export default function BookAdmin() {
 
-
     // CLIENT
     const [selectedClient, setSelectedClient] =
         useState(null);
@@ -17,7 +17,8 @@ export default function BookAdmin() {
         useState(false);
 
     // PROFESSIONALS
-    const [professionals, setProfessionals] = useState([]);
+    const [professionals, setProfessionals] =
+        useState([]);
 
     const [selectedProfessional, setSelectedProfessional] =
         useState(null);
@@ -51,7 +52,7 @@ export default function BookAdmin() {
             try {
 
                 const data = await apiClient(
-                    `"/professionals"`
+                    "/professionals"
                 );
 
                 setProfessionals(data);
@@ -64,7 +65,7 @@ export default function BookAdmin() {
 
         fetchProfessionals();
 
-    }, [slug]);
+    }, []);
 
     return (
 
@@ -178,7 +179,6 @@ export default function BookAdmin() {
                 selectedProfessional && (
 
                     <ServicesModal
-                        slug={slug}
                         professional={selectedProfessional}
                         onBack={() => {
 
@@ -206,7 +206,6 @@ export default function BookAdmin() {
                 selectedService && (
 
                     <AvailabilityModal
-                        slug={slug}
                         professional={selectedProfessional}
                         service={selectedService}
                         onBack={() => {
