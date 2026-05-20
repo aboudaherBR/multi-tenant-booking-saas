@@ -1,5 +1,5 @@
 import { useState } from "react";
-import apiClient from "../api/apiClient";
+import apiClient from "../../api/apiClient";
 
 export default function ClientModal({
     onClose,
