@@ -60,7 +60,14 @@ async function addServiceToProfessional(companyId, professionalId, serviceId, cu
       SET custom_price = EXCLUDED.custom_price
     RETURNING *
     `,
-    [companyId, professionalId, serviceId, customPrice || null]
+    [
+      companyId,
+      professionalId,
+      serviceId,
+      customPrice == null
+        ? null
+        : customPrice
+    ]
   );
 
   return result.rows[0];
