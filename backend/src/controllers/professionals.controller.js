@@ -457,6 +457,20 @@ async function publicReport(req, res, next) {
   }
 }
 
+async function listServicesAdmin(req, res) {
+
+  try {
+
+    return res.json([]);
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      error: "Erro ao buscar serviços"
+    });
+  }
+}
+
 module.exports = {
   list,
   create,
@@ -464,5 +478,6 @@ module.exports = {
   listServicesPublic,
   getMyAppointments,
   publicDashboard,
-  publicReport
+  publicReport,
+  listServicesAdmin
 };

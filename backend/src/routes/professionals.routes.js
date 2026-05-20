@@ -45,6 +45,11 @@ router.post(
   professionalsController.create
 );
 
+router.get(
+  '/professionals/:professionalId/services',
+  requireAuth,
+  professionalsController.listServicesAdmin
+);
 
 
 module.exports = router;
