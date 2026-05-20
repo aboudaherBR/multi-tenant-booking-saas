@@ -60,7 +60,7 @@ async function search(req, res) {
   try {
 
     const clientsRepository =
-      require('../repositories/client.repository');
+      require('../database/clients.repository');
 
     const clients =
       await clientsRepository.searchClients({
