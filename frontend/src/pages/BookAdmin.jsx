@@ -13,10 +13,11 @@ export default function BookAdmin() {
     const { slug } = useParams();
 
     // CLIENT
-    const [selectedClient, setSelectedClient] = useState({
-        id: 1,
-        name: "Cliente Teste"
-    });
+    const [selectedClient, setSelectedClient] =
+        useState(null);
+
+    const [showClientModal, setShowClientModal] =
+        useState(false);
 
     // PROFESSIONALS
     const [professionals, setProfessionals] = useState([]);
@@ -103,16 +104,50 @@ export default function BookAdmin() {
                 {/* CLIENT */}
                 <div style={{ marginBottom: "20px" }}>
 
-                    <p className="text-row">
-                        <strong>Cliente:</strong>{" "}
-                        {selectedClient?.name}
-                    </p>
+                    {selectedClient ? (
+
+                        <div>
+
+                            <p className="text-row">
+                                <strong>Cliente:</strong>{" "}
+                                {selectedClient.name}
+                            </p>
+
+                            <button
+                                className="button-soft"
+                                style={{
+                                    width: "auto",
+                                    padding: "8px 14px",
+                                    marginTop: "10px"
+                                }}
+                                onClick={() =>
+                                    setShowClientModal(true)
+                                }
+                            >
+                                Trocar cliente
+                            </button>
+
+                        </div>
+
+                    ) : (
+
+                        <button
+                            className="button-primary"
+                            onClick={() =>
+                                setShowClientModal(true)
+                            }
+                        >
+                            Selecionar cliente
+                        </button>
+
+                    )}
 
                 </div>
 
                 {/* ACTION */}
                 <button
                     className="button-primary"
+                    disabled={!selectedClient}
                     onClick={() =>
                         setShowProfessionalsModal(true)
                     }
