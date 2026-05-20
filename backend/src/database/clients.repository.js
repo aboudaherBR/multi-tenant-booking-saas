@@ -72,9 +72,37 @@ async function findActiveClientsByCompany(companyId) {
   return result.rows;
 }
 
+async function searchClients({
+  companyId,
+  query
+}) {
+
+  const result = await pool.query(
+    `
+      SELECT
+        id,
+        name,
+        phone
+      FROM clients
+      WHERE company_id = $1
+        AND is_active = true
+        AND (
+          name ILIKE $2
+          OR phone ILIKE $2
+        )
+      ORDER BY created_at DESC
+      LIMIT 10
+    `,
+    [companyId, `%${query}%`]
+  );
+
+  return result.rows;
+}
+
 module.exports = {
   findClientByPhone,
   createClient,
   updateClientName,
-  findActiveClientsByCompany
+  findActiveClientsByCompany,
+  searchClients
 };
