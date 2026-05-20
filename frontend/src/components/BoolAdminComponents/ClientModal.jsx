@@ -9,6 +9,9 @@ export default function ClientModal({
     const [mode, setMode] =
         useState(null);
 
+    const [clients, setClients] =
+        useState([]);
+
     return (
 
         <div className="modal-backdrop">
@@ -42,7 +45,7 @@ export default function ClientModal({
                                         "/clients/search"
                                     );
 
-                                    console.log(data);
+                                    setClients(data);
 
                                 } catch (err) {
 
@@ -88,38 +91,37 @@ export default function ClientModal({
                             }}
                         >
 
-                            <button
-                                className="button-soft"
-                                onClick={() => {
+                            {clients.map((client) => (
 
-                                    onSelect({
-                                        id: 1,
-                                        name: "João"
-                                    });
+                                <button
+                                    key={client.id}
+                                    className="button-soft"
+                                    onClick={() => {
 
-                                }}
-                            >
-                                João - (85) 99999-9999
-                            </button>
+                                        onSelect(client);
 
-                            <button
-                                className="button-soft"
-                                onClick={() => {
+                                    }}
+                                >
 
-                                    onSelect({
-                                        id: 2,
-                                        name: "Maria"
-                                    });
+                                    {client.name} - {client.phone}
 
-                                }}
-                            >
-                                Maria - (85) 98888-8888
-                            </button>
+                                    <br />
+
+                                    <small>
+                                        Total gasto: R$ {client.total_spent}
+                                    </small>
+
+                                </button>
+
+                            ))}
+
 
                         </div>
 
                     </div>
                 )}
+
+
 
                 {mode === "new" && (
 
