@@ -12,6 +12,10 @@ export default function ClientModal({
     const [clients, setClients] =
         useState([]);
 
+    const sortedClients = [...clients].sort((a, b) =>
+        a.name.localeCompare(b.name, "pt-BR")
+    );
+
     return (
 
         <div className="modal-backdrop">
@@ -91,7 +95,7 @@ export default function ClientModal({
                             }}
                         >
 
-                            {clients.map((client) => (
+                            {sortedClients.map((client) => (
 
                                 <button
                                     key={client.id}
