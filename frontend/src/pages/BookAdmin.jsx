@@ -292,7 +292,9 @@ export default function BookAdmin() {
                         }
                         onConfirm={() => {
 
-                            onConfirm={handleConfirmBooking}
+                            handleConfirmBooking();
+
+                            setShowConfirmModal(false);
                             console.log("CONFIRMADO!");
 
                         }}
