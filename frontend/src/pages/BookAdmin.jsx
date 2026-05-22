@@ -6,6 +6,7 @@ import AvailabilityModal from "../components/AvailabilityModal";
 import ConfirmBookingModal from "../components/ConfirmBookingModal";
 import ClientModal from "../components/BoolAdminComponents/ClientModal";
 import { useParams } from "react-router-dom";
+import { useAuth } from "../hooks/AuthContext";
 
 import apiClient from "../api/apiClient";
 
@@ -46,7 +47,11 @@ export default function BookAdmin() {
     const [showConfirmModal, setShowConfirmModal] =
         useState(false);
 
-    const { slug } = useParams();
+    const { user } = useAuth();
+
+    const slug = user?.companySlug;
+
+
 
     // LOAD PROFESSIONALS
     useEffect(() => {
