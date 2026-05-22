@@ -125,6 +125,17 @@ export default function BookAdmin() {
                             >
                                 Trocar cliente
                             </button>
+                            <button
+                                className="button-primary"
+                                style={{
+                                    marginTop: "20px"
+                                }}
+                                onClick={() =>
+                                    setShowProfessionalsModal(true)
+                                }
+                            >
+                                Escolher profissional
+                            </button>
 
                         </div>
 
@@ -143,7 +154,7 @@ export default function BookAdmin() {
 
                 </div>
 
-                
+
 
             </div>
 
