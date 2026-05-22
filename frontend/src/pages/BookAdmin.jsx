@@ -76,6 +76,38 @@ export default function BookAdmin() {
 
     }, []);
 
+    async function handleConfirmBooking() {
+
+        try {
+
+            const payload = {
+                companySlug: slug,
+                professionalSlug: selectedProfessional.slug,
+                serviceSlug: selectedService.slug,
+                date: selectedSlot.date,
+                startTime: selectedSlot.startTime,
+                clientName: selectedClient.name,
+                phone: selectedClient.phone
+            };
+
+            console.log("📦 PAYLOAD:", payload);
+
+            await apiClient("/agendar", {
+                method: "POST",
+                body: payload
+            });
+
+            console.log("✅ AGENDAMENTO CRIADO");
+
+        } catch (err) {
+
+            console.error(
+                "Erro ao criar agendamento:",
+                err
+            );
+        }
+    }
+
     return (
 
         <div
@@ -260,7 +292,7 @@ export default function BookAdmin() {
                         }
                         onConfirm={() => {
 
-                            console.log("CONFIRMAR");
+                            onConfirm={handleConfirmBooking}
 
                         }}
                     />
