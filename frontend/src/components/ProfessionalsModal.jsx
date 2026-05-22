@@ -6,44 +6,70 @@ export default function ProfessionalsModal({
   onClose,
   onSelect
 }) {
-  const [selectedProfessionalId, setSelectedProfessionalId] = useState(null);
-  return (
-    <div style={overlayStyle}>
-      <div style={modalStyle}>
-        <button
-          onClick={onClose}
-          style={{
-            background: "#0F172A",
-            color: "#fff",
-            border: "1px solid rgba(255,255,255,0.2)",
-            padding: "6px 12px",
-            borderRadius: "999px",
-            fontSize: "13px",
-            cursor: "pointer",
-            marginBottom: "12px",
-            transition: "all 0.2s ease",
-            boxShadow: "0 10px 18px rgba(0,0,0,0.3)",
-            transform: "translateY(0)"
-          }}
-        >
-          Voltar
-        </button>
+  const [selectedProfessionalId, setSelectedProfessionalId] =
+    useState(null);
 
-        <h3 style={{ marginBottom: "15px" }}>
+  return (
+    <div className="modal-backdrop">
+      <div
+        className="modal-content modal-content--scrollable"
+        style={{
+          maxWidth: "520px",
+          width: "95%",
+          textAlign: "left"
+        }}
+      >
+        <div className="modal-header">
+          <button
+            onClick={onClose}
+            className="button-pill"
+          >
+            Voltar
+          </button>
+
+          <button
+            onClick={onClose}
+            className="button-icon"
+          >
+            ✕
+          </button>
+        </div>
+
+        <h3
+          className="heading"
+          style={{ marginBottom: "15px" }}
+        >
           Escolha um profissional
         </h3>
 
         {professionals.length === 0 ? (
-          <p>Nenhum profissional disponível</p>
+
+          <p className="text-muted">
+            Nenhum profissional disponível
+          </p>
+
         ) : (
-          <div style={listContainerStyle}>
+
+          <div
+            style={{
+              overflowY: "auto",
+              display: "flex",
+              flexDirection: "column",
+              gap: "14px"
+            }}
+          >
             {professionals.map((p) => (
               <ProfessionalsCards
                 key={p.id}
                 professional={p}
-                isSelected={selectedProfessionalId === p.id}
+                isSelected={
+                  selectedProfessionalId === p.id
+                }
                 onSelect={(professional) => {
-                  setSelectedProfessionalId(professional.id);
+
+                  setSelectedProfessionalId(
+                    professional.id
+                  );
 
                   setTimeout(() => {
                     onSelect(professional);
@@ -52,47 +78,9 @@ export default function ProfessionalsModal({
               />
             ))}
           </div>
+
         )}
       </div>
     </div>
   );
 }
-
-/* STYLES */
-
-const overlayStyle = {
-  position: "fixed",
-  inset: 0,
-  background: "rgba(0,0,0,0.5)",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  zIndex: 9999,
-  border: "3px solid red"
-};
-
-const modalStyle = {
-  background: "#fff",
-  padding: "20px",
-  borderRadius: "16px",
-  width: "95%",
-  maxWidth: "520px", 
-  maxHeight: "80vh",
-  display: "flex",
-  flexDirection: "column",
-  boxShadow: "0 20px 40px rgba(0,0,0,0.25)"
-};
-
-const backButtonStyle = {
-  marginBottom: "10px",
-  background: "none",
-  border: "none",
-  cursor: "pointer"
-};
-
-const listContainerStyle = {
-  overflowY: "auto",
-  marginTop: "10px",
-  flex: 1,
-  minHeight: 0
-};
