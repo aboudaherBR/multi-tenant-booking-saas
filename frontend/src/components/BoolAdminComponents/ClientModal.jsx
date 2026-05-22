@@ -12,7 +12,16 @@ export default function ClientModal({
     const [clients, setClients] =
         useState([]);
 
-    const sortedClients = [...clients].sort((a, b) =>
+    const [search, setSearch] =
+        useState("");
+
+    const filteredClients = clients.filter((client) =>
+        client.name
+            .toLowerCase()
+            .includes(search.toLowerCase())
+    );
+
+    const sortedClients = [...filteredClients].sort((a, b) =>
         a.name.localeCompare(b.name, "pt-BR")
     );
 
@@ -84,6 +93,8 @@ export default function ClientModal({
                             className="input-field"
                             type="text"
                             placeholder="Buscar cliente"
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
                         />
 
                         <div
