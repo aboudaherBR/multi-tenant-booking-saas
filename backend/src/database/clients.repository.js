@@ -72,9 +72,53 @@ async function findActiveClientsByCompany(companyId) {
   return result.rows;
 }
 
+async function searchClients({
+  companyId,
+  query
+}) {
+
+  const result = await pool.query(
+    `
+      SELECT
+        c.id,
+        c.name,
+        c.phone,
+        COALESCE(
+          SUM(a.service_price_snapshot),
+          0
+        ) AS total_spent
+
+      FROM clients c
+
+      LEFT JOIN appointments a
+        ON a.client_id = c.id
+
+      WHERE c.company_id = $1
+        AND c.is_active = true
+        AND (
+          c.name ILIKE $2
+          OR c.phone ILIKE $2
+        )
+
+      GROUP BY
+        c.id,
+        c.name,
+        c.phone
+
+      ORDER BY c.created_at DESC
+
+      LIMIT 10
+    `,
+    [companyId, `%${query}%`]
+  );
+
+  return result.rows;
+}
+
 module.exports = {
   findClientByPhone,
   createClient,
   updateClientName,
-  findActiveClientsByCompany
+  findActiveClientsByCompany,
+  searchClients
 };

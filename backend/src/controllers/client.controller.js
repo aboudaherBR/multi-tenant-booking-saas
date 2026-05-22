@@ -55,7 +55,33 @@ async function getByPhone(req, res, next) {
   }
 }
 
+async function search(req, res) {
+
+  try {
+
+    const clientsRepository =
+      require('../database/clients.repository');
+
+    const clients =
+      await clientsRepository.searchClients({
+        companyId: req.user.companyId,
+        query: req.query.q || ''
+      });
+
+    return res.json(clients);
+
+  } catch (error) {
+
+    console.error(error);
+
+    return res.status(500).json({
+      error: "Erro ao buscar clientes"
+    });
+  }
+}
+
 module.exports = {
   list,
-  getByPhone
+  getByPhone,
+  search
 };

@@ -52,7 +52,7 @@ export default function AvailabilityModal({
             });
 
             const data = await apiClient(
-                `/agendar/${slug}/profissionais/${professional.slug}/disponibilidade?date=${selectedDate}&serviceSlug=${service.slug}`
+                `/agendar/${slug}/profissionais/${professional.slug}/disponibilidade?date=${selectedDate}&serviceSlug=${encodeURIComponent(service.slug)}`
             );
 
             // 🔥 CORREÇÃO CRÍTICA

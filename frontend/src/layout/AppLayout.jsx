@@ -65,8 +65,8 @@ function AppLayout({ children }) {
         </button>
 
         <button
-          className={styles.navButtonPrimary} // 👈 destaque
-          onClick={() => navigate('/schedule')}
+          className={styles.navButtonPrimary}
+          onClick={() => navigate('/admin/book')}
         >
           Agendar
         </button>
