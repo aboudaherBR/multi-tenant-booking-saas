@@ -42,7 +42,7 @@ function App() {
         <Route path="/schedule" element={<ScheduleWizard />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/reports" element={<ReportsPage />} />
-        <Route path="/admin/book" element={<BookAdmin />} />
+        <Route path="/:slug/admin/book" element={<BookAdmin />} />
       </Route>
 
       {/* ROTAS PROFISSIONAL */}
