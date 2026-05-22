@@ -218,6 +218,7 @@ export default function BookAdmin() {
                 selectedService && (
 
                     <AvailabilityModal
+                        slug={slug}
                         professional={selectedProfessional}
                         service={selectedService}
                         onBack={() => {
