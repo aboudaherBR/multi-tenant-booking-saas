@@ -268,7 +268,7 @@ export default function ProfessionalsManagementModal({
                                     style={{
                                         width: "90%",
                                         maxWidth: "400px",
-                                        maxHeight: "90vh",
+                                        maxHeight: "70vh",
                                         overflowY: "auto"
                                     }}
                                 >
