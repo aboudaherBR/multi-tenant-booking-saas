@@ -12,6 +12,7 @@ export default function ProfessionalsManagementModal({
     setSelectedProfessional,
     onOpenProfessionalServices
 }) {
+
     const [availableServices, setAvailableServices] =
         useState([]);
 
@@ -24,18 +25,21 @@ export default function ProfessionalsManagementModal({
     const professionalLink =
         `${window.location.origin}/${selectedProfessional?.company_slug}/${selectedProfessional?.slug}`;
 
-
     async function loadAvailableServices() {
 
         try {
+
             const data = await apiClient("/services");
+
             setAvailableServices(data.services || []);
 
         } catch (error) {
+
             console.error(
                 "Erro ao carregar serviços",
                 error
             );
+
             setAvailableServices([]);
         }
     }
@@ -130,22 +134,23 @@ export default function ProfessionalsManagementModal({
 
     }, [isOpen]);
 
-    console.log(professionals);
-
     if (!isOpen) return null;
 
     return (
+
         <div className="modal-backdrop">
 
             <div
                 className="modal-content modal-content--scrollable"
                 style={{
-                    width: "90%",
-                    maxWidth: "400px",
+                    width: "95%",
+                    maxWidth: "500px",
                     maxHeight: "90vh",
                     overflowY: "auto"
                 }}
             >
+
+                {/* HEADER */}
 
                 <div className="modal-header">
 
@@ -161,6 +166,8 @@ export default function ProfessionalsManagementModal({
                     </button>
 
                 </div>
+
+                {/* CREATE PROFESSIONAL */}
 
                 <div style={{ marginTop: "20px" }}>
 
@@ -205,6 +212,8 @@ export default function ProfessionalsManagementModal({
 
                 </div>
 
+                {/* LIST */}
+
                 <div style={{ marginTop: "20px" }}>
 
                     <strong>
@@ -213,8 +222,8 @@ export default function ProfessionalsManagementModal({
 
                     <div style={{ marginTop: "10px" }}>
 
-
                         {professionals?.map((professional) => (
+
                             <div
                                 key={professional.id}
                                 onClick={async () => {
@@ -237,7 +246,8 @@ export default function ProfessionalsManagementModal({
                                             error
                                         );
                                     }
-                                }} style={{
+                                }}
+                                style={{
                                     padding: "12px",
                                     border: "1px solid var(--color-border)",
                                     borderRadius: "var(--radius)",
@@ -253,263 +263,256 @@ export default function ProfessionalsManagementModal({
                             </div>
                         ))}
 
-                        {selectedProfessional && (
+                    </div>
 
-                            <div
-                                style={{
-                                    position: "fixed",
-                                    inset: 0,
-                                    background: "rgba(0, 0, 0, 0.5)",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    zIndex: 9999
-                                }}
+                </div>
+
+                {/* PROFESSIONAL DETAILS */}
+
+                {selectedProfessional && (
+
+                    <div
+                        style={{
+                            marginTop: "25px",
+                            paddingTop: "20px",
+                            borderTop: "1px solid var(--color-border)"
+                        }}
+                    >
+
+                        <div
+                            style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center"
+                            }}
+                        >
+
+                            <h3 className="heading">
+                                Profissional
+                            </h3>
+
+                            <button
+                                className="button-icon"
+                                onClick={() =>
+                                    setSelectedProfessional(null)
+                                }
                             >
+                                ✕
+                            </button>
 
-                                <div
-                                    className="modal-content modal-content--scrollable"
-                                    style={{
-                                        width: "90%",
-                                        maxWidth: "400px",
-                                        maxHeight: "90vh",
-                                        overflowY: "auto"
-                                    }}
-                                >
+                        </div>
 
-                                    <div
-                                        style={{
-                                            display: "flex",
-                                            justifyContent: "space-between",
-                                            alignItems: "center"
-                                        }}
-                                    >
+                        <div style={{ marginTop: "20px" }}>
 
-                                        <h3 className="heading">
-                                            Profissional
-                                        </h3>
+                            <div>
+                                <strong>Nome:</strong>{" "}
+                                {selectedProfessional.name}
+                            </div>
 
-                                        <button
-                                            className="button-icon"
-                                            onClick={() => setSelectedProfessional(null)}
-                                        >
-                                            ✕
-                                        </button>
+                            <div style={{ marginTop: "10px" }}>
+                                <strong>Telefone:</strong>{" "}
+                                {selectedProfessional.phone || "Não informado"}
+                            </div>
 
-                                    </div>
+                            {/* SERVICES */}
 
-                                    <div style={{ marginTop: "20px" }}>
+                            <div style={{ marginTop: "20px" }}>
 
-                                        <div>
-                                            <strong>Nome:</strong>{" "}
-                                            {selectedProfessional.name}
+                                <strong>
+                                    Serviços do profissional
+                                </strong>
+
+                                <div style={{ marginTop: "10px" }}>
+
+                                    {selectedProfessional.services?.length === 0 ? (
+
+                                        <div className="text-muted">
+                                            Nenhum serviço vinculado
                                         </div>
 
-                                        <div style={{ marginTop: "10px" }}>
-                                            <strong>Telefone:</strong>{" "}
-                                            {selectedProfessional.phone || "Não informado"}
-                                        </div>
-                                        <div style={{ marginTop: "20px" }}>
+                                    ) : (
 
-                                            <strong>
-                                                Serviços do profissional
-                                            </strong>
+                                        selectedProfessional.services?.map((service) => (
 
-                                            <div style={{ marginTop: "10px" }}>
+                                            <div
+                                                key={service.id}
+                                                style={{
+                                                    padding: "10px",
+                                                    border: "1px solid var(--color-border)",
+                                                    borderRadius: "var(--radius)",
+                                                    marginBottom: "8px"
+                                                }}
+                                            >
 
-                                                {selectedProfessional.services?.length === 0 ? (
-
-                                                    <div className="text-muted">
-                                                        Nenhum serviço vinculado
-                                                    </div>
-
-                                                ) : (
-
-                                                    selectedProfessional.services?.map((service) => (
-
-                                                        <div
-                                                            key={service.id}
-                                                            style={{
-                                                                padding: "10px",
-                                                                border: "1px solid var(--color-border)",
-                                                                borderRadius: "var(--radius)",
-                                                                marginBottom: "8px"
-                                                            }}
-                                                        >
-
-
-
-                                                            <div>
-                                                                <strong>
-                                                                    {service.name}
-                                                                </strong>
-                                                            </div>
-
-                                                            <div className="text-muted">
-                                                                {service.duration_minutes} min
-                                                            </div>
-
-                                                            <div>
-                                                                R$ {Number(service.price).toFixed(2)}
-                                                            </div>
-                                                            <button
-                                                                className="button-danger"
-                                                                style={{
-                                                                    marginTop: "10px"
-                                                                }}
-                                                                onClick={() =>
-                                                                    removeServiceFromProfessional(service.id)
-                                                                }
-                                                            >
-                                                                Remover serviço
-                                                            </button>
-
-                                                        </div>
-                                                    ))
-                                                )}
-
-                                                <div style={{ marginTop: "20px" }}>
-
+                                                <div>
                                                     <strong>
-                                                        Adicionar serviço
+                                                        {service.name}
                                                     </strong>
-
-                                                    <div style={{ marginTop: "10px" }}>
-
-                                                        <select
-                                                            className="input"
-                                                            value={selectedServiceId}
-                                                            onChange={(e) =>
-                                                                setSelectedServiceId(e.target.value)
-                                                            }
-                                                        >
-
-                                                            <option value="">
-                                                                Selecione um serviço
-                                                            </option>
-
-                                                            {availableServices.map((service) => (
-
-                                                                <option
-                                                                    key={service.id}
-                                                                    value={service.id}
-                                                                >
-                                                                    {service.name}
-                                                                </option>
-
-                                                            ))}
-
-                                                        </select>
-
-                                                        <input
-                                                            type="number"
-                                                            placeholder="Preço personalizado (opcional)"
-                                                            value={customPrice}
-                                                            onChange={(e) =>
-                                                                setCustomPrice(e.target.value)
-                                                            }
-                                                            className="input"
-                                                            style={{
-                                                                marginTop: "10px"
-                                                            }}
-                                                        />
-
-                                                        <button
-                                                            className="button-primary"
-                                                            style={{
-                                                                marginTop: "10px"
-                                                            }}
-                                                            onClick={addServiceToProfessional}
-                                                        >
-                                                            Adicionar serviço
-                                                        </button>
-
-                                                    </div>
-
-                                                    <div style={{ marginTop: "20px" }}>
-
-                                                        <strong>
-                                                            Enviar link do profissional
-                                                        </strong>
-
-                                                        <div
-                                                            style={{
-                                                                display: "flex",
-                                                                gap: "10px",
-                                                                marginTop: "10px"
-                                                            }}
-                                                        >
-
-                                                            <button
-                                                                className="button-primary"
-                                                                style={{
-                                                                    flex: 1
-                                                                }}
-                                                                onClick={async () => {
-
-                                                                    try {
-
-                                                                        await navigator.clipboard.writeText(
-                                                                            professionalLink
-                                                                        );
-
-                                                                        alert("Link copiado!");
-
-                                                                    } catch (error) {
-
-                                                                        console.error(
-                                                                            "Erro ao copiar link",
-                                                                            error
-                                                                        );
-                                                                    }
-                                                                }}
-                                                            >
-                                                                Copiar link
-                                                            </button>
-
-                                                            <button
-                                                                className="button-secondary"
-                                                                style={{
-                                                                    flex: 1
-                                                                }}
-                                                                onClick={() => {
-
-                                                                    const message =
-                                                                        `Olá! Seu link de agendamento:\n\n${professionalLink}`;
-
-                                                                    const encodedMessage =
-                                                                        encodeURIComponent(message);
-
-                                                                    window.open(
-                                                                        `https://wa.me/${selectedProfessional.phone?.replace(/\D/g, "")}?text=${encodedMessage}`,
-                                                                        "_blank"
-                                                                    );
-                                                                }}
-                                                            >
-                                                                WhatsApp
-                                                            </button>
-
-                                                        </div>
-
-                                                    </div>
-
                                                 </div>
 
+                                                <div className="text-muted">
+                                                    {service.duration_minutes} min
+                                                </div>
+
+                                                <div>
+                                                    R$ {Number(service.price).toFixed(2)}
+                                                </div>
+
+                                                <button
+                                                    className="button-danger"
+                                                    style={{
+                                                        marginTop: "10px"
+                                                    }}
+                                                    onClick={() =>
+                                                        removeServiceFromProfessional(service.id)
+                                                    }
+                                                >
+                                                    Remover serviço
+                                                </button>
+
                                             </div>
-
-                                        </div>
-
-
-                                    </div>
+                                        ))
+                                    )}
 
                                 </div>
 
                             </div>
-                        )}
+
+                            {/* ADD SERVICE */}
+
+                            <div style={{ marginTop: "20px" }}>
+
+                                <strong>
+                                    Adicionar serviço
+                                </strong>
+
+                                <div style={{ marginTop: "10px" }}>
+
+                                    <select
+                                        className="input"
+                                        value={selectedServiceId}
+                                        onChange={(e) =>
+                                            setSelectedServiceId(e.target.value)
+                                        }
+                                    >
+
+                                        <option value="">
+                                            Selecione um serviço
+                                        </option>
+
+                                        {availableServices.map((service) => (
+
+                                            <option
+                                                key={service.id}
+                                                value={service.id}
+                                            >
+                                                {service.name}
+                                            </option>
+
+                                        ))}
+
+                                    </select>
+
+                                    <input
+                                        type="number"
+                                        placeholder="Preço personalizado (opcional)"
+                                        value={customPrice}
+                                        onChange={(e) =>
+                                            setCustomPrice(e.target.value)
+                                        }
+                                        className="input"
+                                        style={{
+                                            marginTop: "10px"
+                                        }}
+                                    />
+
+                                    <button
+                                        className="button-primary"
+                                        style={{
+                                            marginTop: "10px"
+                                        }}
+                                        onClick={addServiceToProfessional}
+                                    >
+                                        Adicionar serviço
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                            {/* LINKS */}
+
+                            <div style={{ marginTop: "20px" }}>
+
+                                <strong>
+                                    Enviar link do profissional
+                                </strong>
+
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        gap: "10px",
+                                        marginTop: "10px"
+                                    }}
+                                >
+
+                                    <button
+                                        className="button-primary"
+                                        style={{
+                                            flex: 1
+                                        }}
+                                        onClick={async () => {
+
+                                            try {
+
+                                                await navigator.clipboard.writeText(
+                                                    professionalLink
+                                                );
+
+                                                alert("Link copiado!");
+
+                                            } catch (error) {
+
+                                                console.error(
+                                                    "Erro ao copiar link",
+                                                    error
+                                                );
+                                            }
+                                        }}
+                                    >
+                                        Copiar link
+                                    </button>
+
+                                    <button
+                                        className="button-secondary"
+                                        style={{
+                                            flex: 1
+                                        }}
+                                        onClick={() => {
+
+                                            const message =
+                                                `Olá! Seu link de agendamento:\n\n${professionalLink}`;
+
+                                            const encodedMessage =
+                                                encodeURIComponent(message);
+
+                                            window.open(
+                                                `https://wa.me/${selectedProfessional.phone?.replace(/\D/g, "")}?text=${encodedMessage}`,
+                                                "_blank"
+                                            );
+                                        }}
+                                    >
+                                        WhatsApp
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
 
                     </div>
-
-                </div>
+                )}
 
             </div>
 
