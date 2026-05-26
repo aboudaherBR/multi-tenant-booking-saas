@@ -62,11 +62,11 @@ async function login(req, res, next) {
     };
 
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
-      expiresIn: '12h'
+      expiresIn: '30d'
     });
 
     return res.json({
-      message: 'Login successful',
+      message: 'Login succescd ..sful',
       token
     });
 
@@ -165,7 +165,7 @@ async function signup(req, res) {
     };
 
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
-      expiresIn: '8h'
+      expiresIn: '30d'
     });
 
     await client.query('COMMIT');
