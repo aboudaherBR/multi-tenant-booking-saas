@@ -65,6 +65,8 @@ export default function BookPublic() {
 
     const [errorModalOpen, setErrorModalOpen] = useState(false);
 
+    const [company, setCompany] = useState(null);
+
     const [stage, setStage] = useState("welcome"); //Animation 
 
     useEffect(() => {
@@ -81,6 +83,24 @@ export default function BookPublic() {
         }
 
         fetchProfessionals();
+    }, [slug]);
+
+    useEffect(() => {
+        async function fetchCompany() {
+            try {
+
+                const data = await apiClient(
+                    `/agendar/${slug}`
+                );
+
+                setCompany(data);
+
+            } catch (err) {
+                console.log(err);
+            }
+        }
+
+        fetchCompany();
     }, [slug]);
 
     useEffect(() => {
