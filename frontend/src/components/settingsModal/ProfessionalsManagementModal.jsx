@@ -267,15 +267,8 @@ export default function ProfessionalsManagementModal({
                             >
 
                                 <div
-                                    className="modal-content modal-content--scrollable"
-                                    style={{
-                                        width: "90%",
-                                        maxWidth: "400px",
-                                        height: "70vh",
-                                        overflowY: "auto",
-                                        display: "flex",
-                                        flexDirection: "column",
-                                    }}
+                                    className="modal-content professional-services-modal"
+                                    
                                 >
 
                                     <div

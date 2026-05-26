@@ -436,6 +436,25 @@ select {
 
 
 /* ========================================
+   PROFESSIONAL MODAL STACK
+   ======================================== */
+
+.professional-services-modal {
+  width: 100%;
+  max-width: 400px;
+
+  height: 70vh;
+
+  overflow-y: auto;
+
+  display: flex;
+  flex-direction: column;
+
+  pointer-events: auto;
+}
+
+
+/* ========================================
    DESIGN SYSTEM - STATES
    ======================================== */
 
