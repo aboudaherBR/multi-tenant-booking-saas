@@ -205,7 +205,15 @@ export default function ProfessionalsManagementModal({
 
                 </div>
 
-                <div style={{ marginTop: "20px" }}>
+                <div
+                    className="modal-content modal-content--scrollable"
+                    style={{
+                        width: "90%",
+                        maxWidth: "400px",
+                        maxHeight: "90vh",
+                        overflowY: "auto"
+                    }}
+                >
 
                     <strong>
                         Profissionais cadastrados
