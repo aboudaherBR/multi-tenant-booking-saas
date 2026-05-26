@@ -257,9 +257,13 @@ export default function ProfessionalsManagementModal({
 
                             <div
                                 style={{
-                                    marginTop: "20px",
+                                    position: "fixed",
+                                    inset: 0,
                                     display: "flex",
-                                    justifyContent: "center"
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    zIndex: 10000,
+                                    pointerEvents: "none"
                                 }}
                             >
 
