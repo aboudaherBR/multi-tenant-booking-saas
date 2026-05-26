@@ -271,8 +271,10 @@ export default function ProfessionalsManagementModal({
                                     style={{
                                         width: "90%",
                                         maxWidth: "400px",
-                                        maxHeight: "70vh",
-                                        overflowY: "auto"
+                                        height: "70vh",
+                                        overflowY: "auto",
+                                        display: "flex",
+                                        flexDirection: "column",
                                     }}
                                 >
 
