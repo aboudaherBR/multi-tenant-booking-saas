@@ -269,7 +269,9 @@ export default function BookPublic() {
                     <div className="avatar-placeholder" />
                 </div>
 
-                <h2 className="heading" style={{ color: "white" }}>Barbearia</h2>
+                <h2 className="heading" style={{ color: "white" }}>
+                    {company?.name || "Barbearia"}
+                </h2>
             </div>
 
             {/* ⚪ CARD */}
