@@ -140,7 +140,10 @@ export default function ProfessionalsManagementModal({
             <div
                 className="modal-content modal-content--scrollable"
                 style={{
-                    maxHeight: "90vh"
+                    width: "90%",
+                    maxWidth: "400px",
+                    maxHeight: "90vh",
+                    overflowY: "auto"
                 }}
             >
 
