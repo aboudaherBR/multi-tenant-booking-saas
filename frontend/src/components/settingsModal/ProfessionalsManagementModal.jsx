@@ -138,12 +138,11 @@ export default function ProfessionalsManagementModal({
         <div className="modal-backdrop">
 
             <div
-                className="modal-content modal-content--scrollable"
+                className="modal-content"
                 style={{
                     width: "90%",
                     maxWidth: "400px",
-                    maxHeight: "90vh",
-                    overflowY: "auto"
+                    maxHeight: "90vh"
                 }}
             >
 
