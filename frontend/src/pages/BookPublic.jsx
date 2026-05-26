@@ -190,7 +190,7 @@ export default function BookPublic() {
 
             console.log("📦 PAYLOAD:", payload);
 
-            await apiClient("/agendar", {
+            await apiClient(`/book/${slug}`, {
                 method: "POST",
                 body: payload
             });

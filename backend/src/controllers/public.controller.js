@@ -10,8 +10,6 @@ const { normalizeBrazilianPhone } = require('../utils/phone.utils');
 const { findAppointmentsByClientId } = require('../database/appointments.repository');
 const { findClientByPhone } = require('../database/clients.repository');
 
-
-
 async function getPublicCompany(req, res, next) {
   try {
     const { slug } = req.params;
@@ -46,15 +44,17 @@ async function getPublicProfessionals(req, res, next) {
     const { slug } = req.params;
 
     if (!slug) {
-      return res.status(400).json({ message: 'slug é obrigatório' });
+      return res.status(400).json({
+        message: 'slug é obrigatório'
+      });
     }
 
     const company = await findCompanyBySlug(slug);
-    console.log('COMPANY_ID_USADO:', company.id);
-    console.log("COMPANY:", company);
 
     if (!company || company.status !== 'active') {
-      return res.status(404).json({ message: 'Empresa não encontrada' });
+      return res.status(404).json({
+        message: 'Empresa não encontrada'
+      });
     }
 
     const professionals =
@@ -110,6 +110,7 @@ async function getPublicAvailability(req, res, next) {
     }
 
     const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+
     if (!dateRegex.test(date)) {
       return res.status(400).json({
         message: 'Formato de data inválido. Use YYYY-MM-DD.'
@@ -176,9 +177,8 @@ async function getPublicAvailability(req, res, next) {
       const endHours = Math.floor(endMinutes / 60);
       const endMins = endMinutes % 60;
 
-      const endTime = `${String(endHours).padStart(2, '0')}:${String(endMins).padStart(2, '0')}`;
-
-
+      const endTime =
+        `${String(endHours).padStart(2, '0')}:${String(endMins).padStart(2, '0')}`;
 
       return {
         startTime,
@@ -186,7 +186,9 @@ async function getPublicAvailability(req, res, next) {
       };
     });
 
-    slots.sort((a, b) => a.startTime.localeCompare(b.startTime));
+    slots.sort((a, b) =>
+      a.startTime.localeCompare(b.startTime)
+    );
 
     return res.status(200).json({
       companySlug,
@@ -206,8 +208,10 @@ async function getPublicAvailability(req, res, next) {
 
 async function createPublicAppointment(req, res, next) {
   try {
+
+    const { slug } = req.params;
+
     const {
-      companySlug,
       professionalSlug,
       serviceSlug,
       date,
@@ -217,7 +221,6 @@ async function createPublicAppointment(req, res, next) {
     } = req.body;
 
     if (
-      !companySlug ||
       !professionalSlug ||
       !serviceSlug ||
       !date ||
@@ -230,17 +233,19 @@ async function createPublicAppointment(req, res, next) {
       });
     }
 
-    // ✅ NORMALIZAÇÃO NO LUGAR CERTO
     let normalizedPhone;
 
     try {
       normalizedPhone = normalizeBrazilianPhone(phone);
     } catch (err) {
-      return res.status(400).json({ message: 'Telefone inválido' });
+      return res.status(400).json({
+        message: 'Telefone inválido'
+      });
     }
 
-    const company = await findCompanyBySlug(companySlug);
-    if (!company) {
+    const company = await findCompanyBySlug(slug);
+
+    if (!company || company.status !== 'active') {
       return res.status(404).json({
         message: "Empresa não encontrada"
       });
@@ -252,11 +257,12 @@ async function createPublicAppointment(req, res, next) {
       serviceSlug
     });
 
-    const serviceData = await findServiceForProfessionalBySlugs({
-      companyId: company.id,
-      professionalSlug,
-      serviceSlug
-    });
+    const serviceData =
+      await findServiceForProfessionalBySlugs({
+        companyId: company.id,
+        professionalSlug,
+        serviceSlug
+      });
 
     if (
       !serviceData ||
@@ -276,7 +282,7 @@ async function createPublicAppointment(req, res, next) {
       SELECT id FROM clients
       WHERE company_id = $1 AND phone = $2
       LIMIT 1
-    `,
+      `,
       [company.id, normalizedPhone]
     );
 
@@ -285,12 +291,13 @@ async function createPublicAppointment(req, res, next) {
     if (clientResult.rows.length > 0) {
       clientId = clientResult.rows[0].id;
     } else {
+
       const newClient = await pool.query(
         `
         INSERT INTO clients (company_id, name, phone)
         VALUES ($1, $2, $3)
         RETURNING id
-      `,
+        `,
         [company.id, clientName, normalizedPhone]
       );
 
@@ -299,6 +306,7 @@ async function createPublicAppointment(req, res, next) {
 
     function addMinutes(time, duration) {
       const [h, m] = time.split(':').map(Number);
+
       const total = h * 60 + m + duration;
 
       const newH = Math.floor(total / 60);
@@ -307,23 +315,26 @@ async function createPublicAppointment(req, res, next) {
       return `${String(newH).padStart(2, '0')}:${String(newM).padStart(2, '0')}`;
     }
 
-    const endTime = addMinutes(startTime, serviceData.duration_minutes);
+    const endTime =
+      addMinutes(startTime, serviceData.duration_minutes);
 
     const clientConflict = await pool.query(
       `
-  SELECT 1
-  FROM appointments
-  WHERE company_id = $1
-    AND client_id = $2
-    AND date = $3
-    AND start_time = $4
-  LIMIT 1
-  `,
+      SELECT 1
+      FROM appointments
+      WHERE company_id = $1
+        AND client_id = $2
+        AND date = $3
+        AND start_time = $4
+      LIMIT 1
+      `,
       [
         company.id,
         clientId,
         date,
-        startTime.length === 5 ? startTime + ":00" : startTime
+        startTime.length === 5
+          ? startTime + ":00"
+          : startTime
       ]
     );
 
@@ -348,7 +359,7 @@ async function createPublicAppointment(req, res, next) {
         service_duration_snapshot
       )
       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
-    `,
+      `,
       [
         company.id,
         serviceData.professional_id,
@@ -392,12 +403,7 @@ async function lookupPublicAppointments(req, res, next) {
     const { slug } = req.params;
     const { phone } = req.query;
 
-    console.log('slug:', slug);
-
-
-    const companySlug = slug;
-
-    if (!companySlug || !phone) {
+    if (!slug || !phone) {
       return res.status(400).json({
         message: "Dados obrigatórios não informados"
       });
@@ -408,10 +414,12 @@ async function lookupPublicAppointments(req, res, next) {
     try {
       normalizedPhone = normalizeBrazilianPhone(phone);
     } catch (err) {
-      return res.status(400).json({ message: 'Telefone inválido' });
+      return res.status(400).json({
+        message: 'Telefone inválido'
+      });
     }
 
-    const company = await findCompanyBySlug(companySlug);
+    const company = await findCompanyBySlug(slug);
 
     if (!company || company.status !== 'active') {
       return res.status(404).json({
@@ -429,17 +437,22 @@ async function lookupPublicAppointments(req, res, next) {
     );
 
     if (clientResult.rows.length === 0) {
-      return res.status(200).json({ appointments: [] });
+      return res.status(200).json({
+        appointments: []
+      });
     }
 
     const clientId = clientResult.rows[0].id;
 
-    const appointments = await findAppointmentsByClientId({
-      companyId: company.id,
-      clientId
-    });
+    const appointments =
+      await findAppointmentsByClientId({
+        companyId: company.id,
+        clientId
+      });
 
-    return res.status(200).json({ appointments });
+    return res.status(200).json({
+      appointments
+    });
 
   } catch (error) {
     next(error);
@@ -457,15 +470,16 @@ async function lookupClientWithAppointments(req, res, next) {
       });
     }
 
-    // mesma normalização que você já usa
     let normalizedPhone;
+
     try {
       normalizedPhone = normalizeBrazilianPhone(phone);
     } catch (err) {
-      return res.status(400).json({ message: 'Telefone inválido' });
+      return res.status(400).json({
+        message: 'Telefone inválido'
+      });
     }
 
-    // resolve a empresa
     const company = await findCompanyBySlug(slug);
 
     if (!company || company.status !== 'active') {
@@ -474,13 +488,11 @@ async function lookupClientWithAppointments(req, res, next) {
       });
     }
 
-    // 1. buscar cliente
     const client = await findClientByPhone({
       companyId: company.id,
       phone: normalizedPhone
     });
 
-    // 2. se não existir
     if (!client) {
       return res.status(200).json({
         client: null,
@@ -488,27 +500,18 @@ async function lookupClientWithAppointments(req, res, next) {
       });
     }
 
-    // 3. buscar agendamentos
-    const appointments = await findAppointmentsByClientId({
-      companyId: company.id,
-      clientId: client.id
-    });
+    const appointments =
+      await findAppointmentsByClientId({
+        companyId: company.id,
+        clientId: client.id
+      });
 
-    // 4. retorno final
     return res.status(200).json({
       client: {
         id: client.id,
         name: client.name
       },
       appointments
-    });
-
-    // resposta padronizada
-    return res.status(200).json({
-      client: result.client
-        ? { id: result.client.id, name: result.client.name }
-        : null,
-      appointments: result.appointments
     });
 
   } catch (error) {
@@ -524,5 +527,4 @@ module.exports = {
   createPublicAppointment,
   lookupPublicAppointments,
   lookupClientWithAppointments
-
 };

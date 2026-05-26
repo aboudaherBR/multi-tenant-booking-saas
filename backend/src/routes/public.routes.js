@@ -37,7 +37,7 @@ router.get(
 );
 
 router.post(
-  '/agendar',
+  '/book/:slug',
   publicController.createPublicAppointment
 );
 
