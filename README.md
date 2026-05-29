@@ -91,13 +91,13 @@ Com foco em:
 
 # 📷 Prints do Sistema
 
-## Cliente
+## 👤 Cliente
 
 ![Cliente](./docs/client-booking.png)
 
 ---
 
-## Área Administrativa
+## 🏢 Área Administrativa
 
 ![Admin](./docs/admin-dashboard.png)
 
@@ -105,7 +105,7 @@ Com foco em:
 
 ---
 
-## Área do Profissional
+## 👨‍💼 Área do Profissional
 
 ![Professional](./docs/professional-dashboard.png)
 
