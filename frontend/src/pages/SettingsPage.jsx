@@ -75,9 +75,20 @@ export default function SettingsPage() {
 
     const [showAppearanceModal, setShowAppearanceModal] = useState(false);
     const [selectedTheme, setSelectedTheme] = useState("pink");
+    
     useEffect(() => {
         applyTheme(selectedTheme);
     }, [selectedTheme]);
+
+    useEffect(() => {
+        const savedTheme =
+            localStorage.getItem("theme");
+
+        if (savedTheme) {
+            setSelectedTheme(savedTheme);
+            applyTheme(savedTheme);
+        }
+    }, []);
 
     console.log("showCreateBlockModal:", showCreateBlockModal);
 
@@ -375,6 +386,8 @@ export default function SettingsPage() {
             "data-theme",
             theme
         );
+
+        localStorage.setItem("theme", theme);
     }
 
 
