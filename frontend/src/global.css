@@ -205,6 +205,14 @@ select {
   font-weight: 700;
 }
 
+/* ========================================
+   SETTINGS CARD
+   ======================================== */
+
+.settings-card {
+  padding: 20px;
+  margin-bottom: 24px;
+}
 
 /* ========================================
    DESIGN SYSTEM - LOADING AND ANIMATIONS
