@@ -382,7 +382,7 @@ export default function SettingsPage() {
 
 
                 {/* CARD AGENDA */}
-                <div className="card" style={{ padding: "20px", marginBottom: "16px" }}>
+                <div className="card" style={{ padding: "20px", marginBottom: "24px" }}>
                     <h2 className="heading">Agenda</h2>
 
                     <button
@@ -453,7 +453,7 @@ export default function SettingsPage() {
 
 
                 {/* CARD SERVIÇOS */}
-                <div className="card" style={{ padding: "20px", marginBottom: "16px" }}>
+                <div className="card" style={{ padding: "20px", marginBottom: "24px" }}>
                     <h2 className="heading">Serviços</h2>
 
                     <button
@@ -469,7 +469,7 @@ export default function SettingsPage() {
                 </div>
 
                 {/* CARD EQUIPE */}
-                <div className="card" style={{ padding: "20px", marginBottom: "16px" }}>
+                <div className="card" style={{ padding: "20px", marginBottom: "24px" }}>
                     <h2 className="heading">Equipe</h2>
 
                     <button
