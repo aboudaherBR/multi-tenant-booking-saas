@@ -75,6 +75,9 @@ export default function SettingsPage() {
 
     const [showAppearanceModal, setShowAppearanceModal] = useState(false);
     const [selectedTheme, setSelectedTheme] = useState("pink");
+    useEffect(() => {
+        applyTheme(selectedTheme);
+    }, [selectedTheme]);
 
     console.log("showCreateBlockModal:", showCreateBlockModal);
 
