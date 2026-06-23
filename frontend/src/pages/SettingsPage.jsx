@@ -366,6 +366,13 @@ export default function SettingsPage() {
         }
     }
 
+    function applyTheme(theme) {
+        document.documentElement.setAttribute(
+            "data-theme",
+            theme
+        );
+    }
+
 
     return (
 
@@ -503,9 +510,34 @@ export default function SettingsPage() {
                             <div className="modal-content">
                                 <h2>Tema</h2>
 
-                                <p>
-                                    Em breve
-                                </p>
+                                <div style={{ marginBottom: "20px" }}>
+                                    <label
+                                        style={{
+                                            display: "block",
+                                            marginBottom: "10px"
+                                        }}
+                                    >
+                                        <input
+                                            type="radio"
+                                            name="theme"
+                                            value="pink"
+                                        />
+                                        {" "}Beauty Pink
+                                    </label>
+
+                                    <label
+                                        style={{
+                                            display: "block"
+                                        }}
+                                    >
+                                        <input
+                                            type="radio"
+                                            name="theme"
+                                            value="dark"
+                                        />
+                                        {" "}Dark
+                                    </label>
+                                </div>
 
                                 <button
                                     className="button-primary"
