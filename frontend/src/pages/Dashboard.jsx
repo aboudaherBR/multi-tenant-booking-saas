@@ -50,19 +50,10 @@ export default function Dashboard() {
         <div style={{ minHeight: "100vh", background: "var(--color-bg)" }}>
 
             {/* HEADER */}
-            <div
-                className="
-                header-gradient
-                flex
-                justify-between
-                items-center
-                "
-            >
+            <div className="header-gradient">
                 <h2 style={{ color: "white" }}>
                     Olá, {user?.name}
                 </h2>
-
-                <ThemeToggle />
             </div>
 
             {/* CONTEÚDO */}
