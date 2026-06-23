@@ -75,7 +75,7 @@ export default function SettingsPage() {
 
     const [showAppearanceModal, setShowAppearanceModal] = useState(false);
     const [selectedTheme, setSelectedTheme] = useState("pink");
-    
+
     useEffect(() => {
         applyTheme(selectedTheme);
     }, [selectedTheme]);
@@ -381,7 +381,15 @@ export default function SettingsPage() {
         }
     }
 
-    function applyTheme(theme) {
+    async function applyTheme(theme) {
+
+        await apiClient("/company/theme", {
+            method: "PUT",
+            body: {
+                theme
+            }
+        });
+
         document.documentElement.setAttribute(
             "data-theme",
             theme
@@ -573,6 +581,13 @@ export default function SettingsPage() {
                                         Tema atual: {selectedTheme}
                                     </p>
                                 </div>
+
+                                <button
+                                    className="button-primary"
+                                    onClick={() => applyTheme(selectedTheme)}
+                                >
+                                    Salvar tema
+                                </button>
 
                                 <button
                                     className="button-primary"
