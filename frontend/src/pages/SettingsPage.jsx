@@ -74,6 +74,7 @@ export default function SettingsPage() {
     const [showCreateBlockModal, setShowCreateBlockModal] = useState(false);
 
     const [showAppearanceModal, setShowAppearanceModal] = useState(false);
+    const [selectedTheme, setSelectedTheme] = useState("pink");
 
     console.log("showCreateBlockModal:", showCreateBlockModal);
 
@@ -526,6 +527,8 @@ export default function SettingsPage() {
                                             type="radio"
                                             name="theme"
                                             value="pink"
+                                            checked={selectedTheme === "pink"}
+                                            onChange={() => setSelectedTheme("pink")}
                                         />
                                         {" "}Beauty Pink
                                     </label>
@@ -540,6 +543,8 @@ export default function SettingsPage() {
                                             type="radio"
                                             name="theme"
                                             value="dark"
+                                            checked={selectedTheme === "dark"}
+                                            onChange={() => setSelectedTheme("dark")}
                                         />
                                         {" "}Dark
                                     </label>
