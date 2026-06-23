@@ -510,7 +510,12 @@ export default function SettingsPage() {
                             <div className="modal-content">
                                 <h2>Tema</h2>
 
-                                <div style={{ marginBottom: "20px" }}>
+                                <div
+                                    style={{
+                                        marginBottom: "20px",
+                                        textAlign: "left"
+                                    }}
+                                >
                                     <label
                                         style={{
                                             display: "block",
@@ -527,7 +532,8 @@ export default function SettingsPage() {
 
                                     <label
                                         style={{
-                                            display: "block"
+                                            display: "block",
+                                            marginBottom: "10px"
                                         }}
                                     >
                                         <input
