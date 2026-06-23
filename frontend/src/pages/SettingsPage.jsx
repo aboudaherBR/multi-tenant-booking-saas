@@ -548,6 +548,14 @@ export default function SettingsPage() {
                                         />
                                         {" "}Dark
                                     </label>
+                                    <p
+                                        style={{
+                                            fontSize: "14px",
+                                            color: "var(--color-text-secondary)"
+                                        }}
+                                    >
+                                        Tema atual: {selectedTheme}
+                                    </p>
                                 </div>
 
                                 <button
