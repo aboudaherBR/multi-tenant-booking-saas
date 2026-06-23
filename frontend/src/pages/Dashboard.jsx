@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import apiClient from "../api/apiClient";
 import { useAuth } from "../hooks/AuthContext";
 import BookingLinkCard from "../components/BookingLinkCard";
+import useTheme from "../hooks/useTheme";
+import ThemeToggle from "../components/ui/ThemeToggle";
 
 
 export default function Dashboard() {
@@ -15,7 +17,7 @@ export default function Dashboard() {
     const [error, setError] = useState(null);
 
     const navigate = useNavigate();
-
+    const { theme, toggleTheme } = useTheme();
     async function loadDashboard() {
         try {
             const data = await apiClient("/dashboard/today");
@@ -48,10 +50,19 @@ export default function Dashboard() {
         <div style={{ minHeight: "100vh", background: "var(--color-bg)" }}>
 
             {/* HEADER */}
-            <div className="header-gradient">
+            <div
+                className="
+                header-gradient
+                flex
+                justify-between
+                items-center
+                "
+            >
                 <h2 style={{ color: "white" }}>
                     Olá, {user?.name}
                 </h2>
+
+                <ThemeToggle />
             </div>
 
             {/* CONTEÚDO */}
