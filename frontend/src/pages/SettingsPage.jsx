@@ -81,13 +81,23 @@ export default function SettingsPage() {
     }, [selectedTheme]);
 
     useEffect(() => {
-        const savedTheme =
-            localStorage.getItem("theme");
+        async function loadTheme() {
+            try {
+                const company = await apiClient("/company/settings");
+                const theme = company.theme || "pink";
+                setSelectedTheme(theme);
 
-        if (savedTheme) {
-            setSelectedTheme(savedTheme);
-            applyTheme(savedTheme);
+                document.documentElement.setAttribute(
+                    "data-theme",
+                    theme
+                );
+                localStorage.setItem("theme", theme);
+
+            } catch (error) {
+                console.error(error);
+            }
         }
+        loadTheme();
     }, []);
 
     console.log("showCreateBlockModal:", showCreateBlockModal);
