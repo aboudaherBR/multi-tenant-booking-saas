@@ -379,78 +379,77 @@ export default function SettingsPage() {
             {/* CONTEÚDO */}
             <div className="container-main" style={{ marginTop: "-40px" }}>
 
+
+
                 {/* CARD AGENDA */}
-                <div className="container-main">
+                <div className="card" style={{ padding: "20px", marginBottom: "16px" }}>
+                    <h2 className="heading">Agenda</h2>
 
-                    {/* CARD AGENDA */}
-                    <div className="card" style={{ padding: "20px", marginBottom: "16px" }}>
-                        <h2 className="heading">Agenda</h2>
+                    <button
+                        className="button-secondary"
+                        onClick={openBusinessHoursModal}
+                    >
+                        Horário de funcionamento
+                    </button>
 
-                        <button
-                            className="button-secondary"
-                            onClick={openBusinessHoursModal}
-                        >
-                            Horário de funcionamento
-                        </button>
+                    <button
+                        className="button-secondary"
+                        onClick={async () => {
+                            setSelectedBlock(null);
 
-                        <button
-                            className="button-secondary"
-                            onClick={async () => {
-                                setSelectedBlock(null);
+                            await loadScheduleBlocks();
+                            await loadProfessionals();
 
-                                await loadScheduleBlocks();
-                                await loadProfessionals();
+                            setShowScheduleBlocksModal(true);
+                        }}
+                    >
+                        Bloqueios de agenda
+                    </button>
 
-                                setShowScheduleBlocksModal(true);
-                            }}
-                        >
-                            Bloqueios de agenda
-                        </button>
-
-                        <button
-                            className="button-secondary"
-                            onClick={() => {
-                                console.log("Promoções do dia clicado");
-                            }}
-                        >
-                            Promoções do dia
-                        </button>
-                    </div>
-
-                    {/* 🔥 AQUI, FORA DO CARD */}
-                    <BusinessHoursModal
-                        isOpen={showBusinessHoursModal}
-                        onClose={() => setShowBusinessHoursModal(false)}
-
-                        businessHours={businessHours}
-                        weekdayNames={weekdayNames}
-                        setBusinessHours={setBusinessHours}
-
-                        lunchStart={lunchStart}
-                        lunchEnd={lunchEnd}
-                        setLunchStart={setLunchStart}
-                        setLunchEnd={setLunchEnd}
-
-                        bufferMinutes={bufferMinutes}
-                        setBufferMinutes={setBufferMinutes}
-
-                        saveBusinessHours={saveBusinessHours}
-                    />
-                    <ScheduleBlocksModal
-                        isOpen={showScheduleBlocksModal}
-                        onClose={() => setShowScheduleBlocksModal(false)}
-                        scheduleBlocks={scheduleBlocks}
-                        onCreate={() => setShowCreateBlockModal(true)}
-                        reloadBlocks={loadScheduleBlocks}
-                    />
-                    <CreateScheduleBlockModal
-                        isOpen={showCreateBlockModal}
-                        onClose={() => setShowCreateBlockModal(false)}
-                        professionals={professionals}
-                    />
-
-
+                    <button
+                        className="button-secondary"
+                        onClick={() => {
+                            console.log("Promoções do dia clicado");
+                        }}
+                    >
+                        Promoções do dia
+                    </button>
                 </div>
+
+                {/* 🔥 AQUI, FORA DO CARD */}
+                <BusinessHoursModal
+                    isOpen={showBusinessHoursModal}
+                    onClose={() => setShowBusinessHoursModal(false)}
+
+                    businessHours={businessHours}
+                    weekdayNames={weekdayNames}
+                    setBusinessHours={setBusinessHours}
+
+                    lunchStart={lunchStart}
+                    lunchEnd={lunchEnd}
+                    setLunchStart={setLunchStart}
+                    setLunchEnd={setLunchEnd}
+
+                    bufferMinutes={bufferMinutes}
+                    setBufferMinutes={setBufferMinutes}
+
+                    saveBusinessHours={saveBusinessHours}
+                />
+                <ScheduleBlocksModal
+                    isOpen={showScheduleBlocksModal}
+                    onClose={() => setShowScheduleBlocksModal(false)}
+                    scheduleBlocks={scheduleBlocks}
+                    onCreate={() => setShowCreateBlockModal(true)}
+                    reloadBlocks={loadScheduleBlocks}
+                />
+                <CreateScheduleBlockModal
+                    isOpen={showCreateBlockModal}
+                    onClose={() => setShowCreateBlockModal(false)}
+                    professionals={professionals}
+                />
+
+
+
 
 
                 {/* CARD SERVIÇOS */}
