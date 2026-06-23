@@ -483,6 +483,14 @@ export default function SettingsPage() {
                     </button>
                 </div>
 
+                <div className="card settings-card">
+                    <h2 className="heading">Aparência</h2>
+
+                    <button className="button-secondary">
+                        Personalizar tema
+                    </button>
+                </div>
+
                 {/* VOLTAR */}
                 <button
                     className="button-primary"
