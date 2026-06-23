@@ -12,8 +12,8 @@
 }
 
 [data-theme="dark"] {
-  --color-primary: #f8fafc;
-  --color-primary-light: #cbd5e1;
+  --color-primary: #0f172a;
+  --color-primary-light: #1e293b;
 
   --color-bg: #020617;
   --color-surface: #0f172a;
