@@ -73,6 +73,8 @@ export default function SettingsPage() {
     const [blockType, setBlockType] = useState("global");
     const [showCreateBlockModal, setShowCreateBlockModal] = useState(false);
 
+    const [showAppearanceModal, setShowAppearanceModal] = useState(false);
+
     console.log("showCreateBlockModal:", showCreateBlockModal);
 
 
@@ -483,13 +485,40 @@ export default function SettingsPage() {
                     </button>
                 </div>
 
+                {/* CARD APARÊNCIA */}
                 <div className="card settings-card">
                     <h2 className="heading">Aparência</h2>
 
-                    <button className="button-secondary">
+                    <button
+                        className="button-secondary"
+                        onClick={() => setShowAppearanceModal(true)}
+                    >
                         Personalizar tema
                     </button>
                 </div>
+
+                {
+                    showAppearanceModal && (
+                        <div className="modal-backdrop">
+                            <div className="modal-content">
+                                <h2>Tema</h2>
+
+                                <p>
+                                    Em breve
+                                </p>
+
+                                <button
+                                    className="button-primary"
+                                    onClick={() =>
+                                        setShowAppearanceModal(false)
+                                    }
+                                >
+                                    Fechar
+                                </button>
+                            </div>
+                        </div>
+                    )
+                }
 
                 {/* VOLTAR */}
                 <button
