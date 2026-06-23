@@ -1,4 +1,9 @@
-const { updateCompanyLunch, updateCompanyBuffer } = require('../database/companies.repository');
+const {
+  updateCompanyLunch,
+  updateCompanyBuffer,
+  updateCompanyTheme
+} = require('../database/companies.repository');
+
 
 function isValidTimeFormat(time) {
   return /^([01]\d|2[0-3]):([0-5]\d)$/.test(time);
