@@ -4,6 +4,29 @@ function isValidTimeFormat(time) {
   return /^([01]\d|2[0-3]):([0-5]\d)$/.test(time);
 }
 
+async function updateTheme(req, res, next) {
+  try {
+
+    const { theme } = req.body;
+
+    if (!theme) {
+      return res.status(400).json({
+        message: "theme é obrigatório"
+      });
+    }
+
+    const company = await updateCompanyTheme(
+      req.user.companyId,
+      theme
+    );
+
+    return res.status(200).json(company);
+
+  } catch (error) {
+    next(error);
+  }
+}
+
 async function updateLunch(req, res, next) {
   try {
     if (!req.user.isCompanyAdmin) {
@@ -100,5 +123,6 @@ async function getSettings(req, res, next) {
 module.exports = {
   updateLunch,
   updateBuffer,
-  getSettings
+  getSettings,
+  updateTheme
 };

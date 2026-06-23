@@ -70,7 +70,8 @@ async function findCompanyById(companyId) {
         subscription_ends_at, 
         slot_interval_minutes,
         lunch_start_time,
-        lunch_end_time
+        lunch_end_time,
+        theme
       FROM companies
       WHERE id = $1
     `,
@@ -131,10 +132,39 @@ async function updateCompanyBuffer({
   return rows[0];
 }
 
+async function getCompanyTheme(companyId) {
+  const result = await pool.query(
+    `
+      SELECT theme
+      FROM companies
+      WHERE id = $1
+    `,
+    [companyId]
+  );
+
+  return result.rows[0] || null;
+}
+
+async function updateCompanyTheme(companyId, theme) {
+  const result = await pool.query(
+    `
+      UPDATE companies
+      SET theme = $1
+      WHERE id = $2
+      RETURNING theme
+    `,
+    [theme, companyId]
+  );
+
+  return result.rows[0];
+}
+
 module.exports = {
   createCompany,
   findCompanyById,
   updateCompanyLunch,
   findCompanyBySlug,
-  updateCompanyBuffer
+  updateCompanyBuffer,
+  getCompanyTheme,
+  updateCompanyTheme
 };

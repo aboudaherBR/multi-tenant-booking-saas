@@ -22,4 +22,10 @@ router.put(
   companyController.updateBuffer
 );
 
+router.put(
+  '/company/theme',
+  requireAuth,
+  companyController.updateTheme
+);
+
 module.exports = router;
