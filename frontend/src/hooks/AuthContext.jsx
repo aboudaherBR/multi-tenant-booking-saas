@@ -15,7 +15,9 @@ function AuthProvider({ children }) {
     async function initializeAuth() {
 
       const token = localStorage.getItem('token');
-      
+
+      console.log("AUTH INIT");
+      console.log("TOKEN EXISTE?", !!token);
 
       if (token) {
 
@@ -24,6 +26,8 @@ function AuthProvider({ children }) {
           const payload = JSON.parse(
             atob(token.split('.')[1])
           );
+
+          console.log("PAYLOAD:", payload);
 
           setUser({
             name: payload.name,
@@ -39,11 +43,18 @@ function AuthProvider({ children }) {
             const company =
               await apiClient("/company/settings");
 
+            console.log(
+              "COMPANY SETTINGS:",
+              company
+            );
+
             const theme =
               company.theme || "pink";
 
-            console.log("THEME RECEBIDO:", theme);
-            console.log(theme);
+            console.log(
+              "THEME RECEBIDO:",
+              theme
+            );
 
             document.documentElement.setAttribute(
               "data-theme",
@@ -58,7 +69,7 @@ function AuthProvider({ children }) {
           } catch (error) {
 
             console.error(
-              "Erro ao carregar tema",
+              "ERRO AO CARREGAR THEME:",
               error
             );
           }
@@ -67,7 +78,10 @@ function AuthProvider({ children }) {
 
         } catch (e) {
 
-          console.log("token inválido");
+          console.error(
+            "TOKEN INVÁLIDO:",
+            e
+          );
 
           localStorage.removeItem('token');
 
