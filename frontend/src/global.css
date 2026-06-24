@@ -8,6 +8,8 @@
   --color-text: #1f2937;
   --color-text-secondary: #6b7280;
 
+  --color-header-glow: #f9a8d4;
+
   --radius: 10px;
 }
 
@@ -17,6 +19,10 @@
 
   --color-bg: #020617;
   --color-surface: #0f172a;
+
+
+  --color-header-glow: #60a5fa;
+
 
   --color-text: #f8fafc;
   --color-text-secondary: #94a3b8;
@@ -515,7 +521,7 @@ select {
 .header-gradient {
   position: relative;
   overflow: hidden;
-  background: var(--color-primary);
+  background: var(--color-header-glow);
   padding: 30px 20px;
   text-align: center;
   color: white;
