@@ -5,6 +5,17 @@ import { AuthProvider } from './hooks/AuthContext';
 import App from './App';
 import './global.css';
 
+const cachedTheme =
+  localStorage.getItem("theme");
+
+if (cachedTheme) {
+
+  document.documentElement.setAttribute(
+    "data-theme",
+    cachedTheme
+  );
+}
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
