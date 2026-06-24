@@ -391,19 +391,21 @@ export default function SettingsPage() {
 
     async function applyTheme(theme) {
 
-        await apiClient("/company/theme", {
-            method: "PUT",
-            body: {
-                theme
-            }
-        });
-
+        // atualiza UI imediatamente
         document.documentElement.setAttribute(
             "data-theme",
             theme
         );
 
         localStorage.setItem("theme", theme);
+
+        // sincroniza depois
+        await apiClient("/company/theme", {
+            method: "PUT",
+            body: {
+                theme
+            }
+        });
     }
 
 
