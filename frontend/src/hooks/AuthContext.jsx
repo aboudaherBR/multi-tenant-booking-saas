@@ -43,6 +43,7 @@ function AuthProvider({ children }) {
               company.theme || "pink";
 
             console.log("THEME RECEBIDO:", theme);
+            console.log(theme);
 
             document.documentElement.setAttribute(
               "data-theme",
