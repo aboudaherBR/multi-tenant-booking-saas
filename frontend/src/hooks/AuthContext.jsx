@@ -139,6 +139,22 @@ function AuthProvider({ children }) {
           isProfessional: payload.isProfessional
         });
 
+        const company =
+          await apiClient("/company/settings");
+
+        const theme =
+          company.theme || "pink";
+
+        document.documentElement.setAttribute(
+          "data-theme",
+          theme
+        );
+
+        localStorage.setItem(
+          "theme",
+          theme
+        );
+
         setIsAuthenticated(true);
 
         return true; // 🔥 CORREÇÃO PRINCIPAL
