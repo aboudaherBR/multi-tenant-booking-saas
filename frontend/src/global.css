@@ -1,6 +1,6 @@
 :root {
   --color-primary: #ec4899;
-  --color-primary-light: #f472b6;
+  --color-primary-light: #f9a8d4;
 
   --color-bg: #fff1f2;
   --color-surface: #ffffff;
@@ -12,8 +12,8 @@
 }
 
 [data-theme="dark"] {
-  --color-primary: #0f172a;
-  --color-primary-light: #1e293b;
+  --color-primary: #020617;
+  --color-primary-light: #3b82f6;
 
   --color-bg: #020617;
   --color-surface: #0f172a;
@@ -511,12 +511,27 @@ select {
    DESIGN SYSTEM - HEADER
    ======================================== */
 .header-gradient {
-  background: linear-gradient(135deg,
-      var(--color-primary),
-      var(--color-primary-light));
+  position: relative;
+  overflow: hidden;
+  background: var(--color-primary);
   padding: 30px 20px;
   text-align: center;
-  color: var(--color-surface);
+  color: white;
+}
+
+.header-gradient::before {
+  content: "";
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  top: -180px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-primary-light);
+  filter: blur(80px);
+  opacity: 0.4;
+  pointer-events: none;
 }
 
 .avatar-placeholder {
