@@ -21,7 +21,7 @@
   --color-surface: #0f172a;
 
 
-  --color-header-glow: rgba(255,255,255,0.20);
+  
 
 
   --color-text: #f8fafc;
@@ -521,7 +521,7 @@ select {
 .header-gradient {
   position: relative;
   overflow: hidden;
-  background: var(--color-header-glow);
+  background: var(--color-primary);
   padding: 30px 20px;
   text-align: center;
   color: white;
@@ -536,7 +536,7 @@ select {
   top: -180px;
   left: 50%;
   transform: translateX(-50%);
-  background: var(--color-primary-light);
+  background: var(--color-header-glow);
   filter: blur(80px);
   opacity: 0.4;
   pointer-events: none;
