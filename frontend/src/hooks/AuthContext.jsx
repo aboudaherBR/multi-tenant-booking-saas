@@ -15,6 +15,7 @@ function AuthProvider({ children }) {
     async function initializeAuth() {
 
       const token = localStorage.getItem('token');
+      console.log("THEME RECEBIDO:", theme);
 
       if (token) {
 
