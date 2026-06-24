@@ -15,7 +15,7 @@ function AuthProvider({ children }) {
     async function initializeAuth() {
 
       const token = localStorage.getItem('token');
-      console.log("THEME RECEBIDO:", theme);
+      
 
       if (token) {
 
@@ -41,6 +41,8 @@ function AuthProvider({ children }) {
 
             const theme =
               company.theme || "pink";
+
+            console.log("THEME RECEBIDO:", theme);
 
             document.documentElement.setAttribute(
               "data-theme",
