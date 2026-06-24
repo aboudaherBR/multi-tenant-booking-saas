@@ -69,7 +69,7 @@ select {
   padding: 14px;
   border-radius: var(--radius);
   background: var(--color-primary);
-  color: var(--color-surface);
+  color: var(--color-bg);
   font-weight: 600;
   font-size: 16px;
   transition: all 0.2s ease;
