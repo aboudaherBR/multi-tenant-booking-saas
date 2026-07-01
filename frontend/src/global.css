@@ -391,6 +391,10 @@ select {
   background: #f8fafc;
 }
 
+.button-secondary:active {
+  border: 0.3px solid var(--button-secondary-border);
+}
+
 .button-link {
   margin-top: 5px;
   font-size: 14px;
