@@ -393,6 +393,8 @@ select {
 
 .button-secondary:active {
   border: 0.3px solid var(--button-secondary-border);
+  background: var(--button-secondary-background);
+  color: var(--button-secondary-text);
 }
 
 .button-link {
