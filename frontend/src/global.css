@@ -536,7 +536,7 @@ select {
   top: -180px;
   left: 50%;
   transform: translateX(-50%);
-  background: var(--color-primary-light);
+  /* background: var(--color-primary-light); */
   filter: blur(80px);
   opacity: 0.4;
   pointer-events: none;
