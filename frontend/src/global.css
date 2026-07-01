@@ -9,9 +9,11 @@
   --color-text-secondary: #6b7280;
 
   --button-border: none;
-
   --button-active-background: #db2777;
   --button-active-text: #ffffff;
+  --button-secondary-border: #1d3350;
+  --button-secondary-background: var(--color-surface);
+  --button-secondary-text: var(--color-text);
 
   --radius: 10px;
 }
@@ -27,9 +29,11 @@
   --color-text-secondary: #94a3b8;
 
   --button-border: 1px solid #334155;
-
   --button-active-background: #334155;
   --button-active-text: #ffffff;
+  --button-secondary-border: #334155;
+  --button-secondary-background: var(--color-surface);
+  --button-secondary-text: var(--color-text);
 }
 
 * {
