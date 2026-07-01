@@ -8,6 +8,7 @@
   --color-text: #1f2937;
   --color-text-secondary: #6b7280;
 
+  --button-border: none;
 
   --radius: 10px;
 }
@@ -22,9 +23,7 @@
   --color-text: #f8fafc;
   --color-text-secondary: #94a3b8;
 
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
+  --button-border: 1px solid #334155;
 * {
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
@@ -76,6 +75,7 @@ select {
   font-weight: 600;
   font-size: 16px;
   transition: all 0.2s ease;
+  border: var(--button-border);
 }
 
 .button-primary:active {
