@@ -35,7 +35,7 @@
   --button-secondary-border: #334155;
   --button-secondary-background: var(--color-surface);
   --button-secondary-text: var(--color-text);
-  --button-secondary-hover-background: #1e293b;
+  --button-secondary-hover-background: #fce7f3;
 }
 
 * {
@@ -384,19 +384,26 @@ select {
   color: var(--button-secondary-text);
   font-size: 14px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition:
+    background .2s ease,
+    color .2s ease,
+    border-color .2s ease,
+    transform .12s ease;
   width: 220px;
   display: block;
 }
 
 .button-secondary:hover {
   background: var(--button-secondary-hover-background);
+  transform: translateY(-1px);
+
 }
 
 .button-secondary:active {
   border: 0.3px solid var(--button-secondary-border);
   background: var(--button-secondary-background);
   color: var(--button-secondary-text);
+  transform: scale(.97);
 }
 
 .button-link {
