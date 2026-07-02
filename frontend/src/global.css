@@ -375,6 +375,36 @@ select {
 /* ========================================
    DESIGN SYSTEM - BUTTONS -
    ======================================== */
+
+.button-primary {
+  width: 100%;
+  padding: 14px;
+  border-radius: var(--radius);
+  background: var(--color-primary);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 16px;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.12s ease;
+  border: var(--button-border);
+}
+
+.button-primary:hover {
+  transform: translateY(-1px);
+}
+
+.button-primary:active {
+  transform: scale(0.97);
+  opacity: 0.9;
+  background: var(--button-active-background);
+  color: var(--button-active-text);
+}
+
+
+
 .button-secondary {
   margin-top: 8px;
   padding: 10px 14px;
