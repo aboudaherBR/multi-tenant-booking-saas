@@ -1,14 +1,41 @@
 :root {
-  --color-primary: #0F172A;
-  --color-primary-light: #1E293B;
+  --color-primary: #ec4899;
+  --color-primary-light: #f9a8d4;
 
-  --color-bg: #f1f5f9;
+  --color-bg: #fff1f2;
   --color-surface: #ffffff;
 
-  --color-text: #0f172a;
-  --color-text-secondary: #64748b;
+  --color-text: #1f2937;
+  --color-text-secondary: #6b7280;
+
+  --button-border: none;
+  --button-active-background: #db2777;
+  --button-active-text: #ffffff;
+  --button-secondary-border: #1d3350;
+  --button-secondary-background: var(--color-surface);
+  --button-secondary-text: var(--color-text);
+  --button-secondary-hover-background: #f8fafc;
 
   --radius: 10px;
+}
+
+[data-theme="dark"] {
+  --color-primary: #020617;
+  --color-primary-light: #3b82f6;
+
+  --color-bg: #020617;
+  --color-surface: #0f172a;
+
+  --color-text: #f8fafc;
+  --color-text-secondary: #94a3b8;
+
+  --button-border: 1px solid #334155;
+  --button-active-background: #334155;
+  --button-active-text: #ffffff;
+  --button-secondary-border: #334155;
+  --button-secondary-background: var(--color-surface);
+  --button-secondary-text: var(--color-text);
+  --button-secondary-hover-background: #1e293b;
 }
 
 * {
@@ -58,15 +85,18 @@ select {
   padding: 14px;
   border-radius: var(--radius);
   background: var(--color-primary);
-  color: var(--color-surface);
+  color: #ffffff;
   font-weight: 600;
   font-size: 16px;
   transition: all 0.2s ease;
+  border: var(--button-border);
 }
 
 .button-primary:active {
   transform: scale(0.97);
   opacity: 0.9;
+  background: var(--button-active-background);
+  color: var(--button-active-text);
 }
 
 .container-main {
@@ -78,7 +108,9 @@ select {
 .card {
   background: var(--color-surface);
   border-radius: var(--radius);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow:
+    0 10px 25px rgba(0, 0, 0, 0.08);
   transition: all 0.2s ease;
 }
 
@@ -89,6 +121,19 @@ select {
 .text-row {
   margin-bottom: 8px;
   font-size: 16px;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.theme-button {
+  background: rgba(255, 255, 255, .2);
+  color: white;
+  border-radius: 999px;
+  padding: 8px 12px;
 }
 
 
@@ -181,6 +226,14 @@ select {
   font-weight: 700;
 }
 
+/* ========================================
+   SETTINGS CARD
+   ======================================== */
+
+.settings-card {
+  padding: 20px;
+  margin-bottom: 24px;
+}
 
 /* ========================================
    DESIGN SYSTEM - LOADING AND ANIMATIONS
@@ -320,22 +373,67 @@ select {
 }
 
 /* ========================================
-   DESIGN SYSTEM - BUTTONS
+   DESIGN SYSTEM - BUTTONS -
    ======================================== */
+
+.button-primary {
+  width: 100%;
+  padding: 14px;
+  border-radius: var(--radius);
+  background: var(--color-primary);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 16px;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.12s ease;
+  border: var(--button-border);
+}
+
+.button-primary:hover {
+  transform: translateY(-1px);
+}
+
+.button-primary:active {
+  transform: scale(0.97);
+  opacity: 0.9;
+  background: var(--button-active-background);
+  color: var(--button-active-text);
+}
+
+
+
 .button-secondary {
-  margin-top: 5px;
+  margin-top: 8px;
   padding: 10px 14px;
   border-radius: var(--radius);
-  border: 0.3px solid #1d3350;
-  background: var(--color-surface);
-  color: var(--color-text);
+  border: 0.3px solid var(--button-secondary-border);
+  background: var(--button-secondary-background);
+  color: var(--button-secondary-text);
   font-size: 14px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition:
+    background .2s ease,
+    color .2s ease,
+    border-color .2s ease,
+    transform .12s ease;
+  width: 220px;
+  display: block;
 }
 
 .button-secondary:hover {
-  background: #f8fafc;
+  background: var(--button-secondary-hover-background);
+  transform: translateY(-1px);
+
+}
+
+.button-secondary:active {
+  border: 0.3px solid var(--button-secondary-border);
+  background: var(--button-secondary-background);
+  color: var(--button-secondary-text);
+  transform: scale(.97);
 }
 
 .button-link {
@@ -477,12 +575,27 @@ select {
    DESIGN SYSTEM - HEADER
    ======================================== */
 .header-gradient {
-  background: linear-gradient(135deg,
-      var(--color-primary),
-      var(--color-primary-light));
+  position: relative;
+  overflow: hidden;
+  background: var(--color-primary);
   padding: 30px 20px;
   text-align: center;
-  color: var(--color-surface);
+  color: white;
+}
+
+.header-gradient::before {
+  content: "";
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  top: -180px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-primary-light);
+  filter: blur(80px);
+  opacity: 0.4;
+  pointer-events: none;
 }
 
 .avatar-placeholder {

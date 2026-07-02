@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import apiClient from "../api/apiClient";
 import { useAuth } from "../hooks/AuthContext";
 import BookingLinkCard from "../components/BookingLinkCard";
+import useTheme from "../hooks/useTheme";
+import ThemeToggle from "../components/ui/ThemeToggle";
 
 
 export default function Dashboard() {
@@ -15,7 +17,7 @@ export default function Dashboard() {
     const [error, setError] = useState(null);
 
     const navigate = useNavigate();
-
+    const { theme, toggleTheme } = useTheme();
     async function loadDashboard() {
         try {
             const data = await apiClient("/dashboard/today");

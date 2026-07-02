@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ProfessionalServicesModal from "../components/ProfessionalServicesModal";
 import apiClient from "../api/apiClient";
 import BusinessHoursModal from "../components/settingsModal/BusinessHoursModal";
@@ -72,6 +72,31 @@ export default function SettingsPage() {
 
     const [blockType, setBlockType] = useState("global");
     const [showCreateBlockModal, setShowCreateBlockModal] = useState(false);
+
+    const [showAppearanceModal, setShowAppearanceModal] = useState(false);
+    const [selectedTheme, setSelectedTheme] = useState("pink");
+
+
+
+    useEffect(() => {
+        async function loadTheme() {
+            try {
+                const company = await apiClient("/company/settings");
+                const theme = company.theme || "pink";
+                setSelectedTheme(theme);
+
+                document.documentElement.setAttribute(
+                    "data-theme",
+                    theme
+                );
+                localStorage.setItem("theme", theme);
+
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        loadTheme();
+    }, []);
 
     console.log("showCreateBlockModal:", showCreateBlockModal);
 
@@ -364,6 +389,25 @@ export default function SettingsPage() {
         }
     }
 
+    async function applyTheme(theme) {
+
+        // atualiza UI imediatamente
+        document.documentElement.setAttribute(
+            "data-theme",
+            theme
+        );
+
+        localStorage.setItem("theme", theme);
+
+        // sincroniza depois
+        await apiClient("/company/theme", {
+            method: "PUT",
+            body: {
+                theme
+            }
+        });
+    }
+
 
     return (
 
@@ -379,82 +423,81 @@ export default function SettingsPage() {
             {/* CONTEÚDO */}
             <div className="container-main" style={{ marginTop: "-40px" }}>
 
+
+
                 {/* CARD AGENDA */}
-                <div className="container-main">
+                <div className="card settings-card">
+                    <h2 className="heading">Agenda</h2>
 
-                    {/* CARD AGENDA */}
-                    <div className="card" style={{ padding: "20px", marginBottom: "16px" }}>
-                        <h2 className="heading">Agenda</h2>
+                    <button
+                        className="button-secondary"
+                        onClick={openBusinessHoursModal}
+                    >
+                        Horário de funcionamento
+                    </button>
 
-                        <button
-                            className="button-secondary"
-                            onClick={openBusinessHoursModal}
-                        >
-                            Horário de funcionamento
-                        </button>
+                    <button
+                        className="button-secondary"
+                        onClick={async () => {
+                            setSelectedBlock(null);
 
-                        <button
-                            className="button-secondary"
-                            onClick={async () => {
-                                setSelectedBlock(null);
+                            await loadScheduleBlocks();
+                            await loadProfessionals();
 
-                                await loadScheduleBlocks();
-                                await loadProfessionals();
+                            setShowScheduleBlocksModal(true);
+                        }}
+                    >
+                        Bloqueios de agenda
+                    </button>
 
-                                setShowScheduleBlocksModal(true);
-                            }}
-                        >
-                            Bloqueios de agenda
-                        </button>
-
-                        <button
-                            className="button-secondary"
-                            onClick={() => {
-                                console.log("Promoções do dia clicado");
-                            }}
-                        >
-                            Promoções do dia
-                        </button>
-                    </div>
-
-                    {/* 🔥 AQUI, FORA DO CARD */}
-                    <BusinessHoursModal
-                        isOpen={showBusinessHoursModal}
-                        onClose={() => setShowBusinessHoursModal(false)}
-
-                        businessHours={businessHours}
-                        weekdayNames={weekdayNames}
-                        setBusinessHours={setBusinessHours}
-
-                        lunchStart={lunchStart}
-                        lunchEnd={lunchEnd}
-                        setLunchStart={setLunchStart}
-                        setLunchEnd={setLunchEnd}
-
-                        bufferMinutes={bufferMinutes}
-                        setBufferMinutes={setBufferMinutes}
-
-                        saveBusinessHours={saveBusinessHours}
-                    />
-                    <ScheduleBlocksModal
-                        isOpen={showScheduleBlocksModal}
-                        onClose={() => setShowScheduleBlocksModal(false)}
-                        scheduleBlocks={scheduleBlocks}
-                        onCreate={() => setShowCreateBlockModal(true)}
-                        reloadBlocks={loadScheduleBlocks}
-                    />
-                    <CreateScheduleBlockModal
-                        isOpen={showCreateBlockModal}
-                        onClose={() => setShowCreateBlockModal(false)}
-                        professionals={professionals}
-                    />
-
-
+                    <button
+                        className="button-secondary"
+                        onClick={() => {
+                            console.log("Promoções do dia clicado");
+                        }}
+                    >
+                        Promoções do dia
+                    </button>
                 </div>
+
+                {/* 🔥 AQUI, FORA DO CARD */}
+                <BusinessHoursModal
+                    isOpen={showBusinessHoursModal}
+                    onClose={() => setShowBusinessHoursModal(false)}
+
+                    businessHours={businessHours}
+                    weekdayNames={weekdayNames}
+                    setBusinessHours={setBusinessHours}
+
+                    lunchStart={lunchStart}
+                    lunchEnd={lunchEnd}
+                    setLunchStart={setLunchStart}
+                    setLunchEnd={setLunchEnd}
+
+                    bufferMinutes={bufferMinutes}
+                    setBufferMinutes={setBufferMinutes}
+
+                    saveBusinessHours={saveBusinessHours}
+                />
+                <ScheduleBlocksModal
+                    isOpen={showScheduleBlocksModal}
+                    onClose={() => setShowScheduleBlocksModal(false)}
+                    scheduleBlocks={scheduleBlocks}
+                    onCreate={() => setShowCreateBlockModal(true)}
+                    reloadBlocks={loadScheduleBlocks}
+                />
+                <CreateScheduleBlockModal
+                    isOpen={showCreateBlockModal}
+                    onClose={() => setShowCreateBlockModal(false)}
+                    professionals={professionals}
+                />
+
+
+
 
 
                 {/* CARD SERVIÇOS */}
-                <div className="card" style={{ padding: "20px", marginBottom: "16px" }}>
+                <div className="card settings-card">
                     <h2 className="heading">Serviços</h2>
 
                     <button
@@ -470,7 +513,7 @@ export default function SettingsPage() {
                 </div>
 
                 {/* CARD EQUIPE */}
-                <div className="card" style={{ padding: "20px", marginBottom: "16px" }}>
+                <div className="card settings-card">
                     <h2 className="heading">Equipe</h2>
 
                     <button
@@ -483,6 +526,91 @@ export default function SettingsPage() {
                         Gerenciar profissionais
                     </button>
                 </div>
+
+                {/* CARD APARÊNCIA */}
+                <div className="card settings-card">
+                    <h2 className="heading">Aparência</h2>
+
+                    <button
+                        className="button-secondary"
+                        onClick={() => setShowAppearanceModal(true)}
+                    >
+                        Personalizar tema
+                    </button>
+                </div>
+
+                {
+                    showAppearanceModal && (
+                        <div className="modal-backdrop">
+                            <div className="modal-content">
+                                <h2>Tema</h2>
+
+                                <div
+                                    style={{
+                                        marginBottom: "20px",
+                                        textAlign: "left"
+                                    }}
+                                >
+                                    <label
+                                        style={{
+                                            display: "block",
+                                            marginBottom: "10px"
+                                        }}
+                                    >
+                                        <input
+                                            type="radio"
+                                            name="theme"
+                                            value="pink"
+                                            checked={selectedTheme === "pink"}
+                                            onChange={() => setSelectedTheme("pink")}
+                                        />
+                                        {" "}Beauty Pink
+                                    </label>
+
+                                    <label
+                                        style={{
+                                            display: "block",
+                                            marginBottom: "10px"
+                                        }}
+                                    >
+                                        <input
+                                            type="radio"
+                                            name="theme"
+                                            value="dark"
+                                            checked={selectedTheme === "dark"}
+                                            onChange={() => setSelectedTheme("dark")}
+                                        />
+                                        {" "}Dark
+                                    </label>
+                                    <p
+                                        style={{
+                                            fontSize: "14px",
+                                            color: "var(--color-text-secondary)"
+                                        }}
+                                    >
+                                        Tema atual: {selectedTheme}
+                                    </p>
+                                </div>
+
+                                <button
+                                    className="button-primary"
+                                    onClick={() => applyTheme(selectedTheme)}
+                                >
+                                    Salvar tema
+                                </button>
+
+                                <button
+                                    className="button-primary"
+                                    onClick={() =>
+                                        setShowAppearanceModal(false)
+                                    }
+                                >
+                                    Fechar
+                                </button>
+                            </div>
+                        </div>
+                    )
+                }
 
                 {/* VOLTAR */}
                 <button

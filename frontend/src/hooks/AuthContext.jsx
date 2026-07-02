@@ -1,5 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { login as loginService } from '../services/authService';
+import apiClient from '../api/apiClient';
+
 
 const AuthContext = createContext();
 
@@ -9,33 +11,92 @@ function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
 
-    if (token) {
-      try {
-        const payload = JSON.parse(atob(token.split('.')[1]));
+    async function initializeAuth() {
 
-        setUser({
-          name: payload.name,
-          userId: payload.userId,
-          companyId: payload.companyId,
-          companySlug: payload.companySlug, // 🔥 AQUI
-          isCompanyAdmin: payload.isCompanyAdmin,
-          isProfessional: payload.isProfessional
-        });
+      const token = localStorage.getItem('token');
 
-        setIsAuthenticated(true);
-      } catch (e) {
-        console.log("token inválido");
-        localStorage.removeItem('token');
-        setUser(null);
-        setIsAuthenticated(false);
+      console.log("AUTH INIT");
+      console.log("TOKEN EXISTE?", !!token);
+
+      if (token) {
+
+        try {
+
+          const payload = JSON.parse(
+            atob(token.split('.')[1])
+          );
+
+          console.log("PAYLOAD:", payload);
+
+          setUser({
+            name: payload.name,
+            userId: payload.userId,
+            companyId: payload.companyId,
+            companySlug: payload.companySlug,
+            isCompanyAdmin: payload.isCompanyAdmin,
+            isProfessional: payload.isProfessional
+          });
+
+          try {
+
+            const company =
+              await apiClient("/company/settings");
+
+            console.log(
+              "COMPANY SETTINGS:",
+              company
+            );
+
+            const theme =
+              company.theme || "pink";
+
+            console.log(
+              "THEME RECEBIDO:",
+              theme
+            );
+
+            document.documentElement.setAttribute(
+              "data-theme",
+              theme
+            );
+
+            localStorage.setItem(
+              "theme",
+              theme
+            );
+
+          } catch (error) {
+
+            console.error(
+              "ERRO AO CARREGAR THEME:",
+              error
+            );
+          }
+
+          setIsAuthenticated(true);
+
+        } catch (e) {
+
+          console.error(
+            "TOKEN INVÁLIDO:",
+            e
+          );
+
+          localStorage.removeItem('token');
+
+          setUser(null);
+
+          setIsAuthenticated(false);
+        }
       }
+
+      setLoading(false);
     }
 
-    setLoading(false);
-  }, []);
+    initializeAuth();
 
+  }, []);
   async function login(credentials, passwordParam) {
     let slug;
     let username;
@@ -64,7 +125,7 @@ function AuthProvider({ children }) {
           name: payload.name,
           userId: payload.userId,
           companyId: payload.companyId,
-          companySlug: payload.companySlug, 
+          companySlug: payload.companySlug,
           isCompanyAdmin: payload.isCompanyAdmin,
           isProfessional: payload.isProfessional
         });
@@ -77,6 +138,22 @@ function AuthProvider({ children }) {
           isCompanyAdmin: payload.isCompanyAdmin,
           isProfessional: payload.isProfessional
         });
+
+        const company =
+          await apiClient("/company/settings");
+
+        const theme =
+          company.theme || "pink";
+
+        document.documentElement.setAttribute(
+          "data-theme",
+          theme
+        );
+
+        localStorage.setItem(
+          "theme",
+          theme
+        );
 
         setIsAuthenticated(true);
 
