@@ -387,8 +387,8 @@ select {
   display: block;
 }
 
-.button-secondary:hover {
-  background: #f8fafc;
+.button-secondary:active {
+  background: var(--button-secondary-background);
 }
 
 .button-secondary:active {
