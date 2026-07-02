@@ -35,7 +35,7 @@
   --button-secondary-border: #334155;
   --button-secondary-background: var(--color-surface);
   --button-secondary-text: var(--color-text);
-  --button-secondary-hover-background: #fce7f3;
+  --button-secondary-hover-background: #1e293b;
 }
 
 * {
