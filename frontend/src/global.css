@@ -14,6 +14,7 @@
   --button-secondary-border: #1d3350;
   --button-secondary-background: var(--color-surface);
   --button-secondary-text: var(--color-text);
+  --button-secondary-hover-background: #f8fafc;
 
   --radius: 10px;
 }
@@ -34,6 +35,7 @@
   --button-secondary-border: #334155;
   --button-secondary-background: var(--color-surface);
   --button-secondary-text: var(--color-text);
+  --button-secondary-hover-background: #1e293b;
 }
 
 * {
@@ -387,8 +389,8 @@ select {
   display: block;
 }
 
-.button-secondary:active {
-  background: var(--button-secondary-background);
+.button-secondary:hover {
+  background: var(--button-secondary-hover-background);
 }
 
 .button-secondary:active {
